@@ -1,0 +1,22 @@
+{
+  "name": "Sesame",
+  "version": "0.1.0",
+  "summary": "A short description of Sesame.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/cuddergambino/Sesame",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "cuddergambino": "kash650@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/cuddergambino/Sesame.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "Sesame/Classes/**/*"
+}
