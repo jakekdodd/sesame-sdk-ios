@@ -21,22 +21,22 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/cuddergambino/Sesame'
+  s.homepage         = 'https://github.com/BoundlessAI/sesame-sdk-ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'cuddergambino' => 'kash650@gmail.com' }
-  s.source           = { :git => 'https://github.com/cuddergambino/Sesame.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { 'BoundlessAI' => 'team@boundless.ai' }
+  s.source           = { :git => 'https://github.com/BoundlessAI/sesame-sdk-ios', :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/BoundlessAI'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'Sesame/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'Sesame' => ['Sesame/Assets/*.png']
-  # }
+  s.resource_bundles = {
+    'Sesame' => ['Sesame/Assets/*.png']
+  }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end

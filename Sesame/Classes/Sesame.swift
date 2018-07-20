@@ -1,6 +1,6 @@
 
 import CoreData
-class Sesame : NSObject {
+public class Sesame : NSObject {
     
     internal static var _instance: Sesame?
     internal var apiCreds: ApiCredentials
@@ -9,7 +9,7 @@ class Sesame : NSObject {
     public var tracker: Tracker
     
     @objc
-    static var shared: Sesame? {
+    public static var shared: Sesame? {
         get {
             return _instance
         }
@@ -39,7 +39,7 @@ struct SesameConfig {
     init(_ versionId: String, _ revision: Int) {self.versionId = versionId; self.revision = revision}
 }
 
-class Reinforcer : NSObject {
+public class Reinforcer : NSObject {
     var cartridge: Cartridge
     
     init(cartridge: Cartridge = Cartridge.nuetral) {
@@ -47,8 +47,8 @@ class Reinforcer : NSObject {
     }
 }
 
-class Tracker : NSObject {
-    var actions: [ReportEvent]
+public class Tracker : NSObject {
+    public var actions: [ReportEvent]
     
     init(actions: [ReportEvent] = []) { self.actions = actions }
 }
@@ -90,7 +90,7 @@ protocol Report {
 //
 //}
 
-class ReportEvent : NSObject {
+public class ReportEvent : NSObject {
     static let ACTION_APP_OPEN = "appOpen"
     static let ACTION_APP_CLOSE = "appClose"
     static let REINFORCEMENT_NUETRAL = "nuetral"
