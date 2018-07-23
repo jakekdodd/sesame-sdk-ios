@@ -3,10 +3,12 @@ import CoreData
 public class Sesame : NSObject {
     
     internal static var _instance: Sesame?
+    internal var service: SesameApplicationService?
     internal var apiCreds: ApiCredentials
     internal var config: SesameConfig
     public var reinforcer: Reinforcer
     public var tracker: Tracker
+    public var data: SesameData = SesameData()
     
     @objc
     public static var shared: Sesame? {
@@ -128,3 +130,14 @@ open class AppOpenDetector {
 //        return container
 //    }
 //}
+
+public class SesameData : NSObject {
+    
+    
+    
+    public override init() {
+        guard let bundleURL = Bundle(for: SesameData.self).url(forResource: "Sesame", withExtension: "bundle") else { fatalError() }
+        guard let frameworkBundle = Bundle(url: bundleURL) else { fatalError() }
+        guard let momURL = frameworkBundle.url(forResource: "SesameDataModel", withExtension: "momd") else { fatalError() }
+    }
+}

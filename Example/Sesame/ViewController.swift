@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     
     @IBAction
     func printEventCount() {
-        print("Events:\(Sesame.shared?.tracker.actions.count)")
+        print("Events:\(String(describing:Sesame.shared?.tracker.actions.count))")
     }
 
 }

@@ -10,7 +10,7 @@ import CloudKit
 
 open class SesameApplicationDelegate : PluggableApplicationDelegate {
     
-    func needsReinforcement(reinforcement: String) {}
+    open func needsReinforcement(reinforcement: String) {}
     
     open override var services: [ApplicationService] {
         return [
