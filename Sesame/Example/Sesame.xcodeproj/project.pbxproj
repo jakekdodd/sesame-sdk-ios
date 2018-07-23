@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		313419F678F00E0B6FB038A9 /* Pods_Sesame_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5887B8C4408E67206BA2F9D /* Pods_Sesame_Tests.framework */; };
+		551FA643F9A66B9A2479FA7B /* Pods_Sesame_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E79B94BD43C4858BD5BB6A7A /* Pods_Sesame_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		9B8A7E8CF4FA50EA344C61DF /* Pods_Sesame_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD7AFAA304F4526E650EBCE /* Pods_Sesame_Example.framework */; };
+		928C6686758FC2AEBEADC635 /* Pods_Sesame_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,9 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0A0FE6477EF4AAF78EE1D7BB /* Pods-Sesame_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Example/Pods-Sesame_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		560DF594F5D6858E4D07D197 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Example/Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
-		56F9E4B6ACD67CB481A20862 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		03040E17F95268FC611015EA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		521463A3F448A228628737B2 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Example/Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
+		52E24092945A1C67CBA075D4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Sesame_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sesame_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,12 +41,12 @@
 		607FACE51AFB9204008FA782 /* Sesame_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sesame_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		8052C3052A39569E2B89BA3B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		9BD7AFAA304F4526E650EBCE /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A5887B8C4408E67206BA2F9D /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9BA1D86338BEEA7DFAC279F /* Sesame.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Sesame.podspec; path = ../Sesame.podspec; sourceTree = "<group>"; };
-		C898DA186887536C3666D3CC /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		F8FDD3E14B29B764CE8DE234 /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FC2485495B52FF43A9AE41D /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		B88D121BCE5EF6408FE87B07 /* Sesame.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Sesame.podspec; path = ../Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		DD22E7534AAD9CEB9629A0DB /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		E79B94BD43C4858BD5BB6A7A /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9A09AF62351238B5ADF747D /* Pods-Sesame_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Example/Pods-Sesame_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B8A7E8CF4FA50EA344C61DF /* Pods_Sesame_Example.framework in Frameworks */,
+				928C6686758FC2AEBEADC635 /* Pods_Sesame_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,18 +62,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				313419F678F00E0B6FB038A9 /* Pods_Sesame_Tests.framework in Frameworks */,
+				551FA643F9A66B9A2479FA7B /* Pods_Sesame_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		37BC970A0863C865859DB7F2 /* Frameworks */ = {
+		54CF4BE87963C1D91A1750C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9BD7AFAA304F4526E650EBCE /* Pods_Sesame_Example.framework */,
-				A5887B8C4408E67206BA2F9D /* Pods_Sesame_Tests.framework */,
+				76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */,
+				E79B94BD43C4858BD5BB6A7A /* Pods_Sesame_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -85,8 +85,8 @@
 				607FACD21AFB9204008FA782 /* Example for Sesame */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
-				B316268A9FACD6F024C25FD4 /* Pods */,
-				37BC970A0863C865859DB7F2 /* Frameworks */,
+				9725A6BE9D777C37B1489B05 /* Pods */,
+				54CF4BE87963C1D91A1750C1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,20 +141,20 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				B9BA1D86338BEEA7DFAC279F /* Sesame.podspec */,
-				56F9E4B6ACD67CB481A20862 /* README.md */,
-				8052C3052A39569E2B89BA3B /* LICENSE */,
+				B88D121BCE5EF6408FE87B07 /* Sesame.podspec */,
+				03040E17F95268FC611015EA /* README.md */,
+				52E24092945A1C67CBA075D4 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		B316268A9FACD6F024C25FD4 /* Pods */ = {
+		9725A6BE9D777C37B1489B05 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0A0FE6477EF4AAF78EE1D7BB /* Pods-Sesame_Example.debug.xcconfig */,
-				560DF594F5D6858E4D07D197 /* Pods-Sesame_Example.release.xcconfig */,
-				F8FDD3E14B29B764CE8DE234 /* Pods-Sesame_Tests.debug.xcconfig */,
-				C898DA186887536C3666D3CC /* Pods-Sesame_Tests.release.xcconfig */,
+				F9A09AF62351238B5ADF747D /* Pods-Sesame_Example.debug.xcconfig */,
+				521463A3F448A228628737B2 /* Pods-Sesame_Example.release.xcconfig */,
+				7FC2485495B52FF43A9AE41D /* Pods-Sesame_Tests.debug.xcconfig */,
+				DD22E7534AAD9CEB9629A0DB /* Pods-Sesame_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -166,11 +166,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "Sesame_Example" */;
 			buildPhases = (
-				6956361C941032753257889E /* [CP] Check Pods Manifest.lock */,
+				A1044764478BAD94207B163E /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				D2B4122D9026E3417BBD46F8 /* [CP] Embed Pods Frameworks */,
+				55199B4D5F131E16A87AFD03 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -185,7 +185,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "Sesame_Tests" */;
 			buildPhases = (
-				0872F236D460E6AF882164EF /* [CP] Check Pods Manifest.lock */,
+				3A8C3B4559DF8E83D87AF0F0 /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
@@ -261,7 +261,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0872F236D460E6AF882164EF /* [CP] Check Pods Manifest.lock */ = {
+		3A8C3B4559DF8E83D87AF0F0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -279,25 +279,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6956361C941032753257889E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Sesame_Example-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D2B4122D9026E3417BBD46F8 /* [CP] Embed Pods Frameworks */ = {
+		55199B4D5F131E16A87AFD03 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -313,6 +295,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sesame_Example/Pods-Sesame_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A1044764478BAD94207B163E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sesame_Example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -415,6 +415,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -460,13 +461,14 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A0FE6477EF4AAF78EE1D7BB /* Pods-Sesame_Example.debug.xcconfig */;
+			baseConfigurationReference = F9A09AF62351238B5ADF747D /* Pods-Sesame_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Sesame/Info.plist;
@@ -481,7 +483,7 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 560DF594F5D6858E4D07D197 /* Pods-Sesame_Example.release.xcconfig */;
+			baseConfigurationReference = 521463A3F448A228628737B2 /* Pods-Sesame_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Sesame/Info.plist;
@@ -496,7 +498,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F8FDD3E14B29B764CE8DE234 /* Pods-Sesame_Tests.debug.xcconfig */;
+			baseConfigurationReference = 7FC2485495B52FF43A9AE41D /* Pods-Sesame_Tests.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -518,7 +520,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C898DA186887536C3666D3CC /* Pods-Sesame_Tests.release.xcconfig */;
+			baseConfigurationReference = DD22E7534AAD9CEB9629A0DB /* Pods-Sesame_Tests.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",

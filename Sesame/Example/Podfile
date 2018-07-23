@@ -1,5 +1,5 @@
-use_frameworks!
 platform :ios, '10.0'
+use_frameworks!
 
 target 'Sesame_Example' do
   pod 'Sesame', :path => '../'
