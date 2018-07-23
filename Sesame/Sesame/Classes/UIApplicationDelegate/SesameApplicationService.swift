@@ -8,9 +8,8 @@
 import Foundation
 final class SesameApplicationService : NSObject, ApplicationService {
     
-    
     override init() {
-        Sesame.configureShared()
+        Sesame.configureShared(appId: "570ffc491b4c6e9869482fbf", secret: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10", versionId: "rams1")
         super.init()
         Sesame.shared?.service = self
         print("Configured Sesame")

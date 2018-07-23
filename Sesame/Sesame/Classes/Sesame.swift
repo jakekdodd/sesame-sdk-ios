@@ -12,7 +12,9 @@ import Foundation
 public class Sesame : NSObject {
     internal static var _instance: Sesame?
     internal var service: SesameApplicationService?
-    
+    internal var apiCreds: SesameApiCredentials
+    internal var config: SesameApiConfig
+    public var reinforcer: Reinforcer
     public var tracker: Tracker
     
     
@@ -23,15 +25,20 @@ public class Sesame : NSObject {
         }
     }
     
-    override init() {
+    init(credentials: SesameApiCredentials, config: SesameApiConfig) {
+        self.apiCreds = credentials
+        self.config = config
+        self.reinforcer = Reinforcer()
         self.tracker = Tracker()
         super.init()
     }
     
     @objc
-    static func configureShared() {
+    static func configureShared(appId: String, secret: String, versionId: String, revision: Int = 0) {
         _instance = Sesame(
-            )
+            credentials: SesameApiCredentials(appId: appId, secret: secret),
+            config: SesameApiConfig.init(versionId, revision)
+        )
     }
     
 }
