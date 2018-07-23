@@ -10,11 +10,11 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegate: PluggableApplicationDelegate {
+class AppDelegate: SesameApplicationDelegate {
 //class AppDelegate: UIResponder, UIApplicationDelegate {
 //    var window: UIWindow?
 
-    func needsReinforcement(reinforcement: String) {
+    override func needsReinforcement(reinforcement: String) {
         
     }
 

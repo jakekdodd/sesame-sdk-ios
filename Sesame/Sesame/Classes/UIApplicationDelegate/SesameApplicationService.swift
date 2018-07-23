@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 
+@available(iOS 10.0, *)
 final class SesameApplicationService : NSObject, ApplicationService {
     
     

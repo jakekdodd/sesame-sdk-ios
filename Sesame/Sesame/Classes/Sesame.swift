@@ -1,5 +1,6 @@
 
 import CoreData
+@available(iOS 10.0, *)
 public class Sesame : NSObject {
     
     internal static var _instance: Sesame?
