@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SesameApiCredentials {
+struct SesameApiCreds {
     let appId: String
     let secret: String
 }
@@ -23,11 +23,11 @@ struct SesameApiConfig {
 }
 
 class SesameApi : NSObject {
-    func boot(creds: SesameApiCredentials, completion: (Bool, SesameApiConfig?) -> Void) {
+    func boot(creds: SesameApiCreds, completion: (Bool, SesameApiConfig?) -> Void) {
         
     }
     
-    func reinforce(creds: SesameApiCredentials, events: [ReportEvent]?, completion: (Bool, Cartridge) -> Void) {
+    func reinforce(creds: SesameApiCreds, events: [ReportEvent]?, completion: (Bool, Cartridge) -> Void) {
         
     }
     
