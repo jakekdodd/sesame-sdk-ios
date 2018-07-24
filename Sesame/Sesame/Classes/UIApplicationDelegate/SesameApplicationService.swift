@@ -6,20 +6,22 @@
 //
 
 import Foundation
-final class SesameApplicationService : NSObject, ApplicationService {
+
+final public class SesameApplicationService : UIResponder, UIApplicationDelegate {
     
-    override init() {
-        Sesame.createShared(appId: "570ffc491b4c6e9869482fbf", appVersionId: "rams1", auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10")
+    public init(appId: String, appVersionId: String, auth: String) {
+        Sesame.createShared(appId: appId, appVersionId: appVersionId, auth: auth)
         super.init()
         Sesame.shared?.service = self
         print("Configured Sesame")
     }
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         print("Sesame service app did launch")
         
 //        Sesame.shared?.tracker.actions.append(ReportEvent.init(ReportEvent.ACTION_APP_OPEN, [String : Any]()))
-        Sesame.shared?.boot()
+//        Sesame.shared?.boot()
         return true
     }
+    
 }

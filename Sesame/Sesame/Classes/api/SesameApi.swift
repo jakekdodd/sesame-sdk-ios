@@ -7,17 +7,21 @@
 
 import Foundation
 
-struct SesameAppVersion {
+public struct SesameAppVersion {
     let appId: String
     let appVersionId: String
     let auth: String
     var config: SesameAppConfig
+    var reinforcer: Reinforcer
+    var tracker: Tracker
     
     init(appId: String, appVersionId: String, auth: String, config: SesameAppConfig) {
         self.appId = appId
         self.appVersionId = appVersionId
         self.auth = auth
         self.config = config
+        self.reinforcer = Reinforcer()
+        self.tracker = Tracker()
     }
 
     func createPayload() -> [String: Any] {

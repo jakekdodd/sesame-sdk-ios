@@ -10,14 +10,14 @@ import Foundation
 
 
 public class Sesame : NSObject {
-    internal static var _instance: Sesame?
-    internal var service: SesameApplicationService?
-    internal var app: SesameAppVersion
+    
+    // Start service by extending class
+    public var service: SesameApplicationService?
+    public var app: SesameAppVersion
     internal var api: SesameApi
-    public var reinforcer: Reinforcer
-    public var tracker: Tracker
     
     
+    internal static var _instance: Sesame?
     @objc
     public static var shared: Sesame? {
         get {
@@ -28,8 +28,6 @@ public class Sesame : NSObject {
     init(appId: String, appVersionId: String, auth: String) {
         self.app = SesameAppVersion(appId: appId, appVersionId: appVersionId, auth: auth, config: SesameAppConfig())
         self.api = SesameApi()
-        self.reinforcer = Reinforcer()
-        self.tracker = Tracker()
         super.init()
     }
     
