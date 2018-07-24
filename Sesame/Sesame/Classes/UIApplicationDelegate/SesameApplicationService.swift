@@ -7,7 +7,23 @@
 
 import Foundation
 
-final public class SesameApplicationService : UIResponder, UIApplicationDelegate {
+open class SesameApplicationDelegate: PluggableApplicationDelegate {
+    
+    open var SesameCredentials: [String: Any] { get { return [:] } }
+    
+    open override var services: [ApplicationService] {
+        var s = [ApplicationService]()
+        if let appId = SesameCredentials["appId"] as? String,
+            let appVersionId = SesameCredentials["appVersionId"] as? String,
+            let auth = SesameCredentials["auth"] as? String {
+            s.append(SesameApplicationService(appId: appId, appVersionId: appVersionId, auth: auth))
+        }
+        return super.services + s
+    }
+    
+}
+
+final public class SesameApplicationService : NSObject, ApplicationService {
     
     public init(appId: String, appVersionId: String, auth: String) {
         Sesame.createShared(appId: appId, appVersionId: appVersionId, auth: auth)

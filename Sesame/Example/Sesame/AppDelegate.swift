@@ -10,24 +10,20 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegateWithPlugins : PluggableApplicationDelegate {
-    override var services: [UIApplicationDelegate] {
-        return super.services + [
-            AppDelegate(),
-            SesameApplicationService(appId: "570ffc491b4c6e9869482fbf",
-                                     appVersionId: "rams1",
-                                     auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10")
-        ]
-    }
-}
-
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    var window: UIWindow?
+class AppDelegate: SesameApplicationDelegate {
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        print("In normal app delegate")
+    override var SesameCredentials: [String : Any] {
+        return ["appId": "570ffc491b4c6e9869482fbf",
+                "appVersionId": "rams1",
+                "auth": "d388c7074d8a283bff1f01eb932c1c9e6bec3b10"]
+    }
+    
+    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // don't forget to call super!
+        _ = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        
+        print("In normal app delegate applicationDidFinishLaunchingWithOptions")
         return true
     }
 
