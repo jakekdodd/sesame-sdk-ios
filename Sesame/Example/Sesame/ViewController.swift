@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     @IBAction
     func didTapButton(_ sender: Any) {
 //        print("Did tap button")
-        print("Action count:\(String(describing: Sesame.shared?.tracker.actions.count))")
+        print("Action count:\(String(describing: Sesame.shared?.app.tracker.actions.count))")
     }
 
 }

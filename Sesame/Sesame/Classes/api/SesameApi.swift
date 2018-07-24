@@ -12,8 +12,8 @@ public struct SesameAppVersion {
     let appVersionId: String
     let auth: String
     var config: SesameAppConfig
-    var reinforcer: Reinforcer
-    var tracker: Tracker
+    internal var reinforcer: Reinforcer
+    public var tracker: Tracker
     
     init(appId: String, appVersionId: String, auth: String, config: SesameAppConfig) {
         self.appId = appId
