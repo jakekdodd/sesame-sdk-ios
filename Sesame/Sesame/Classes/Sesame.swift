@@ -12,9 +12,8 @@ import Foundation
 public class Sesame : NSObject {
     internal static var _instance: Sesame?
     internal var service: SesameApplicationService?
+    internal var app: SesameAppVersion
     internal var api: SesameApi
-    internal var apiCreds: SesameApiCreds
-    internal var config: SesameApiConfig
     public var reinforcer: Reinforcer
     public var tracker: Tracker
     
@@ -26,9 +25,8 @@ public class Sesame : NSObject {
         }
     }
     
-    init(credentials: SesameApiCreds, config: SesameApiConfig) {
-        self.apiCreds = credentials
-        self.config = config
+    init(appId: String, appVersionId: String, auth: String) {
+        self.app = SesameAppVersion(appId: appId, appVersionId: appVersionId, auth: auth, config: SesameAppConfig())
         self.api = SesameApi()
         self.reinforcer = Reinforcer()
         self.tracker = Tracker()
@@ -36,17 +34,19 @@ public class Sesame : NSObject {
     }
     
     @objc
-    static func configureShared(appId: String, secret: String, versionId: String, revision: Int = 0) {
+    static func createShared(appId: String, appVersionId: String, auth: String) {
         _instance = Sesame(
-            credentials: SesameApiCreds(appId: appId, secret: secret),
-            config: SesameApiConfig.init(versionId, revision)
+            appId: appId, appVersionId: appVersionId, auth: auth
         )
     }
     
     @objc
     func boot() {
-        api.boot(creds: apiCreds) { (success, returnedConfig) in
-            
+        api.boot(appVersion: app) { (success, config) in
+            guard success else {
+                Logger.debug("Boot failed")
+                return
+            }
         }
     }
     
