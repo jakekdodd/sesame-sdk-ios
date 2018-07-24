@@ -30,6 +30,13 @@ final public class SesameApplicationService : NSObject, ApplicationService {
                 return nil
         }
         self.init(appId: appId, appVersionId: appVersionId, auth: auth)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(test), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+    }
+    
+    @objc
+    func test() {
+        print("In a tst")
     }
     
     public init(appId: String, appVersionId: String, auth: String) {

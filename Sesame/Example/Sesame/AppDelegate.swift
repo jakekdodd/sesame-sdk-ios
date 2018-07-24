@@ -10,18 +10,77 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegate: SesameApplicationDelegate {
+class AppDelegateWithPlugins : PluggableApplicationDelegate {
     
-    override var SesameCredentials: [String : Any] {
+    var SesameCredentials: [String : Any] {
         return ["appId": "570ffc491b4c6e9869482fbf",
                 "appVersionId": "rams1",
                 "auth": "d388c7074d8a283bff1f01eb932c1c9e6bec3b10"]
     }
     
+    override var services: [ApplicationService] {
+       return super.services + [
+        SesameApplicationService(args: SesameCredentials)!
+        ]
+    }
+    
+    var launchedShortcutItem: UIApplicationShortcutItem?
+    
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        // don't forget to call super!
         _ = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        var continueHandling = true
+        
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+            launchedShortcutItem = shortcutItem
+            continueHandling = false
+        }
+        
+        print("Launch options:\(launchOptions?.keys)")
+        
+        return continueHandling
+    }
+    
+    override func applicationDidBecomeActive(_ application: UIApplication) {
+        super.applicationDidBecomeActive(application)
+        application.applicationState
+//        launchedShortcutItem = UIApplicationShortcutItem.init(type: "Custom", localizedTitle: "Locaized string")
+        if let shortcut = launchedShortcutItem {
+            _ = handleShortcut(shortcut)
+            launchedShortcutItem = nil
+        }
+        
+        print("Application did become active")
+    }
+    
+    override func applicationWillEnterForeground(_ application: UIApplication) {
+        super.applicationWillEnterForeground(application)
+        
+        print("Did enter foreground")
+    }
+    
+    override func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        super.application(application, performActionFor: shortcutItem, completionHandler: completionHandler)
+        
+        completionHandler(handleShortcut(shortcutItem))
+    }
+    
+    func handleShortcut(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
+        // Construct an alert using the details of the shortcut used to open the application.
+        let alertController = UIAlertController(title: "Shortcut Handled", message: "\"\(shortcutItem.localizedTitle)\"", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        // Display an alert indicating the shortcut selected from the home screen.
+        window!.rootViewController?.present(alertController, animated: true, completion: nil)
+        
+        return true
+    }
+    
+    override func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+        _ = super.application(app, open: url, options: options)
+        
+        print("Open url:\(url.absoluteString)")
         
         return true
     }
@@ -47,7 +106,5 @@ class AppDelegate: SesameApplicationDelegate {
 //    func applicationWillTerminate(_ application: UIApplication) {
 //        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 //    }
-
-
 }
 

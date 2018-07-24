@@ -255,6 +255,8 @@ open class PluggableApplicationDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+    // Requires permission not needed elsewhere in the SDK!
+    //
     //    /*! This delegate method offers an opportunity for applications with the "remote-notification" background mode to fetch appropriate new data in response to an incoming remote notification. You should call the fetchCompletionHandler as soon as you're finished performing that operation, so the system can accurately estimate its power and data cost.
     //
     //     This method will be invoked even if the application was launched or resumed because of the remote notification. The respective delegate methods will be invoked first. Note that this behavior is in contrast to application:didReceiveRemoteNotification:, which is not called in those cases, and which will not be invoked if this method is implemented. !*/
