@@ -7,43 +7,32 @@
 
 import Foundation
 
-public struct SesameAppVersion {
+enum SesameAppState {
+    case closed, opened, reopened
+}
+
+public class SesameAppVersion : NSObject {
     let appId: String
     let appVersionId: String
     let auth: String
-    var config: SesameAppConfig
-    internal var reinforcer: Reinforcer
+    let api: SesameApi
+    public var config: SesameAppConfig
+    public var reinforcer: Reinforcer
     public var tracker: Tracker
     
-    init(appId: String, appVersionId: String, auth: String, config: SesameAppConfig) {
+    init(appId: String, appVersionId: String, auth: String) {
         self.appId = appId
         self.appVersionId = appVersionId
         self.auth = auth
-        self.config = config
+        self.api = SesameApi()
+        self.config = SesameAppConfig()
         self.reinforcer = Reinforcer()
         self.tracker = Tracker()
+        super.init()
     }
-
-    func createPayload() -> [String: Any] {
-        return [ "clientOS": "iOS",
-                 "clientOSVersion": UIDevice.current.systemVersion,
-                 "clientSDKVersion": Bundle(for: Sesame.self).object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String,
-                 "clientBuild": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String,
-                 
-                 "appId": appId,
-                 "versionId": appVersionId,
-                 "revision": config.revision,
-                 "secret": auth,
-                 "primaryIdentity": "IDUNAVAILABLE",
-                 
-                 "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
-                 "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
-        ]
-    }
-    
 }
 
-struct SesameAppConfig {
+public struct SesameAppConfig {
     var revision: Int
     var values: [String: Any]
     
@@ -87,13 +76,30 @@ class SesameApi : HTTPClient {
     
     static let BOOT_URL = URL(string:"https://reinforce.boundless.ai/v6/app/boot")!
     
-    func boot(appVersion: SesameAppVersion, completion: @escaping (Bool, SesameAppConfig?) -> Void) {
+    func createPayload(for app: SesameAppVersion) -> [String: Any] {
+        return [ "clientOS": "iOS",
+                 "clientOSVersion": UIDevice.current.systemVersion,
+                 "clientSDKVersion": Bundle(for: type(of: app).self).object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String,
+                 "clientBuild": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String,
+                 
+                 "appId": app.appId,
+                 "versionId": app.appVersionId,
+                 "revision": app.config.revision,
+                 "secret": app.auth,
+                 "primaryIdentity": "IDUNAVAILABLE",
+                 
+                 "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
+                 "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
+        ]
+    }
+    
+    func boot(app: SesameAppVersion, completion: @escaping (Bool, SesameAppConfig?) -> Void) {
         
-        var payload = appVersion.createPayload()
+        var payload = createPayload(for: app)
         payload["initialBoot"] = false
         payload["inProduction"] = false
-        payload["currentVersion"] = appVersion.appVersionId
-        payload["currentConfig"] = "\(appVersion.config.revision)"
+        payload["currentVersion"] = app.appVersionId
+        payload["currentConfig"] = "\(app.config.revision)"
         
         post(url: SesameApi.BOOT_URL, jsonObject: payload) { response in
             guard let response = response,

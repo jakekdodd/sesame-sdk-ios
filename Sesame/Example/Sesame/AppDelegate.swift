@@ -10,18 +10,12 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegateWithPlugins : PluggableApplicationDelegate {
+class AppDelegateWithPlugins : SesameApplicationDelegate {
     
-    var SesameCredentials: [String : Any] {
+    override var SesameCredentials: [String : Any] {
         return ["appId": "570ffc491b4c6e9869482fbf",
                 "appVersionId": "rams1",
                 "auth": "d388c7074d8a283bff1f01eb932c1c9e6bec3b10"]
-    }
-    
-    override var services: [ApplicationService] {
-       return super.services + [
-        SesameApplicationService(args: SesameCredentials)!
-        ]
     }
     
     var launchedShortcutItem: UIApplicationShortcutItem?
@@ -36,7 +30,7 @@ class AppDelegateWithPlugins : PluggableApplicationDelegate {
             continueHandling = false
         }
         
-        print("Launch options:\(launchOptions?.keys)")
+        print("Launch options:\(launchOptions?.keys as AnyObject)")
         
         return continueHandling
     }

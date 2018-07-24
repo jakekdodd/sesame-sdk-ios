@@ -17,8 +17,8 @@ import Foundation
 
 @objc open class LoggerPreferences : NSObject {
     @objc open var printEnabled = true
-    @objc open var debugEnabled = false
-    //    @objc open var debugEnabled = true
+//    @objc open var debugEnabled = false
+    @objc open var debugEnabled = true
 }
 
 @objc open class Logger : NSObject {
