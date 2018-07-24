@@ -13,10 +13,8 @@ open class SesameApplicationDelegate: PluggableApplicationDelegate {
     
     open override var services: [ApplicationService] {
         var s = super.services
-        if let appId = SesameCredentials["appId"] as? String,
-            let appVersionId = SesameCredentials["appVersionId"] as? String,
-            let auth = SesameCredentials["auth"] as? String {
-            s.append(SesameApplicationService(appId: appId, appVersionId: appVersionId, auth: auth))
+        if let sesameService = SesameApplicationService(args: SesameCredentials) {
+            s.append(sesameService)
         }
         return s
     }
@@ -24,6 +22,15 @@ open class SesameApplicationDelegate: PluggableApplicationDelegate {
 }
 
 final public class SesameApplicationService : NSObject, ApplicationService {
+    
+    public convenience init?(args: [String: Any]) {
+        guard let appId = args["appId"] as? String,
+            let appVersionId = args["appVersionId"] as? String,
+            let auth = args["auth"] as? String else {
+                return nil
+        }
+        self.init(appId: appId, appVersionId: appVersionId, auth: auth)
+    }
     
     public init(appId: String, appVersionId: String, auth: String) {
         Sesame.createShared(appId: appId, appVersionId: appVersionId, auth: auth)

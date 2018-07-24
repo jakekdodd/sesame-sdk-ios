@@ -19,11 +19,10 @@ class AppDelegate: SesameApplicationDelegate {
     }
     
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         // don't forget to call super!
         _ = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        
-        print("In normal app delegate applicationDidFinishLaunchingWithOptions")
         return true
     }
 
