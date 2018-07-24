@@ -12,13 +12,13 @@ open class SesameApplicationDelegate: PluggableApplicationDelegate {
     open var SesameCredentials: [String: Any] { get { return [:] } }
     
     open override var services: [ApplicationService] {
-        var s = [ApplicationService]()
+        var s = super.services
         if let appId = SesameCredentials["appId"] as? String,
             let appVersionId = SesameCredentials["appVersionId"] as? String,
             let auth = SesameCredentials["auth"] as? String {
             s.append(SesameApplicationService(appId: appId, appVersionId: appVersionId, auth: auth))
         }
-        return super.services + s
+        return s
     }
     
 }
