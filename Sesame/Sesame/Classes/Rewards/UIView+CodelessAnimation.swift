@@ -19,11 +19,6 @@ public extension UIView {
         let jumpDuration:TimeInterval = 1
         let jumpsDuration = jumpDuration * TimeInterval(jumpCount)
         let jumpTranslation:Int = -10
-//        let scale:CGFloat = 0.8
-//        let scaleCount:Float = 3
-//        let scaleDuration:TimeInterval = 3
-//        let scaleVelocity:CGFloat = 20
-//        let scaleDamping:CGFloat = 1
         let hapticFeedback: Bool = false
         let systemSound: UInt32 = 0
         
@@ -60,9 +55,9 @@ public extension UIView {
         rotateAnimation.path = {
             let path = UIBezierPath()
             path.move(to: .zero)
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
             path.addLine(to: CGPoint(x: rotateDegrees * 0.2, y: 0))
             path.addLine(to: CGPoint(x: rotateDegrees * -0.2, y: 0))
             path.addLine(to: CGPoint(x: rotateDegrees * 0.6, y: 0))
@@ -71,14 +66,27 @@ public extension UIView {
             path.addLine(to: CGPoint(x: rotateDegrees * -0.8, y: 0))
             path.addLine(to: CGPoint(x: rotateDegrees * 1, y: 0))
             path.addLine(to: CGPoint(x: rotateDegrees * -1, y: 0))
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
-            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
+//            path.addLine(to: CGPoint(x: rotateDegrees * 0, y: 0))
             path.close()
             return path.cgPath
         }()
         animations.append(rotateAnimation)
+        
+        
+        
+        let scaleIncrease:CGFloat = 0.2
+        let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
+        scaleAnimation.repeatCount = jumpAnimation.repeatCount
+        scaleAnimation.duration = jumpAnimation.duration
+        scaleAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+        scaleAnimation.toValue = 1 + scaleIncrease
+        scaleAnimation.autoreverses = true
+        scaleAnimation.initialVelocity = 5
+//        scaleAnimation.damping = damping
+//        animations.append(scaleAnimation)
         
         
         let group = CAAnimationGroup()
