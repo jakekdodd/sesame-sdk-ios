@@ -7,46 +7,19 @@
 
 import Foundation
 
-/* Extend this class to seamlessly plug-in Sesame to your product.
- *
- * Copy and paste your credentials as a swift dictionary.
- * Reinforcements will invoke func application(_:didReceiveReinforcement:withOptions:)
- *
- */
-open class SesameApplicationDelegate: PluggableApplicationDelegate, SesameApplicationServiceDelegate {
-    
-    open var SesameCredentials: [String: Any] {
-        get { fatalError("Need to override `SesameCredentials` in SesameApplicationDelegate with your credentials") }
-    }
-    
-    open override var services: [ApplicationService] {
-        var services = super.services
-        if let sesameService = SesameApplicationService(args: SesameCredentials, delegate: self) {
-            services.append(sesameService)
-        }
-        return services
-    }
-    
-    /// MARK: SesameApplicationServiceDelegate
-    public func application(_ application: SesameAppVersion, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
-        Logger.debug(confirmed: "Received reinforcement:\(reinforcement) with options:\(options as AnyObject)")
-        Logger.debug(error: "This method should be overriden.")
-    }
-    
-}
-
-
-
-
 public protocol SesameApplicationServiceDelegate : class {
-    func application(_ application: SesameAppVersion, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
+    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
 }
 
 final public class SesameApplicationService : NSObject, ApplicationService {
     
-    public var app: SesameAppVersion
+    public var app: Sesame
     public weak var delegate: SesameApplicationServiceDelegate?
     
+    
+    enum SesameAppState {
+        case closed, opened, reopened
+    }
     
     var lastOpened: Date? = nil
     var appState: SesameAppState = .closed {
@@ -60,15 +33,17 @@ final public class SesameApplicationService : NSObject, ApplicationService {
             {
                 appState = .reopened
                 self.lastOpened = Date()
+                Logger.debug("App reopened")
             }
             
             if oldValue == .closed,
                 appState == .opened {
+                Logger.debug("App opening from close")
                 self.lastOpened = Date()
                 // TO-DO: call api for reinforcement, deliver reinforcement to delegate
                 let reinforcement = app.reinforcer.cartridge.removeDecision()
                 print("Removed decision reinforcement:\(reinforcement)")
-                delegate?.application(app, didReceiveReinforcement: reinforcement, withOptions: app.reinforcer.options?[reinforcement])
+                delegate?.app(app, didReceiveReinforcement: reinforcement, withOptions: app.reinforcer.options?[reinforcement])
             }
         }
     }
@@ -83,7 +58,7 @@ final public class SesameApplicationService : NSObject, ApplicationService {
     }
     
     init(appId: String, appVersionId: String, auth: String, delegate: SesameApplicationServiceDelegate?) {
-        self.app = SesameAppVersion(appId: appId, appVersionId: appVersionId, auth: auth)
+        self.app = Sesame(appId: appId, appVersionId: appVersionId, auth: auth)
         self.delegate = delegate
         super.init()
     }
@@ -95,15 +70,15 @@ final public class SesameApplicationService : NSObject, ApplicationService {
         appState = .opened
         
         app.tracker.actions.append(ReportEvent.init(ReportEvent.ACTION_APP_OPEN, [String : Any]()))
-        app.api.boot(app: app) { (success, newConfig) in
-            guard success else {
-                Logger.debug(error: "Boot call failed.")
-                return
-            }
-            if let newConfig = newConfig {
-                self.app.config = newConfig
-            }
-        }
+//        app.api.boot(app: app) { (success, newConfig) in
+//            guard success else {
+//                Logger.debug(error: "Boot call failed.")
+//                return
+//            }
+//            if let newConfig = newConfig {
+//                self.app.config = newConfig
+//            }
+//        }
         return true
     }
     
