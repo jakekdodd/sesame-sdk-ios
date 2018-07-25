@@ -23,7 +23,8 @@ class AppDelegate : SesameApplicationDelegate {
         Logger.print("Got reinforcement:\(reinforcement) with options:\(options as AnyObject)")
         
         if reinforcement == "nuetral" {
-            window?.showConfetti()
+//            window?.showConfetti()
+            ViewController.instance?.button.showTest()
         }
         
     }

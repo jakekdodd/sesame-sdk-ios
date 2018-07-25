@@ -10,9 +10,13 @@ import UIKit
 import Sesame
 
 class ViewController: UIViewController {
+    
+    static var instance: ViewController?
 
+    @IBOutlet weak var button: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
+        ViewController.instance = self
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -20,6 +24,8 @@ class ViewController: UIViewController {
     func didTapButton(_ sender: Any) {
 //        print("Did tap button")
 //        print("Action count:\(String(describing: Sesame.shared?.service.app.tracker.actions.count))")
+        
+        button.showTest()
     }
 
 }
