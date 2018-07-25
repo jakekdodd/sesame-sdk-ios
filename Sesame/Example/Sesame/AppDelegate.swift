@@ -19,90 +19,14 @@ class AppDelegate : SesameApplicationDelegate {
     }
     
     override func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
+        
         Logger.print("Got reinforcement:\(reinforcement) with options:\(options as AnyObject)")
-    }
-    
-    var launchedShortcutItem: UIApplicationShortcutItem?
-    
-    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        _ = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        var continueHandling = true
-        
-        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
-            launchedShortcutItem = shortcutItem
-            continueHandling = false
+        if reinforcement == "nuetral" {
+            window?.showConfetti()
         }
         
-        print("Launch options:\(launchOptions?.keys as AnyObject)")
-        
-        return continueHandling
     }
     
-    override func applicationDidBecomeActive(_ application: UIApplication) {
-        super.applicationDidBecomeActive(application)
-        application.applicationState
-//        launchedShortcutItem = UIApplicationShortcutItem.init(type: "Custom", localizedTitle: "Locaized string")
-        if let shortcut = launchedShortcutItem {
-            _ = handleShortcut(shortcut)
-            launchedShortcutItem = nil
-        }
-        
-        print("Application did become active")
-    }
-    
-    override func applicationWillEnterForeground(_ application: UIApplication) {
-        super.applicationWillEnterForeground(application)
-        
-        print("Did enter foreground")
-    }
-    
-    override func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        super.application(application, performActionFor: shortcutItem, completionHandler: completionHandler)
-        
-        completionHandler(handleShortcut(shortcutItem))
-    }
-    
-    func handleShortcut(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
-        // Construct an alert using the details of the shortcut used to open the application.
-        let alertController = UIAlertController(title: "Shortcut Handled", message: "\"\(shortcutItem.localizedTitle)\"", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        
-        // Display an alert indicating the shortcut selected from the home screen.
-        window!.rootViewController?.present(alertController, animated: true, completion: nil)
-        
-        return true
-    }
-    
-    override func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-        _ = super.application(app, open: url, options: options)
-        
-        print("Open url:\(url.absoluteString)")
-        
-        return true
-    }
-
-//    func applicationWillResignActive(_ application: UIApplication) {
-//        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-//        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-//    }
-//
-//    func applicationDidEnterBackground(_ application: UIApplication) {
-//        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-//        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-//    }
-//
-//    func applicationWillEnterForeground(_ application: UIApplication) {
-//        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-//    }
-//
-//    func applicationDidBecomeActive(_ application: UIApplication) {
-//        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//    }
-//
-//    func applicationWillTerminate(_ application: UIApplication) {
-//        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-//    }
 }
 

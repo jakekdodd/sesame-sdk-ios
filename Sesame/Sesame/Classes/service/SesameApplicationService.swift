@@ -18,32 +18,39 @@ final public class SesameApplicationService : NSObject, ApplicationService {
     
     
     enum SesameAppState {
-        case closed, opened, reopened
+        case closed, opened
     }
     
     var lastOpened: Date? = nil
     var appState: SesameAppState = .closed {
         didSet {
-            guard appState != .closed else { return }
-            
-            if oldValue == .opened,
-                appState == .opened,
-                let lastOpened = lastOpened,
-                lastOpened.timeIntervalSince(Date()) > 0.5
-            {
-                appState = .reopened
-                self.lastOpened = Date()
-                Logger.debug("App reopened")
+            Logger.debug("App state changed from \(oldValue) to \(appState)")
+            let reinforce = {
+                let reinforcement = self.app.reinforcer.cartridge.removeDecision()
+                self.delegate?.app(self.app, didReceiveReinforcement: reinforcement, withOptions: self.app.reinforcer.options?[reinforcement])
             }
             
-            if oldValue == .closed,
-                appState == .opened {
-                Logger.debug("App opening from close")
+            switch (oldValue, appState) {
+            case (.closed, .opened):
                 self.lastOpened = Date()
-                // TO-DO: call api for reinforcement, deliver reinforcement to delegate
-                let reinforcement = app.reinforcer.cartridge.removeDecision()
-                print("Removed decision reinforcement:\(reinforcement)")
-                delegate?.app(app, didReceiveReinforcement: reinforcement, withOptions: app.reinforcer.options?[reinforcement])
+                reinforce()
+                
+            case (.opened, .opened):
+                let now = Date()
+                if let lastOpened = lastOpened,
+                    lastOpened.timeIntervalSince(now) > 2
+                {
+                    reinforce()
+                    self.lastOpened = Date()
+                } else {
+                    Logger.debug("App reopened too soon for another reinforcement")
+                }
+                
+            case (.opened, .closed):
+                self.lastOpened = nil
+                
+            default:
+                break
             }
         }
     }
@@ -65,7 +72,7 @@ final public class SesameApplicationService : NSObject, ApplicationService {
     
     /// MARK: protocol ApplicationService UIApplicationDelegate
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
-        print("Sesame service app did launch")
+        Logger.debug("Sesame service app did launch")
         
         appState = .opened
         
@@ -80,6 +87,18 @@ final public class SesameApplicationService : NSObject, ApplicationService {
 //            }
 //        }
         return true
+    }
+    
+    public func applicationWillEnterForeground(_ application: UIApplication) {
+        Logger.debug("Sesame service app will enter foreground")
+        
+        appState = .opened
+    }
+    
+    public func applicationDidEnterBackground(_ application: UIApplication) {
+        Logger.debug("Sesame service app did enter background")
+        
+        appState = .closed
     }
     
 }
