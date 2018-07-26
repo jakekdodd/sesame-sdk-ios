@@ -41,7 +41,7 @@ public extension UIView {
         let burstDuration = 0.8
         let showerDuration = max(0, duration - burstDuration)
         self.confettiBurst(duration: burstDuration, size: size, shapes: shapes, colors: colors) {
-            BKAudio.play(systemSound, vibrate: hapticFeedback)
+            AudioEffect.play(systemSound, vibrate: hapticFeedback)
             self.confettiShower(duration: showerDuration, size: size, shapes: shapes, colors: colors, completion: completion)
         }
     }

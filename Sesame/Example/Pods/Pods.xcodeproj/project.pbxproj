@@ -7,36 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A3230F3790284C3710972A6DEA96572 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B8787A8D14ABC500A0607E950DD1A4 /* StringExtensions.swift */; };
-		0D3F835F8A6A883964EADECA81294D62 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D979923A5875B80DDF8B54B74CBBE /* UIColorExtensions.swift */; };
+		0B69326C038C3BFCC15A3E2935E20732 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8B0E44AE974E2C577C6C130510B723 /* Logger.swift */; };
+		1681026D027E041E0464A0AFBB4B1DAE /* UIView+CodelessAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1318BB181A79565A4E0BDEE1754FE89F /* UIView+CodelessAnimation.swift */; };
+		19AFBD7C30D1B0CB77EE0022BBCD29BE /* UIView+CodelessConfetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10A60536F8EEBAB8DA9FE2205485924 /* UIView+CodelessConfetti.swift */; };
+		19E14085765CF70ABCC34EB38BDE5012 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97CF6D862ED78AB4EE20E1B996AEC86 /* AppConfig.swift */; };
 		1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */; };
-		291BBE89E3D07220B667BCAB2A2B2EB8 /* SesameApplicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE913091E2512525ECE971F373D0FF5B /* SesameApplicationService.swift */; };
-		2D4846CCDC94A656F8311D9410A82156 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CC1F50450FDDAB8426D2E4856F222 /* APIClient.swift */; };
-		2E0335BA794F8425B8EA67344BF32BE6 /* UIView+CodelessConfetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885B7D87953B6EEBF3C82424C703EDBD /* UIView+CodelessConfetti.swift */; };
+		29D276B521865F0FF13417A2283B7322 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2519326A4EF2A08C4A3D60AA2B874B6 /* UIImageExtensions.swift */; };
+		2FA61D374F1A73991B054CD75A6CE82B /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213511B69D856F0D8EB23098890C5765 /* AudioEffect.swift */; };
+		3CB5F59C4A6AAC53F2A28DBA073A0821 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A9F148F517BC8A8189009DD69428E /* BundleExtensions.swift */; };
+		3D3D30FD655A0978B2451D44479DE3B8 /* Reinforcer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB9DDB0A616872FA4EB41201BBAE1C8 /* Reinforcer.swift */; };
 		4192EF17D62CCA0E1CA3F2C5668BF74E /* Pods-Sesame_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 52E8674BB969D65A77D69A63CE3DD61A /* Pods-Sesame_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		474A6209154E60D89BB2AEBD15948342 /* Sesame-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5279ACE19F0936CF51B0F6E013D4D235 /* Sesame-dummy.m */; };
-		62B56E16214CD80CB38AAB6ADF80BF72 /* DelayedSerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4B72E4D29B2D5AC0DF5D757C2A1C97 /* DelayedSerialQueue.swift */; };
+		4B8497C2B2B4484EBF36C07DCA1BECEA /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01732DA964DF32D5A384CBAA07093002 /* APIClient.swift */; };
+		58A5DC0D9484D4484C5DEEC79BEAB2FE /* DelayedSerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD7DD6DDF5069B9E4B2DD6179F0515E /* DelayedSerialQueue.swift */; };
+		5E762194C72C45D0A98C036F2D8940E0 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF3E24FF1ED245DD2EC20A5797058F3 /* Tracker.swift */; };
 		65E33CA91C3E6663100BCADBD7DA7505 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
-		74B9990C64C560863DBDD0F6786E30DA /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA292E406CDBDCDF55BF9431D6E4C4 /* Tracker.swift */; };
-		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B90B0DB82CED3A15B9CC06853344364C /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		80EB7AAAA4C3F8D18EDAF09B023ADAF9 /* Reinforcer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5F062AB8529878194A552245DAF8B1 /* Reinforcer.swift */; };
-		99C0F4DAE825179272EEE224D4A8457C /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096B433A2ED5577828F8914DB3B7549F /* UIViewExtensions.swift */; };
-		9E8B242DC3B6B5F8827AC68E43AF4BAD /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89768DD8DF438255F493AD2147B77319 /* CGExtensions.swift */; };
-		A543D97D2EFC264839171C134D9C7F94 /* UIView+CodelessAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE5A949A6DB9A54B594F8D17699362B /* UIView+CodelessAnimation.swift */; };
-		AEA758776A9C33B53D02376B19E67D54 /* Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = E818A7369ED48A8D388E0C989F8CE01B /* Sesame.swift */; };
-		B4FE47D9F22E940F2E7D51F75E7DADEC /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F9B58006364D4D41521439C6B9B8BE /* HTTPClient.swift */; };
-		B53FEA22395C81E1599125042CAA0E23 /* PluggableApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE6C2C5ADCA75EA42A2E509475FD64 /* PluggableApplicationDelegate.swift */; };
+		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EAB6465FFD4CF87F5EC6AF3F46C8394 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		84938BE221094B6400855CE9 /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84938BE121094B6400855CE9 /* VisualEffect.swift */; };
+		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = E08F3D34A706FD1A08D607A20EEF09D6 /* sheen.png */; };
+		8FBF71AAD7951BF143AB5A2EB73F6514 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3506D324CCA2FB4C7293ADAD49A3E7A9 /* CGExtensions.swift */; };
+		90A2B42011300899380893FEA200E23A /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EBA262B91904FA2FB955702C2055CA /* UIColorExtensions.swift */; };
+		9583A66B2E297E3CC25C66A24D35BAB2 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA67D2A71C47256EA75F616CD703C38 /* HTTPClient.swift */; };
 		C26FDB83473646EADEFE16405B8D9EE6 /* Pods-Sesame_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CD6245A50459CD75AB028B6A8384AE45 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3522162F2273391B7ED767428E9613A /* UIWindowExtensions.swift */; };
-		D3FA3E3270191C17A7C5EE92476EDA5A /* ReportEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C231715FD045ACB812F1BE254D552B11 /* ReportEvent.swift */; };
-		D528DC8061B73FAF28E74DB01BB17277 /* BKAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAA467AB3F55CD9C1DEA0FDB978A856 /* BKAudio.swift */; };
+		C7C6DB414FF4DF98A247495147E2E210 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E50EB41568B31F9B9815CDC1DE474D /* UIWindowExtensions.swift */; };
+		CCE4E21799FFBC4E5ECD64AC019345BE /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FDBB32B2680F9AF07FCD15D5A517C6 /* UIViewExtensions.swift */; };
+		CD05E4D83DDB022011FBF4ACEE61CAFA /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6BE28EDBD25D9456A0C3740313C94C /* StringExtensions.swift */; };
 		D7FD58B6C27002412FE625D7F0F93A13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		D95DC6969F3636ED070E45DDA7269F09 /* Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F7B06DC1B3BE2C1465501AFE94CE39 /* Sesame.swift */; };
 		D973E3BFCA386C12EF284207B6E8D303 /* Pods-Sesame_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 13802097F96956396CF62876DBBB6CE0 /* Pods-Sesame_Tests-dummy.m */; };
-		DCC4D30F3BA1755CD12869E2047C8D28 /* Cartridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCFB0CD92646A4529D496B88CA7F3D /* Cartridge.swift */; };
-		E772A88AE67A030CA7E422BA14DD7CD1 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62576FFDF9B67827CAAB4EAD93DCE25 /* Logger.swift */; };
-		F58283EE82481CBD165CED6D971DAD61 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF9B71645FD9D05850C6547E8FCE13 /* AppConfig.swift */; };
+		DB98DE33D062F82DF9C6A7002403AE24 /* SesameApplicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2FD4AE8CCCBA517256BB22610669BF /* SesameApplicationService.swift */; };
+		EF6A3CA406731904979D5C7D11653E2A /* PluggableApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074E5F4E26C1AC27D5B5AA88692884A8 /* PluggableApplicationDelegate.swift */; };
+		F31B5EA2FC46FF19ACFD5729EF2C4107 /* Sesame-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CDEC274B8336D036A21BE774E8DFFE /* Sesame-dummy.m */; };
+		F5BD18793155BB4A2E44C58998485CE4 /* Cartridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4502F679250172BBA1BD8C63A7E668D0 /* Cartridge.swift */; };
 		F62BDF3C3B8F6231AA2CD883CFCCEC45 /* Sesame.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */; };
 		F82B6F7F41AF0050E92996B56DAEB3FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		FDC40DDCE0AB9653BA130DAA13F873AD /* ReportEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15ADD98691701BD38185A2CC917EDBA /* ReportEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,61 +68,65 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01686B53AFD13171D84C1F486245DA62 /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		01732DA964DF32D5A384CBAA07093002 /* APIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		02E57E757A8A4354713EC136929BA111 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		069AF1FC2613B359A92114726CB60EE4 /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
+		074E5F4E26C1AC27D5B5AA88692884A8 /* PluggableApplicationDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PluggableApplicationDelegate.swift; sourceTree = "<group>"; };
 		0954B47DB180D4FDDCCD01311785CD70 /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		096B433A2ED5577828F8914DB3B7549F /* UIViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
-		11F307AE15AFD8DA228D100B3FB24C03 /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
+		0BF3E24FF1ED245DD2EC20A5797058F3 /* Tracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		0EB9DDB0A616872FA4EB41201BBAE1C8 /* Reinforcer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Reinforcer.swift; sourceTree = "<group>"; };
+		1318BB181A79565A4E0BDEE1754FE89F /* UIView+CodelessAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CodelessAnimation.swift"; sourceTree = "<group>"; };
 		13802097F96956396CF62876DBBB6CE0 /* Pods-Sesame_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sesame_Tests-dummy.m"; sourceTree = "<group>"; };
+		20E50EB41568B31F9B9815CDC1DE474D /* UIWindowExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
+		213511B69D856F0D8EB23098890C5765 /* AudioEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
 		231C325760A9C9A0F6A4EE831A059EAE /* Pods-Sesame_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-resources.sh"; sourceTree = "<group>"; };
-		31F5F6810ED7D05E34FBC5D440F9755E /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Sesame_Example.framework; path = "Pods-Sesame_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		31F5F6810ED7D05E34FBC5D440F9755E /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3427FBADB6ACE92DD4BB0A3D70704E48 /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		3506D324CCA2FB4C7293ADAD49A3E7A9 /* CGExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		39F7B06DC1B3BE2C1465501AFE94CE39 /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
 		3C46D37F2C90130D8F55131F45B0D945 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42F89EE22FD25D5852AB69A94CA1017C /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
-		43FF9B71645FD9D05850C6547E8FCE13 /* AppConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		4502F679250172BBA1BD8C63A7E668D0 /* Cartridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Cartridge.swift; sourceTree = "<group>"; };
+		4BD7DD6DDF5069B9E4B2DD6179F0515E /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
+		4EAB6465FFD4CF87F5EC6AF3F46C8394 /* Sesame-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-umbrella.h"; sourceTree = "<group>"; };
 		519399B67D41AFED8F2A1E60D874C33D /* Pods-Sesame_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Tests-resources.sh"; sourceTree = "<group>"; };
-		5279ACE19F0936CF51B0F6E013D4D235 /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
 		52E8674BB969D65A77D69A63CE3DD61A /* Pods-Sesame_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Tests-umbrella.h"; sourceTree = "<group>"; };
-		53AAA57482A54E1A3F41365FB5EDB743 /* Sesame.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sesame.xcconfig; sourceTree = "<group>"; };
 		54C2AD22FEA7896F65F496251A010D04 /* Pods-Sesame_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		588E24ADFD51ECC045E9453F7CB7FCDE /* Pods-Sesame_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sesame_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		5938A1FFB92D40ABAF4F84E7C034DB71 /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Sesame_Tests.framework; path = "Pods-Sesame_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		591F9B6C73BFAFFA63B81A51E7F90903 /* Sesame-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-prefix.pch"; sourceTree = "<group>"; };
+		5938A1FFB92D40ABAF4F84E7C034DB71 /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A9A9F148F517BC8A8189009DD69428E /* BundleExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
 		5DD0B4F60CDCA0172F58397CA167CDB3 /* Pods-Sesame_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Tests-frameworks.sh"; sourceTree = "<group>"; };
-		62B8787A8D14ABC500A0607E950DD1A4 /* StringExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		67E0897833D436B50FAD390281753F42 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69D84422BE64D7F24C44FEC4C26C049E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AD0F9E29AA24DD719DD2EEE990A7B47 /* Pods-Sesame_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
-		7D4B72E4D29B2D5AC0DF5D757C2A1C97 /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
+		7D6BE28EDBD25D9456A0C3740313C94C /* StringExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		7E2FD4AE8CCCBA517256BB22610669BF /* SesameApplicationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SesameApplicationService.swift; sourceTree = "<group>"; };
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
-		885B7D87953B6EEBF3C82424C703EDBD /* UIView+CodelessConfetti.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CodelessConfetti.swift"; sourceTree = "<group>"; };
-		89768DD8DF438255F493AD2147B77319 /* CGExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		84938BE121094B6400855CE9 /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
+		89CDEC274B8336D036A21BE774E8DFFE /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		98AC6AB29E4DAEB4508C626B03E5053F /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9BAA467AB3F55CD9C1DEA0FDB978A856 /* BKAudio.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BKAudio.swift; sourceTree = "<group>"; };
-		AACE6C2C5ADCA75EA42A2E509475FD64 /* PluggableApplicationDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PluggableApplicationDelegate.swift; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9BC430FC5E0629220B479E026C7BDEF5 /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
 		AB895FADDBD0F9AC58F5C6B69A218187 /* Pods-Sesame_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		AC7F04CDF8CCA509E6588E4389CE16F2 /* Sesame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Sesame.framework; path = Sesame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD5F062AB8529878194A552245DAF8B1 /* Reinforcer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Reinforcer.swift; sourceTree = "<group>"; };
-		B62576FFDF9B67827CAAB4EAD93DCE25 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Sesame/Classes/Logger.swift; sourceTree = "<group>"; };
-		B90B0DB82CED3A15B9CC06853344364C /* Sesame-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-umbrella.h"; sourceTree = "<group>"; };
+		AC7F04CDF8CCA509E6588E4389CE16F2 /* Sesame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sesame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB5A36CD792F18933E1A2B2D2E359D09 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BC7915A09521E093504F8CB6E66FDB80 /* Pods-Sesame_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Example.modulemap"; sourceTree = "<group>"; };
-		C231715FD045ACB812F1BE254D552B11 /* ReportEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReportEvent.swift; sourceTree = "<group>"; };
-		C2F9B58006364D4D41521439C6B9B8BE /* HTTPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
-		C71D979923A5875B80DDF8B54B74CBBE /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
-		CDE5A949A6DB9A54B594F8D17699362B /* UIView+CodelessAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CodelessAnimation.swift"; sourceTree = "<group>"; };
-		CFA15351E354AA83E66A2EDEAAE70860 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		D3DA292E406CDBDCDF55BF9431D6E4C4 /* Tracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
-		D4E6D3F9449E27AB8B3E58C67BBEE4AA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		DBCCFB0CD92646A4529D496B88CA7F3D /* Cartridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Cartridge.swift; sourceTree = "<group>"; };
-		DF3CC1F50450FDDAB8426D2E4856F222 /* APIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Sesame.bundle; path = "Sesame-Sesame.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1F1B3204C9AD3F68E0E36350E3D8E82 /* Sesame-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-prefix.pch"; sourceTree = "<group>"; };
-		E818A7369ED48A8D388E0C989F8CE01B /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
-		EE913091E2512525ECE971F373D0FF5B /* SesameApplicationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SesameApplicationService.swift; sourceTree = "<group>"; };
+		BD6D2D65C6E44EAAE82B9D704EFD29FA /* Sesame.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sesame.xcconfig; sourceTree = "<group>"; };
+		C2EE72B1E7CA44832237CB4C19B0918F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		C97CF6D862ED78AB4EE20E1B996AEC86 /* AppConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		D5FDBB32B2680F9AF07FCD15D5A517C6 /* UIViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		D7EBA262B91904FA2FB955702C2055CA /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sesame.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		E08F3D34A706FD1A08D607A20EEF09D6 /* sheen.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sheen.png; path = Sesame/Assets/sheen.png; sourceTree = "<group>"; };
+		E10A60536F8EEBAB8DA9FE2205485924 /* UIView+CodelessConfetti.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CodelessConfetti.swift"; sourceTree = "<group>"; };
+		E2519326A4EF2A08C4A3D60AA2B874B6 /* UIImageExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
+		EB8B0E44AE974E2C577C6C130510B723 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Sesame/Classes/Logger.swift; sourceTree = "<group>"; };
+		EDA67D2A71C47256EA75F616CD703C38 /* HTTPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		F15ADD98691701BD38185A2CC917EDBA /* ReportEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReportEvent.swift; sourceTree = "<group>"; };
 		F2E846F19171FD5D0B774660CAF1D75C /* Pods-Sesame_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sesame_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		F3522162F2273391B7ED767428E9613A /* UIWindowExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sesame_Example-dummy.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -157,38 +165,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		06FAF5568507B01AB2ABAF9F9DF1CAA9 /* Extensions */ = {
+		213F781AD4CD221BB325AECCC96AFD1F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				89768DD8DF438255F493AD2147B77319 /* CGExtensions.swift */,
-				7D4B72E4D29B2D5AC0DF5D757C2A1C97 /* DelayedSerialQueue.swift */,
-				62B8787A8D14ABC500A0607E950DD1A4 /* StringExtensions.swift */,
-				C71D979923A5875B80DDF8B54B74CBBE /* UIColorExtensions.swift */,
-				096B433A2ED5577828F8914DB3B7549F /* UIViewExtensions.swift */,
-				F3522162F2273391B7ED767428E9613A /* UIWindowExtensions.swift */,
+				5A9A9F148F517BC8A8189009DD69428E /* BundleExtensions.swift */,
+				3506D324CCA2FB4C7293ADAD49A3E7A9 /* CGExtensions.swift */,
+				4BD7DD6DDF5069B9E4B2DD6179F0515E /* DelayedSerialQueue.swift */,
+				7D6BE28EDBD25D9456A0C3740313C94C /* StringExtensions.swift */,
+				D7EBA262B91904FA2FB955702C2055CA /* UIColorExtensions.swift */,
+				E2519326A4EF2A08C4A3D60AA2B874B6 /* UIImageExtensions.swift */,
+				D5FDBB32B2680F9AF07FCD15D5A517C6 /* UIViewExtensions.swift */,
+				20E50EB41568B31F9B9815CDC1DE474D /* UIWindowExtensions.swift */,
 			);
 			name = Extensions;
 			path = Sesame/Classes/Extensions;
 			sourceTree = "<group>";
 		};
-		238BB4A5EA21482881BD99D87E4E65A3 /* Service */ = {
+		24AB1438BE638C4E8BC69C4921D4D6A4 /* Sesame */ = {
 			isa = PBXGroup;
 			children = (
-				AACE6C2C5ADCA75EA42A2E509475FD64 /* PluggableApplicationDelegate.swift */,
-				EE913091E2512525ECE971F373D0FF5B /* SesameApplicationService.swift */,
+				EB8B0E44AE974E2C577C6C130510B723 /* Logger.swift */,
+				39F7B06DC1B3BE2C1465501AFE94CE39 /* Sesame.swift */,
+				68D11D3ADFD93C5FF7987D3D7861B3D3 /* API */,
+				34DE2348A96B58839106AE48D5D07483 /* App */,
+				7DFBB34CC77060E0129F80128CDD0E99 /* Effects */,
+				213F781AD4CD221BB325AECCC96AFD1F /* Extensions */,
+				33A5C082AF0F148FF0F565F81FD59D2F /* Pod */,
+				D691407EA4C94175A56CA80A9F094A9F /* Resources */,
+				A94D6DEE45B38E66C658D29C0E5A11CF /* Service */,
+				7A86933D10F2EBF9B73E5108CDF1F2E5 /* Support Files */,
 			);
-			name = Service;
-			path = Sesame/Classes/Service;
+			name = Sesame;
+			path = ../..;
 			sourceTree = "<group>";
 		};
-		2731DD8035E17ED504AE1A45E8683F8B /* API */ = {
+		33A5C082AF0F148FF0F565F81FD59D2F /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				DF3CC1F50450FDDAB8426D2E4856F222 /* APIClient.swift */,
-				C2F9B58006364D4D41521439C6B9B8BE /* HTTPClient.swift */,
+				C2EE72B1E7CA44832237CB4C19B0918F /* LICENSE */,
+				BB5A36CD792F18933E1A2B2D2E359D09 /* README.md */,
+				01686B53AFD13171D84C1F486245DA62 /* Sesame.podspec */,
 			);
-			name = API;
-			path = Sesame/Classes/API;
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		34DE2348A96B58839106AE48D5D07483 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				C97CF6D862ED78AB4EE20E1B996AEC86 /* AppConfig.swift */,
+				4502F679250172BBA1BD8C63A7E668D0 /* Cartridge.swift */,
+				0EB9DDB0A616872FA4EB41201BBAE1C8 /* Reinforcer.swift */,
+				F15ADD98691701BD38185A2CC917EDBA /* ReportEvent.swift */,
+				0BF3E24FF1ED245DD2EC20A5797058F3 /* Tracker.swift */,
+			);
+			name = App;
+			path = Sesame/Classes/App;
 			sourceTree = "<group>";
 		};
 		366FC10CB5456B9E273809EEA5E3D52A /* Pods-Sesame_Example */ = {
@@ -209,61 +240,14 @@
 			path = "Target Support Files/Pods-Sesame_Example";
 			sourceTree = "<group>";
 		};
-		5B7F3E3A53266B1A90673C86E42AE2C2 /* App */ = {
+		68D11D3ADFD93C5FF7987D3D7861B3D3 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				43FF9B71645FD9D05850C6547E8FCE13 /* AppConfig.swift */,
-				DBCCFB0CD92646A4529D496B88CA7F3D /* Cartridge.swift */,
-				AD5F062AB8529878194A552245DAF8B1 /* Reinforcer.swift */,
-				C231715FD045ACB812F1BE254D552B11 /* ReportEvent.swift */,
-				D3DA292E406CDBDCDF55BF9431D6E4C4 /* Tracker.swift */,
+				01732DA964DF32D5A384CBAA07093002 /* APIClient.swift */,
+				EDA67D2A71C47256EA75F616CD703C38 /* HTTPClient.swift */,
 			);
-			name = App;
-			path = Sesame/Classes/App;
-			sourceTree = "<group>";
-		};
-		613D5E07E409ECCFF4F1AA16A88E555A /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				808098C4AB6A70F5ED0E8258943EFBFC /* Sesame */,
-			);
-			name = "Development Pods";
-			sourceTree = "<group>";
-		};
-		650963EAB5D311DAAA94F40DCF05EE8E /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				67E0897833D436B50FAD390281753F42 /* Info.plist */,
-				42F89EE22FD25D5852AB69A94CA1017C /* ResourceBundle-Sesame-Info.plist */,
-				11F307AE15AFD8DA228D100B3FB24C03 /* Sesame.modulemap */,
-				53AAA57482A54E1A3F41365FB5EDB743 /* Sesame.xcconfig */,
-				5279ACE19F0936CF51B0F6E013D4D235 /* Sesame-dummy.m */,
-				E1F1B3204C9AD3F68E0E36350E3D8E82 /* Sesame-prefix.pch */,
-				B90B0DB82CED3A15B9CC06853344364C /* Sesame-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/Sesame";
-			sourceTree = "<group>";
-		};
-		65279BAFD6AD7CAE2803C1DDFD878099 /* Rewards */ = {
-			isa = PBXGroup;
-			children = (
-				9BAA467AB3F55CD9C1DEA0FDB978A856 /* BKAudio.swift */,
-				CDE5A949A6DB9A54B594F8D17699362B /* UIView+CodelessAnimation.swift */,
-				885B7D87953B6EEBF3C82424C703EDBD /* UIView+CodelessConfetti.swift */,
-			);
-			name = Rewards;
-			path = Sesame/Classes/Rewards;
-			sourceTree = "<group>";
-		};
-		6C32C143C67C314AD6CCBF895F9EAD62 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				CFA15351E354AA83E66A2EDEAAE70860 /* LICENSE */,
-				D4E6D3F9449E27AB8B3E58C67BBEE4AA /* README.md */,
-				98AC6AB29E4DAEB4508C626B03E5053F /* Sesame.podspec */,
-			);
-			name = Pod;
+			name = API;
+			path = Sesame/Classes/API;
 			sourceTree = "<group>";
 		};
 		788D7DA7D6782ED5B7E3FCC5AA032772 /* Pods-Sesame_Tests */ = {
@@ -284,32 +268,52 @@
 			path = "Target Support Files/Pods-Sesame_Tests";
 			sourceTree = "<group>";
 		};
+		7A86933D10F2EBF9B73E5108CDF1F2E5 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				69D84422BE64D7F24C44FEC4C26C049E /* Info.plist */,
+				9BC430FC5E0629220B479E026C7BDEF5 /* ResourceBundle-Sesame-Info.plist */,
+				069AF1FC2613B359A92114726CB60EE4 /* Sesame.modulemap */,
+				BD6D2D65C6E44EAAE82B9D704EFD29FA /* Sesame.xcconfig */,
+				89CDEC274B8336D036A21BE774E8DFFE /* Sesame-dummy.m */,
+				591F9B6C73BFAFFA63B81A51E7F90903 /* Sesame-prefix.pch */,
+				4EAB6465FFD4CF87F5EC6AF3F46C8394 /* Sesame-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/Sesame";
+			sourceTree = "<group>";
+		};
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
-				613D5E07E409ECCFF4F1AA16A88E555A /* Development Pods */,
+				BE74E06097FC79957CA6632EA64268C3 /* Development Pods */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
 				A9AE9A2518F5065EE5F5A07F2082A30E /* Products */,
 				F0B555B44F6756E727677EDFF2995F9D /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		808098C4AB6A70F5ED0E8258943EFBFC /* Sesame */ = {
+		7DFBB34CC77060E0129F80128CDD0E99 /* Effects */ = {
 			isa = PBXGroup;
 			children = (
-				B62576FFDF9B67827CAAB4EAD93DCE25 /* Logger.swift */,
-				E818A7369ED48A8D388E0C989F8CE01B /* Sesame.swift */,
-				2731DD8035E17ED504AE1A45E8683F8B /* API */,
-				5B7F3E3A53266B1A90673C86E42AE2C2 /* App */,
-				06FAF5568507B01AB2ABAF9F9DF1CAA9 /* Extensions */,
-				6C32C143C67C314AD6CCBF895F9EAD62 /* Pod */,
-				65279BAFD6AD7CAE2803C1DDFD878099 /* Rewards */,
-				238BB4A5EA21482881BD99D87E4E65A3 /* Service */,
-				650963EAB5D311DAAA94F40DCF05EE8E /* Support Files */,
+				213511B69D856F0D8EB23098890C5765 /* AudioEffect.swift */,
+				84938BE121094B6400855CE9 /* VisualEffect.swift */,
+				1318BB181A79565A4E0BDEE1754FE89F /* UIView+CodelessAnimation.swift */,
+				E10A60536F8EEBAB8DA9FE2205485924 /* UIView+CodelessConfetti.swift */,
 			);
-			name = Sesame;
-			path = ../..;
+			name = Effects;
+			path = Sesame/Classes/Effects;
+			sourceTree = "<group>";
+		};
+		A94D6DEE45B38E66C658D29C0E5A11CF /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				074E5F4E26C1AC27D5B5AA88692884A8 /* PluggableApplicationDelegate.swift */,
+				7E2FD4AE8CCCBA517256BB22610669BF /* SesameApplicationService.swift */,
+			);
+			name = Service;
+			path = Sesame/Classes/Service;
 			sourceTree = "<group>";
 		};
 		A9AE9A2518F5065EE5F5A07F2082A30E /* Products */ = {
@@ -331,12 +335,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BE74E06097FC79957CA6632EA64268C3 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				24AB1438BE638C4E8BC69C4921D4D6A4 /* Sesame */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
 		D35AF013A5F0BAD4F32504907A52519E /* iOS */ = {
 			isa = PBXGroup;
 			children = (
 				6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */,
 			);
 			name = iOS;
+			sourceTree = "<group>";
+		};
+		D691407EA4C94175A56CA80A9F094A9F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E08F3D34A706FD1A08D607A20EEF09D6 /* sheen.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		F0B555B44F6756E727677EDFF2995F9D /* Targets Support Files */ = {
@@ -420,7 +440,7 @@
 			buildPhases = (
 				2716042F1DEEED15C89332748A7B80B1 /* Sources */,
 				6D5E255100F1B8A179CFE94A9994DB4B /* Frameworks */,
-				1FD83E95F3E0AA5D3F49813FCD96C67D /* Resources */,
+				AA2026AE1A8A44ADE1B3EAD26DB95E96 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -435,7 +455,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7829688744268BB15E71164D9724418C /* Build configuration list for PBXNativeTarget "Sesame" */;
 			buildPhases = (
-				A2A035757A5C36C3D835B36AFFEDBEAA /* Sources */,
+				305B58BD289B7D6A6CB9B9827C37BA79 /* Sources */,
 				D7BC1E33BA0966C2ED7981C8C641F4EF /* Frameworks */,
 				0008149B56834FD63B65E57E80697CED /* Resources */,
 				381ECDCFFFCA3C4EE13901E1BFCE462F /* Headers */,
@@ -458,6 +478,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					59EC070CDD1C0BA9E906746C0D87B8FC = {
+						LastSwiftMigration = 0940;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -488,10 +513,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1FD83E95F3E0AA5D3F49813FCD96C67D /* Resources */ = {
+		AA2026AE1A8A44ADE1B3EAD26DB95E96 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,31 +539,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A2A035757A5C36C3D835B36AFFEDBEAA /* Sources */ = {
+		305B58BD289B7D6A6CB9B9827C37BA79 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D4846CCDC94A656F8311D9410A82156 /* APIClient.swift in Sources */,
-				F58283EE82481CBD165CED6D971DAD61 /* AppConfig.swift in Sources */,
-				D528DC8061B73FAF28E74DB01BB17277 /* BKAudio.swift in Sources */,
-				DCC4D30F3BA1755CD12869E2047C8D28 /* Cartridge.swift in Sources */,
-				9E8B242DC3B6B5F8827AC68E43AF4BAD /* CGExtensions.swift in Sources */,
-				62B56E16214CD80CB38AAB6ADF80BF72 /* DelayedSerialQueue.swift in Sources */,
-				B4FE47D9F22E940F2E7D51F75E7DADEC /* HTTPClient.swift in Sources */,
-				E772A88AE67A030CA7E422BA14DD7CD1 /* Logger.swift in Sources */,
-				B53FEA22395C81E1599125042CAA0E23 /* PluggableApplicationDelegate.swift in Sources */,
-				80EB7AAAA4C3F8D18EDAF09B023ADAF9 /* Reinforcer.swift in Sources */,
-				D3FA3E3270191C17A7C5EE92476EDA5A /* ReportEvent.swift in Sources */,
-				474A6209154E60D89BB2AEBD15948342 /* Sesame-dummy.m in Sources */,
-				AEA758776A9C33B53D02376B19E67D54 /* Sesame.swift in Sources */,
-				291BBE89E3D07220B667BCAB2A2B2EB8 /* SesameApplicationService.swift in Sources */,
-				0A3230F3790284C3710972A6DEA96572 /* StringExtensions.swift in Sources */,
-				74B9990C64C560863DBDD0F6786E30DA /* Tracker.swift in Sources */,
-				0D3F835F8A6A883964EADECA81294D62 /* UIColorExtensions.swift in Sources */,
-				A543D97D2EFC264839171C134D9C7F94 /* UIView+CodelessAnimation.swift in Sources */,
-				2E0335BA794F8425B8EA67344BF32BE6 /* UIView+CodelessConfetti.swift in Sources */,
-				99C0F4DAE825179272EEE224D4A8457C /* UIViewExtensions.swift in Sources */,
-				CD6245A50459CD75AB028B6A8384AE45 /* UIWindowExtensions.swift in Sources */,
+				4B8497C2B2B4484EBF36C07DCA1BECEA /* APIClient.swift in Sources */,
+				19E14085765CF70ABCC34EB38BDE5012 /* AppConfig.swift in Sources */,
+				2FA61D374F1A73991B054CD75A6CE82B /* AudioEffect.swift in Sources */,
+				3CB5F59C4A6AAC53F2A28DBA073A0821 /* BundleExtensions.swift in Sources */,
+				F5BD18793155BB4A2E44C58998485CE4 /* Cartridge.swift in Sources */,
+				8FBF71AAD7951BF143AB5A2EB73F6514 /* CGExtensions.swift in Sources */,
+				58A5DC0D9484D4484C5DEEC79BEAB2FE /* DelayedSerialQueue.swift in Sources */,
+				9583A66B2E297E3CC25C66A24D35BAB2 /* HTTPClient.swift in Sources */,
+				0B69326C038C3BFCC15A3E2935E20732 /* Logger.swift in Sources */,
+				EF6A3CA406731904979D5C7D11653E2A /* PluggableApplicationDelegate.swift in Sources */,
+				3D3D30FD655A0978B2451D44479DE3B8 /* Reinforcer.swift in Sources */,
+				FDC40DDCE0AB9653BA130DAA13F873AD /* ReportEvent.swift in Sources */,
+				F31B5EA2FC46FF19ACFD5729EF2C4107 /* Sesame-dummy.m in Sources */,
+				D95DC6969F3636ED070E45DDA7269F09 /* Sesame.swift in Sources */,
+				DB98DE33D062F82DF9C6A7002403AE24 /* SesameApplicationService.swift in Sources */,
+				CD05E4D83DDB022011FBF4ACEE61CAFA /* StringExtensions.swift in Sources */,
+				5E762194C72C45D0A98C036F2D8940E0 /* Tracker.swift in Sources */,
+				90A2B42011300899380893FEA200E23A /* UIColorExtensions.swift in Sources */,
+				29D276B521865F0FF13417A2283B7322 /* UIImageExtensions.swift in Sources */,
+				1681026D027E041E0464A0AFBB4B1DAE /* UIView+CodelessAnimation.swift in Sources */,
+				19AFBD7C30D1B0CB77EE0022BBCD29BE /* UIView+CodelessConfetti.swift in Sources */,
+				CCE4E21799FFBC4E5ECD64AC019345BE /* UIViewExtensions.swift in Sources */,
+				C7C6DB414FF4DF98A247495147E2E210 /* UIWindowExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +573,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84938BE221094B6400855CE9 /* VisualEffect.swift in Sources */,
 				1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,6 +607,7 @@
 			baseConfigurationReference = 7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -602,6 +632,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -743,7 +774,7 @@
 		};
 		55DFE908E8E9391464DCB7F286B25732 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53AAA57482A54E1A3F41365FB5EDB743 /* Sesame.xcconfig */;
+			baseConfigurationReference = BD6D2D65C6E44EAAE82B9D704EFD29FA /* Sesame.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Sesame";
@@ -817,7 +848,7 @@
 		};
 		8C84D942B22F4CA9544C992C3115380E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53AAA57482A54E1A3F41365FB5EDB743 /* Sesame.xcconfig */;
+			baseConfigurationReference = BD6D2D65C6E44EAAE82B9D704EFD29FA /* Sesame.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -851,7 +882,7 @@
 		};
 		941111B352218E68BCCAA0984FE1E9FB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53AAA57482A54E1A3F41365FB5EDB743 /* Sesame.xcconfig */;
+			baseConfigurationReference = BD6D2D65C6E44EAAE82B9D704EFD29FA /* Sesame.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -887,6 +918,7 @@
 			baseConfigurationReference = 6AD0F9E29AA24DD719DD2EEE990A7B47 /* Pods-Sesame_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -912,6 +944,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -920,7 +953,7 @@
 		};
 		F7899D9D3B6D68540A1F191077A798FF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53AAA57482A54E1A3F41365FB5EDB743 /* Sesame.xcconfig */;
+			baseConfigurationReference = BD6D2D65C6E44EAAE82B9D704EFD29FA /* Sesame.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Sesame";

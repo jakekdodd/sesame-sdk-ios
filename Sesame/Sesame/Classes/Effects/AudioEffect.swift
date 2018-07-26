@@ -1,5 +1,5 @@
 //
-//  BKAudio.swift
+//  AudioEffect.swift
 //  BoundlessKit
 //
 //  Created by Akash Desai on 11/29/17.
@@ -8,9 +8,9 @@
 import Foundation
 import AudioToolbox
 
-internal class BKAudio : NSObject {
+internal class AudioEffect : NSObject {
     
-    fileprivate static let audioQueue = DelayedSerialQueue(delayAfter: 1, dropCollisions: true)
+    fileprivate static let audioQueue = DelayedSerialQueue(delayAfter: 1, dropCollisions: false)
     
     class func play(_ systemSoundID: SystemSoundID = 0 , vibrate: Bool = false) {
         audioQueue.addOperation {

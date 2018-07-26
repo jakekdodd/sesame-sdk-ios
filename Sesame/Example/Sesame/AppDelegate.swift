@@ -24,7 +24,6 @@ class AppDelegate : SesameApplicationDelegate {
         
         if reinforcement == "nuetral" {
 //            window?.showConfetti()
-            ViewController.instance?.button.showTest()
         }
         
     }
