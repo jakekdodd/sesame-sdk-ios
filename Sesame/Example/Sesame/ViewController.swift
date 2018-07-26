@@ -30,30 +30,23 @@ class ViewController: UIViewController {
         
 //        button.showSheen()
         
-        addEffect(backgroundImage)
+        addEffect(view)
         
     }
     
     func addEffect(_ view: UIView, duration: TimeInterval = 3) {
-        let effect = UIBlurEffect(style: UIBlurEffectStyle.prominent)
+       
+        let confettiView = ConfettiEffectView.init(frame: CGRect.init(x: 0, y: view.bounds.height / 3, width: view.bounds.width, height: view.bounds.height / 3))
+        confettiView.clipsToBounds = true
+        confettiView.duration = 1
         
-        let effectView = UIVisualEffectView()
-        effectView.effect = effect
-        
-        effectView.alpha = 0
-        view.addSubview(effectView)
-        effectView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([effectView.heightAnchor.constraint(equalTo: view.heightAnchor),
-                                     effectView.widthAnchor.constraint(equalTo: view.widthAnchor)
-            ])
-        UIView.animate(withDuration: 0.3, animations: {
-            effectView.alpha = 1
-        }) { _ in
-            UIView.animate(withDuration: 0.3, delay: duration, animations: {
-                effectView.alpha = 0
-            }) { _ in
-                effectView.removeFromSuperview()
-            }
+        view.addSubview(confettiView)
+//        confettiView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([confettiView.heightAnchor.constraint(equalTo: view.heightAnchor),
+//                                     confettiView.widthAnchor.constraint(equalTo: view.widthAnchor)
+//            ])
+        confettiView.start() {
+            confettiView.removeFromSuperview()
         }
     }
 

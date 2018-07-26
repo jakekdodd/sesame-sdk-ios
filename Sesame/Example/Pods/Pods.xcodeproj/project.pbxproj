@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0B69326C038C3BFCC15A3E2935E20732 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8B0E44AE974E2C577C6C130510B723 /* Logger.swift */; };
 		1681026D027E041E0464A0AFBB4B1DAE /* UIView+CodelessAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1318BB181A79565A4E0BDEE1754FE89F /* UIView+CodelessAnimation.swift */; };
-		19AFBD7C30D1B0CB77EE0022BBCD29BE /* UIView+CodelessConfetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10A60536F8EEBAB8DA9FE2205485924 /* UIView+CodelessConfetti.swift */; };
+		19AFBD7C30D1B0CB77EE0022BBCD29BE /* ConfettiEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10A60536F8EEBAB8DA9FE2205485924 /* ConfettiEffectView.swift */; };
 		19E14085765CF70ABCC34EB38BDE5012 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97CF6D862ED78AB4EE20E1B996AEC86 /* AppConfig.swift */; };
 		1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */; };
 		29D276B521865F0FF13417A2283B7322 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2519326A4EF2A08C4A3D60AA2B874B6 /* UIImageExtensions.swift */; };
@@ -23,6 +23,8 @@
 		65E33CA91C3E6663100BCADBD7DA7505 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EAB6465FFD4CF87F5EC6AF3F46C8394 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84938BE221094B6400855CE9 /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84938BE121094B6400855CE9 /* VisualEffect.swift */; };
+		84D4D4CA210A62E90094BAED /* SheenEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D4D4C9210A62E90094BAED /* SheenEffectView.swift */; };
+		84D4D4CC210A632E0094BAED /* CoreAnimationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D4D4CB210A632E0094BAED /* CoreAnimationDelegate.swift */; };
 		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = E08F3D34A706FD1A08D607A20EEF09D6 /* sheen.png */; };
 		8FBF71AAD7951BF143AB5A2EB73F6514 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3506D324CCA2FB4C7293ADAD49A3E7A9 /* CGExtensions.swift */; };
 		90A2B42011300899380893FEA200E23A /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EBA262B91904FA2FB955702C2055CA /* UIColorExtensions.swift */; };
@@ -106,6 +108,8 @@
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
 		84938BE121094B6400855CE9 /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
+		84D4D4C9210A62E90094BAED /* SheenEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheenEffectView.swift; sourceTree = "<group>"; };
+		84D4D4CB210A632E0094BAED /* CoreAnimationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationDelegate.swift; sourceTree = "<group>"; };
 		89CDEC274B8336D036A21BE774E8DFFE /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -121,7 +125,7 @@
 		D7EBA262B91904FA2FB955702C2055CA /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sesame.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		E08F3D34A706FD1A08D607A20EEF09D6 /* sheen.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sheen.png; path = Sesame/Assets/sheen.png; sourceTree = "<group>"; };
-		E10A60536F8EEBAB8DA9FE2205485924 /* UIView+CodelessConfetti.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CodelessConfetti.swift"; sourceTree = "<group>"; };
+		E10A60536F8EEBAB8DA9FE2205485924 /* ConfettiEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfettiEffectView.swift; sourceTree = "<group>"; };
 		E2519326A4EF2A08C4A3D60AA2B874B6 /* UIImageExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		EB8B0E44AE974E2C577C6C130510B723 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Sesame/Classes/Logger.swift; sourceTree = "<group>"; };
 		EDA67D2A71C47256EA75F616CD703C38 /* HTTPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -298,9 +302,11 @@
 			isa = PBXGroup;
 			children = (
 				213511B69D856F0D8EB23098890C5765 /* AudioEffect.swift */,
+				84D4D4CB210A632E0094BAED /* CoreAnimationDelegate.swift */,
 				84938BE121094B6400855CE9 /* VisualEffect.swift */,
 				1318BB181A79565A4E0BDEE1754FE89F /* UIView+CodelessAnimation.swift */,
-				E10A60536F8EEBAB8DA9FE2205485924 /* UIView+CodelessConfetti.swift */,
+				84D4D4C9210A62E90094BAED /* SheenEffectView.swift */,
+				E10A60536F8EEBAB8DA9FE2205485924 /* ConfettiEffectView.swift */,
 			);
 			name = Effects;
 			path = Sesame/Classes/Effects;
@@ -546,6 +552,7 @@
 				4B8497C2B2B4484EBF36C07DCA1BECEA /* APIClient.swift in Sources */,
 				19E14085765CF70ABCC34EB38BDE5012 /* AppConfig.swift in Sources */,
 				2FA61D374F1A73991B054CD75A6CE82B /* AudioEffect.swift in Sources */,
+				84D4D4CA210A62E90094BAED /* SheenEffectView.swift in Sources */,
 				3CB5F59C4A6AAC53F2A28DBA073A0821 /* BundleExtensions.swift in Sources */,
 				F5BD18793155BB4A2E44C58998485CE4 /* Cartridge.swift in Sources */,
 				8FBF71AAD7951BF143AB5A2EB73F6514 /* CGExtensions.swift in Sources */,
@@ -559,11 +566,12 @@
 				D95DC6969F3636ED070E45DDA7269F09 /* Sesame.swift in Sources */,
 				DB98DE33D062F82DF9C6A7002403AE24 /* SesameApplicationService.swift in Sources */,
 				CD05E4D83DDB022011FBF4ACEE61CAFA /* StringExtensions.swift in Sources */,
+				84D4D4CC210A632E0094BAED /* CoreAnimationDelegate.swift in Sources */,
 				5E762194C72C45D0A98C036F2D8940E0 /* Tracker.swift in Sources */,
 				90A2B42011300899380893FEA200E23A /* UIColorExtensions.swift in Sources */,
 				29D276B521865F0FF13417A2283B7322 /* UIImageExtensions.swift in Sources */,
 				1681026D027E041E0464A0AFBB4B1DAE /* UIView+CodelessAnimation.swift in Sources */,
-				19AFBD7C30D1B0CB77EE0022BBCD29BE /* UIView+CodelessConfetti.swift in Sources */,
+				19AFBD7C30D1B0CB77EE0022BBCD29BE /* ConfettiEffectView.swift in Sources */,
 				CCE4E21799FFBC4E5ECD64AC019345BE /* UIViewExtensions.swift in Sources */,
 				C7C6DB414FF4DF98A247495147E2E210 /* UIWindowExtensions.swift in Sources */,
 			);
