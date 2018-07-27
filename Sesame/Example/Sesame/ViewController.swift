@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     
     static var instance: ViewController?
     
+    @IBOutlet weak var sheenEffectView: SheenEffectView!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
     
@@ -44,12 +45,17 @@ class ViewController: UIViewController {
 //            confettiView.removeFromSuperview()
 //        }
         
-        let sheenView = SheenEffectView(frame: view.bounds)
-        sheenView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-//        sheenView.opacityMask = true
-        view.addSubview(sheenView)
-        sheenView.constrainToSuperview()
-        sheenView.start()
+        /// When view is created programitcally
+//        let sheenView = SheenEffectView(frame: view.bounds)
+//        sheenView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+////        sheenView.opacityMask = true
+//        view.addSubview(sheenView)
+//        sheenView.constrainToSuperview()
+//        sheenView.start()
+        
+        /// When view is placed on storyboard
+        sheenEffectView.systemSound = 1001
+        sheenEffectView.start()
     }
 
 }
