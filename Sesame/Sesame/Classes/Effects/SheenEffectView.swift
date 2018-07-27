@@ -46,12 +46,16 @@ open class SheenEffectView : UIView {
     
     @objc
     open func constrainToSuperview() {
-        guard let superview = superview else { return }
+        guard let superview = superview else {
+            Logger.debug(error: "`superview` was nil – call `addSubview(_ view: UIView)` before calling `\(#function)` to fix this.")
+            return
+        }
         translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([topAnchor.constraint(equalTo: superview.topAnchor),
-                                     leftAnchor.constraint(equalTo: superview.leftAnchor),
-                                     widthAnchor.constraint(equalTo: superview.widthAnchor),
-                                     heightAnchor.constraint(equalTo: superview.heightAnchor),
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: superview.topAnchor),
+            bottomAnchor.constraint(equalTo: superview.bottomAnchor),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
                                      ])
     }
     
@@ -63,19 +67,20 @@ open class SheenEffectView : UIView {
             if let color = sheenColor {
                 image = image.tint(tintColor: color)
             }
-            sheenImageView = UIImageView(image: image)
+            let sheenImageView = UIImageView(image: image)
             let height = bounds.height
             let width: CGFloat =  height * sheenWidth.rawValue
-            sheenImageView?.frame = CGRect(x: -width, y: 0, width: width, height: height)
+            sheenImageView.frame = CGRect(x: -width, y: 0, width: width, height: height)
+            self.sheenImageView = sheenImageView
         }
         
-        guard let imageView = sheenImageView else {
+        guard let sheenImageView = sheenImageView else {
             Logger.debug(error: "No image set for sheen")
             completion(self)
             return
         }
         
-        guard imageView.superview == nil else {
+        guard sheenImageView.superview == nil else {
             return
         }
         
@@ -83,15 +88,15 @@ open class SheenEffectView : UIView {
             mask = superview?.generateMask()
         }
         
-        let previousTransform = imageView.transform
+        let previousTransform = sheenImageView.transform
         
         UIView.animate(withDuration: duration, animations: {
-            self.addSubview(imageView)
-            imageView.transform = imageView.transform.translatedBy(x: self.bounds.width + imageView.frame.width, y: 0)
+            self.addSubview(sheenImageView)
+            sheenImageView.transform = sheenImageView.transform.translatedBy(x: self.bounds.width + sheenImageView.frame.width, y: 0)
             AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
         }) { _ in
-            imageView.removeFromSuperview()
-            imageView.transform = previousTransform
+            sheenImageView.removeFromSuperview()
+            sheenImageView.transform = previousTransform
             completion(self)
         }
     }
@@ -101,7 +106,6 @@ open class SheenEffectView : UIView {
     }
 }
 
-@objc
 public extension SheenEffectView {
     @objc(start)
     public func objc_start() {

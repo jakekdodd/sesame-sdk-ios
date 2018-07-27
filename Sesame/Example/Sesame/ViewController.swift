@@ -14,7 +14,6 @@ class ViewController: UIViewController {
     
     static var instance: ViewController?
     
-    @IBOutlet weak var sheenEffectView: SheenEffectView!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
     
@@ -46,16 +45,18 @@ class ViewController: UIViewController {
 //        }
         
         /// When view is created programitcally
-//        let sheenView = SheenEffectView(frame: view.bounds)
-//        sheenView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-////        sheenView.opacityMask = true
+        let sheenView = SheenEffectView(frame: view.bounds)
+//        sheenView.opacityMask = true
 //        view.addSubview(sheenView)
-//        sheenView.constrainToSuperview()
-//        sheenView.start()
+        sheenView.constrainToSuperview()
+        sheenView.start() { sheenView in
+            sheenView.removeFromSuperview()
+        }
         
-        /// When view is placed on storyboard
-        sheenEffectView.systemSound = 1001
-        sheenEffectView.start()
+//        /// When view is placed on storyboard
+//        sheenEffectView.constrainToSuperview()
+//        sheenEffectView.systemSound = 1001
+//        sheenEffectView.start()
     }
 
 }
