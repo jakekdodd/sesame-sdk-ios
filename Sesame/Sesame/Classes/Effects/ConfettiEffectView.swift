@@ -28,12 +28,12 @@ open class ConfettiEffectView : UIView {
     public var hapticFeedback: Bool = false
     public var systemSound: UInt32 = 0
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     public func start(completion: @escaping () -> Void = {  }) {

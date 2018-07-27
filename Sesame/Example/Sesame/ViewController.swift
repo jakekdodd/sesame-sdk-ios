@@ -30,24 +30,26 @@ class ViewController: UIViewController {
         
 //        button.showSheen()
         
-        addEffect(view)
+        addEffect(button)
         
     }
     
     func addEffect(_ view: UIView, duration: TimeInterval = 3) {
        
-        let confettiView = ConfettiEffectView.init(frame: CGRect.init(x: 0, y: view.bounds.height / 3, width: view.bounds.width, height: view.bounds.height / 3))
-        confettiView.clipsToBounds = true
-        confettiView.duration = 1
+//        let confettiView = ConfettiEffectView.init(frame: CGRect.init(x: 0, y: view.bounds.height / 3, width: view.bounds.width, height: view.bounds.height / 3))
+//        confettiView.clipsToBounds = true
+//        confettiView.duration = 1
+//        view.addSubview(confettiView)
+//        confettiView.start() {
+//            confettiView.removeFromSuperview()
+//        }
         
-        view.addSubview(confettiView)
-//        confettiView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([confettiView.heightAnchor.constraint(equalTo: view.heightAnchor),
-//                                     confettiView.widthAnchor.constraint(equalTo: view.widthAnchor)
-//            ])
-        confettiView.start() {
-            confettiView.removeFromSuperview()
-        }
+        let sheenView = SheenEffectView(frame: view.bounds)
+        sheenView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+//        sheenView.opacityMask = true
+        view.addSubview(sheenView)
+        sheenView.constrainToSuperview()
+        sheenView.start()
     }
 
 }
