@@ -44,6 +44,18 @@ open class SheenEffectView : UIView {
         isUserInteractionEnabled = false
     }
     
+    fileprivate var screenIsVertical: Bool = (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        let isVertical = UIScreen.main.bounds.width < UIScreen.main.bounds.height
+        if isVertical != screenIsVertical {
+            screenIsVertical = isVertical
+            if opacityMask && superview != nil {
+                mask = superview?.generateMask()
+            }
+        }
+    }
+    
     @objc
     open func constrainToSuperview() {
         guard let superview = superview else {

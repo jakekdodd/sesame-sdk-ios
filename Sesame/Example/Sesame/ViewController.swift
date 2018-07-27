@@ -46,8 +46,8 @@ class ViewController: UIViewController {
         
         /// When view is created programitcally
         let sheenView = SheenEffectView(frame: view.bounds)
-//        sheenView.opacityMask = true
-//        view.addSubview(sheenView)
+        sheenView.opacityMask = true
+        view.addSubview(sheenView)
         sheenView.constrainToSuperview()
         sheenView.start() { sheenView in
             sheenView.removeFromSuperview()
