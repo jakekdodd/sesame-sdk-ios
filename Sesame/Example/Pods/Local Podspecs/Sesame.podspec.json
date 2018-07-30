@@ -22,9 +22,14 @@
   "source_files": "Sesame/Classes/**/*",
   "resource_bundles": {
     "Sesame": [
-      "Sesame/Assets/*.{png,xcdatamodeld}"
+      "Sesame/Assets/*.{png}"
     ]
   },
+  "resources": "Sesame/Assets/*.xcdatamodeld",
+  "frameworks": [
+    "Foundation",
+    "CoreData"
+  ],
   "public_header_files": "Pod/Classes/**/*.h",
   "swift_version": "4.1"
 }

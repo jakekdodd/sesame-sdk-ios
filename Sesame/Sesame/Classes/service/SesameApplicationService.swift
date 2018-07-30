@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 public protocol SesameApplicationServiceDelegate : class {
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
@@ -13,6 +14,7 @@ public protocol SesameApplicationServiceDelegate : class {
 
 final public class SesameApplicationService : NSObject, ApplicationService {
     
+    public static var shared: SesameApplicationService?
     public var app: Sesame
     public weak var delegate: SesameApplicationServiceDelegate?
     
@@ -33,6 +35,8 @@ final public class SesameApplicationService : NSObject, ApplicationService {
             switch (oldValue, appState) {
             case (.closed, .opened):
                 self.lastOpened = Date()
+                app.tracker.add(action: "appOpen", details: [:])
+                print("Action count:\(app.tracker.actions.count)")
                 reinforce()
                 
             case (.opened, .opened):
@@ -72,11 +76,13 @@ final public class SesameApplicationService : NSObject, ApplicationService {
     
     /// MARK: protocol ApplicationService UIApplicationDelegate
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        app.tracker.context = persistentContainer.viewContext
         Logger.debug("Sesame service app did launch")
         
         appState = .opened
         
-        app.tracker.actions.append(ReportEvent.init(ReportEvent.ACTION_APP_OPEN, [String : Any]()))
+//        app.tracker.actions.append(ReportEvent.init(ReportEvent.ACTION_APP_OPEN, [String : Any]()))
 //        app.api.boot(app: app) { (success, newConfig) in
 //            guard success else {
 //                Logger.debug(error: "Boot call failed.")
@@ -101,4 +107,38 @@ final public class SesameApplicationService : NSObject, ApplicationService {
         appState = .closed
     }
     
+    // MARK: - Core Data Container Mangement
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        /*
+         The persistent container for the application. This implementation
+         creates and returns a container, having loaded the store for the
+         application to it. This property is optional since there are legitimate
+         error conditions that could cause the creation of the store to fail.
+         */
+        let modelURL = Bundle(for: type(of: self)).url(forResource: "Sesame", withExtension: "momd")!
+        let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL)
+        let container = NSPersistentContainer(name: "Sesame", managedObjectModel: managedObjectModel!)
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+            print("Store description:\(storeDescription)")
+        })
+        return container
+    }()
+    
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
 }

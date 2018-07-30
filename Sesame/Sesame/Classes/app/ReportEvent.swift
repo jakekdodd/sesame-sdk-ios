@@ -6,13 +6,17 @@
 //
 
 import Foundation
+import CoreData
 
-public class ReportEvent : NSObject {
+//public class ReportEvent : NSManagedObject {
+//    var actionName: String? = nil
+//    var details: [String: Any] = [:]
+//}
+
+extension ReportEvent {
+    
     static let ACTION_APP_OPEN = "appOpen"
     static let ACTION_APP_CLOSE = "appClose"
     static let REINFORCEMENT_NUETRAL = "nuetral"
-    let actionName: String
-    var details: [String: Any]
     
-    init(_ actionName: String, _ details: [String: Any]) { self.actionName = actionName; self.details = details}
 }

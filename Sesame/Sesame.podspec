@@ -33,8 +33,11 @@ TODO: Add long description of the pod here.
   s.source_files = 'Sesame/Classes/**/*'
   
   s.resource_bundles = {
-      'Sesame' => ['Sesame/Assets/*.{png,xcdatamodeld}']
+      'Sesame' => ['Sesame/Assets/*.{png}']
   }
+  s.resources = 'Sesame/Assets/*.xcdatamodeld'
+  
+  s.frameworks = 'Foundation', 'CoreData'
 
   s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
