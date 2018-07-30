@@ -10,7 +10,13 @@ import UIKit
 import Sesame
 import AudioToolbox
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, SesameEffectDelegate {
+    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
+        
+        addEffect(button)
+        
+    }
+    
     
     static var instance: ViewController?
     
@@ -20,7 +26,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ViewController.instance = self
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.sesame?.delegate = self
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     

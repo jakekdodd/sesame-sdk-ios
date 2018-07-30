@@ -10,7 +10,7 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegate : SesameApplicationDelegate {
+class AppDelegate : AppDelegateWithSesame {
     
     override var SesameCredentials: [String : Any] {
         return ["appId": "570ffc491b4c6e9869482fbf",

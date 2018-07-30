@@ -28,6 +28,7 @@
 		6E4CB1356DD4084BFFB27A0619FB7896 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4AD758E1D924EB7EF048AFBBD24E8D /* CGExtensions.swift */; };
 		7070532690616A12DFDC56BA3469602B /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D24142DD9788C982D53D70E31D75C /* UIImageExtensions.swift */; };
 		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 838D5EC0E6806A2B916CF1FFA973C212 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8440A784210F9E9B00E8DC03 /* SesameApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8440A783210F9E9B00E8DC03 /* SesameApplicationDelegate.swift */; };
 		88FF3E7F95D7C408CA538B33485201CC /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD875BF6FEF9659B28526CD03FBB7C8 /* VisualEffect.swift */; };
 		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = EBBE59052BAB5CE6D3437665A53D830F /* sheen.png */; };
 		918A4879E1FACE7033F4A58A35199AB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
@@ -42,7 +43,7 @@
 		D6ADFA245C77481133F0A843491EFB72 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825138D043CCFB828F2BB5E121EE6696 /* AppConfig.swift */; };
 		D973E3BFCA386C12EF284207B6E8D303 /* Pods-Sesame_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 13802097F96956396CF62876DBBB6CE0 /* Pods-Sesame_Tests-dummy.m */; };
 		E55797A0B17DF24B1CA15FAE2C1BB33D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A7BE07A93D389088D0712B8DA370ED /* CoreData.framework */; };
-		E6FF63D2327958AA050AC2E5A98518E8 /* SesameCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7767691C0C4D83F95649DAEAE83A7017 /* SesameCoreData.swift */; };
+		E6FF63D2327958AA050AC2E5A98518E8 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7767691C0C4D83F95649DAEAE83A7017 /* CoreDataManager.swift */; };
 		F18639BF5BA2DEC9DB78AAE7FED5CDBF /* DelayedSerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E73A5B8785A8DA3B68173342641E929 /* DelayedSerialQueue.swift */; };
 		F3B74C6F82D32D473F9BDEA156139F5D /* Reinforcer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209AD2419309BAE290285FEC40B1EDC9 /* Reinforcer.swift */; };
 		F62BDF3C3B8F6231AA2CD883CFCCEC45 /* Sesame.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */; };
@@ -106,7 +107,7 @@
 		6E6F0B44E8E81C98E830E3B12C8E8F40 /* OverlayEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OverlayEffectView.swift; sourceTree = "<group>"; };
 		7451AD5D760C5076285F9553C2011276 /* CoreAnimationDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreAnimationDelegate.swift; sourceTree = "<group>"; };
 		775BD9585DE6BA876A4854C0FF3444CA /* ReportEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReportEvent.swift; sourceTree = "<group>"; };
-		7767691C0C4D83F95649DAEAE83A7017 /* SesameCoreData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SesameCoreData.swift; sourceTree = "<group>"; };
+		7767691C0C4D83F95649DAEAE83A7017 /* CoreDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
 		7E73A5B8785A8DA3B68173342641E929 /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
@@ -114,6 +115,7 @@
 		825138D043CCFB828F2BB5E121EE6696 /* AppConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
 		838D5EC0E6806A2B916CF1FFA973C212 /* Sesame-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-umbrella.h"; sourceTree = "<group>"; };
+		8440A783210F9E9B00E8DC03 /* SesameApplicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SesameApplicationDelegate.swift; path = Sesame/Classes/SesameApplicationDelegate.swift; sourceTree = "<group>"; };
 		8AE7E52010AFC81915324A423C18524A /* UIView+CodelessAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CodelessAnimation.swift"; sourceTree = "<group>"; };
 		8BFA0139072F99AD1A7D650C1233868A /* BundleExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
@@ -290,7 +292,7 @@
 				408B77EFF6A01811A5D73DCC8545B92B /* Cartridge.swift */,
 				209AD2419309BAE290285FEC40B1EDC9 /* Reinforcer.swift */,
 				775BD9585DE6BA876A4854C0FF3444CA /* ReportEvent.swift */,
-				7767691C0C4D83F95649DAEAE83A7017 /* SesameCoreData.swift */,
+				7767691C0C4D83F95649DAEAE83A7017 /* CoreDataManager.swift */,
 				D56BB48CC2AAF0DAF3C5EF25BAC1E23D /* Tracker.swift */,
 			);
 			name = App;
@@ -374,6 +376,7 @@
 			children = (
 				3D83204978F9A5B6C7DAEA8A13BBDE2F /* Logger.swift */,
 				EDEC2833AB3E947B4FFB071F42AD28E1 /* Sesame.swift */,
+				8440A783210F9E9B00E8DC03 /* SesameApplicationDelegate.swift */,
 				EA94F94D07F9B39786981F892CCAB3A9 /* API */,
 				A16BD8EE294BDD6B79EE8A3C1FA0A550 /* App */,
 				65F4CAFBEA7A31EB656A6EBAE729C397 /* Effects */,
@@ -555,13 +558,14 @@
 				B0E31AB4AC163A6877E1F0BB30F3E218 /* Logger.swift in Sources */,
 				9F47FCF6C9FEF3913E3CBE5B8FCBE6E6 /* OverlayEffectView.swift in Sources */,
 				6BB7DEBE1525C25199E5EEFBD1BC01DD /* PluggableApplicationDelegate.swift in Sources */,
+				8440A784210F9E9B00E8DC03 /* SesameApplicationDelegate.swift in Sources */,
 				F3B74C6F82D32D473F9BDEA156139F5D /* Reinforcer.swift in Sources */,
 				19095F76451DCBB9F59318AC3A702BC0 /* ReportEvent.swift in Sources */,
 				4CD4630980815E10794BAE9A7CAA7B76 /* Sesame-dummy.m in Sources */,
 				1B5AC91168C374EA80E0C098D82CB177 /* Sesame.swift in Sources */,
 				69AF97DC9FFCCF632CEFC0DA3A725681 /* Sesame.xcdatamodeld in Sources */,
 				923C3E75C6A9C445C44BF60759A77A03 /* SesameApplicationService.swift in Sources */,
-				E6FF63D2327958AA050AC2E5A98518E8 /* SesameCoreData.swift in Sources */,
+				E6FF63D2327958AA050AC2E5A98518E8 /* CoreDataManager.swift in Sources */,
 				5F70792CC40F274420A94BB8AFC99551 /* SheenEffectView.swift in Sources */,
 				ADBD45BF78808D745CE3D4D9315BC223 /* StringExtensions.swift in Sources */,
 				52DC01E03F968FC625807A4911ADEB9B /* Tracker.swift in Sources */,
@@ -785,7 +789,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Debug;
@@ -860,7 +863,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_VERSION = 4.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;
