@@ -11,14 +11,6 @@ import Sesame
 import AudioToolbox
 
 class ViewController: UIViewController, SesameEffectDelegate {
-    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
-        
-        addEffect(button)
-        
-    }
-    
-    
-    static var instance: ViewController?
     
     @IBOutlet weak var confettiEffectView: ConfettiEffectView!
     @IBOutlet weak var backgroundImage: UIImageView!
@@ -26,10 +18,15 @@ class ViewController: UIViewController, SesameEffectDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.sesame?.delegate = self
+            appDelegate.sesame?.effectDelegate = self
         }
-        // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
+        
+        addEffect(button)
     }
     
     @IBAction

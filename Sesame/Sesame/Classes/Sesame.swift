@@ -8,14 +8,35 @@
 import Foundation
 import CoreData
 
-
 public protocol SesameEffectDelegate : class {
+    
+    /// Override this method to receive reinforcements! Set this object as the delegate of the Sesame object from your AppDelegate
+    ///
+    /// - Parameters:
+    ///   - app: The Sesame app
+    ///   - reinforcement: A string representing the reinforcement effect configured on the web dashboard
+    ///   - options: A dictionary with any additional options configured on the web dashboard
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
 }
 
 public class Sesame : NSObject {
     
-    public var delegate: SesameEffectDelegate?
+    public var effectDelegate: SesameEffectDelegate? {
+        didSet {
+            _effect = {_effect}()
+        }
+    }
+    
+    /// If the delegate isn't set when an effect is supposed to show, the effect is stored until the delegate is set
+    fileprivate var _effect: (String, [String: Any])? {
+        didSet {
+            if let effect = _effect,
+                let effectDelegate = effectDelegate {
+                effectDelegate.app(self, didReceiveReinforcement: effect.0, withOptions: effect.1)
+                _effect = nil
+            }
+        }
+    }
     
     let appId: String
     let appVersionId: String
@@ -28,12 +49,6 @@ public class Sesame : NSObject {
     public var reinforcer: Reinforcer
     public var tracker: Tracker
     
-    var lastOpened: Date? = nil
-    var appState: SesameAppState = .closed {
-        didSet {
-            didSet(oldValue: oldValue, appState: appState)
-        }
-    }
     
     init(appId: String, appVersionId: String, auth: String, service: SesameApplicationService) {
         self.appId = appId
@@ -48,44 +63,10 @@ public class Sesame : NSObject {
         self.tracker = Tracker(context: coreDataManager.persistentContainer.viewContext)
         super.init()
     }
-}
-
-// MARK: - App State
-extension Sesame {
-    enum SesameAppState {
-        case closed, opened
-    }
     
-    fileprivate func didSet(oldValue: SesameAppState, appState: SesameAppState) {
-        Logger.debug("App state changed from \(oldValue) to \(appState)")
-        let reinforce = {
-            let reinforcement = self.reinforcer.cartridge.removeDecision()
-            self.delegate?.app(self, didReceiveReinforcement: reinforcement, withOptions: self.reinforcer.options?[reinforcement])
-        }
-        
-        switch (oldValue, appState) {
-        case (.closed, .opened):
-            self.lastOpened = Date()
-            tracker.add(action: "appOpen", details: [:])
-            print("Action count:\(tracker.actions.count)")
-            reinforce()
-            
-        case (.opened, .opened):
-            let now = Date()
-            if let lastOpened = lastOpened,
-                lastOpened.timeIntervalSince(now) > 2
-            {
-                reinforce()
-                self.lastOpened = Date()
-            } else {
-                Logger.debug("App reopened too soon for another reinforcement")
-            }
-            
-        case (.opened, .closed):
-            self.lastOpened = nil
-            
-        default:
-            break
-        }
+    func open() {
+        let reinforcement = reinforcer.cartridge.removeDecision()
+        _effect = (reinforcement, [:])
+        tracker.add(action: "appOpen", details: [:])
     }
 }

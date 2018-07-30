@@ -15,7 +15,7 @@ import Foundation
  */
 open class AppDelegateWithSesame: PluggableApplicationDelegate {
     
-    // From a UIViewController or SesameEffectDelegate, set yourself as a delegate to get reinforcement messages
+    // From a UIViewController inheriting protocol SesameEffectDelegate, set yourself as the effectDelegate in `viewDidLoad()` to get reinforcement messages
     open var sesame: Sesame?
     
     // MARK: - Override this dictionary to return your app's credentials
@@ -29,19 +29,20 @@ open class AppDelegateWithSesame: PluggableApplicationDelegate {
     // This method creates both the Sesame app and app service. The Sesame app service is a UIApplicationDelegate that
     // sends messages to the Sesame app for open and close actions, along with the UIApplication lifecycle events.
     open override var services: [ApplicationService] {
+        // Create a service to connect Sesame to the UIApplication lifecycle
         let sesameService = SesameApplicationService.init(args: SesameCredentials)
         
+        // Keep a reference to Sesame so the delegate can be set later
         sesame = sesameService.app
+        
+        // Set the AppDelegate if it's also a SesameEffectDelegate
+        if let effectDelegate = self as? SesameEffectDelegate {
+            sesame?.effectDelegate = effectDelegate
+        }
         
         return super.services + [
             sesameService
         ]
-    }
-    
-    // MARK: - SesameApplicationServiceDelegate - Override this method to receive reinforcements!
-    open func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
-        Logger.debug(confirmed: "Received reinforcement:\(reinforcement) with options:\(options as AnyObject)")
-        Logger.debug(error: "The method *app(_:didReceiveReinforcement:withOptions:)* for SesameApplicationDelegate should be overriden.")
     }
     
 }
