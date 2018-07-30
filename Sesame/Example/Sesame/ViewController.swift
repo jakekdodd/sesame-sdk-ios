@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     
     static var instance: ViewController?
     
+    @IBOutlet weak var confettiEffectView: ConfettiEffectView!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
     
@@ -36,22 +37,27 @@ class ViewController: UIViewController {
     
     func addEffect(_ view: UIView, duration: TimeInterval = 3) {
        
+//        /// When view is created programitcally
 //        let confettiView = ConfettiEffectView.init(frame: CGRect.init(x: 0, y: view.bounds.height / 3, width: view.bounds.width, height: view.bounds.height / 3))
-//        confettiView.clipsToBounds = true
-//        confettiView.duration = 1
+//        confettiView.duration = duration
 //        view.addSubview(confettiView)
-//        confettiView.start() {
+//        confettiView.start() { confettiView in
 //            confettiView.removeFromSuperview()
 //        }
         
-        /// When view is created programitcally
-        let sheenView = SheenEffectView(frame: view.bounds)
-        sheenView.opacityMask = true
-        view.addSubview(sheenView)
-        sheenView.constrainToSuperview()
-        sheenView.start() { sheenView in
-            sheenView.removeFromSuperview()
-        }
+        /// When view is placed on storboard
+        confettiEffectView.duration = duration
+        confettiEffectView.start()
+        
+        
+//        /// When view is created programitcally
+//        let sheenView = SheenEffectView(frame: view.bounds)
+//        sheenView.opacityMask = true
+//        view.addSubview(sheenView)
+//        sheenView.constrainToSuperview()
+//        sheenView.start() { sheenView in
+//            sheenView.removeFromSuperview()
+//        }
         
 //        /// When view is placed on storyboard
 //        sheenEffectView.constrainToSuperview()

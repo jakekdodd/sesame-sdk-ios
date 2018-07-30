@@ -10,42 +10,41 @@ import Foundation
 import UIKit
 
 @objc
-public enum ConfettiShape : Int {
-    case rectangle, circle, spiral
-}
-
-@objc
-open class ConfettiEffectView : UIView {
+open class ConfettiEffectView : OverlayEffectView {
     
-    public var duration:TimeInterval = 2
+    @objc
+    public enum ConfettiShape : Int {
+        case rectangle, circle, spiral
+    }
+    
+    @IBInspectable @objc
+    public var duration:Double = 2
+    @IBInspectable @objc
     public var size:CGSize = CGSize(width: 9, height: 6)
+    @objc
+    public var s: ConfettiShape = .rectangle
     public var shapes:[ConfettiShape] = [.rectangle, .rectangle, .circle, .spiral]
+    @objc
     public var colors:[UIColor] = [UIColor.from(rgb: "4d81fb", alpha: 0.8) ?? UIColor.purple,
                                    UIColor.from(rgb: "4ac4fb", alpha: 0.8) ?? UIColor.blue,
                                    UIColor.from(rgb: "9243f9", alpha: 0.8) ?? UIColor.purple,
                                    UIColor.from(rgb: "fdc33b", alpha: 0.8) ?? UIColor.orange,
                                    UIColor.from(rgb: "f7332f", alpha: 0.8) ?? UIColor.red,]
+    @IBInspectable @objc
     public var hapticFeedback: Bool = false
+    @IBInspectable @objc
     public var systemSound: UInt32 = 0
     
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    @objc(start)
+    public func objc_start() {
+        self.start()
     }
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    public func start(completion: @escaping () -> Void = {  }) {
+    @objc
+    public func start(completion: @escaping (ConfettiEffectView) -> Void = {_ in}) {
         self.showConfetti(duration: duration, size: size, shapes: shapes, colors: colors, hapticFeedback: hapticFeedback, systemSound: systemSound, completion: completion)
     }
     
-    open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return false
-    }
-}
-
-fileprivate extension UIView {
     /**
      Creates a CAEmitterLayer that drops celebration confetti from the top of the view
      
@@ -68,7 +67,7 @@ fileprivate extension UIView {
                                                  UIColor.from(rgb: "f7332f", alpha: 0.8) ?? UIColor.red,],
                              hapticFeedback: Bool = false,
                              systemSound: UInt32 = 0,
-                             completion: @escaping ()->Void = {}) {
+                             completion: @escaping (ConfettiEffectView)->Void = {_ in}) {
         let burstDuration = 0.8
         let showerDuration = max(0, duration - burstDuration)
         self.confettiBurst(duration: burstDuration, size: size, shapes: shapes, colors: colors) {
@@ -141,7 +140,7 @@ fileprivate extension UIView {
                                size:CGSize,
                                shapes:[ConfettiShape],
                                colors:[UIColor],
-                               completion: @escaping ()->Void) {
+                               completion: @escaping (ConfettiEffectView)->Void) {
         DispatchQueue.main.async {
             
             /* Create showering confetti */
@@ -191,7 +190,7 @@ fileprivate extension UIView {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(confettiEmitter.emitterCells?.first?.lifetimeMax ?? 0)) {
                     confettiEmitter.removeFromSuperlayer()
-                    completion()
+                    completion(self)
                 }
             }
         }
@@ -271,7 +270,7 @@ fileprivate extension CAEmitterCell {
 }
 
 
-fileprivate extension ConfettiShape {
+fileprivate extension ConfettiEffectView.ConfettiShape {
     
     fileprivate static func rectangleConfetti(size: CGSize, color: UIColor = UIColor.white) -> CGImage {
         let offset = size.width / CGFloat((arc4random_uniform(7) + 1))
@@ -328,4 +327,3 @@ fileprivate extension ConfettiShape {
         return image!.cgImage!
     }
 }
-

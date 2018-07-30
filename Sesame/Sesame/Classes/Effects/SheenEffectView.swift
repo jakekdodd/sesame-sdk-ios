@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-open class SheenEffectView : UIView {
+open class SheenEffectView : OverlayEffectView {
     
     public enum SheenWidth : CGFloat {
         case short = 0.333, medium = 1, long = 1.667
@@ -28,22 +28,6 @@ open class SheenEffectView : UIView {
     @IBInspectable @objc
     public var systemSound: UInt32 = 0
     
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
-    
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
-    }
-    
-    fileprivate func setup() {
-        clipsToBounds = true
-        isUserInteractionEnabled = false
-    }
-    
     fileprivate var screenIsVertical: Bool = (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
     open override func layoutSubviews() {
         super.layoutSubviews()
@@ -56,19 +40,9 @@ open class SheenEffectView : UIView {
         }
     }
     
-    @objc
-    open func constrainToSuperview() {
-        guard let superview = superview else {
-            Logger.debug(error: "`superview` was nil – call `addSubview(_ view: UIView)` before calling `\(#function)` to fix this.")
-            return
-        }
-        translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: superview.topAnchor),
-            bottomAnchor.constraint(equalTo: superview.bottomAnchor),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-                                     ])
+    @objc(start)
+    public func objc_start() {
+        self.start()
     }
     
     @objc
@@ -113,14 +87,4 @@ open class SheenEffectView : UIView {
         }
     }
     
-    open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return false
-    }
-}
-
-public extension SheenEffectView {
-    @objc(start)
-    public func objc_start() {
-        self.start()
-    }
 }

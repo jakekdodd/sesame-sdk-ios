@@ -25,6 +25,7 @@
 		84938BE221094B6400855CE9 /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84938BE121094B6400855CE9 /* VisualEffect.swift */; };
 		84D4D4CA210A62E90094BAED /* SheenEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D4D4C9210A62E90094BAED /* SheenEffectView.swift */; };
 		84D4D4CC210A632E0094BAED /* CoreAnimationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D4D4CB210A632E0094BAED /* CoreAnimationDelegate.swift */; };
+		84F88C55210ECB0D009E030C /* OverlayEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F88C54210ECB0D009E030C /* OverlayEffectView.swift */; };
 		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = E08F3D34A706FD1A08D607A20EEF09D6 /* sheen.png */; };
 		8FBF71AAD7951BF143AB5A2EB73F6514 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3506D324CCA2FB4C7293ADAD49A3E7A9 /* CGExtensions.swift */; };
 		90A2B42011300899380893FEA200E23A /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EBA262B91904FA2FB955702C2055CA /* UIColorExtensions.swift */; };
@@ -110,6 +111,7 @@
 		84938BE121094B6400855CE9 /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
 		84D4D4C9210A62E90094BAED /* SheenEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheenEffectView.swift; sourceTree = "<group>"; };
 		84D4D4CB210A632E0094BAED /* CoreAnimationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationDelegate.swift; sourceTree = "<group>"; };
+		84F88C54210ECB0D009E030C /* OverlayEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayEffectView.swift; sourceTree = "<group>"; };
 		89CDEC274B8336D036A21BE774E8DFFE /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -306,6 +308,7 @@
 				84938BE121094B6400855CE9 /* VisualEffect.swift */,
 				1318BB181A79565A4E0BDEE1754FE89F /* UIView+CodelessAnimation.swift */,
 				84D4D4C9210A62E90094BAED /* SheenEffectView.swift */,
+				84F88C54210ECB0D009E030C /* OverlayEffectView.swift */,
 				E10A60536F8EEBAB8DA9FE2205485924 /* ConfettiEffectView.swift */,
 			);
 			name = Effects;
@@ -571,6 +574,7 @@
 				DB98DE33D062F82DF9C6A7002403AE24 /* SesameApplicationService.swift in Sources */,
 				CD05E4D83DDB022011FBF4ACEE61CAFA /* StringExtensions.swift in Sources */,
 				84D4D4CC210A632E0094BAED /* CoreAnimationDelegate.swift in Sources */,
+				84F88C55210ECB0D009E030C /* OverlayEffectView.swift in Sources */,
 				5E762194C72C45D0A98C036F2D8940E0 /* Tracker.swift in Sources */,
 				90A2B42011300899380893FEA200E23A /* UIColorExtensions.swift in Sources */,
 				29D276B521865F0FF13417A2283B7322 /* UIImageExtensions.swift in Sources */,

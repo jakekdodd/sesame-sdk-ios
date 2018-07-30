@@ -21,8 +21,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="beach" translatesAutoresizingMaskIntoConstraints="NO" id="Tcr-K9-2HO">
-                                <rect key="frame" x="0.0" y="-8" width="375" height="667"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="beach" translatesAutoresizingMaskIntoConstraints="NO" id="Tcr-K9-2HO">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FwT-Gv-p3m">
                                 <rect key="frame" x="16" y="274" width="165" height="118"/>
@@ -45,20 +46,19 @@
                                             <outletCollection property="gestureRecognizers" destination="LJh-Np-Owg" appends="YES" id="ClM-r7-pFv"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWj-u2-nRq" customClass="ConfettiEffectView" customModule="Sesame">
+                                        <rect key="frame" x="0.0" y="0.0" width="165" height="118"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
-                        <constraints>
-                            <constraint firstItem="Tcr-K9-2HO" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Cbj-HX-DCI"/>
-                            <constraint firstAttribute="trailing" secondItem="Tcr-K9-2HO" secondAttribute="trailing" id="fJ3-IX-Ple"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Tcr-K9-2HO" secondAttribute="bottom" id="pX0-Ux-Gd8"/>
-                            <constraint firstItem="Tcr-K9-2HO" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="yGa-J4-eKT"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="backgroundImage" destination="Tcr-K9-2HO" id="2Qn-fC-iLk"/>
                         <outlet property="button" destination="NZB-cI-tge" id="G5J-bt-WXb"/>
+                        <outlet property="confettiEffectView" destination="XWj-u2-nRq" id="Pmm-Ab-kmX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
