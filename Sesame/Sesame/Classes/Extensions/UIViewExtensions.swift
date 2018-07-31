@@ -64,11 +64,14 @@ internal extension UIView {
 
 internal extension UIView {
     func generateMask(color: UIColor = .clear) -> UIView {
+        var image: UIImage?
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, 0)
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
-        color.setFill()
-        UIBezierPath(rect: CGRect(origin: .zero, size: self.bounds.size)).fill(with: .sourceAtop, alpha:1.0)
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        if let context = UIGraphicsGetCurrentContext() {
+            self.layer.render(in: context)
+            color.setFill()
+            UIBezierPath(rect: CGRect(origin: .zero, size: self.bounds.size)).fill(with: .sourceAtop, alpha:1.0)
+        }
+        image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         return UIImageView(image: image)

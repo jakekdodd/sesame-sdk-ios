@@ -17,8 +17,10 @@ class ViewController: UIViewController, SesameEffectDelegate {
     lazy var sheenView: SheenEffectView = {
         let view = button!
         let sheenView = SheenEffectView(frame: view.bounds)
+        sheenView.sheenImage = UIImage.init(named: "bmind")
         sheenView.opacityMask = true
-        sheenView.duration = 5
+        sheenView.duration = 4
+        sheenView.sheenColor = UIColor.from(rgb: "FFD700")
         view.addSubview(sheenView)
         sheenView.constrainToSuperview()
         return sheenView
@@ -58,8 +60,8 @@ class ViewController: UIViewController, SesameEffectDelegate {
     
     @IBAction
     func didTapButton(_ sender: Any) {
-        
-        
+        sheenView.start()
+
     }
 
 }

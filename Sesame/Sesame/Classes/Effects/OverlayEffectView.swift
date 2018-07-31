@@ -38,6 +38,7 @@ open class OverlayEffectView : UIView {
             trailingAnchor.constraint(equalTo: superview.trailingAnchor),
             leadingAnchor.constraint(equalTo: superview.leadingAnchor),
             ])
+        layoutIfNeeded()
     }
     
     open func didRotate() {}
