@@ -40,6 +40,18 @@ open class OverlayEffectView : UIView {
             ])
     }
     
+    open func didRotate() {}
+    
+    fileprivate var screenIsVertical: Bool = (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        let isVertical = UIScreen.main.bounds.width < UIScreen.main.bounds.height
+        if isVertical != screenIsVertical {
+            screenIsVertical = isVertical
+            didRotate()
+         }
+    }
+    
     open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
     }

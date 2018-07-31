@@ -46,10 +46,6 @@
                                             <outletCollection property="gestureRecognizers" destination="LJh-Np-Owg" appends="YES" id="ClM-r7-pFv"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWj-u2-nRq" customClass="ConfettiEffectView" customModule="Sesame">
-                                        <rect key="frame" x="0.0" y="0.0" width="165" height="118"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -58,7 +54,6 @@
                     <connections>
                         <outlet property="backgroundImage" destination="Tcr-K9-2HO" id="2Qn-fC-iLk"/>
                         <outlet property="button" destination="NZB-cI-tge" id="G5J-bt-WXb"/>
-                        <outlet property="confettiEffectView" destination="XWj-u2-nRq" id="Pmm-Ab-kmX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

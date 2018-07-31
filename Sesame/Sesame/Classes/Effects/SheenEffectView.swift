@@ -28,15 +28,11 @@ open class SheenEffectView : OverlayEffectView {
     @IBInspectable @objc
     public var systemSound: UInt32 = 0
     
-    fileprivate var screenIsVertical: Bool = (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        let isVertical = UIScreen.main.bounds.width < UIScreen.main.bounds.height
-        if isVertical != screenIsVertical {
-            screenIsVertical = isVertical
-            if opacityMask && superview != nil {
-                mask = superview?.generateMask()
-            }
+    override open func didRotate() {
+        if opacityMask && superview != nil {
+            mask = superview?.generateMask()
+            guard let sheenImageView = sheenImageView else { return }
+            sheenImageView.frame = CGRect(origin: sheenImageView.frame.origin, size: bounds.size.applying(CGAffineTransform.init(scaleX: 1, y: sheenWidth.rawValue)))
         }
     }
     
@@ -47,18 +43,7 @@ open class SheenEffectView : OverlayEffectView {
     
     @objc
     open func start(completion: @escaping (SheenEffectView) -> Void = {_ in}) {
-        if sheenImageView == nil,
-            let bundle = Bundle.sesame,
-            var image = UIImage(named: "sheen", in: bundle, compatibleWith: nil) {
-            if let color = sheenColor {
-                image = image.tint(tintColor: color)
-            }
-            let sheenImageView = UIImageView(image: image)
-            let height = bounds.height
-            let width: CGFloat =  height * sheenWidth.rawValue
-            sheenImageView.frame = CGRect(x: -width, y: 0, width: width, height: height)
-            self.sheenImageView = sheenImageView
-        }
+        resetSheen()
         
         guard let sheenImageView = sheenImageView else {
             Logger.debug(error: "No image set for sheen")
@@ -74,17 +59,28 @@ open class SheenEffectView : OverlayEffectView {
             mask = superview?.generateMask()
         }
         
-        let previousTransform = sheenImageView.transform
-        
         UIView.animate(withDuration: duration, animations: {
             self.addSubview(sheenImageView)
             sheenImageView.transform = sheenImageView.transform.translatedBy(x: self.bounds.width + sheenImageView.frame.width, y: 0)
             AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
         }) { _ in
             sheenImageView.removeFromSuperview()
-            sheenImageView.transform = previousTransform
             completion(self)
         }
     }
     
+    func resetSheen() {
+        if sheenImageView == nil,
+            let bundle = Bundle.sesame,
+            var image = UIImage(named: "sheen", in: bundle, compatibleWith: nil) {
+            if let color = sheenColor {
+                image = image.tint(tintColor: color)
+            }
+            self.sheenImageView = UIImageView(image: image)
+        }
+        
+        if let sheenImageView = sheenImageView {
+            sheenImageView.frame = CGRect(origin: CGPoint(x: -bounds.size.width, y: 0), size: bounds.size.applying(CGAffineTransform.init(scaleX: 1, y: sheenWidth.rawValue)))
+        }
+    }
 }

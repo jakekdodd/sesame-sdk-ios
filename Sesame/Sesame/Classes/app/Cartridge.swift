@@ -12,7 +12,8 @@ class Cartridge : NSObject {
     let cartridgeId: String
     var decisions: [String]
     static var nuetral: Cartridge {
-        return Cartridge(NUETRAL_CARTRIDGE_ID, [])
+//        return Cartridge(NUETRAL_CARTRIDGE_ID, [])
+        return Cartridge.init(NUETRAL_CARTRIDGE_ID, ["sheen", "sheen", "sheen", "sheen", "confetti", "sheen", "sheen", "sheen"])
     }
     init(_ id: String, _ decisions: [String]) { cartridgeId = id; self.decisions = decisions}
     

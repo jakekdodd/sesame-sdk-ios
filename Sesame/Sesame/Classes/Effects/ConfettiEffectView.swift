@@ -21,8 +21,6 @@ open class ConfettiEffectView : OverlayEffectView {
     public var duration:Double = 2
     @IBInspectable @objc
     public var size:CGSize = CGSize(width: 9, height: 6)
-    @objc
-    public var s: ConfettiShape = .rectangle
     public var shapes:[ConfettiShape] = [.rectangle, .rectangle, .circle, .spiral]
     @objc
     public var colors:[UIColor] = [UIColor.from(rgb: "4d81fb", alpha: 0.8) ?? UIColor.purple,
@@ -35,9 +33,21 @@ open class ConfettiEffectView : OverlayEffectView {
     @IBInspectable @objc
     public var systemSound: UInt32 = 0
     
+    var burstEmitter: CAEmitterLayer?
+    var showerEmitter: CAEmitterLayer?
+    
     @objc(start)
     public func objc_start() {
         self.start()
+    }
+    
+    override open func didRotate() {
+        if let emitter = burstEmitter {
+            setEmitterPositionAndSize(emitter)
+        }
+        if let emitter = showerEmitter {
+            setEmitterPositionAndSize(emitter)
+        }
     }
     
     @objc
@@ -84,10 +94,9 @@ open class ConfettiEffectView : OverlayEffectView {
         DispatchQueue.main.async {
             
             /* Create bursting confetti */
-            let confettiEmitter = CAEmitterLayer()
-            confettiEmitter.emitterPosition = CGPoint(x: self.frame.width / 2.0, y: -30)
-            confettiEmitter.emitterShape = kCAEmitterLayerLine
-            confettiEmitter.emitterSize = CGSize(width: self.frame.width / 4.0, height: 0)
+            let burstEmitter = CAEmitterLayer()
+            self.burstEmitter  = burstEmitter
+            self.setEmitterPositionAndSize(burstEmitter)
             
             var cells:[CAEmitterCell] = []
             for shape in shapes {
@@ -108,17 +117,17 @@ open class ConfettiEffectView : OverlayEffectView {
                     cells.append(cell)
                 }
             }
-            confettiEmitter.emitterCells = cells
+            burstEmitter.emitterCells = cells
             
             /* Start showing the confetti */
-            confettiEmitter.beginTime = CACurrentMediaTime()
-            self.layer.addSublayer(confettiEmitter)
+            burstEmitter.beginTime = CACurrentMediaTime()
+            self.layer.addSublayer(burstEmitter)
             self.layer.setNeedsLayout()
             startedHandler()
             
             /* Remove the burst effect */
             DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2.0) {
-                if let cells = confettiEmitter.emitterCells {
+                if let cells = burstEmitter.emitterCells {
                     for cell in cells {
                         cell.setValuesForBurstPhase2()
                     }
@@ -126,14 +135,21 @@ open class ConfettiEffectView : OverlayEffectView {
                 
                 /* Remove the confetti emitter */
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2.0) {
-                    confettiEmitter.birthRate = 0
+                    burstEmitter.birthRate = 0
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(confettiEmitter.emitterCells?.first?.lifetimeMax ?? 0)) {
-                        confettiEmitter.removeFromSuperlayer()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(burstEmitter.emitterCells?.first?.lifetimeMax ?? 0)) {
+                        burstEmitter.removeFromSuperlayer()
+                        self.burstEmitter = nil
                     }
                 }
             }
         }
+    }
+    
+    fileprivate func setEmitterPositionAndSize(_ emitter: CAEmitterLayer) {
+        emitter.emitterPosition = CGPoint(x: self.frame.width / 2, y: -30)
+        emitter.emitterShape = kCAEmitterLayerLine
+        emitter.emitterSize = CGSize(width: self.frame.width, height: 0)
     }
     
     func confettiShower(duration:TimeInterval,
@@ -144,10 +160,9 @@ open class ConfettiEffectView : OverlayEffectView {
         DispatchQueue.main.async {
             
             /* Create showering confetti */
-            let confettiEmitter = CAEmitterLayer()
-            confettiEmitter.emitterPosition = CGPoint(x: self.frame.width / 2, y: -30)
-            confettiEmitter.emitterShape = kCAEmitterLayerLine
-            confettiEmitter.emitterSize = CGSize(width: self.frame.width, height: 0)
+            let showerEmitter = CAEmitterLayer()
+            self.showerEmitter = showerEmitter
+            self.setEmitterPositionAndSize(showerEmitter)
             
             var cells:[CAEmitterCell] = []
             for shape in shapes {
@@ -177,19 +192,20 @@ open class ConfettiEffectView : OverlayEffectView {
                     }
                 }
             }
-            confettiEmitter.emitterCells = cells
+            showerEmitter.emitterCells = cells
             
             /* Start showing the confetti */
-            confettiEmitter.beginTime = CACurrentMediaTime()
-            self.layer.addSublayer(confettiEmitter)
+            showerEmitter.beginTime = CACurrentMediaTime()
+            self.layer.addSublayer(showerEmitter)
             self.layer.setNeedsLayout()
             
             /* Remove the confetti emitter */
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                confettiEmitter.birthRate = 0
+                showerEmitter.birthRate = 0
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(confettiEmitter.emitterCells?.first?.lifetimeMax ?? 0)) {
-                    confettiEmitter.removeFromSuperlayer()
+                DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(showerEmitter.emitterCells?.first?.lifetimeMax ?? 0)) {
+                    showerEmitter.removeFromSuperlayer()
+                    self.showerEmitter = nil
                     completion(self)
                 }
             }

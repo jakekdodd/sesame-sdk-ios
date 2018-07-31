@@ -8,13 +8,30 @@
 
 import UIKit
 import Sesame
-import AudioToolbox
 
 class ViewController: UIViewController, SesameEffectDelegate {
     
-    @IBOutlet weak var confettiEffectView: ConfettiEffectView!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
+    
+    lazy var sheenView: SheenEffectView = {
+        let view = button!
+        let sheenView = SheenEffectView(frame: view.bounds)
+        sheenView.opacityMask = true
+        sheenView.duration = 5
+        view.addSubview(sheenView)
+        sheenView.constrainToSuperview()
+        return sheenView
+    }()
+    
+    lazy var confettiView: ConfettiEffectView = {
+        let view = button!
+        let confettiView = ConfettiEffectView(frame: view.bounds)
+        confettiView.duration = 5
+        view.addSubview(confettiView)
+        confettiView.constrainToSuperview()
+        return confettiView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,49 +42,24 @@ class ViewController: UIViewController, SesameEffectDelegate {
     }
     
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
+        print("Got reinforcement:\(reinforcement)")
         
-        addEffect(button)
+        switch reinforcement {
+        case "confetti":
+            confettiView.start()
+            
+        case "sheen":
+            sheenView.start()
+
+        default:
+            break
+        }
     }
     
     @IBAction
     func didTapButton(_ sender: Any) {
-//        print("Did tap button")
-//        print("Action count:\(String(describing: Sesame.shared?.service.app.tracker.actions.count))")
-        
-//        button.showSheen()
-        
-        addEffect(button)
-        
-    }
-    
-    func addEffect(_ view: UIView, duration: TimeInterval = 3) {
-       
-//        /// When view is created programitcally
-//        let confettiView = ConfettiEffectView.init(frame: CGRect.init(x: 0, y: view.bounds.height / 3, width: view.bounds.width, height: view.bounds.height / 3))
-//        confettiView.duration = duration
-//        view.addSubview(confettiView)
-//        confettiView.start() { confettiView in
-//            confettiView.removeFromSuperview()
-//        }
-        
-        /// When view is placed on storboard
-        confettiEffectView.duration = duration
-        confettiEffectView.start()
         
         
-//        /// When view is created programitcally
-//        let sheenView = SheenEffectView(frame: view.bounds)
-//        sheenView.opacityMask = true
-//        view.addSubview(sheenView)
-//        sheenView.constrainToSuperview()
-//        sheenView.start() { sheenView in
-//            sheenView.removeFromSuperview()
-//        }
-        
-//        /// When view is placed on storyboard
-//        sheenEffectView.constrainToSuperview()
-//        sheenEffectView.systemSound = 1001
-//        sheenEffectView.start()
     }
 
 }
