@@ -10,7 +10,7 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegate : AppDelegateWithSesame{
+class AppDelegate : AppDelegateWithSesame {
     
     override var SesameCredentials: [String : Any] {
         return ["appId": "570ffc491b4c6e9869482fbf",
@@ -19,11 +19,3 @@ class AppDelegate : AppDelegateWithSesame{
     }
     
 }
-
-//extension AppDelegate : SesameEffectDelegate {
-//    
-//    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
-//        print("Got reinfrocement:\(reinforcement)")
-//    }
-//    
-//}

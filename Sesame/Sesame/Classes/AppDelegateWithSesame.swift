@@ -7,15 +7,20 @@
 
 import Foundation
 
-/* Extend this class to seamlessly plug-in Sesame to your product.
- *
- * Copy and paste your credentials as a swift dictionary.
- * Reinforcements will invoke method *app(_:didReceiveReinforcement:withOptions:)*
- *
- */
+/// Extend this class to seamlessly plug-in Sesame to your product.
+///
+/// - A subclass should:
+///     - Override `SesameCredentials` with credentials from the web dashboard
+///     - Have `sesame.effectDelegate` set with a `SesameEffectDelegate`
+///
+/// A SesameEffectDelegate will receive reinforcements in method *app(_:didReceiveReinforcement:withOptions:)*.
+///
+/// The suggested implementation is to have a UIViewController implement protocol `SesameEffectDelegate`,
+/// and in `viewDidLoad()` set itself as the sesame.effectDelegate via `UIApplication.shared.delegate`.
+///
 open class AppDelegateWithSesame: PluggableApplicationDelegate {
     
-    // From a UIViewController inheriting protocol SesameEffectDelegate, set yourself as the effectDelegate in `viewDidLoad()` to get reinforcement messages
+    // MARK: - Set sesame.effectDelegate with a UIViewController
     open var sesame: Sesame?
     
     // MARK: - Override this dictionary to return your app's credentials
