@@ -19,6 +19,10 @@ open class OverlayEffectView : UIView {
         setup()
     }
     
+    convenience init() {
+        self.init(frame: .zero)
+    }
+    
     fileprivate func setup() {
         clipsToBounds = true
         isUserInteractionEnabled = false

@@ -16,7 +16,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
     
     lazy var sheenView: SheenEffectView = {
         let view = button!
-        let sheenView = SheenEffectView(frame: view.bounds)
+        let sheenView = SheenEffectView()
         sheenView.sheenImage = UIImage.init(named: "bmind")
         sheenView.opacityMask = true
         sheenView.duration = 4
@@ -28,7 +28,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
     
     lazy var confettiView: ConfettiEffectView = {
         let view = button!
-        let confettiView = ConfettiEffectView(frame: view.bounds)
+        let confettiView = ConfettiEffectView()
         confettiView.duration = 5
         view.addSubview(confettiView)
         confettiView.constrainToSuperview()
@@ -60,7 +60,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
     
     @IBAction
     func didTapButton(_ sender: Any) {
-        sheenView.start()
+        confettiView.start()
 
     }
 

@@ -41,15 +41,6 @@ open class ConfettiEffectView : OverlayEffectView {
         self.start()
     }
     
-    override open func didRotate() {
-        if let emitter = burstEmitter {
-            setEmitterPositionAndSize(emitter)
-        }
-        if let emitter = showerEmitter {
-            setEmitterPositionAndSize(emitter)
-        }
-    }
-    
     @objc
     public func start(completion: @escaping (ConfettiEffectView) -> Void = {_ in}) {
         self.showConfetti(duration: duration, size: size, shapes: shapes, colors: colors, hapticFeedback: hapticFeedback, systemSound: systemSound, completion: completion)
@@ -146,12 +137,6 @@ open class ConfettiEffectView : OverlayEffectView {
         }
     }
     
-    fileprivate func setEmitterPositionAndSize(_ emitter: CAEmitterLayer) {
-        emitter.emitterPosition = CGPoint(x: self.frame.width / 2, y: -30)
-        emitter.emitterShape = kCAEmitterLayerLine
-        emitter.emitterSize = CGSize(width: self.frame.width, height: 0)
-    }
-    
     func confettiShower(duration:TimeInterval,
                                size:CGSize,
                                shapes:[ConfettiShape],
@@ -210,6 +195,23 @@ open class ConfettiEffectView : OverlayEffectView {
                 }
             }
         }
+    }
+    
+    open override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        
+        if let emitter = burstEmitter {
+            setEmitterPositionAndSize(emitter)
+        }
+        if let emitter = showerEmitter {
+            setEmitterPositionAndSize(emitter)
+        }
+    }
+    
+    fileprivate func setEmitterPositionAndSize(_ emitter: CAEmitterLayer) {
+        emitter.emitterPosition = CGPoint(x: bounds.width / 2, y: -30)
+        emitter.emitterShape = kCAEmitterLayerLine
+        emitter.emitterSize = CGSize(width: bounds.width, height: 0)
     }
 }
 
