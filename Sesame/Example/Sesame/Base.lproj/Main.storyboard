@@ -42,17 +42,56 @@
                                     <outletCollection property="gestureRecognizers" destination="LJh-Np-Owg" appends="YES" id="ClM-r7-pFv"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ho2-k3-saE">
+                                <rect key="frame" x="16" y="45" width="336" height="184"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Xyk-Mw-58c" appends="YES" id="bkO-oU-qx9"/>
+                                </connections>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iGc-Cr-bEV">
+                                <rect key="frame" x="16" y="414" width="165" height="118"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <state key="normal" title="Send notification">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="TzI-je-MAk" appends="YES" id="J6v-ko-Ctj"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="backgroundImage" destination="Tcr-K9-2HO" id="2Qn-fC-iLk"/>
                         <outlet property="button" destination="NZB-cI-tge" id="G5J-bt-WXb"/>
+                        <outlet property="label" destination="Ho2-k3-saE" id="pjZ-B6-69j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="LJh-Np-Owg">
                     <connections>
                         <action selector="didTapButton:" destination="vXZ-lx-hvc" id="vGQ-s2-KzF"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Xyk-Mw-58c">
+                    <connections>
+                        <action selector="didTapLabel:" destination="vXZ-lx-hvc" id="zNu-ZV-aYw"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="TzI-je-MAk">
+                    <connections>
+                        <action selector="didTapSendNotification:" destination="vXZ-lx-hvc" id="UOg-8D-t3G"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

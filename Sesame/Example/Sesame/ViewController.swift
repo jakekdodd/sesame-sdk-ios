@@ -8,9 +8,11 @@
 
 import UIKit
 import Sesame
+import UserNotifications
 
 class ViewController: UIViewController, SesameEffectDelegate {
     
+    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
     
@@ -35,9 +37,10 @@ class ViewController: UIViewController, SesameEffectDelegate {
         return confettiView
     }()
     
+    var notificationCenter: UNUserNotificationCenter?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        notificationCenter = UNUserNotificationCenter.current()
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             appDelegate.sesame?.effectDelegate = self
         }
@@ -59,10 +62,18 @@ class ViewController: UIViewController, SesameEffectDelegate {
     }
     
     @IBAction
-    func didTapButton(_ sender: Any) {
+    func didTapTest(_ sender: Any) {
         confettiView.start()
-
+        
+    }
+    
+    @IBAction
+    func didTapLabel(_ sender: Any) {
+        label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.appOpenSource.debugDescription ?? "nil"
     }
 
+    @IBAction func didTapSendNotification(_ sender: Any) {
+        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time:2)
+    }
 }
 

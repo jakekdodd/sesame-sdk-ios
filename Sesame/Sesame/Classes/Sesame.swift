@@ -44,7 +44,7 @@ public class Sesame : NSObject {
     let api: APIClient
     public var config: AppConfig
     
-    unowned let service: SesameApplicationService
+    public unowned let service: SesameApplicationService
     let coreDataManager: CoreDataManager
     public var reinforcer: Reinforcer
     public var tracker: Tracker
