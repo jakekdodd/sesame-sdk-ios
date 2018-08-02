@@ -14,4 +14,6 @@ public class Reinforcer : NSObject {
     init(cartridge: Cartridge = Cartridge.nuetral) {
         self.cartridge = cartridge
     }
+    
+    
 }
