@@ -17,7 +17,7 @@
   },
   "social_media_url": "https://twitter.com/BoundlessAI",
   "platforms": {
-    "ios": "10.0"
+    "ios": "8.0"
   },
   "source_files": "Sesame/Classes/**/*",
   "resource_bundles": {

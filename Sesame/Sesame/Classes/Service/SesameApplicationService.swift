@@ -11,27 +11,18 @@ import UserNotifications
 
 final public class SesameApplicationService : NSObject {
     
-    public enum AppOpenSource {
-        case homescreen
-        case background
-        case deeplink
-        case notification
-        case spotlight
-    }
-    public var appOpenSource: AppOpenSource?
-    
-    enum SesameAppState {
-        case closed, opened
-    }
-    
-    var refractoryDuration: TimeInterval = 2
-    fileprivate (set) var lastAppOpen: Date? = nil
-    fileprivate (set) var appState: SesameAppState = .closed {
+    public var app: Sesame?
+    fileprivate (set) public var trigger: UserTrigger? {
         didSet {
-            didSet(oldValue: oldValue, appState: appState)
+            if oldValue == nil,
+                let trigger = trigger {
+                switch trigger {
+                default:
+                    app?.open()
+                }
+            }
         }
     }
-    public var app: Sesame?
     
     public convenience init(args: [String: Any]) {
         self.init()
@@ -42,46 +33,25 @@ final public class SesameApplicationService : NSObject {
             app = Sesame(appId: appId, appVersionId: appVersionId, auth: auth, service: self)
         }
     }
-    
-    fileprivate func didSet(oldValue: SesameAppState, appState: SesameAppState) {
-        Logger.debug("App state changed from \(oldValue) to \(appState)")
-        
-        switch (oldValue, appState) {
-        case (.closed, .opened):
-            self.lastAppOpen = Date()
-            app?.open()
-            
-        case (.opened, .opened):
-            let now = Date()
-            if let lastOpened = lastAppOpen,
-                lastOpened.timeIntervalSince(now) > refractoryDuration
-            {
-                self.lastAppOpen = Date()
-                app?.open()
-            } else {
-                Logger.debug("App reopened too soon for another reinforcement")
-            }
-            
-        case (.opened, .closed):
-            self.lastAppOpen = nil
-            self.appOpenSource = nil
-            
-        case (.closed, .closed):
-            break
-        }
-    }
 }
 
 
 // MARK: - UIApplicationDelegate
 extension SesameApplicationService : ApplicationService {
     
+    // MARK: - Launch
+    
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         Logger.debug("Sesame service app did launch")
         Logger.debug(confirmed: "Application state:\(UIApplication.shared.applicationState.rawValue)")
-        UIApplicationShortcutItem.registerDynamicItems()
-        
-        appState = .opened
+        if #available(iOS 9.0, *), launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] != nil {
+            trigger = UserTrigger(type: .internal(.shortcut))
+        } else if launchOptions?[UIApplicationLaunchOptionsKey.sourceApplication] != nil || launchOptions?[UIApplicationLaunchOptionsKey.url] != nil {
+            // Even if you decide to return false for this method and not handle the url, the user was still triggered by a deep link and so should be marked as such
+            trigger = UserTrigger(type: .external(.deepLink))
+        } else if launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil || launchOptions?[UIApplicationLaunchOptionsKey.localNotification] != nil {
+            trigger = UserTrigger(type: .synthetic(.notification))
+        }
         
         //        app.tracker.actions.append(ReportEvent.init(ReportEvent.ACTION_APP_OPEN, [String : Any]()))
         //        app.api.boot(app: app) { (success, newConfig) in
@@ -96,44 +66,66 @@ extension SesameApplicationService : ApplicationService {
         return true
     }
     
-    // MARK: - Notifications
     
+    // MARK: - App Open from Shortcut
+    
+    @available(iOS 9.0, *)
     public func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        
+        if trigger == nil {
+            trigger = UserTrigger(type: .internal(.shortcut))
+        }
     }
     
-    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        appOpenSource = .notification
-    }
-    
-    // MARK: - Deep Links
-    
-//    public func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
-//        Logger.debug("Sesame service app open url for universal link")
-//        if userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-//            let url = userActivity.webpageURL {
-//            print("User activity webpage:\(url.absoluteString)")
-//        }
-//        return false
-//    }
+    // MARK: - App Open from Deep Link
     
     public func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        Logger.debug("Sesame service app open url for deep link")
-        appOpenSource = .deeplink
+        if trigger == nil {
+            trigger = UserTrigger(type: .external(.deepLink))
+        }
         return true
     }
     
-    public func applicationWillEnterForeground(_ application: UIApplication) {
-        Logger.debug("Sesame service app will enter foreground")
-        Logger.debug(confirmed: "Application state:\(UIApplication.shared.applicationState.rawValue)")
-        
-        appState = .opened
+    // MARK: - App Open from Notifications
+    
+    // MARK: Notifications for iOS >= 10.0
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if trigger == nil {
+            trigger = UserTrigger(type: .synthetic(.notification))
+        }
     }
     
-    public func applicationDidEnterBackground(_ application: UIApplication) {
-        Logger.debug("Sesame service app did enter background")
-        Logger.debug(confirmed: "Application state:\(UIApplication.shared.applicationState.rawValue)")
-        
-        appState = .closed
+    // MARK: Notifications for iOS < 10.0
+    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if trigger == nil {
+            trigger = UserTrigger(type: .synthetic(.notification))
+        }
     }
+    
+    @available(iOS, obsoleted: 10.0)
+    public func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        if trigger == nil {
+            trigger = UserTrigger(type: .synthetic(.notification))
+        }
+    }
+    
+    // MARK: - App Open for Default
+    
+    public func applicationDidBecomeActive(_ application: UIApplication) {
+        // If none of the other trigger types have been set, then the user must've tapped open the app from Spotlight, Springboard, or from the App Switcher which are all internal triggers
+        if trigger == nil {
+            trigger = UserTrigger(type: .internal(.default))
+        }
+    }
+    
+    // MARK: - App Close
+    
+    public func applicationDidEnterBackground(_ application: UIApplication) {
+        // Clear the trigger so a new one can be set
+        trigger = nil
+        
+        // custom implementation
+        
+    }
+    
 }

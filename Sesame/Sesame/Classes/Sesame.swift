@@ -60,7 +60,8 @@ public class Sesame : NSObject {
         let coreDataManager = CoreDataManager()
         self.coreDataManager = coreDataManager
         self.reinforcer = Reinforcer()
-        self.tracker = Tracker(context: coreDataManager.persistentContainer.viewContext)
+//        self.tracker = Tracker(context: coreDataManager.persistentContainer.viewContext)
+        self.tracker = Tracker(context: coreDataManager.managedObjectContext!)
         super.init()
     }
     

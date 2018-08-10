@@ -14,6 +14,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8491A2E1211CE03B00069B94 /* Utilities.swift */; };
 		928C6686758FC2AEBEADC635 /* Pods_Sesame_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC2485495B52FF43A9AE41D /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8422CD7A21124C9F001E94FF /* Sesame_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sesame_Example.entitlements; sourceTree = "<group>"; };
+		8491A2E1211CE03B00069B94 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		B88D121BCE5EF6408FE87B07 /* Sesame.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Sesame.podspec; path = ../Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		DD22E7534AAD9CEB9629A0DB /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E79B94BD43C4858BD5BB6A7A /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				8491A2E1211CE03B00069B94 /* Utilities.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -331,6 +334,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);

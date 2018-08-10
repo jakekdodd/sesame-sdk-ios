@@ -28,7 +28,7 @@ open class OverlayEffectView : UIView {
         isUserInteractionEnabled = false
     }
     
-    @objc
+    @objc @available(iOS 9.0, *)
     open func constrainToSuperview() {
         // Adjusts to cover the superview
         guard let superview = superview else {

@@ -23,7 +23,8 @@ open class SheenEffectView : OverlayEffectView {
     @IBInspectable @objc
     public var sheenWidthToHeightRatio: CGFloat = SheenWidthToHeightRatio.equal.rawValue {
         didSet {
-            if sheenImageViewWidthConstraint != nil {
+            if #available(iOS 9.0, *),
+                sheenImageViewWidthConstraint != nil {
                 sheenImageViewWidthConstraint?.isActive = false
                 sheenImageViewWidthConstraint = sheenImageView?.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: sheenWidthToHeightRatio)
                 sheenImageViewWidthConstraint?.isActive = true
@@ -75,17 +76,19 @@ open class SheenEffectView : OverlayEffectView {
             sheenImageView.isHidden = true
             self.addSubview(sheenImageView)
             
-            sheenImageView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                sheenImageView.topAnchor.constraint(equalTo: self.topAnchor),
-                sheenImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-                ])
-            sheenImageViewWidthConstraint = sheenImageView.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: sheenWidthToHeightRatio)
-            sheenImageViewAnimationStartConstraint = sheenImageView.trailingAnchor.constraint(equalTo: leadingAnchor)
-            sheenImageViewAnimationEndConstraint = sheenImageView.leadingAnchor.constraint(equalTo: trailingAnchor)
-            sheenImageViewWidthConstraint?.isActive = true
-            sheenImageViewAnimationEndConstraint?.isActive = false
-            sheenImageViewAnimationStartConstraint?.isActive = true
+            if #available(iOS 9.0, *) {
+                sheenImageView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    sheenImageView.topAnchor.constraint(equalTo: self.topAnchor),
+                    sheenImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+                    ])
+                sheenImageViewWidthConstraint = sheenImageView.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: sheenWidthToHeightRatio)
+                sheenImageViewAnimationStartConstraint = sheenImageView.trailingAnchor.constraint(equalTo: leadingAnchor)
+                sheenImageViewAnimationEndConstraint = sheenImageView.leadingAnchor.constraint(equalTo: trailingAnchor)
+                sheenImageViewWidthConstraint?.isActive = true
+                sheenImageViewAnimationEndConstraint?.isActive = false
+                sheenImageViewAnimationStartConstraint?.isActive = true
+            }
             layoutIfNeeded()
         }
         

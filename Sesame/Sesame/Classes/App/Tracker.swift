@@ -39,12 +39,15 @@ public class Tracker : NSObject {
             print("Could not save. \(error), \(error.userInfo)")
         }
         saveContext()
+        
+        print("Tracker count:\(actions.count)")
     }
     
     func saveContext() {
         if context.hasChanges {
             do {
                 try context.save()
+                print()
             } catch {
                 let nserror = error as NSError
                 Logger.debug(error: "Unresolved error \(nserror), \(nserror.userInfo)")

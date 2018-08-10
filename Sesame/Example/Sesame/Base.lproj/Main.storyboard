@@ -42,7 +42,7 @@
                                     <outletCollection property="gestureRecognizers" destination="LJh-Np-Owg" appends="YES" id="ClM-r7-pFv"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ho2-k3-saE">
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap to show where the app opened from" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ho2-k3-saE">
                                 <rect key="frame" x="16" y="45" width="336" height="184"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <gestureRecognizers/>
@@ -81,7 +81,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="LJh-Np-Owg">
                     <connections>
-                        <action selector="didTapButton:" destination="vXZ-lx-hvc" id="vGQ-s2-KzF"/>
+                        <action selector="didTapTest:" destination="vXZ-lx-hvc" id="6zZ-re-V7V"/>
                     </connections>
                 </tapGestureRecognizer>
                 <tapGestureRecognizer id="Xyk-Mw-58c">

@@ -69,7 +69,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
     
     @IBAction
     func didTapLabel(_ sender: Any) {
-        label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.appOpenSource.debugDescription ?? "nil"
+        label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.trigger?.type.description ?? "nil"
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {
