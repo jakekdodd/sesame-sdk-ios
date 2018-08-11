@@ -36,10 +36,8 @@
 		A974872A061E60C0ECAD312DE33D9B53 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7628D81106F4BB9CD08EE119F4938C95 /* BundleExtensions.swift */; };
 		B48804CC13C96A4B7D28A22F2CDB2F67 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ABB0D890342123C7907C09DFF0CB88 /* UIViewExtensions.swift */; };
 		B518DCBE9DBF64839EADE7D7BA5139BA /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8B3BE8CB77E2E4F3D05E9705D1E7C1 /* StringExtensions.swift */; };
-		B797F568C8A7797C3B9E81F2BC851DF5 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9B90CE0C7703A332982399C0800E0 /* Tracker.swift */; };
 		BB41F2FFFF3509BAC404ED84C1F357AB /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897E0DF7013A6BBBDE5236F71789CF91 /* APIClient.swift */; };
 		C26FDB83473646EADEFE16405B8D9EE6 /* Pods-Sesame_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C78967DA874E5679766FF6CE9343A9FE /* ReportEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BF7B3826929ECA228D8E46CC713187 /* ReportEvent.swift */; };
 		CE338400F231A717AA068F8B3F2169B5 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35EFC3FC34248746675A0741ABA7C4 /* HTTPClient.swift */; };
 		D0472E4129AC610B661E94C1631C6A53 /* Sesame-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 208CA85D1FD36D8B8AE3AC74F1180A1B /* Sesame-dummy.m */; };
 		D4349609719CC5450975C87B2CF84E5C /* Reinforcer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4066D11E4E6850042F0994C44170CD /* Reinforcer.swift */; };
@@ -90,7 +88,6 @@
 		3427FBADB6ACE92DD4BB0A3D70704E48 /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		347258DB9702C3A030A05EC025F205B8 /* PluggableApplicationDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PluggableApplicationDelegate.swift; sourceTree = "<group>"; };
 		3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		37BF7B3826929ECA228D8E46CC713187 /* ReportEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReportEvent.swift; sourceTree = "<group>"; };
 		3AD1EC8587ED2D9D29AD28568F9A0087 /* OverlayEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OverlayEffectView.swift; sourceTree = "<group>"; };
 		3C46D37F2C90130D8F55131F45B0D945 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D4A116DAC41DD1A9E0C7DE17A6A30D0 /* Cartridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Cartridge.swift; sourceTree = "<group>"; };
@@ -124,7 +121,6 @@
 		9A9C60C74BDFFA3E7DE54E6A7A9597C2 /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
 		9DE34E5FB751A90B649910F7EDFE4B04 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E35EFC3FC34248746675A0741ABA7C4 /* HTTPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
-		A0F9B90CE0C7703A332982399C0800E0 /* Tracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		AB895FADDBD0F9AC58F5C6B69A218187 /* Pods-Sesame_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		AC7F04CDF8CCA509E6588E4389CE16F2 /* Sesame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sesame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADB3E3E031C079D6E101B03685C7AF9A /* Sesame.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = Sesame.xcdatamodel; sourceTree = "<group>"; };
@@ -266,8 +262,6 @@
 				3D4A116DAC41DD1A9E0C7DE17A6A30D0 /* Cartridge.swift */,
 				E09C03AB68B5BFEBE2D64D4AB1026E39 /* CoreDataManager.swift */,
 				6F4066D11E4E6850042F0994C44170CD /* Reinforcer.swift */,
-				37BF7B3826929ECA228D8E46CC713187 /* ReportEvent.swift */,
-				A0F9B90CE0C7703A332982399C0800E0 /* Tracker.swift */,
 			);
 			name = App;
 			path = Sesame/Classes/App;
@@ -564,14 +558,12 @@
 				449DC989976108D5DF1D93295D428CC0 /* OverlayEffectView.swift in Sources */,
 				23F9EBF966D67402EEC5FCB2E3940547 /* PluggableApplicationDelegate.swift in Sources */,
 				D4349609719CC5450975C87B2CF84E5C /* Reinforcer.swift in Sources */,
-				C78967DA874E5679766FF6CE9343A9FE /* ReportEvent.swift in Sources */,
 				D0472E4129AC610B661E94C1631C6A53 /* Sesame-dummy.m in Sources */,
 				87DF47049A0260C675D0DC85B8531B1E /* Sesame.swift in Sources */,
 				4FE15A3933AD7314E757C3BDDA864007 /* Sesame.xcdatamodeld in Sources */,
 				63E99E5AD612043C45B6DB7EBC7394C2 /* SesameApplicationService.swift in Sources */,
 				686B27BA3D24693430458B01783D474B /* SheenEffectView.swift in Sources */,
 				B518DCBE9DBF64839EADE7D7BA5139BA /* StringExtensions.swift in Sources */,
-				B797F568C8A7797C3B9E81F2BC851DF5 /* Tracker.swift in Sources */,
 				87F2831817A8A3EB8006B715707175E8 /* UIColorExtensions.swift in Sources */,
 				94CFDD23AE4797CCF096249A96862FB7 /* UIImageExtensions.swift in Sources */,
 				485DF42951AA5D6DC7A17B0B46F84730 /* UIView+CodelessAnimation.swift in Sources */,

@@ -47,7 +47,6 @@ public class Sesame : NSObject {
     public unowned let service: SesameApplicationService
     let coreDataManager: CoreDataManager
     public var reinforcer: Reinforcer
-    public var tracker: Tracker
     
     
     init(appId: String, appVersionId: String, auth: String, service: SesameApplicationService) {
@@ -60,14 +59,14 @@ public class Sesame : NSObject {
         let coreDataManager = CoreDataManager()
         self.coreDataManager = coreDataManager
         self.reinforcer = Reinforcer()
-//        self.tracker = Tracker(context: coreDataManager.persistentContainer.viewContext)
-        self.tracker = Tracker(context: coreDataManager.managedObjectContext!)
         super.init()
     }
     
     func open() {
         let reinforcement = reinforcer.cartridge.removeDecision()
         _effect = (reinforcement, [:])
-        tracker.add(action: "appOpen", details: [:])
+        
+        coreDataManager.addEvent("appOpen")
     }
+    
 }

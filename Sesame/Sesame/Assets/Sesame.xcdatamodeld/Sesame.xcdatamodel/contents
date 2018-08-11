@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="Sesame">
-    <entity name="ReportBatch" representedClassName="ReportBatch" syncable="YES" codeGenerationType="class"/>
-    <entity name="ReportEvent" representedClassName="ReportEvent" syncable="YES" codeGenerationType="class">
-        <attribute name="actionName" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="Event" representedClassName="Event" syncable="YES" codeGenerationType="class">
+        <attribute name="utc" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="report" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Report" inverseName="events" inverseEntity="Report" syncable="YES"/>
+    </entity>
+    <entity name="Report" representedClassName="Report" syncable="YES" codeGenerationType="class">
+        <attribute name="actionId" attributeType="String" syncable="YES"/>
+        <relationship name="events" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Event" inverseName="report" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ReportEvent" positionX="-63" positionY="-18" width="128" height="60"/>
-        <element name="ReportBatch" positionX="-63" positionY="-9" width="128" height="45"/>
+        <element name="Event" positionX="-56" positionY="-18" width="128" height="73"/>
+        <element name="Report" positionX="-288" positionY="-18" width="128" height="73"/>
     </elements>
 </model>

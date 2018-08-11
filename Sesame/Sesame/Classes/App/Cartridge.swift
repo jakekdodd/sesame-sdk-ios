@@ -18,7 +18,7 @@ class Cartridge : NSObject {
     
     func removeDecision() -> String {
         guard !decisions.isEmpty else {
-            return ReportEvent.REINFORCEMENT_NUETRAL
+            return Report.REINFORCEMENT_NUETRAL
         }
         return decisions.remove(at: 0)
     }

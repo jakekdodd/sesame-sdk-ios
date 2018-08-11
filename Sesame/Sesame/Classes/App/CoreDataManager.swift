@@ -10,6 +10,7 @@ import CoreData
 
 
 class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
+    
     lazy var applicationDocumentsDirectory: NSURL = {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls.last! as NSURL
@@ -73,58 +74,59 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         
     }()
 }
-//
-//class CoreDataManager : NSObject {
-//
-//    fileprivate var persistentContainerQueue: OperationQueue = {
-//        let queue = OperationQueue()
-//        queue.maxConcurrentOperationCount = 1
-//        return queue
-//    }()
-//
-//    override init() {
-//        super.init()
-//    }
-//
-//    @available(iOS 10.0, *)
-//    func enqueue(block: @escaping (NSManagedObjectContext) -> Void) {
-//        persistentContainerQueue.addOperation {
-//            let context = self.persistentContainer.newBackgroundContext()
-//            context.performAndWait {
-//                block(context)
-//                do {
-//                    try context.save()
-//                } catch {
-//                    Logger.debug(error: "Error while saving to Core Data:\(error as AnyObject)")
-//                }
-//            }
-//        }
-//    }
-//
-//    @available(iOS 10.0, *)
-//    lazy var persistentContainer: NSPersistentContainer = {
-//        let modelURL = Bundle(for: type(of: self)).url(forResource: "Sesame", withExtension: "momd")!
-//        let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL)!
-//        let container = NSPersistentContainer(name: "Sesame", managedObjectModel: managedObjectModel)
-//        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//            if let error = error as NSError? {
-//                fatalError("Unresolved error \(error), \(error.userInfo)")
-//            }
-//        })
-//        return container
-//    }()
-//
-////    func saveContext () {
-////        let context = persistentContainer.viewContext
-////        if context.hasChanges {
-////            do {
-////                try context.save()
-////            } catch {
-////                // Replace this implementation with code to handle the error appropriately.
-////                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-////                let nserror = error as NSError
-////                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-////            }
-////        }
-////    }
-//}
+
+extension CoreDataManager {
+    
+    func fetchTrackReport(actionId: String, create: Bool = true) -> Report? {
+        let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
+        fetchRequest.predicate = NSPredicate(format: "actionId = '\(actionId)'")
+        fetchRequest.fetchLimit = 1
+        do {
+            if let report = try managedObjectContext?.fetch(fetchRequest).first {
+                return report
+            } else if create,
+                let managedObjectContext = managedObjectContext,
+                let entity = NSEntityDescription.entity(forEntityName: "Report", in: managedObjectContext) {
+                let report = Report(entity: entity, insertInto: managedObjectContext)
+                report.actionId = actionId
+                return report
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        
+        return nil
+    }
+    
+    func addEvent(_ actionId: String) {
+        guard let managedObjectContext = managedObjectContext,
+            let report = fetchTrackReport(actionId: actionId) else {
+            Logger.debug(error: "Could not create report for actionId:\(actionId)")
+            return
+        }
+        
+        guard let entity = NSEntityDescription.entity(forEntityName: "Event", in: managedObjectContext) else {
+            Logger.debug(error: "Could not create entity for event")
+            return
+        }
+        
+        let event = Event(entity: entity, insertInto: managedObjectContext)
+        event.utc = Date()
+        event.report = report
+        
+        do {
+            try managedObjectContext.save()
+            print("Saved coredata. Reported events for <\(actionId)>:<\(report.events?.count as AnyObject)>")
+        } catch {
+            Logger.debug(error: "\(error)")
+        }
+    }
+}
+
+extension Report {
+    
+    static let ACTION_APP_OPEN = "appOpen"
+    static let ACTION_APP_CLOSE = "appClose"
+    static let REINFORCEMENT_NUETRAL = "nuetral"
+    
+}
