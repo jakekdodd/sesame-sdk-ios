@@ -11,11 +11,11 @@ import Sesame
 import UserNotifications
 
 class ViewController: UIViewController, SesameEffectDelegate {
-    
+
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
-    
+
     lazy var sheenView: SheenEffectView = {
         let view = button!
         let sheenView = SheenEffectView()
@@ -27,7 +27,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
         sheenView.constrainToSuperview()
         return sheenView
     }()
-    
+
     lazy var confettiView: ConfettiEffectView = {
         let view = button!
         let confettiView = ConfettiEffectView()
@@ -36,7 +36,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
         confettiView.constrainToSuperview()
         return confettiView
     }()
-    
+
     var notificationCenter: UNUserNotificationCenter?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,14 +45,14 @@ class ViewController: UIViewController, SesameEffectDelegate {
             appDelegate.sesame?.effectDelegate = self
         }
     }
-    
-    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String : Any]?) {
+
+    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
         print("Got reinforcement:\(reinforcement)")
-        
+
         switch reinforcement {
         case "confetti":
             confettiView.start()
-            
+
         case "sheen":
             sheenView.start()
 
@@ -60,20 +60,19 @@ class ViewController: UIViewController, SesameEffectDelegate {
             break
         }
     }
-    
+
     @IBAction
     func didTapTest(_ sender: Any) {
         confettiView.start()
-        
+
     }
-    
+
     @IBAction
     func didTapLabel(_ sender: Any) {
         label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.trigger?.type.description ?? "nil"
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {
-        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time:2)
+        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time: 2)
     }
 }
-

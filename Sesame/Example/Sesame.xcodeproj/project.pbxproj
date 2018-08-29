@@ -176,6 +176,7 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				55199B4D5F131E16A87AFD03 /* [CP] Embed Pods Frameworks */,
+				84CDA144213715FF002D2A82 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -308,6 +309,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sesame_Example/Pods-Sesame_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		84CDA144213715FF002D2A82 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nfi";
 		};
 		A1044764478BAD94207B163E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -47,19 +47,19 @@ public extension UNUserNotificationCenter {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request) { (error) in
-            if (error != nil) {
+            if error != nil {
                 print(error!)
             } else {
                 print("Success! ID:\(identifier), Message:\(body), Time:\(trigger.timeInterval.magnitude) seconds")
             }
         }
     }
-    
+
     public func requestPermission(remoteRegistration: Bool = true, completion: ((Bool) -> Void)? = nil) {
         getNotificationSettings { (settings) in
             switch settings.authorizationStatus {
             case .notDetermined:
-                self.requestAuthorization(options: [.alert, .sound]) { granted, error in
+                self.requestAuthorization(options: [.alert, .sound]) { granted, _ in
                     if granted && remoteRegistration {
                         DispatchQueue.main.async {
                             UIApplication.shared.registerForRemoteNotifications()
@@ -67,10 +67,10 @@ public extension UNUserNotificationCenter {
                     }
                     completion?(granted)
                 }
-                
+
             case .authorized:
                 completion?(true)
-                
+
             case .denied:
                 completion?(false)
             }
@@ -94,7 +94,7 @@ public extension Bundle {
             let externalURLScheme = urlSchemes.first as? String else {
                 return nil
         }
-        
+
         return externalURLScheme
     }
 }

@@ -10,12 +10,15 @@ import UIKit
 import Sesame
 
 @UIApplicationMain
-class AppDelegate : AppDelegateWithSesame {
-    
-    override var SesameCredentials: [String : Any] {
+@objc
+class AppDelegate: AppDelegateWithSesame {
+
+    override var SesameCredentials: [String: Any] {
         return ["appId": "570ffc491b4c6e9869482fbf",
                 "appVersionId": "rams1",
-                "auth": "d388c7074d8a283bff1f01eb932c1c9e6bec3b10"]
+                "auth": "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
+                "userIdSource": UserIdSource.custom
+        ]
     }
-    
+
 }
