@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="Sesame">
     <entity name="Event" representedClassName="Event" syncable="YES" codeGenerationType="class">
-        <attribute name="utc" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="metadata" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timezoneOffset" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="utc" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="report" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Report" inverseName="events" inverseEntity="Report" syncable="YES"/>
     </entity>
     <entity name="Report" representedClassName="Report" syncable="YES" codeGenerationType="class">
@@ -14,7 +16,7 @@
         <relationship name="reports" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="user" inverseEntity="Report" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-54" positionY="-18" width="128" height="73"/>
+        <element name="Event" positionX="-54" positionY="-18" width="128" height="105"/>
         <element name="Report" positionX="-288" positionY="-18" width="128" height="90"/>
         <element name="User" positionX="-153" positionY="18" width="128" height="75"/>
     </elements>

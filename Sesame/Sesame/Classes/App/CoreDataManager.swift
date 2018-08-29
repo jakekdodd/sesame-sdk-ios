@@ -98,7 +98,7 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         return nil
     }
     
-    func addEvent(for actionId: String) {
+    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
         guard let managedObjectContext = managedObjectContext,
             let report = fetchReport(for: actionId) else {
             Logger.debug(error: "Could not create report for actionId:\(actionId)")
@@ -111,7 +111,14 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         }
         
         let event = Event(entity: entity, insertInto: managedObjectContext)
-        event.utc = Date()
+        event.utc = Int64(Date().timeIntervalSince1970 * 1000)
+        event.timezoneOffset = Int64(NSTimeZone.default.secondsFromGMT() * 1000)
+        do {
+            event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata),
+                                    encoding: .utf8)
+        } catch {
+            print(error)
+        }
         event.report = report
 
         if managedObjectContext.hasChanges {
@@ -124,6 +131,20 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         }
 
         Logger.debug(confirmed: "Logged event:\(event.debugDescription)")
+    }
+
+    func reports() -> [Report]? {
+        let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
+
+        do {
+            if let events = try managedObjectContext?.fetch(fetchRequest) {
+                return events
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+        return nil
     }
 }
 

@@ -26,6 +26,7 @@
 		691002B9536EAF3897633FE3A087DE69 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D47A391F623A91E9D862AFB65D70C /* CGExtensions.swift */; };
 		75D87406E208759D185E3ADA97663488 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B387EEB5A979AF44A3423F07D9879BF /* AudioEffect.swift */; };
 		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 715FF4D200C1230E5D913AE48EB33C62 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		84BB01D82136233700F3506A /* UserIdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BB01D72136233700F3506A /* UserIdSource.swift */; };
 		86DB4FC86B194E3716BF431B282F4C95 /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895BAD17F67F466C771EB52EB48FD80 /* VisualEffect.swift */; };
 		87DF47049A0260C675D0DC85B8531B1E /* Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4B75811AF7B33C116C838D0E298BD6 /* Sesame.swift */; };
 		87F2831817A8A3EB8006B715707175E8 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE01DAF3A16B9C4A3BF9975F634C720E /* UIColorExtensions.swift */; };
@@ -111,6 +112,7 @@
 		8135F17ACC60CE5B512B09ED8E98F56F /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
 		84BB01D321361A1800F3506A /* Sesame 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Sesame 2.xcdatamodel"; sourceTree = "<group>"; };
+		84BB01D72136233700F3506A /* UserIdSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdSource.swift; sourceTree = "<group>"; };
 		88BD5DF3D220166BCE20F9914317C5B0 /* SheenEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SheenEffectView.swift; sourceTree = "<group>"; };
 		897E0DF7013A6BBBDE5236F71789CF91 /* APIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		8B387EEB5A979AF44A3423F07D9879BF /* AudioEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 			children = (
 				347258DB9702C3A030A05EC025F205B8 /* PluggableApplicationDelegate.swift */,
 				6D21D0F3D314C3AFF72A039B26EE55D9 /* SesameApplicationService.swift */,
+				84BB01D72136233700F3506A /* UserIdSource.swift */,
 				8B96E2010844724705E3FD07A552F871 /* UserTrigger.swift */,
 			);
 			name = Service;
@@ -576,6 +579,7 @@
 				B48804CC13C96A4B7D28A22F2CDB2F67 /* UIViewExtensions.swift in Sources */,
 				5EA40ABA82A4A7B50FA3609A58CCE813 /* UIWindowExtensions.swift in Sources */,
 				5A2E3F5E99CD8CC616E3F5449B85AEF6 /* UserTrigger.swift in Sources */,
+				84BB01D82136233700F3506A /* UserIdSource.swift in Sources */,
 				86DB4FC86B194E3716BF431B282F4C95 /* VisualEffect.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

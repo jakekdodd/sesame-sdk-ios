@@ -43,6 +43,7 @@ public class Sesame : NSObject {
     let auth: String
     let api: APIClient
     public var config: AppConfig
+    var user: User?
     
     public unowned let service: SesameApplicationService
     let coreDataManager: CoreDataManager
@@ -59,6 +60,8 @@ public class Sesame : NSObject {
         self.coreDataManager = CoreDataManager()
         self.reinforcer = Reinforcer()
         super.init()
+
+        user = coreDataManager.fetchUser()
     }
 
     func open() {
@@ -66,6 +69,10 @@ public class Sesame : NSObject {
         _effect = (reinforcement, [:])
 
         coreDataManager.addEvent(for: "appOpen")
+
+        api.track(app: self) { (success) in
+
+        }
     }
 
 //    func set(userId: String) {

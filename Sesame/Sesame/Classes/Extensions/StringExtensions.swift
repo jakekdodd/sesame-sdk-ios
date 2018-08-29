@@ -7,6 +7,16 @@
 
 import Foundation
 
+extension String {
+    func jsonDecoded() -> [String: AnyObject]? {
+        if let data = data(using: String.Encoding.utf8),
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: AnyObject] {
+            return json
+        }
+        return nil
+    }
+}
+
 public extension NSString {
     @objc
     func utf8Decoded() -> NSString {
