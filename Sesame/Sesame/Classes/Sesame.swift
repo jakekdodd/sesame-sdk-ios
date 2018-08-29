@@ -56,17 +56,20 @@ public class Sesame : NSObject {
         self.api = APIClient()
         self.config = AppConfig()
         self.service = service
-        let coreDataManager = CoreDataManager()
-        self.coreDataManager = coreDataManager
+        self.coreDataManager = CoreDataManager()
         self.reinforcer = Reinforcer()
         super.init()
     }
-    
+
     func open() {
         let reinforcement = reinforcer.cartridge.removeDecision()
         _effect = (reinforcement, [:])
-        
-        coreDataManager.addEvent("appOpen")
+
+        coreDataManager.addEvent(for: "appOpen")
     }
+
+//    func set(userId: String) {
+//        User
+//    }
     
 }
