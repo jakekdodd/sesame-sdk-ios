@@ -11,7 +11,7 @@ import CoreData
 
 class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
 
-    // MARK: - Members
+    // MARK: - CoreData Objects
 
     lazy var managedObjectModel: NSManagedObjectModel? = {
         if let modelURL = Bundle(for: type(of: self)).url(forResource: "Sesame", withExtension: "momd"),
@@ -52,7 +52,44 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         }
     }()
 
-    // MARK: - Functions
+    // MARK: - Methods
+
+    func save() {
+        if managedObjectContext?.hasChanges ?? false {
+            do {
+                try managedObjectContext?.save()
+            } catch {
+                Logger.debug(error: "\(error)")
+            }
+        }
+    }
+
+    // MARK: AppConfig
+
+    func fetchAppConfig() -> AppConfig? {
+        let fetchRequest = NSFetchRequest<AppConfig>(entityName: "AppConfig")
+        fetchRequest.fetchLimit = 1
+        do {
+            if let appConfig = try managedObjectContext?.fetch(fetchRequest).first {
+                return appConfig
+            } else if let managedObjectContext = managedObjectContext,
+                let appConfigEntity = NSEntityDescription.entity(forEntityName: "AppConfig", in: managedObjectContext),
+                let trackingCapabilitiesEntity = NSEntityDescription.entity(forEntityName: "TrackingCapabilities", in: managedObjectContext)
+            {
+                let trackingCapabilities = TrackingCapabilities(entity: trackingCapabilitiesEntity, insertInto: managedObjectContext)
+                let appConfig = AppConfig(entity: appConfigEntity, insertInto: managedObjectContext)
+                appConfig.trackingCapabilities = trackingCapabilities
+
+                return appConfig
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+        return nil
+    }
+
+    // MARK: User
 
     func fetchUser(for id: String? = nil, createIfNotFound: Bool = true) -> User? {
         let fetchRequest = NSFetchRequest<User>(entityName: "User")
@@ -69,6 +106,22 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
                 let user = User(entity: entity, insertInto: managedObjectContext)
                 user.id = id ?? UUID().uuidString
                 return user
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+        return nil
+    }
+
+    // MARK: Report
+
+    func reports() -> [Report]? {
+        let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
+
+        do {
+            if let events = try managedObjectContext?.fetch(fetchRequest) {
+                return events
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -97,6 +150,8 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         
         return nil
     }
+
+    // MARK: Event
     
     func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
         guard let managedObjectContext = managedObjectContext,
@@ -120,32 +175,12 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
             print(error)
         }
         event.report = report
-
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-                print("Saved coredata. Reported events for <\(actionId)>:<\(report.events?.count as AnyObject)>")
-            } catch {
-                Logger.debug(error: "\(error)")
-            }
-        }
+        save()
+        print("Saved coredata. Reported events for <\(actionId)>:<\(report.events?.count as AnyObject)>")
 
         Logger.debug(confirmed: "Logged event:\(event.debugDescription)")
     }
 
-    func reports() -> [Report]? {
-        let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
-
-        do {
-            if let events = try managedObjectContext?.fetch(fetchRequest) {
-                return events
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-
-        return nil
-    }
 }
 
 extension Report {

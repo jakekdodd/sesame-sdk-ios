@@ -41,9 +41,9 @@ class ViewController: UIViewController, SesameEffectDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationCenter = UNUserNotificationCenter.current()
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.sesame?.effectDelegate = self
-        }
+//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//            appDelegate.sesame?.effectDelegate = self
+//        }
     }
 
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
@@ -69,7 +69,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
 
     @IBAction
     func didTapLabel(_ sender: Any) {
-        label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.trigger?.type.description ?? "nil"
+//        label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.trigger?.type.description ?? "nil"
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {

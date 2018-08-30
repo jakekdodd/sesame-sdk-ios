@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="Sesame">
+    <entity name="AppConfig" representedClassName=".AppConfig" syncable="YES" codeGenerationType="class">
+        <attribute name="configId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="revision" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="trackingEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="trackingCapabilities" maxCount="1" deletionRule="Cascade" destinationEntity="TrackingCapabilities" inverseName="appConfig" inverseEntity="TrackingCapabilities" syncable="YES"/>
+    </entity>
     <entity name="Event" representedClassName="Event" syncable="YES" codeGenerationType="class">
         <attribute name="metadata" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timezoneOffset" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -11,13 +17,19 @@
         <relationship name="events" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Event" inverseName="report" inverseEntity="Event" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="reports" inverseEntity="User" syncable="YES"/>
     </entity>
+    <entity name="TrackingCapabilities" representedClassName="TrackingCapabilities" syncable="YES" codeGenerationType="class">
+        <attribute name="applicationState" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="appConfig" maxCount="1" deletionRule="Nullify" destinationEntity="AppConfig" inverseName="trackingCapabilities" inverseEntity="AppConfig" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="reports" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="user" inverseEntity="Report" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-54" positionY="-18" width="128" height="105"/>
-        <element name="Report" positionX="-288" positionY="-18" width="128" height="90"/>
-        <element name="User" positionX="-153" positionY="18" width="128" height="75"/>
+        <element name="AppConfig" positionX="-551" positionY="291" width="128" height="103"/>
+        <element name="Event" positionX="-360" positionY="72" width="128" height="105"/>
+        <element name="Report" positionX="-560" positionY="72" width="128" height="90"/>
+        <element name="User" positionX="-776" positionY="72" width="128" height="75"/>
+        <element name="TrackingCapabilities" positionX="-792" positionY="290" width="128" height="73"/>
     </elements>
 </model>
