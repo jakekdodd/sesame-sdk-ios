@@ -22,7 +22,7 @@ pod 'Sesame'
 
 ## Author
 
-cuddergambino, kash650@gmail.com
+Bounldess Mind, team@boundless.ai
 
 ## License
 
