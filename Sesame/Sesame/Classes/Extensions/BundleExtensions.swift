@@ -16,4 +16,8 @@ internal extension Bundle {
             return nil
         }
     }
+    
+    var shortVersionString: String? {
+        return object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+    }
 }

@@ -8,19 +8,8 @@
 import Foundation
 
 internal extension UIWindow {
-    static func presentTopLevelAlert(alertController: UIAlertController, completion:(() -> Void)? = nil) {
-        DispatchQueue.main.async {
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindowLevelAlert + 1
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alertController, animated: true, completion: completion)
-        }
-    }
-}
 
-public extension UIWindow {
-    public class var topWindow: UIWindow? {
+    class var topWindow: UIWindow? {
         if let window = UIApplication.shared.keyWindow {
             return window
         }
@@ -32,4 +21,15 @@ public extension UIWindow {
             }
         return nil
     }
+
+    static func presentTopLevelAlert(alertController: UIAlertController, completion:(() -> Void)? = nil) {
+        DispatchQueue.main.async {
+            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+            alertWindow.rootViewController = UIViewController()
+            alertWindow.windowLevel = UIWindowLevelAlert + 1
+            alertWindow.makeKeyAndVisible()
+            alertWindow.rootViewController?.present(alertController, animated: true, completion: completion)
+        }
+    }
+
 }

@@ -41,9 +41,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationCenter = UNUserNotificationCenter.current()
-//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-//            appDelegate.sesame?.effectDelegate = self
-//        }
+        Sesame.shared?.effectDelegate = self
     }
 
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
@@ -74,13 +72,6 @@ class ViewController: UIViewController, SesameEffectDelegate {
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {
-//        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time: 2)
-
-        if let window = UIWindow.topWindow {
-            let sheenView = ConfettiEffectView.init(frame: window.bounds)
-            window.addSubview(sheenView)
-//            sheenView.color = .green
-            sheenView.start()
-        }
+        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time: 2)
     }
 }

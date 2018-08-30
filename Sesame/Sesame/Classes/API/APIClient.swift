@@ -46,9 +46,3 @@ class APIClient: HTTPClient {
     }
 
 }
-
-private extension Bundle {
-    var shortVersionString: String? {
-        return object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-    }
-}
