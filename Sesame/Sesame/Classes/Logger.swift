@@ -15,16 +15,18 @@ import Foundation
 
 import Foundation
 
-@objc open class LoggerPreferences : NSObject {
-    @objc open var printEnabled = true
-//    @objc open var debugEnabled = false
-    @objc open var debugEnabled = true
-}
+@objc open class Logger: NSObject {
 
-@objc open class Logger : NSObject {
-    
-    @objc open static var preferences = LoggerPreferences()
-    
+    @objc open class Preferences: NSObject {
+        @objc open var printEnabled = true
+        //    @objc open var debugEnabled = false
+        @objc open var debugEnabled = true
+        @objc open var httpRequests = false
+        @objc open var httpResponses = true
+    }
+
+    @objc open static var preferences = Preferences()
+
     /// This function prints to the console if preferences.printEnabled is true
     ///
     /// - parameters:
@@ -35,15 +37,16 @@ import Foundation
     ///
     @objc open class func print(_ message: String, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled else { return }
-        var functionSignature:String = function
+        var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
             functionSignature.replaceSubrange(parameterNames, with: "()")
         }
         let fileName = NSString(string: filePath).lastPathComponent
         Swift.print("[\(fileName):\(line):\(functionSignature)] - \(message)")
     }
-    
-    /// This function prints debug messages to the console if preferences.printEnabled and preferences.debugEnabled are true
+
+    /// This function prints debug messages to the console
+    /// if preferences.printEnabled and preferences.debugEnabled are true
     ///
     /// - parameters:
     ///     - message: The debug message.
@@ -53,15 +56,16 @@ import Foundation
     ///
     @objc open class func debug(_ message: String, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled && preferences.debugEnabled else { return }
-        var functionSignature:String = function
+        var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
             functionSignature.replaceSubrange(parameterNames, with: "()")
         }
         let fileName = NSString(string: filePath).lastPathComponent
         Swift.print("[\(fileName):\(line):\(functionSignature)] - \(message)")
     }
-    
-    /// This function prints confirmation messages to the console if preferences.printEnabled and preferences.debugEnabled are true
+
+    /// This function prints confirmation messages to the console
+    /// if preferences.printEnabled and preferences.debugEnabled are true
     ///
     /// - parameters:
     ///     - message: The confirmation message.
@@ -71,15 +75,16 @@ import Foundation
     ///
     @objc open class func debug(confirmed message: String, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled && preferences.debugEnabled else { return }
-        var functionSignature:String = function
+        var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
             functionSignature.replaceSubrange(parameterNames, with: "()")
         }
         let fileName = NSString(string: filePath).lastPathComponent
         Swift.print("[\(fileName):\(line):\(functionSignature)] - ✅ \(message)")
     }
-    
-    /// This function prints error messages to the console if preferences.printEnabled and preferences.debugEnabled are true
+
+    /// This function prints error messages to the console
+    /// if preferences.printEnabled and preferences.debugEnabled are true
     ///
     /// - parameters:
     ///     - message: The debug message.
@@ -90,18 +95,18 @@ import Foundation
     ///
     @objc open class func debug(error message: String, visual: Bool = false, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled && preferences.debugEnabled else { return }
-        var functionSignature:String = function
+        var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
             functionSignature.replaceSubrange(parameterNames, with: "()")
         }
         let fileName = NSString(string: filePath).lastPathComponent
         Swift.print("[\(fileName):\(line):\(functionSignature)] - ❌ \(message)")
-        
+
         if visual {
             alert(title: "☠️", message: "🚫 \(message)")
         }
     }
-    
+
     /// This function displays an OK alert if preferences.printEnabled and preferences.debugEnabled are true
     ///
     /// - parameters:

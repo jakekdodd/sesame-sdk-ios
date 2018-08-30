@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-public class UserIdSource : NSObject {
+public class UserIdSource: NSObject {
     public static let custom = "custom"
     public static let auto = "auto"
 }

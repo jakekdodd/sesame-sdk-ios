@@ -8,119 +8,125 @@
 import Foundation
 
 @objc
-open class SheenEffectView : OverlayEffectView {
-    
-    public enum SheenWidthToHeightRatio : CGFloat {
+open class SheenEffectView: OverlayEffectView {
+
+    public enum WidthToHeightRatio: CGFloat {
         case narrow = 0.333, equal = 1, wide = 1.667
     }
-    
+
     @IBInspectable @objc
-    public var duration:Double = 2
+    public var duration: Double = 2
     @IBInspectable @objc
-    public var delay:Double = 0
+    public var delay: Double = 0
     @IBInspectable @objc
-    public var sheenImage: UIImage?
+    public var image: UIImage?
     @IBInspectable @objc
-    public var sheenWidthToHeightRatio: CGFloat = SheenWidthToHeightRatio.equal.rawValue {
+    public var widthToHeightRatio: CGFloat = WidthToHeightRatio.equal.rawValue {
         didSet {
             if #available(iOS 9.0, *),
-                sheenImageViewWidthConstraint != nil {
-                sheenImageViewWidthConstraint?.isActive = false
-                sheenImageViewWidthConstraint = sheenImageView?.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: sheenWidthToHeightRatio)
-                sheenImageViewWidthConstraint?.isActive = true
+                imageViewWidthConstraint != nil {
+                imageViewWidthConstraint?.isActive = false
+                imageViewWidthConstraint = imageView?.widthAnchor
+                    .constraint(equalTo: self.heightAnchor, multiplier: widthToHeightRatio)
+                imageViewWidthConstraint?.isActive = true
                 setNeedsLayout()
             }
         }
     }
     @IBInspectable @objc
-    public var sheenColor: UIColor? = nil
+    public var color: UIColor?
     @IBInspectable @objc
     public var opacityMask: Bool = false
     @IBInspectable @objc
     public var hapticFeedback: Bool = false
     @IBInspectable @objc
     public var systemSound: UInt32 = 0
-    
+
     public var animationOptions: UIViewAnimationOptions = []
-    
-    fileprivate var sheenImageViewAnimationStartConstraint: NSLayoutConstraint?
-    fileprivate var sheenImageViewAnimationEndConstraint: NSLayoutConstraint?
-    fileprivate var sheenImageViewWidthConstraint: NSLayoutConstraint?
-    fileprivate var sheenImageView: UIImageView?
-    
+
+    fileprivate var imageViewAnimationStartConstraint: NSLayoutConstraint?
+    fileprivate var imageViewAnimationEndConstraint: NSLayoutConstraint?
+    fileprivate var imageViewWidthConstraint: NSLayoutConstraint?
+    fileprivate var imageView: UIImageView?
+
     override open func didRotate() {
         if opacityMask && superview != nil {
             mask = superview?.generateMask()
         }
     }
-    
+
     @objc(start)
     public func objc_start() {
         self.start()
     }
-    
+
     @objc
-    open func start(completion: @escaping (Bool) -> Void = {_ in}) {
-        if sheenImage == nil,
+    open func start(completion: @escaping (Bool) -> Void = {_ in}) { // swiftlint:disable:this function_body_length
+        if image == nil,
             let bundle = Bundle.sesame,
             let image = UIImage(named: "sheen", in: bundle, compatibleWith: nil) {
-            sheenImage = image
+            self.image = image
         }
-        if sheenImageView == nil && sheenImage != nil {
-            if let color = sheenColor {
-                sheenImage = sheenImage?.tint(tintColor: color)
+        if imageView == nil && image != nil {
+            if let color = color {
+                image = image?.tint(tintColor: color)
             }
-            let sheenImageView = UIImageView(image: sheenImage)
-            self.sheenImageView = sheenImageView
-            
-            sheenImageView.isHidden = true
-            self.addSubview(sheenImageView)
-            
+            let imageView = UIImageView(image: image)
+            self.imageView = imageView
+
+            imageView.isHidden = true
+            self.addSubview(imageView)
+
             if #available(iOS 9.0, *) {
-                sheenImageView.translatesAutoresizingMaskIntoConstraints = false
+                imageView.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
-                    sheenImageView.topAnchor.constraint(equalTo: self.topAnchor),
-                    sheenImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+                    imageView.topAnchor.constraint(equalTo: self.topAnchor),
+                    imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
                     ])
-                sheenImageViewWidthConstraint = sheenImageView.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: sheenWidthToHeightRatio)
-                sheenImageViewAnimationStartConstraint = sheenImageView.trailingAnchor.constraint(equalTo: leadingAnchor)
-                sheenImageViewAnimationEndConstraint = sheenImageView.leadingAnchor.constraint(equalTo: trailingAnchor)
-                sheenImageViewWidthConstraint?.isActive = true
-                sheenImageViewAnimationEndConstraint?.isActive = false
-                sheenImageViewAnimationStartConstraint?.isActive = true
+                imageViewWidthConstraint = imageView.widthAnchor.constraint(equalTo: heightAnchor,
+                                                                            multiplier: widthToHeightRatio)
+                imageViewAnimationStartConstraint = imageView.trailingAnchor.constraint(equalTo: leadingAnchor)
+                imageViewAnimationEndConstraint = imageView.leadingAnchor.constraint(equalTo: trailingAnchor)
+                imageViewWidthConstraint?.isActive = true
+                imageViewAnimationEndConstraint?.isActive = false
+                imageViewAnimationStartConstraint?.isActive = true
             }
             layoutIfNeeded()
         }
-        
-        guard let sheenImageView = sheenImageView else {
+
+        guard let imageView = imageView else {
             Logger.debug(error: "No image set for sheen")
             completion(false)
             return
         }
-        guard sheenImageView.isHidden else {
+        guard imageView.isHidden else {
             Logger.debug(error: "Sheen is already animating")
             completion(false)
             return
         }
-        
+
         if opacityMask {
             mask = superview?.generateMask()
         }
-        
+
         setNeedsLayout()
-        UIView.animate(withDuration: duration, delay: delay, options: animationOptions, animations: {
-            sheenImageView.isHidden = false
-            self.sheenImageViewAnimationStartConstraint?.isActive = false
-            self.sheenImageViewAnimationEndConstraint?.isActive = true
-            self.layoutIfNeeded()
-            AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
-        }) { _ in
-            sheenImageView.isHidden = true
-            self.sheenImageViewAnimationEndConstraint?.isActive = false
-            self.sheenImageViewAnimationStartConstraint?.isActive = true
-            self.layoutIfNeeded()
-            completion(true)
-        }
+        UIView.animate(withDuration: duration,
+                       delay: delay,
+                       options: animationOptions,
+                       animations: {
+                        imageView.isHidden = false
+                        self.imageViewAnimationStartConstraint?.isActive = false
+                        self.imageViewAnimationEndConstraint?.isActive = true
+                        self.layoutIfNeeded()
+                        AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
+        },
+                       completion: { _ in
+                        imageView.isHidden = true
+                        self.imageViewAnimationEndConstraint?.isActive = false
+                        self.imageViewAnimationStartConstraint?.isActive = true
+                        self.layoutIfNeeded()
+                        completion(true)
+        })
     }
-    
+
 }

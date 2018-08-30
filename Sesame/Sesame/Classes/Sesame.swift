@@ -8,9 +8,10 @@
 import Foundation
 import CoreData
 
-public protocol SesameEffectDelegate : class {
-    
-    /// Override this method to receive reinforcements! Set this object as the delegate of the Sesame object from your AppDelegate
+public protocol SesameEffectDelegate: class {
+
+    /// Override this method to receive reinforcements!
+    /// Set this object as the delegate of the Sesame object from your AppDelegate
     ///
     /// - Parameters:
     ///   - app: The Sesame app
@@ -19,19 +20,19 @@ public protocol SesameEffectDelegate : class {
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
 }
 
-public class Sesame : NSObject {
+public class Sesame: NSObject {
 
     public fileprivate(set) static var shared: Sesame?
     public class func setShared(_ sesame: Sesame) {
         shared = sesame
     }
-    
+
     public var effectDelegate: SesameEffectDelegate? {
         didSet {
             _effect = {_effect}()
         }
     }
-    
+
     /// If the delegate isn't set when an effect is supposed to show, the effect is stored until the delegate is set
     fileprivate var _effect: (String, [String: Any])? {
         didSet {
@@ -43,6 +44,7 @@ public class Sesame : NSObject {
         }
     }
 
+    //swiftlint:disable:next weak_delegate
     public let UIApplicationDelegate: SesameUIApplicationDelegate
     public class var UIApplicationDelegate: SesameUIApplicationDelegate? { return shared?.UIApplicationDelegate }
 
@@ -50,10 +52,9 @@ public class Sesame : NSObject {
     public let appVersionId: String
     public let auth: String
 
-    fileprivate(set) var userId: String?
-
     let api: APIClient
     var config: AppConfig?
+    var user: User?
 
     let coreDataManager: CoreDataManager
     public var reinforcer: Reinforcer
@@ -72,24 +73,26 @@ public class Sesame : NSObject {
 
     }
 
-    var eventUploadCount: Int = 30
+    var eventUploadCount: Int = 5
     var eventUploadPeriod: TimeInterval = 30
 
-    
+    fileprivate var uploadScheduled = false
+
 }
 
 extension Sesame {
-    
+
     func receive(appOpenAction: AppOpenAction?) {
         switch appOpenAction?.cueCategory {
         case .internal?,
              .external?:
 
             let reinforcement = reinforcer.cartridge.removeDecision()
+            Logger.debug(confirmed: "Next reinforcement:\(reinforcement)")
             _effect = (reinforcement, [:])
 
-            coreDataManager.addEvent(for: "appOpen")
-            sendBoot()
+            addEvent(for: "appOpen")
+//            sendBoot()
 
         case .synthetic?:
             break
@@ -101,7 +104,39 @@ extension Sesame {
 
 }
 
+// MARK: - For development
+
+public extension Sesame {
+    public func testEvent(_ actionId: String) {
+        addEvent(for: actionId)
+    }
+}
+
+// MARK: - Private Methods
+
 private extension Sesame {
+
+    func addEvent(for actionId: String) {
+        let eventCount = coreDataManager.addEvent(for: actionId)
+
+        print("Reported \(eventCount ?? -1) events for <\(actionId)>")
+
+        guard let reports = coreDataManager.reports() else { print("No reports"); return }
+        let totalEvents = reports.reduce(0) { (result, report) -> Int in
+            return result + (report.events?.count ?? 0)
+        }
+        print("Reported \(totalEvents) events total")
+        print("Stored events:\(coreDataManager.eventsCount() ?? -1)")
+
+        if totalEvents >= eventUploadCount {
+            sendTracks { _ in
+                for report in reports {
+                    self.coreDataManager.managedObjectContext?.delete(report)
+                }
+                self.coreDataManager.save()
+            }
+        }
+    }
 
     func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
@@ -166,6 +201,7 @@ private extension Sesame {
         }()
 
         api.post(url: APIClient.APIClientURL.track.url, jsonObject: payload) { response in
+
             guard let response = response,
                 response["errors"] == nil else {
                     completion(false)

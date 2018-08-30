@@ -19,10 +19,10 @@ class ViewController: UIViewController, SesameEffectDelegate {
     lazy var sheenView: SheenEffectView = {
         let view = button!
         let sheenView = SheenEffectView()
-        sheenView.sheenImage = UIImage.init(named: "bmind")
+        sheenView.image = UIImage.init(named: "bmind")
         sheenView.opacityMask = true
         sheenView.duration = 4
-        sheenView.sheenColor = UIColor.from(rgb: "FFD700")
+        sheenView.color = UIColor.from(rgb: "FFD700")
         view.addSubview(sheenView)
         sheenView.constrainToSuperview()
         return sheenView
@@ -63,16 +63,24 @@ class ViewController: UIViewController, SesameEffectDelegate {
 
     @IBAction
     func didTapTest(_ sender: Any) {
-        confettiView.start()
+//        confettiView.start()
+        Sesame.shared?.testEvent("buttonTap")
 
     }
 
     @IBAction
     func didTapLabel(_ sender: Any) {
-//        label.text = (UIApplication.shared.delegate as? AppDelegate)?.sesame?.service.trigger?.type.description ?? "nil"
+
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {
-        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time: 2)
+//        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time: 2)
+
+        if let window = UIWindow.topWindow {
+            let sheenView = ConfettiEffectView.init(frame: window.bounds)
+            window.addSubview(sheenView)
+//            sheenView.color = .green
+            sheenView.start()
+        }
     }
 }

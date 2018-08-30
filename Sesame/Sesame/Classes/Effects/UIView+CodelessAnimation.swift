@@ -12,9 +12,9 @@ import AVFoundation
 
 // call all these in main queue DispatchQueue.main
 public extension UIView {
-    
+
     @objc
-    public func showEmojiSplosion(at location:CGPoint,
+    public func showEmojiSplosion(at location: CGPoint,
                                   content: CGImage? = "❤️".image().cgImage,
                                   scale: CGFloat = 0.6,
                                   scaleSpeed: CGFloat = 0.2,
@@ -32,18 +32,18 @@ public extension UIView {
                                   spin: CGFloat = 0,
                                   hapticFeedback: Bool = false,
                                   systemSound: UInt32 = 0,
-                                  completion: (()->Void)? = nil
+                                  completion: (() -> Void)? = nil
         ) {
         guard let content = content else {
             Logger.debug(error: "Received nil image content!")
             return
         }
-        
+
         DispatchQueue.main.async {
             let emitter = CAEmitterLayer()
             emitter.emitterPosition = location
             emitter.beginTime = CACurrentMediaTime() - 0.9
-            
+
             let cell = CAEmitterCell()
             cell.contents = content
             cell.birthRate = birthRate
@@ -68,7 +68,7 @@ public extension UIView {
                 cell.color = cell.color?.copy(alpha: 0)
             }
             emitter.emitterCells = [cell]
-            
+
             self.layer.addSublayer(emitter)
 //            BKLog.debug("💥 Emojisplosion on <\(NSStringFromClass(type(of: self)))> at <\(location)>!")
             AudioEffect.play(systemSound, vibrate: hapticFeedback)
@@ -83,48 +83,4 @@ public extension UIView {
         }
     }
     
-    @objc
-    public func showSheen(duration: Double = 2.0, color: UIColor? = nil, heightMultiplier: CGFloat = 1, widthMultiplier: CGFloat = 1.667, hapticFeedback: Bool = false, systemSound: UInt32 = 0, completion: (()->Void)? = nil) {
-        guard let bundle = Bundle.sesame,
-            var image = UIImage(named: "sheen", in: bundle, compatibleWith: nil) else {
-                Logger.debug(error: "Could not find sheen image asset")
-                return
-        }
-        
-        if let color = color {
-            image = image.tint(tintColor: color)
-        }
-        let imageView = UIImageView(image: image)
-        let height = self.frame.height * heightMultiplier
-        let width: CGFloat =  self.frame.height * widthMultiplier
-        imageView.frame = CGRect(x: -width, y: 0, width: width, height: height)
-        
-        let containerView = UIImageView(frame: CGRect(origin: .zero, size: self.bounds.size))
-        containerView.mask = self.generateMask()
-        containerView.addSubview(imageView)
-        
-        let animation = CABasicAnimation(keyPath: "transform.translation.x")
-        animation.duration = duration
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        animation.byValue = self.frame.width + width
-        animation.fillMode = kCAFillModeForwards
-        animation.isRemovedOnCompletion = false
-        
-        AudioEffect.play(systemSound, vibrate: hapticFeedback)
-        CoreAnimationDelegate(
-            willStart: { start in
-                self.addSubview(containerView)
-                start()
-        },
-            didStart:{
-//                AudioEffect.play(systemSound, vibrate: hapticFeedback)
-        },
-            didStop: {
-                containerView.removeFromSuperview()
-                completion?()
-        }).start(view: imageView, animation: animation)
-    }
-    
 }
-
-

@@ -6,7 +6,7 @@
 
 import Foundation
 
-class Cue : NSObject {
+class Cue: NSObject {
     enum Category {
         case `internal`, external, synthetic
     }

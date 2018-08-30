@@ -321,7 +321,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\n  cd ../\n  swiftlint\nfi";
+			showEnvVarsInLog = 0;
 		};
 		A1044764478BAD94207B163E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -8,8 +8,7 @@
 import Foundation
 import CoreData
 
-
-class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
+class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
 
     // MARK: - CoreData Objects
 
@@ -74,9 +73,10 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
                 return appConfig
             } else if let managedObjectContext = managedObjectContext,
                 let appConfigEntity = NSEntityDescription.entity(forEntityName: "AppConfig", in: managedObjectContext),
-                let trackingCapabilitiesEntity = NSEntityDescription.entity(forEntityName: "TrackingCapabilities", in: managedObjectContext)
-            {
-                let trackingCapabilities = TrackingCapabilities(entity: trackingCapabilitiesEntity, insertInto: managedObjectContext)
+                let trackingCapabilitiesEntity = NSEntityDescription.entity(forEntityName: "TrackingCapabilities",
+                                                                            in: managedObjectContext) {
+                let trackingCapabilities = TrackingCapabilities(entity: trackingCapabilitiesEntity,
+                                                                insertInto: managedObjectContext)
                 let appConfig = AppConfig(entity: appConfigEntity, insertInto: managedObjectContext)
                 appConfig.trackingCapabilities = trackingCapabilities
 
@@ -120,8 +120,8 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
 
         do {
-            if let events = try managedObjectContext?.fetch(fetchRequest) {
-                return events
+            if let reports = try managedObjectContext?.fetch(fetchRequest) {
+                return reports
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -147,24 +147,45 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        
+
         return nil
     }
 
     // MARK: Event
-    
-    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
+
+    func eventsCount() -> Int? {
+        let fetchRequest = NSFetchRequest<Event>(entityName: "Event")
+
+        do {
+            if let eventsCount = try managedObjectContext?.count(for: fetchRequest) {
+                return eventsCount
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+        return nil
+    }
+
+    ///
+    ///
+    /// - Parameters:
+    ///   - actionId: name for the action
+    ///   - metadata: any extra info
+    /// - Returns: The number of events reported for the actionId if successfully added, otherwise nil
+    @discardableResult
+    func addEvent(for actionId: String, metadata: [String: Any] = [:]) -> Int? {
         guard let managedObjectContext = managedObjectContext,
             let report = fetchReport(for: actionId) else {
             Logger.debug(error: "Could not create report for actionId:\(actionId)")
-            return
+            return nil
         }
-        
+
         guard let entity = NSEntityDescription.entity(forEntityName: "Event", in: managedObjectContext) else {
             Logger.debug(error: "Could not create entity for event")
-            return
+            return nil
         }
-        
+
         let event = Event(entity: entity, insertInto: managedObjectContext)
         event.utc = Int64(Date().timeIntervalSince1970 * 1000)
         event.timezoneOffset = Int64(NSTimeZone.default.secondsFromGMT() * 1000)
@@ -176,17 +197,10 @@ class CoreDataManager : NSObject, NSFetchedResultsControllerDelegate {
         }
         event.report = report
         save()
-        print("Saved coredata. Reported events for <\(actionId)>:<\(report.events?.count as AnyObject)>")
 
         Logger.debug(confirmed: "Logged event:\(event.debugDescription)")
+
+        return report.events?.count
     }
 
-}
-
-extension Report {
-    
-    static let ACTION_APP_OPEN = "appOpen"
-    static let ACTION_APP_CLOSE = "appClose"
-    static let REINFORCEMENT_NUETRAL = "nuetral"
-    
 }

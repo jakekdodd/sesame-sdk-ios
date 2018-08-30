@@ -7,18 +7,19 @@
 
 import Foundation
 
-class Cartridge : NSObject {
-    static let NUETRAL_CARTRIDGE_ID = "CLIENT_NEUTRAL"
+class Cartridge: NSObject {
+    static let NeutralCartridgeId = "CLIENT_NEUTRAL"
+    static let NeutralReinforcementName = "nuetral"
     let cartridgeId: String
     var decisions: [String]
     static var nuetral: Cartridge {
-        return Cartridge(NUETRAL_CARTRIDGE_ID, [])
+        return Cartridge(NeutralCartridgeId, [])
     }
     init(_ id: String, _ decisions: [String]) { cartridgeId = id; self.decisions = decisions}
-    
+
     func removeDecision() -> String {
         guard !decisions.isEmpty else {
-            return Report.REINFORCEMENT_NUETRAL
+            return Cartridge.NeutralReinforcementName
         }
         return decisions.remove(at: 0)
     }

@@ -7,13 +7,12 @@
 
 import Foundation
 
-public class Reinforcer : NSObject {
+public class Reinforcer: NSObject {
     var cartridge: Cartridge
-    var options: [String: [String:Any]]?
-    
+    var options: [String: [String: Any]]?
+
     init(cartridge: Cartridge = Cartridge.nuetral) {
         self.cartridge = cartridge
     }
-    
-    
+
 }

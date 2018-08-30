@@ -7,27 +7,27 @@
 
 import Foundation
 
-open class OverlayEffectView : UIView {
-    
+open class OverlayEffectView: UIView {
+
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
-    
+
     convenience init() {
         self.init(frame: .zero)
     }
-    
+
     fileprivate func setup() {
         clipsToBounds = true
         isUserInteractionEnabled = false
     }
-    
+
     @objc @available(iOS 9.0, *)
     open func constrainToSuperview() {
         // Adjusts to cover the superview
@@ -40,13 +40,13 @@ open class OverlayEffectView : UIView {
             topAnchor.constraint(equalTo: superview.topAnchor),
             bottomAnchor.constraint(equalTo: superview.bottomAnchor),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor)
             ])
         layoutIfNeeded()
     }
-    
+
     open func didRotate() {}
-    
+
     fileprivate var screenIsVertical: Bool = (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
     open override func layoutSubviews() {
         super.layoutSubviews()
@@ -56,9 +56,9 @@ open class OverlayEffectView : UIView {
             didRotate()
          }
     }
-    
+
     open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
     }
-    
+
 }

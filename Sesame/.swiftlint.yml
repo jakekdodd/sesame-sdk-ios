@@ -1,0 +1,14 @@
+line_length:
+  warning: 120
+  ignores_function_declarations: true
+#  ignores_comments: true
+
+identifier_name:
+  excluded: 
+    - id
+    - x
+    - y
+    - r
+    - g
+    - b
+    - a

@@ -21,12 +21,12 @@ open class SesameUIApplicationDelegate: NSObject {
     public override init() {
         super.init()
     }
-    
+
 }
 
 // MARK: - UIApplicationDelegate
 
-extension SesameUIApplicationDelegate : UIApplicationDelegate {
+extension SesameUIApplicationDelegate: UIApplicationDelegate {
 
     // MARK: - Initial App Open
 
