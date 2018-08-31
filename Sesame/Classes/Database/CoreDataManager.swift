@@ -16,57 +16,58 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         if let modelURL = Bundle(for: type(of: self)).url(forResource: "Sesame", withExtension: "momd"),
             let model = NSManagedObjectModel(contentsOf: modelURL) {
             return model
-        } else {
-            return nil
         }
+        return nil
     }()
 
     lazy var persistentStoreURL: URL? = {
-        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last else {
-            return nil
+        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last {
+            return dir.appendingPathComponent("Sesame.sqlite")
         }
-        return dir.appendingPathComponent("Sesame.sqlite")
+        return nil
     }()
 
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
-        guard let model = managedObjectModel,
-            let persistentStoreURL = persistentStoreURL else {
-                return nil
-        }
-        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+        if let model = managedObjectModel,
+            let persistentStoreURL = persistentStoreURL {
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
 
-        do {
-            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                                               configurationName: nil,
-                                               at: persistentStoreURL,
-                                               options: [NSInferMappingModelAutomaticallyOption: true,
-                                                         NSMigratePersistentStoresAutomaticallyOption: true])
-        } catch {
-            print(error)
+            do {
+                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                                                   configurationName: nil,
+                                                   at: persistentStoreURL,
+                                                   options: [NSInferMappingModelAutomaticallyOption: true,
+                                                             NSMigratePersistentStoresAutomaticallyOption: true])
+                return coordinator
+            } catch {
+                print(error)
+            }
         }
-        return coordinator
+        return nil
     }()
 
     lazy var managedObjectContext: NSManagedObjectContext? = {
         if let coordinator = persistentStoreCoordinator {
-            var managedObjectContext = NSManagedObjectContext()
+            let managedObjectContext = NSManagedObjectContext()
             managedObjectContext.persistentStoreCoordinator = coordinator
             return managedObjectContext
-        } else {
-            return nil
         }
+        return nil
     }()
 
     // MARK: - Methods
 
+//    let queue = DispatchQueue.init(label: "SesameCoreData")
     func save() {
-        if managedObjectContext?.hasChanges ?? false {
-            do {
-                try managedObjectContext?.save()
-            } catch {
-                Logger.debug(error: "\(error)")
+//        queue.sync {
+            if managedObjectContext?.hasChanges ?? false {
+                do {
+                    try managedObjectContext?.save()
+                } catch {
+                    Logger.debug(error: "\(error)")
+                }
             }
-        }
+//        }
     }
 
     @available(iOS 9.0, *)

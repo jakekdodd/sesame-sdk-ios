@@ -34,19 +34,21 @@ extension SesameUIApplicationDelegate: UIApplicationDelegate {
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         // The user could have launched the app for many reasons.
         // We catch what we can here, and the rest in other methods related to the UIApplication lifecycle
-        switch launchOptions {
-        case _ where launchOptions?[UIApplicationLaunchOptionsKey.sourceApplication] != nil,
-             _ where launchOptions?[UIApplicationLaunchOptionsKey.url] != nil:
+        if launchOptions?[.sourceApplication] != nil ||
+            launchOptions?[.url]  != nil {
+
             appOpenAction = AppOpenAction(source: .deepLink)
 
-        case _ where launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil,
-             _ where launchOptions?[UIApplicationLaunchOptionsKey.localNotification] != nil:
+        } else if launchOptions?[.remoteNotification] != nil ||
+            launchOptions?[.localNotification] != nil {
+
             appOpenAction = AppOpenAction(source: .notification)
 
-        default:
-            if #available(iOS 9.0, *), launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] != nil {
-                appOpenAction = AppOpenAction(source: .shortcut)
-            }
+        } else if #available(iOS 9.0, *),
+            launchOptions?[.shortcutItem] != nil {
+
+            appOpenAction = AppOpenAction(source: .shortcut)
+
         }
 
         return true
