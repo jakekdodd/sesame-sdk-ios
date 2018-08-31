@@ -5,12 +5,34 @@ class Tests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        
+
         CoreDataManager().eraseAll()
     }
 
     override func tearDown() {
         super.tearDown()
+    }
+
+    func testEventsCount() {
+        let coreDataManager = CoreDataManager()
+        let desiredCount = 5
+
+        DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
+//        for iteration in 1...desiredCount {
+            switch iteration % 2 {
+            case 0:
+                coreDataManager.addEvent(for: "appOpen")
+            default:
+                coreDataManager.addEvent(for: "appClose")
+            }
+        }
+
+        XCTAssert(coreDataManager.eventsCount() == desiredCount)
+
+//        var events = [Event]()
+//        for case let report in coreDataManager.reports() {
+//
+//        }
     }
 
     func testMultipleEvents() {
