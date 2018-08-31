@@ -5,25 +5,36 @@ class Tests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        CoreDataManager().eraseAll()
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-        
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+    func testMultipleEvents() {
+        let coreDataManager = CoreDataManager()
+        let eventCount = { coreDataManager.eventsCount() }
+        XCTAssert(eventCount() == 0)
+
+        coreDataManager.addEvent(for: "appOpen")
+        XCTAssert(eventCount() == 1)
+
+        coreDataManager.addEvent(for: "appOpen")
+        XCTAssert(eventCount() == 2)
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testMultipleReports() {
+        let coreDataManager = CoreDataManager()
+        let reportCount = { coreDataManager.reports()?.count }
+        XCTAssert(reportCount() == 0)
+
+        coreDataManager.addEvent(for: "appOpen")
+        XCTAssert(reportCount() == 1)
+
+        coreDataManager.addEvent(for: "appClose")
+        XCTAssert(reportCount() == 2)
     }
 
 }
