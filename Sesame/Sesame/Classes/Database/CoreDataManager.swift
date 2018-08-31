@@ -198,7 +198,7 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         event.report = report
         save()
 
-        Logger.debug(confirmed: "Logged event:\(event.debugDescription)")
+        Logger.debug("Logged event with actionId:\(actionId)")
 
         return report.events?.count
     }

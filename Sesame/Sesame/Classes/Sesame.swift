@@ -23,9 +23,6 @@ public protocol SesameEffectDelegate: class {
 public class Sesame: NSObject {
 
     public fileprivate(set) static var shared: Sesame?
-    public class func setShared(_ sesame: Sesame) {
-        shared = sesame
-    }
 
     public var effectDelegate: SesameEffectDelegate? {
         didSet {
@@ -46,7 +43,6 @@ public class Sesame: NSObject {
 
     //swiftlint:disable:next weak_delegate
     public let UIApplicationDelegate: SesameUIApplicationDelegate
-    public class var UIApplicationDelegate: SesameUIApplicationDelegate? { return shared?.UIApplicationDelegate }
 
     public let appId: String
     public let appVersionId: String
@@ -79,6 +75,23 @@ public class Sesame: NSObject {
     fileprivate var uploadScheduled = false
 
 }
+
+// MARK: - Public Methods
+
+public extension Sesame {
+
+    @objc
+    public class func setShared(_ sesame: Sesame) {
+        shared = sesame
+    }
+
+    @objc
+    public class var UIApplicationDelegate: SesameUIApplicationDelegate? {
+        return shared?.UIApplicationDelegate
+    }
+}
+
+// MARK: - Internal Methods
 
 extension Sesame {
 

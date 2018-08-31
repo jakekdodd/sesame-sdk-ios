@@ -3,7 +3,7 @@ This application makes use of the following third party libraries:
 
 ## Sesame
 
-Copyright (c) 2018 cuddergambino <kash650@gmail.com>
+Copyright (c) 2018 BoundlessMind <team@boundless.ai>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
