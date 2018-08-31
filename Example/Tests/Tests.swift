@@ -17,8 +17,8 @@ class Tests: XCTestCase {
         let coreDataManager = CoreDataManager()
         let desiredCount = 5
 
-        DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
-//        for iteration in 1...desiredCount {
+//        DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
+        for iteration in 1...desiredCount {
             switch iteration % 2 {
             case 0:
                 coreDataManager.addEvent(for: "appOpen")
