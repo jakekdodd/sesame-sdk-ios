@@ -21,18 +21,24 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         }
     }()
 
+    lazy var persistentStoreURL: URL? = {
+        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last else {
+            return nil
+        }
+        return dir.appendingPathComponent("Sesame.sqlite")
+    }()
+
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
         guard let model = managedObjectModel,
-            let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last else {
+            let persistentStoreURL = persistentStoreURL else {
                 return nil
         }
-
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-        let url = dir.appendingPathComponent("Sesame.sqlite")
+
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                configurationName: nil,
-                                               at: url,
+                                               at: persistentStoreURL,
                                                options: [NSInferMappingModelAutomaticallyOption: true,
                                                          NSMigratePersistentStoresAutomaticallyOption: true])
         } catch {
@@ -60,6 +66,21 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
             } catch {
                 Logger.debug(error: "\(error)")
             }
+        }
+    }
+
+    @available(iOS 9.0, *)
+    func eraseAll() {
+        guard let model = managedObjectModel,
+            let persistentStoreURL = persistentStoreURL else {
+                return
+        }
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+
+        do {
+            try coordinator.destroyPersistentStore(at: persistentStoreURL, ofType: NSSQLiteStoreType, options: nil)
+        } catch {
+            print(error)
         }
     }
 
