@@ -122,7 +122,7 @@ extension Sesame {
 
 public extension Sesame {
     public func testEvent(_ actionId: String) {
-        addEvent(for: actionId)
+        addEvent(for: actionId, metadata: ["key": "otherValue"])
     }
 }
 
@@ -130,9 +130,9 @@ public extension Sesame {
 
 private extension Sesame {
 
-    func addEvent(for actionId: String) {
-        coreDataManager.addEvent(for: actionId)
-        let eventCount = coreDataManager.eventsCount()
+    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
+        coreDataManager.insertEvent(for: actionId, metadata: metadata)
+        let eventCount = coreDataManager.countEvents()
 
         Logger.debug("Reported #\(eventCount ?? -1) events total")
 
@@ -183,7 +183,7 @@ private extension Sesame {
         payload["versionId"] = appVersionId
         payload["tracks"] = {
             var tracks = [[String: Any]]()
-            if let reports = coreDataManager.reports() {
+            if let reports = coreDataManager.fetchReports() {
                 for case let report in reports {
                     guard let reportEvents = report.events else { continue }
 

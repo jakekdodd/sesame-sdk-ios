@@ -45,7 +45,7 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
 
             do {
-                try coordinator.addPersistentStore(ofType: NSInMemoryStoreType,
+                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                    configurationName: nil,
                                                    at: persistentStoreURL,
                                                    options: [NSInferMappingModelAutomaticallyOption: true,
@@ -62,6 +62,7 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         if let coordinator = persistentStoreCoordinator {
             let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
             managedObjectContext.persistentStoreCoordinator = coordinator
+            managedObjectContext.mergePolicy = NSRollbackMergePolicy
             return managedObjectContext
         }
         return nil
@@ -69,8 +70,8 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
 
     // MARK: - Methods
 
-    fileprivate func save() {
-        queue.async {
+    func save() {
+        queue.sync {
             if self.managedObjectContext?.hasChanges ?? false {
                 do {
                     try self.managedObjectContext?.save()
@@ -96,24 +97,9 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
                     print(error)
                 }
             }
-            self.save()
         }
 
-//        return nil
-
-//
-//        guard let model = managedObjectModel,
-//            let persistentStoreURL = persistentStoreURL else {
-//                return
-//        }
-//        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-//
-//        do {
-//            managedObjectContext?.dele
-//            try coordinator.destroyPersistentStore(at: persistentStoreURL, ofType: NSSQLiteStoreType, options: nil)
-//        } catch {
-//            print(error)
-//        }
+        save()
     }
 
 }
@@ -179,7 +165,7 @@ extension CoreDataManager {
 
     // MARK: Report
 
-    func reports() -> [Report]? {
+    func fetchReports() -> [Report]? {
         var values: [Report]?
 
         queue.sync {
@@ -194,33 +180,7 @@ extension CoreDataManager {
         return values
     }
 
-    fileprivate func fetchReport(for actionId: String, createIfNotFound: Bool = true) -> Report? {
-        var value: Report?
-
-//        queue.sync {
-            let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
-            fetchRequest.predicate = NSPredicate(format: "actionId = '\(actionId)'")
-            fetchRequest.fetchLimit = 1
-            do {
-                if let report = try managedObjectContext?.fetch(fetchRequest).first {
-                    value = report
-                } else if createIfNotFound,
-                    let managedObjectContext = managedObjectContext,
-                    let entity = NSEntityDescription.entity(forEntityName: "Report", in: managedObjectContext) {
-                    let report = Report(entity: entity, insertInto: managedObjectContext)
-                    report.actionId = actionId
-                    value = report
-                }
-            } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
-            }
-//        }
-
-        return value
-    }
-
     func eraseReports() {
-
         queue.sync {
             let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
             do {
@@ -230,14 +190,37 @@ extension CoreDataManager {
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
-            self.save()
         }
 
+        save()
+    }
+
+    private func fetchReport(for actionId: String, createIfNotFound: Bool = true) -> Report? {
+        var value: Report?
+
+        let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
+        fetchRequest.predicate = NSPredicate(format: "actionId = '\(actionId)'")
+        fetchRequest.fetchLimit = 1
+        do {
+            if let report = try managedObjectContext?.fetch(fetchRequest).first {
+                value = report
+            } else if createIfNotFound,
+                let managedObjectContext = managedObjectContext,
+                let entity = NSEntityDescription.entity(forEntityName: "Report", in: managedObjectContext) {
+                let report = Report(entity: entity, insertInto: managedObjectContext)
+                report.actionId = actionId
+                value = report
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+        return value
     }
 
     // MARK: Event
 
-    func eventsCount() -> Int? {
+    func countEvents() -> Int? {
         var value: Int?
 
         queue.sync {
@@ -252,7 +235,7 @@ extension CoreDataManager {
         return value
     }
 
-    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
+    func insertEvent(for actionId: String, metadata: [String: Any] = [:]) {
         queue.sync {
             guard let managedObjectContext = self.managedObjectContext,
                 let report = fetchReport(for: actionId) else {
@@ -275,10 +258,11 @@ extension CoreDataManager {
                 print(error)
             }
             event.report = report
-            save()
 
             Logger.debug("Logged event #\(report.events?.count ?? -1) with actionId:\(actionId)")
         }
+
+        save()
     }
 
 }
