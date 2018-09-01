@@ -63,42 +63,11 @@ public class Sesame: NSObject {
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.reinforcer = Reinforcer()
+
         super.init()
+
         self.UIApplicationDelegate.app = self
         self.config = self.coreDataManager.fetchAppConfig()
-
-//        let coreDataManager = CoreDataManager()
-        let eventCount = { self.coreDataManager.eventsCount() }
-        coreDataManager.eraseAll()
-        assert(eventCount() == 0)
-        coreDataManager.addEvent(for: "appOpen")
-        coreDataManager.addEvent(for: "appOpen")
-        assert(eventCount() == 2)
-
-        coreDataManager.eraseAll()
-        assert(eventCount() == 0)
-        coreDataManager.addEvent(for: "appOpen")
-        coreDataManager.addEvent(for: "appOpen")
-        assert(eventCount() == 2)
-
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            let desiredCount = 5
-            self.coreDataManager.eraseAll()
-            DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
-                switch iteration % 2 {
-                case 0:
-                    self.coreDataManager.addEvent(for: "appOpen")
-                default:
-                    self.coreDataManager.addEvent(for: "appClose")
-                }
-            }
-
-            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-                let count = self.coreDataManager.eventsCount()
-                Logger.debug(confirmed: "Action count:\(count)")
-                assert(count == desiredCount)
-            }
-        }
     }
 
     var eventUploadCount: Int = 5
@@ -162,25 +131,14 @@ public extension Sesame {
 private extension Sesame {
 
     func addEvent(for actionId: String) {
-        let eventCount = coreDataManager.addEvent(for: actionId)
+        coreDataManager.addEvent(for: actionId)
+        let eventCount = coreDataManager.eventsCount()
 
-        print("Reported \(eventCount ?? -1) events for <\(actionId)>")
+        Logger.debug("Reported #\(eventCount ?? -1) events total")
 
-//        guard let reports = coreDataManager.reports() else { print("No reports"); return }
-//        let totalEvents = reports.reduce(0) { (result, report) -> Int in
-//            return result + (report.events?.count ?? 0)
-//        }
-//        print("Reported \(totalEvents) events total")
-//        print("Stored events:\(coreDataManager.eventsCount() ?? -1)")
-//
-////        if totalEvents >= eventUploadCount {
-////            sendTracks { _ in
-////                for report in reports {
-////                    self.coreDataManager.managedObjectContext?.delete(report)
-////                }
-//////                self.coreDataManager.save()
-////            }
-////        }
+        if eventCount ?? 0 >= eventUploadCount {
+            sendTracks()
+        }
     }
 
     func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
@@ -190,7 +148,7 @@ private extension Sesame {
         payload["currentVersion"] = appVersionId
         payload["currentConfig"] = "\(config?.revision ?? 0)"
 
-        api.post(url: APIClient.APIClientURL.boot.url, jsonObject: payload) { response in
+        api.post(endpoint: .boot, jsonObject: payload) { response in
             guard let response = response,
                 response["errors"] == nil else {
                     completion(false)
@@ -220,7 +178,7 @@ private extension Sesame {
             }.start()
     }
 
-    func sendTracks(completion: @escaping (Bool) -> Void) {
+    func sendTracks(completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
         payload["versionId"] = appVersionId
         payload["tracks"] = {
@@ -248,8 +206,8 @@ private extension Sesame {
             return tracks
         }()
 
-        api.post(url: APIClient.APIClientURL.track.url, jsonObject: payload) { response in
-
+        api.post(endpoint: .track, jsonObject: payload) { response in
+            self.coreDataManager.eraseReports()
             guard let response = response,
                 response["errors"] == nil else {
                     completion(false)

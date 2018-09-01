@@ -9,7 +9,7 @@ import Foundation
 
 class APIClient: HTTPClient {
 
-    enum APIClientURL {
+    enum Endpoint {
         case boot, track, reinforce
 
         var url: URL {
@@ -22,6 +22,10 @@ class APIClient: HTTPClient {
                 return URL(string: "https://reinforce.boundless.ai/v6/app/boot")!
             }
         }
+    }
+
+    func post(endpoint: Endpoint, jsonObject: [String: Any], timeout: TimeInterval = 3.0, completion: @escaping ([String: Any]?) -> Void) -> URLSessionDataTaskProtocol {
+        return super.post(url: endpoint.url, jsonObject: jsonObject, timeout: timeout, completion: completion)
     }
 
     func createPayload(for app: Sesame) -> [String: Any] {

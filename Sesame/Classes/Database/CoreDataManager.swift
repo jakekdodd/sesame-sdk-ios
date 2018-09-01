@@ -18,6 +18,10 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
 
     // MARK: - CoreData Objects
 
+    /// The context is used only on this queue.
+    /// All public facing methods are run synchronously on this queue if they return a result, asynchronously otherwise.
+    /// Private methods called within public methods can use the queue asynchronously
+    /// but not synchronously due to deadlock.
     fileprivate let queue = DispatchQueue(label: "Sesame.CoreDataManager")
 
     private lazy var managedObjectModel: NSManagedObjectModel? = {
@@ -121,17 +125,14 @@ extension CoreDataManager {
     // MARK: AppConfig
 
     func fetchAppConfig() -> AppConfig? {
-        guard let context = managedObjectContext else {
-            return nil
-        }
-        var config: AppConfig?
+        var value: AppConfig?
+
         queue.sync {
             let fetchRequest = NSFetchRequest<AppConfig>(entityName: "AppConfig")
             fetchRequest.fetchLimit = 1
             do {
                 if let appConfig = try self.managedObjectContext?.fetch(fetchRequest).first {
-                    config = appConfig
-                    return
+                    value = appConfig
                 } else if let managedObjectContext = self.managedObjectContext,
                     let appConfigEntity = NSEntityDescription.entity(forEntityName: "AppConfig",
                                                                      in: managedObjectContext),
@@ -142,16 +143,13 @@ extension CoreDataManager {
                     let appConfig = AppConfig(entity: appConfigEntity, insertInto: managedObjectContext)
                     appConfig.trackingCapabilities = trackingCapabilities
 
-                    config = appConfig
-                    return
+                    value = appConfig
                 }
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
-
-            config = nil
         }
-        return config
+        return value
     }
 
     // MARK: User
@@ -221,6 +219,22 @@ extension CoreDataManager {
         return value
     }
 
+    func eraseReports() {
+
+        queue.sync {
+            let fetchRequest = NSFetchRequest<Report>(entityName: "Report")
+            do {
+                for report in try self.managedObjectContext?.fetch(fetchRequest) ?? [] {
+                    self.managedObjectContext?.delete(report)
+                }
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+            }
+            self.save()
+        }
+
+    }
+
     // MARK: Event
 
     func eventsCount() -> Int? {
@@ -238,16 +252,7 @@ extension CoreDataManager {
         return value
     }
 
-    ///
-    ///
-    /// - Parameters:
-    ///   - actionId: name for the action
-    ///   - metadata: any extra info
-    /// - Returns: The number of events reported for the actionId if successfully added, otherwise nil
-    @discardableResult
-    func addEvent(for actionId: String, metadata: [String: Any] = [:]) -> Int? {
-        var value: Int?
-
+    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
         queue.sync {
             guard let managedObjectContext = self.managedObjectContext,
                 let report = fetchReport(for: actionId) else {
@@ -272,12 +277,8 @@ extension CoreDataManager {
             event.report = report
             save()
 
-            Logger.debug("Logged event with actionId:\(actionId)")
-
-            value = report.events?.count
+            Logger.debug("Logged event #\(report.events?.count ?? -1) with actionId:\(actionId)")
         }
-
-        return value
     }
 
 }
