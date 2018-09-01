@@ -38,7 +38,7 @@ class APIClient: HTTPClient {
                  "versionId": app.appVersionId,
                  "revision": app.config?.revision ?? 0,
                  "secret": app.auth,
-                 "primaryIdentity": app.user?.id ?? "IDUNAVAILABLE",
+                 "primaryIdentity": app.config?.user?.id ?? app.config?.user?.fallbackId ?? "IDUNAVAILABLE",
 
                  "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
                  "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)

@@ -50,12 +50,11 @@ public class Sesame: NSObject {
 
     let api: APIClient
     var config: AppConfig?
-    var user: User?
 
     let coreDataManager: CoreDataManager
     public var reinforcer: Reinforcer
 
-    public init(appId: String, appVersionId: String, auth: String) {
+    public init(appId: String, appVersionId: String, auth: String, userId: String? = nil) {
         self.UIApplicationDelegate = SesameUIApplicationDelegate()
         self.appId = appId
         self.appVersionId = appVersionId
@@ -67,13 +66,18 @@ public class Sesame: NSObject {
         super.init()
 
         self.UIApplicationDelegate.app = self
-        self.config = self.coreDataManager.fetchAppConfig()
+        self.config = coreDataManager.fetchAppConfig()
+        self.config?.user = coreDataManager.fetchUser(for: userId)
     }
 
     var eventUploadCount: Int = 5
     var eventUploadPeriod: TimeInterval = 30
 
     fileprivate var uploadScheduled = false
+
+    func set(userId: String?) {
+        config?.user = coreDataManager.fetchUser(for: userId)
+    }
 
 }
 
@@ -131,7 +135,7 @@ public extension Sesame {
 private extension Sesame {
 
     func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
-        coreDataManager.insertEvent(for: actionId, metadata: metadata)
+        coreDataManager.insertEvent(userId: config?.user?.id, actionId: actionId, metadata: metadata)
         let eventCount = coreDataManager.countEvents()
 
         Logger.debug("Reported #\(eventCount ?? -1) events total")
@@ -207,7 +211,7 @@ private extension Sesame {
         }()
 
         api.post(endpoint: .track, jsonObject: payload) { response in
-            self.coreDataManager.eraseReports()
+            self.coreDataManager.deleteReports()
             guard let response = response,
                 response["errors"] == nil else {
                     completion(false)

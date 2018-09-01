@@ -6,7 +6,7 @@ class Tests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        CoreDataManager().erase()
+//        CoreDataManager().deleteObjects()
     }
 
     override func tearDown() {
@@ -18,10 +18,10 @@ class Tests: XCTestCase {
         let eventCount = { coreDataManager.countEvents() }
         XCTAssert(eventCount() == 0)
 
-        coreDataManager.insertEvent(for: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
         XCTAssert(eventCount() == 1)
 
-        coreDataManager.insertEvent(for: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
         XCTAssert(eventCount() == 2)
     }
 
@@ -30,10 +30,10 @@ class Tests: XCTestCase {
         let reportCount = { coreDataManager.fetchReports()?.count }
         XCTAssert(reportCount() == 0)
 
-        coreDataManager.insertEvent(for: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
         XCTAssert(reportCount() == 1)
 
-        coreDataManager.insertEvent(for: "appClose")
+        coreDataManager.insertEvent(actionId: "appClose")
         XCTAssert(reportCount() == 2)
     }
 
@@ -41,14 +41,14 @@ class Tests: XCTestCase {
         let coreDataManager = CoreDataManager()
         let eventCount = { coreDataManager.countEvents() }
         XCTAssert(eventCount() == 0)
-        coreDataManager.insertEvent(for: "appOpen")
-        coreDataManager.insertEvent(for: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
         XCTAssert(eventCount() == 2)
 
-        coreDataManager.erase()
+        coreDataManager.deleteObjects()
         XCTAssert(eventCount() == 0)
-        coreDataManager.insertEvent(for: "appOpen")
-        coreDataManager.insertEvent(for: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
+        coreDataManager.insertEvent(actionId: "appOpen")
         XCTAssert(eventCount() == 2)
 
     }
@@ -62,9 +62,9 @@ class Tests: XCTestCase {
         DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
             switch iteration % 2 {
             case 0:
-                coreDataManager.insertEvent(for: "appOpen")
+                coreDataManager.insertEvent(actionId: "appOpen")
             default:
-                coreDataManager.insertEvent(for: "appClose")
+                coreDataManager.insertEvent(actionId: "appClose")
             }
             group.leave()
         }
@@ -109,9 +109,54 @@ class Tests: XCTestCase {
         Logger.debug("appConfig3?.configId:<\(appConfig3?.configId ?? "nil")>")
     }
 
+    func testUserChange() {
+        let sesame = Sesame.dev
+        sesame.coreDataManager.deleteObjects()
+
+        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForUser))")
+        XCTAssert(sesame.eventCountForUser == 0)
+
+        sesame.addEventForUser()
+        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForUser))")
+        XCTAssert(sesame.eventCountForUser == 1)
+
+        sesame.set(userId: "bob")
+
+        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForUser))")
+        XCTAssert(sesame.eventCountForUser == 0)
+
+        sesame.addEventForUser()
+        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForUser))")
+        XCTAssert(sesame.eventCountForUser == 1)
+
+        sesame.set(userId: nil)
+
+        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForUser))")
+        XCTAssert(sesame.eventCountForUser == 1)
+
+        sesame.addEventForUser()
+        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForUser))")
+        XCTAssert(sesame.eventCountForUser == 2)
+
+    }
+
     func testSomething() {
 //        let coredatamanager = CoreDataManager()
         print(Report.self.debugDescription())
     }
 
+}
+
+extension User {
+    func countEvents() -> Int {
+        var count = 0
+        if let reports = reports {
+            for case let report as Report in reports {
+                if let events = report.events {
+                    count += events.count
+                }
+            }
+        }
+        return count
+    }
 }
