@@ -67,6 +67,38 @@ public class Sesame: NSObject {
         self.UIApplicationDelegate.app = self
         self.config = self.coreDataManager.fetchAppConfig()
 
+//        let coreDataManager = CoreDataManager()
+        let eventCount = { self.coreDataManager.eventsCount() }
+        coreDataManager.eraseAll()
+        assert(eventCount() == 0)
+        coreDataManager.addEvent(for: "appOpen")
+        coreDataManager.addEvent(for: "appOpen")
+        assert(eventCount() == 2)
+
+        coreDataManager.eraseAll()
+        assert(eventCount() == 0)
+        coreDataManager.addEvent(for: "appOpen")
+        coreDataManager.addEvent(for: "appOpen")
+        assert(eventCount() == 2)
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+            let desiredCount = 5
+            self.coreDataManager.eraseAll()
+            DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
+                switch iteration % 2 {
+                case 0:
+                    self.coreDataManager.addEvent(for: "appOpen")
+                default:
+                    self.coreDataManager.addEvent(for: "appClose")
+                }
+            }
+
+            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+                let count = self.coreDataManager.eventsCount()
+                Logger.debug(confirmed: "Action count:\(count)")
+                assert(count == desiredCount)
+            }
+        }
     }
 
     var eventUploadCount: Int = 5
@@ -134,21 +166,21 @@ private extension Sesame {
 
         print("Reported \(eventCount ?? -1) events for <\(actionId)>")
 
-        guard let reports = coreDataManager.reports() else { print("No reports"); return }
-        let totalEvents = reports.reduce(0) { (result, report) -> Int in
-            return result + (report.events?.count ?? 0)
-        }
-        print("Reported \(totalEvents) events total")
-        print("Stored events:\(coreDataManager.eventsCount() ?? -1)")
-
-        if totalEvents >= eventUploadCount {
-            sendTracks { _ in
-                for report in reports {
-                    self.coreDataManager.managedObjectContext?.delete(report)
-                }
-                self.coreDataManager.save()
-            }
-        }
+//        guard let reports = coreDataManager.reports() else { print("No reports"); return }
+//        let totalEvents = reports.reduce(0) { (result, report) -> Int in
+//            return result + (report.events?.count ?? 0)
+//        }
+//        print("Reported \(totalEvents) events total")
+//        print("Stored events:\(coreDataManager.eventsCount() ?? -1)")
+//
+////        if totalEvents >= eventUploadCount {
+////            sendTracks { _ in
+////                for report in reports {
+////                    self.coreDataManager.managedObjectContext?.delete(report)
+////                }
+//////                self.coreDataManager.save()
+////            }
+////        }
     }
 
     func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
@@ -178,9 +210,12 @@ private extension Sesame {
                     }
                 }
 
-//                config = AppConfig(revision, configValues)
-                self.coreDataManager.save()
-                print("after:\(self.config.debugDescription)")
+////                config = AppConfig(revision, configValues)
+//                if let context = self.config?.managedObjectContext {
+//                    self.coreDataManager.save()
+//                }
+////                self.coreDataManager.save()
+//                print("after:\(self.config.debugDescription)")
             }
             }.start()
     }
