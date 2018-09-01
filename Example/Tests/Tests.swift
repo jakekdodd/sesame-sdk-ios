@@ -6,7 +6,7 @@ class Tests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        CoreDataManager().eraseAll()
+        CoreDataManager().erase()
     }
 
     override func tearDown() {
@@ -45,7 +45,7 @@ class Tests: XCTestCase {
         coreDataManager.insertEvent(for: "appOpen")
         XCTAssert(eventCount() == 2)
 
-        coreDataManager.eraseAll()
+        coreDataManager.erase()
         XCTAssert(eventCount() == 0)
         coreDataManager.insertEvent(for: "appOpen")
         coreDataManager.insertEvent(for: "appOpen")

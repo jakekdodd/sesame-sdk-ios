@@ -82,7 +82,7 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
 
-    func eraseAll() {
+    func erase() {
         queue.sync {
             let modelTypes = [Report.self, Event.self, User.self]
             for model in modelTypes {
