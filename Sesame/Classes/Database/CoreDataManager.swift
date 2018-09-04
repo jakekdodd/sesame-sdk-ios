@@ -185,16 +185,15 @@ extension CoreDataManager {
     }
 
     func deleteReports(userId: String?) {
-        guard let managedObjectContext = managedObjectContext else { return }
-
         queue.sync {
             let request = NSFetchRequest<Report>(entityName: "Report")
             request.predicate = NSPredicate(format: "user.id == \(userId == nil ? "nil" : "'\(userId!)'")")
             do {
-                let reports = try managedObjectContext.fetch(request)
-                Logger.debug("Deleting \(String(describing: reports.count)) events")
-                for report in reports {
-                    managedObjectContext.delete(report)
+                if let reports = try managedObjectContext?.fetch(request) {
+                    Logger.debug("Deleting \(String(describing: reports.count)) events")
+                    for report in reports {
+                        managedObjectContext?.delete(report)
+                    }
                 }
             } catch {
                 print(error)
@@ -256,10 +255,7 @@ extension CoreDataManager {
     }
 
     func insertEvent(userId: String?, actionId: String, metadata: [String: Any] = [:]) {
-        guard let report = fetchReport(userId: userId, actionId: actionId) else {
-                Logger.debug(error: "Could not create report for actionId:\(actionId)")
-                return
-        }
+        guard let report = fetchReport(userId: userId, actionId: actionId) else { return }
 
         queue.sync {
             guard let managedObjectContext = self.managedObjectContext,
