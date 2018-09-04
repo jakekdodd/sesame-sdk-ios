@@ -75,8 +75,18 @@ public class Sesame: NSObject {
 
     fileprivate var uploadScheduled = false
 
+    var userId: String? {
+        get {
+            return config?.user?.id
+        }
+        set {
+            config?.user = coreDataManager.fetchUser(for: newValue)
+        }
+    }
+
     func set(userId: String?) {
-        config?.user = coreDataManager.fetchUser(for: userId)
+//        config?.user = coreDataManager.fetchUser(for: userId)
+        self.userId = userId
     }
 
 }
@@ -112,6 +122,10 @@ extension Sesame {
             addEvent(for: "appOpen")
 //            sendBoot()
 
+            if reinforcer.cartridge.decisions.isEmpty {
+                // TO-DO: refresh cartridge
+            }
+
         case .synthetic?:
             break
 
@@ -136,12 +150,12 @@ private extension Sesame {
 
     func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
         coreDataManager.insertEvent(userId: config?.user?.id, actionId: actionId, metadata: metadata)
-        let eventCount = coreDataManager.countEvents()
+        let eventCount = coreDataManager.countEvents(userId: config?.user?.id)
 
         Logger.debug("Reported #\(eventCount ?? -1) events total")
 
         if eventCount ?? 0 >= eventUploadCount {
-            sendTracks()
+            sendTracks(userId: config?.user?.id)
         }
     }
 
@@ -182,12 +196,12 @@ private extension Sesame {
             }.start()
     }
 
-    func sendTracks(completion: @escaping (Bool) -> Void = {_ in}) {
+    func sendTracks(userId: String?, completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
         payload["versionId"] = appVersionId
         payload["tracks"] = {
             var tracks = [[String: Any]]()
-            if let reports = coreDataManager.fetchReports() {
+            if let reports = coreDataManager.fetchReports(userId: userId) {
                 for case let report in reports {
                     guard let reportEvents = report.events else { continue }
 
@@ -211,7 +225,7 @@ private extension Sesame {
         }()
 
         api.post(endpoint: .track, jsonObject: payload) { response in
-            self.coreDataManager.deleteReports()
+            self.coreDataManager.deleteReports(userId: userId)
             guard let response = response,
                 response["errors"] == nil else {
                     completion(false)

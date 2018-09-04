@@ -16,11 +16,11 @@ extension Sesame {
                            auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10")
     }
 
-    var eventCountForUser: Int? {
-        return coreDataManager.countEvents(forUserId: config?.user?.id)
+    var eventCountForCurrentUser: Int? {
+        return coreDataManager.countEvents(userId: config?.user?.id)
     }
 
-    func addEventForUser(actionId: String = "appOpen", metadata: [String: Any] = [:]) {
+    func addEventForCurrentUser(actionId: String = "appOpen", metadata: [String: Any] = [:]) {
         coreDataManager.insertEvent(userId: config?.user?.id, actionId: actionId, metadata: metadata)
     }
 }
