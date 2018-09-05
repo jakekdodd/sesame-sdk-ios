@@ -199,13 +199,13 @@ extension CoreDataManager {
         save()
     }
 
-    private func fetchReport(userId: String, actionId: String, createIfNotFound: Bool = true) -> Report? {
+    private func fetchReport(userId: String, actionName: String, createIfNotFound: Bool = true) -> Report? {
         var value: Report?
 
         queue.sync {
             let request = NSFetchRequest<Report>(entityName: Report.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(#keyPath(Report.actionId)) == '\(actionId)'"),
+                NSPredicate(format: "\(#keyPath(Report.actionName)) == '\(actionName)'"),
                 NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
                 ])
             request.fetchLimit = 1
@@ -217,7 +217,7 @@ extension CoreDataManager {
                     let entity = NSEntityDescription.entity(forEntityName: Report.description(),
                                                             in: managedObjectContext) {
                     let report = Report(entity: entity, insertInto: managedObjectContext)
-                    report.actionId = actionId
+                    report.actionName = actionName
                     value = report
                 }
             } catch let error as NSError {
@@ -253,8 +253,8 @@ extension CoreDataManager {
         return value
     }
 
-    func insertEvent(userId: String, actionId: String, metadata: [String: Any] = [:]) {
-        guard let report = fetchReport(userId: userId, actionId: actionId) else { return }
+    func insertEvent(userId: String, actionName: String, metadata: [String: Any] = [:]) {
+        guard let report = fetchReport(userId: userId, actionName: actionName) else { return }
 
         queue.sync {
             guard let managedObjectContext = managedObjectContext,
@@ -273,7 +273,7 @@ extension CoreDataManager {
             }
             event.report = report
 
-            Logger.debug("Logged event #\(report.events?.count ?? -1) with actionId:\(actionId)")
+            Logger.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
         }
 
         save()
