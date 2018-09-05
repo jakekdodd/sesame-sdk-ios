@@ -28,3 +28,23 @@ extension AppConfig {
         }
     }
 }
+
+extension User {
+    override public func awakeFromInsert() {
+        super.awakeFromInsert()
+        setPrimitiveValue(UUID().uuidString, forKey: #keyPath(User.id))
+
+//        // Set free reports to most recent user
+//        let request = NSFetchRequest<Report>(entityName: Report.description())
+//        request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == nil")
+//        do {
+//            if let reports = try managedObjectContext?.fetch(request) {
+//                for report in reports {
+//                    report.user = self
+//                }
+//            }
+//        } catch let error as NSError {
+//            print("Could not fetch. \(error), \(error.userInfo)")
+//        }
+    }
+}

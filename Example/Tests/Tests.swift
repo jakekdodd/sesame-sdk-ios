@@ -14,47 +14,51 @@ class Tests: XCTestCase {
     }
 
     func testMultipleEvents() {
-        let coreDataManager = CoreDataManager()
-        let eventCount = { coreDataManager.countEvents(userId: nil) }
-        XCTAssert(eventCount() == 0)
+        let sesame = Sesame.dev()
+        let addEvent = { sesame.addEvent(for: "appOpen") }
+        let countEvents = { return sesame.coreDataManager.countEvents(userId: Sesame.devUserId) }
+        XCTAssert(countEvents() == 0)
 
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        XCTAssert(eventCount() == 1)
+        addEvent()
+        XCTAssert(countEvents() == 1)
 
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        XCTAssert(eventCount() == 2)
+        addEvent()
+        XCTAssert(countEvents() == 2)
     }
 
     func testMultipleReports() {
-        let coreDataManager = CoreDataManager()
-        let reportCount = { coreDataManager.fetchReports(userId: nil)?.count }
-        XCTAssert(reportCount() == 0)
+        let sesame = Sesame.dev()
+        let countReports = { sesame.coreDataManager.fetchReports(userId: Sesame.devUserId)?.count }
+        XCTAssert(countReports() == 0)
 
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        XCTAssert(reportCount() == 1)
+        sesame.addEvent(for: "appOpen")
+        XCTAssert(countReports() == 1)
 
-        coreDataManager.insertEvent(userId: nil, actionId: "appClose")
-        XCTAssert(reportCount() == 2)
+        sesame.addEvent(for: "appClose")
+        XCTAssert(countReports() == 2)
     }
 
-    func testErase() {
-        let coreDataManager = CoreDataManager()
-        let eventCount = { coreDataManager.countEvents(userId: nil) }
-        XCTAssert(eventCount() == 0)
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        XCTAssert(eventCount() == 2)
+    func testDeleteData() {
+        let sesame = Sesame.dev()
+        let countEvents = { sesame.coreDataManager.countEvents(userId: Sesame.devUserId) }
+        XCTAssert(countEvents() == 0)
 
-        coreDataManager.deleteObjects()
-        XCTAssert(eventCount() == 0)
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
-        XCTAssert(eventCount() == 2)
+        sesame.addEvent(for: "appOpen")
+        sesame.addEvent(for: "appOpen")
+        XCTAssert(countEvents() == 2)
+
+        sesame.coreDataManager.deleteObjects()
+        XCTAssert(countEvents() == 0)
+
+        sesame.userId = Sesame.devUserId
+        sesame.addEvent(for: "appOpen")
+        sesame.addEvent(for: "appOpen")
+        XCTAssert(countEvents() == 2)
 
     }
 
     func testEventsCount() {
-        let coreDataManager = CoreDataManager()
+        let sesame = Sesame.dev()
         let desiredCount = 5
 
         let group = DispatchGroup()
@@ -62,26 +66,37 @@ class Tests: XCTestCase {
         DispatchQueue.concurrentPerform(iterations: desiredCount) { iteration in
             switch iteration % 2 {
             case 0:
-                coreDataManager.insertEvent(userId: nil, actionId: "appOpen")
+                sesame.addEvent(for: "appOpen")
             default:
-                coreDataManager.insertEvent(userId: nil, actionId: "appClose")
+                sesame.addEvent(for: "appClose")
             }
             group.leave()
         }
 
         XCTAssert(group.wait(timeout: .now() + 2) == .success)
 
-        let count = coreDataManager.countEvents(userId: nil)
+        let count = sesame.eventCount()
         print("Got count:\(String(describing: count))")
         XCTAssert(count == desiredCount)
-
-        //        var events = [Event]()
-        //        for case let report in coreDataManager.fetchReports() {
-        //
-        //        }
     }
 
-    func testMultipleChange() {
+    func testAppConfigRemeberLast() {
+        var sesame = Sesame.dev()
+        let testConfigId = "0123"
+        let setConfigId = { sesame.configId = testConfigId }
+        XCTAssert(sesame.configId == nil)
+        XCTAssert(sesame.config?.configId == nil)
+
+        setConfigId()
+        XCTAssert(sesame.configId == testConfigId)
+        XCTAssert(sesame.config?.configId == testConfigId)
+
+        sesame = Sesame.dev()
+        XCTAssert(sesame.configId == testConfigId)
+        XCTAssert(sesame.config?.configId == testConfigId)
+    }
+
+    func testAppConfigChangeInMultipleContext() {
         let coreDataManager1 = CoreDataManager()
         let coreDataManager2 = CoreDataManager()
         let appConfig1 = coreDataManager1.fetchAppConfig()
@@ -110,74 +125,46 @@ class Tests: XCTestCase {
     }
 
     func testUserChange() {
-        let sesame = Sesame.dev
+        let sesame = Sesame.dev()
+        let user1 = "ann"
+        let user2 = "bob"
+        var currentUser = user1
+        let setUser1 = { currentUser = user1; sesame.userId = currentUser }
+        let setUser2 = { currentUser = user2; sesame.userId = currentUser }
+        let addEvent = { sesame.addEvent(for: "appOpen") }
+        let countEvents = { return sesame.coreDataManager.countEvents(userId: currentUser) ?? -1 }
+        let deleteReports = { sesame.coreDataManager.deleteReports(userId: currentUser) }
+
         sesame.coreDataManager.deleteObjects()
+        XCTAssert(sesame.userId == "")
 
-        XCTAssert(sesame.userId == nil)
+        setUser1()
+        XCTAssert(countEvents() == 0)
+        addEvent()
+        XCTAssert(countEvents() == 1)
 
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 0)
+        setUser2()
+        XCTAssert(sesame.userId == user2)
+        XCTAssert(countEvents() == 0)
+        addEvent()
+        XCTAssert(countEvents() == 1)
 
-        sesame.addEventForCurrentUser()
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 1)
+        setUser1()
+        XCTAssert(sesame.userId == user1)
+        XCTAssert(countEvents() == 1)
+        addEvent()
+        XCTAssert(countEvents() == 2)
 
-        sesame.set(userId: "bob")
-        XCTAssert(sesame.userId == "bob")
+        setUser2()
+        XCTAssert(sesame.userId == user2)
+        XCTAssert(countEvents() == 1)
+        deleteReports()
+        XCTAssert(countEvents() == 0)
 
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 0)
-
-        sesame.addEventForCurrentUser()
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 1)
-
-        sesame.set(userId: nil)
-        XCTAssert(sesame.userId == nil)
-
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 1)
-
-        sesame.addEventForCurrentUser()
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 2)
-
-        sesame.set(userId: "bob")
-        XCTAssert(sesame.userId == "bob")
-
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 1)
-
-        sesame.coreDataManager.deleteReports(userId: sesame.userId)
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 0)
-
-        sesame.set(userId: nil)
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 2)
-
-        sesame.coreDataManager.deleteReports(userId: sesame.userId)
-        Logger.debug("sesame.eventCountForUser:\(String(describing: sesame.eventCountForCurrentUser))")
-        XCTAssert(sesame.eventCountForCurrentUser == 0)
+        setUser1()
+        XCTAssert(countEvents() == 2)
+        deleteReports()
+        XCTAssert(countEvents() == 0)
     }
 
-    func testSomething() {
-//        let coredatamanager = CoreDataManager()
-        print(Report.self.debugDescription())
-    }
-
-}
-
-extension User {
-    func countEvents() -> Int {
-        var count = 0
-        if let reports = reports {
-            for case let report as Report in reports {
-                if let events = report.events {
-                    count += events.count
-                }
-            }
-        }
-        return count
-    }
 }

@@ -112,14 +112,15 @@ extension CoreDataManager {
         var value: AppConfig?
 
         queue.sync {
-            let request = NSFetchRequest<AppConfig>(entityName: "AppConfig")
-            request.predicate = NSPredicate(format: "configId == \(configId == nil ? "nil" : "'\(configId!)'")")
+            let request = NSFetchRequest<AppConfig>(entityName: AppConfig.description())
+            let configIdValue = "\(configId == nil ? "nil" : "'\(configId!)'")"
+            request.predicate = NSPredicate(format: "\(#keyPath(AppConfig.configId)) == \(configIdValue)")
             request.fetchLimit = 1
             do {
                 if let appConfig = try managedObjectContext?.fetch(request).first {
                     value = appConfig
                 } else if let managedObjectContext = managedObjectContext,
-                    let appConfigEntity = NSEntityDescription.entity(forEntityName: "AppConfig",
+                    let appConfigEntity = NSEntityDescription.entity(forEntityName: AppConfig.description(),
                                                                      in: managedObjectContext) {
                     let appConfig = AppConfig(entity: appConfigEntity, insertInto: managedObjectContext)
                     appConfig.configId = configId
@@ -135,21 +136,21 @@ extension CoreDataManager {
 
     // MARK: User
 
-    func fetchUser(for id: String?, createIfNotFound: Bool = true) -> User? {
+    func fetchUser(for id: String, createIfNotFound: Bool = true) -> User? {
         var value: User?
 
         queue.sync {
-            let request = NSFetchRequest<User>(entityName: "User")
-            request.predicate = NSPredicate(format: "id == \(id == nil ? "nil" : "'\(id!)'")")
+            let request = NSFetchRequest<User>(entityName: User.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(User.id)) == '\(id)'")
             request.fetchLimit = 1
             do {
                 if let user = try managedObjectContext?.fetch(request).first {
                     value = user
                 } else if createIfNotFound,
                     let managedObjectContext = managedObjectContext,
-                    let entity = NSEntityDescription.entity(forEntityName: "User", in: managedObjectContext) {
+                    let entity = NSEntityDescription.entity(forEntityName: User.description(),
+                                                            in: managedObjectContext) {
                     let user = User(entity: entity, insertInto: managedObjectContext)
-                    user.fallbackId = UUID().uuidString
                     user.id = id
                     value = user
                 }
@@ -163,12 +164,12 @@ extension CoreDataManager {
 
     // MARK: Report
 
-    func fetchReports(userId: String?) -> [Report]? {
+    func fetchReports(userId: String) -> [Report]? {
         var values: [Report]?
 
         queue.sync {
-            let request = NSFetchRequest<Report>(entityName: "Report")
-            request.predicate = NSPredicate(format: "user.id == \(userId == nil ? "nil" : "'\(userId!)'")")
+            let request = NSFetchRequest<Report>(entityName: Report.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
             do {
                 values = try managedObjectContext?.fetch(request)
             } catch let error as NSError {
@@ -179,13 +180,13 @@ extension CoreDataManager {
         return values
     }
 
-    func deleteReports(userId: String?) {
+    func deleteReports(userId: String) {
         queue.sync {
-            let request = NSFetchRequest<Report>(entityName: "Report")
-            request.predicate = NSPredicate(format: "user.id == \(userId == nil ? "nil" : "'\(userId!)'")")
+            let request = NSFetchRequest<Report>(entityName: Report.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
             do {
                 if let reports = try managedObjectContext?.fetch(request) {
-                    Logger.debug("Deleting \(String(describing: reports.count)) events")
+                    Logger.debug("Deleting \(reports.count) events")
                     for report in reports {
                         managedObjectContext?.delete(report)
                     }
@@ -198,14 +199,14 @@ extension CoreDataManager {
         save()
     }
 
-    private func fetchReport(userId: String?, actionId: String, createIfNotFound: Bool = true) -> Report? {
+    private func fetchReport(userId: String, actionId: String, createIfNotFound: Bool = true) -> Report? {
         var value: Report?
 
         queue.sync {
-            let request = NSFetchRequest<Report>(entityName: "Report")
+            let request = NSFetchRequest<Report>(entityName: Report.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "actionId = '\(actionId)'"),
-                NSPredicate(format: "user.id = \(userId == nil ? "nil" : "'\(userId!)'")")
+                NSPredicate(format: "\(#keyPath(Report.actionId)) == '\(actionId)'"),
+                NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
                 ])
             request.fetchLimit = 1
             do {
@@ -213,7 +214,8 @@ extension CoreDataManager {
                     value = report
                 } else if createIfNotFound,
                     let managedObjectContext = managedObjectContext,
-                    let entity = NSEntityDescription.entity(forEntityName: "Report", in: managedObjectContext) {
+                    let entity = NSEntityDescription.entity(forEntityName: Report.description(),
+                                                            in: managedObjectContext) {
                     let report = Report(entity: entity, insertInto: managedObjectContext)
                     report.actionId = actionId
                     value = report
@@ -233,12 +235,14 @@ extension CoreDataManager {
 
     // MARK: Event
 
-    func countEvents(userId: String?) -> Int? {
+    func countEvents(userId: String? = nil) -> Int? {
         var value: Int?
 
         queue.sync {
-            let request = NSFetchRequest<Event>(entityName: "Event")
-            request.predicate = NSPredicate(format: "report.user.id == \(userId == nil ? "nil" : "'\(userId!)'")")
+            let request = NSFetchRequest<Event>(entityName: Event.description())
+            if let userId = userId {
+                request.predicate = NSPredicate(format: "\(#keyPath(Event.report.user.id)) == '\(userId)'")
+            }
             do {
                 value = try managedObjectContext?.count(for: request)
             } catch let error as NSError {
@@ -249,19 +253,18 @@ extension CoreDataManager {
         return value
     }
 
-    func insertEvent(userId: String?, actionId: String, metadata: [String: Any] = [:]) {
+    func insertEvent(userId: String, actionId: String, metadata: [String: Any] = [:]) {
         guard let report = fetchReport(userId: userId, actionId: actionId) else { return }
 
         queue.sync {
             guard let managedObjectContext = managedObjectContext,
-                let entity = NSEntityDescription.entity(forEntityName: "Event", in: managedObjectContext) else {
+                let entity = NSEntityDescription.entity(forEntityName: Event.description(),
+                                                        in: managedObjectContext) else {
                 Logger.debug(error: "Could not create entity for event")
                 return
             }
 
             let event = Event(entity: entity, insertInto: managedObjectContext)
-//            event.utc = Int64(Date().timeIntervalSince1970 * 1000)
-//            event.timezoneOffset = Int64(NSTimeZone.default.secondsFromGMT() * 1000)
             do {
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata),
                                         encoding: .utf8)

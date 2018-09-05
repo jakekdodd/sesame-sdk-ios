@@ -23,8 +23,7 @@
         <relationship name="appConfig" maxCount="1" deletionRule="Deny" destinationEntity="AppConfig" inverseName="trackingCapabilities" inverseEntity="AppConfig" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
-        <attribute name="fallbackId" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
         <relationship name="appConfig" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AppConfig" inverseName="user" inverseEntity="AppConfig" syncable="YES"/>
         <relationship name="reports" toMany="YES" deletionRule="Cascade" destinationEntity="Report" inverseName="user" inverseEntity="Report" syncable="YES"/>
     </entity>
@@ -33,6 +32,6 @@
         <element name="Event" positionX="-344" positionY="72" width="128" height="103"/>
         <element name="Report" positionX="-560" positionY="72" width="128" height="90"/>
         <element name="TrackingCapabilities" positionX="-1225" positionY="72" width="128" height="73"/>
-        <element name="User" positionX="-776" positionY="72" width="128" height="105"/>
+        <element name="User" positionX="-776" positionY="72" width="128" height="90"/>
     </elements>
 </model>

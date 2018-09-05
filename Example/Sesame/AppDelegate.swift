@@ -14,10 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var userId = "dev"
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         Sesame.setShared(.init(appId: "570ffc491b4c6e9869482fbf",
                                appVersionId: "rams1",
-                               auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10"))
+                               auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
+                               userId: userId))
         Sesame.UIApplicationDelegate?.application(application, didFinishLaunchingWithOptions: launchOptions)
 
         return true

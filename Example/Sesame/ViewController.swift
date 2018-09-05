@@ -62,7 +62,7 @@ class ViewController: UIViewController, SesameEffectDelegate {
     @IBAction
     func didTapTest(_ sender: Any) {
 //        confettiView.start()
-        Sesame.shared?.testEvent("buttonTap")
+        Sesame.shared?.addEvent(for: "buttonTap")
 
     }
 
