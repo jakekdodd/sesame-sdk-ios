@@ -94,6 +94,7 @@ public class Sesame: NSObject {
         }
         set {
             config?.user = coreDataManager.fetchUser(for: newValue)
+            sendBoot()
         }
     }
 
@@ -128,7 +129,7 @@ extension Sesame {
             _effect = (reinforcement, [:])
 
             addEvent(for: "appOpen")
-//            sendBoot()
+            sendBoot()
 
             if reinforcer.cartridge.decisions.isEmpty {
                 // TO-DO: refresh cartridge
@@ -147,10 +148,10 @@ extension Sesame {
 // MARK: - For development
 
 public extension Sesame {
-    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
+    func addEvent(for actionName: String, metadata: [String: Any] = [:]) {
         guard case let userId = userId, userId != "" else { return }
 
-        coreDataManager.insertEvent(userId: userId, actionId: actionId, metadata: metadata)
+        coreDataManager.insertEvent(userId: userId, actionName: actionName, metadata: metadata)
         let eventCount = coreDataManager.countEvents(userId: userId)
 
         Logger.debug("Reported #\(eventCount ?? -1) events total")
@@ -216,7 +217,7 @@ private extension Sesame {
                     guard let reportEvents = report.events else { continue }
 
                     var track = [String: Any]()
-                    track["actionName"] = report.actionId
+                    track["actionName"] = report.actionName
                     track["type"] = "NON_REINFORCEABLE"
                     var events = [[String: Any]]()
                     for case let reportEvent as Event in reportEvents {
@@ -244,4 +245,6 @@ private extension Sesame {
             completion(true)
             }.start()
     }
+
+//    func sendRefresh
 }
