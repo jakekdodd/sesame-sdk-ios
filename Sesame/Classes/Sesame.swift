@@ -49,12 +49,22 @@ public class Sesame: NSObject {
     public let auth: String
 
     let api: APIClient
-    var config: AppConfig?
+    var config: AppConfig? {
+        return coreDataManager.fetchAppConfig(configId)
+    }
 
     let coreDataManager: CoreDataManager
+    @objc var configId: String? {
+        get {
+            return UserDefaults.sesame.string(forKey: #keyPath(Sesame.configId))
+        }
+        set {
+            UserDefaults.sesame.set(newValue, forKey: #keyPath(Sesame.configId))
+        }
+    }
     public var reinforcer: Reinforcer
 
-    public init(appId: String, appVersionId: String, auth: String, userId: String? = nil) {
+    public init(appId: String, appVersionId: String, auth: String, userId: String) {
         self.UIApplicationDelegate = SesameUIApplicationDelegate()
         self.appId = appId
         self.appVersionId = appVersionId
@@ -66,8 +76,7 @@ public class Sesame: NSObject {
         super.init()
 
         self.UIApplicationDelegate.app = self
-        self.config = coreDataManager.fetchAppConfig()
-        self.config?.user = coreDataManager.fetchUser(for: userId)
+        self.userId = userId
     }
 
     var eventUploadCount: Int = 5
@@ -75,18 +84,17 @@ public class Sesame: NSObject {
 
     fileprivate var uploadScheduled = false
 
-    var userId: String? {
+    var userId: String {
         get {
-            return config?.user?.id
+            guard let userId = config?.user?.id else {
+                Logger.debug(error: "User not set")
+                return ""
+            }
+            return userId
         }
         set {
             config?.user = coreDataManager.fetchUser(for: newValue)
         }
-    }
-
-    func set(userId: String?) {
-//        config?.user = coreDataManager.fetchUser(for: userId)
-        self.userId = userId
     }
 
 }
@@ -139,25 +147,27 @@ extension Sesame {
 // MARK: - For development
 
 public extension Sesame {
-    public func testEvent(_ actionId: String) {
-        addEvent(for: actionId, metadata: ["key": "otherValue"])
+    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
+        guard case let userId = userId, userId != "" else { return }
+
+        coreDataManager.insertEvent(userId: userId, actionId: actionId, metadata: metadata)
+        let eventCount = coreDataManager.countEvents(userId: userId)
+
+        Logger.debug("Reported #\(eventCount ?? -1) events total")
+
+        if eventCount ?? 0 >= eventUploadCount {
+            sendTracks(userId: userId)
+        }
+    }
+
+    func eventCount() -> Int {
+        return coreDataManager.countEvents() ?? 0
     }
 }
 
 // MARK: - Private Methods
 
 private extension Sesame {
-
-    func addEvent(for actionId: String, metadata: [String: Any] = [:]) {
-        coreDataManager.insertEvent(userId: config?.user?.id, actionId: actionId, metadata: metadata)
-        let eventCount = coreDataManager.countEvents(userId: config?.user?.id)
-
-        Logger.debug("Reported #\(eventCount ?? -1) events total")
-
-        if eventCount ?? 0 >= eventUploadCount {
-            sendTracks(userId: config?.user?.id)
-        }
-    }
 
     func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
@@ -196,7 +206,7 @@ private extension Sesame {
             }.start()
     }
 
-    func sendTracks(userId: String?, completion: @escaping (Bool) -> Void = {_ in}) {
+    func sendTracks(userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
         payload["versionId"] = appVersionId
         payload["tracks"] = {
