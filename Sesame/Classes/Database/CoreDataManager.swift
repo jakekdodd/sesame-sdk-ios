@@ -19,8 +19,8 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
     // MARK: - CoreData Objects
 
     /// The context is used only on this queue.
-    /// All public facing methods should run synchronously on this queue
-    /// Private fetch methods should be sure not to include another fetch inside their queue block
+    /// All methods that use `managedObjectContext` should run synchronously on this queue.
+    /// This means fetch methods should be sure not to include calls to other fetches inside their queue block.
     fileprivate let queue = DispatchQueue(label: "Sesame.CoreDataManager")
 
     private lazy var managedObjectModel: NSManagedObjectModel? = {
@@ -42,7 +42,6 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         if let model = managedObjectModel,
             let persistentStoreURL = persistentStoreURL {
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-
             do {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                    configurationName: nil,
@@ -71,9 +70,9 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
 
     func save() {
         queue.sync {
-            if self.managedObjectContext?.hasChanges ?? false {
+            if managedObjectContext?.hasChanges ?? false {
                 do {
-                    try self.managedObjectContext?.save()
+                    try managedObjectContext?.save()
                 } catch {
                     Logger.debug(error: "\(error)")
                 }
@@ -83,13 +82,13 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
 
     func deleteObjects() {
         queue.sync {
-            let modelTypes = [Report.self, Event.self, User.self]
-            for model in modelTypes {
+            let rootModels = [User.self, AppConfig.self]
+            for model in rootModels {
                 let request = NSFetchRequest<NSManagedObject>(entityName: model.description())
                 do {
-                    if let objects = try self.managedObjectContext?.fetch(request) {
+                    if let objects = try managedObjectContext?.fetch(request) {
                         for object in objects {
-                            self.managedObjectContext?.delete(object)
+                            managedObjectContext?.delete(object)
                         }
                     }
                 } catch {
@@ -109,25 +108,21 @@ extension CoreDataManager {
 
     // MARK: AppConfig
 
-    func fetchAppConfig() -> AppConfig? {
+    func fetchAppConfig(_ configId: String? = nil) -> AppConfig? {
         var value: AppConfig?
 
         queue.sync {
             let request = NSFetchRequest<AppConfig>(entityName: "AppConfig")
+            request.predicate = NSPredicate(format: "configId == \(configId == nil ? "nil" : "'\(configId!)'")")
             request.fetchLimit = 1
             do {
-                if let appConfig = try self.managedObjectContext?.fetch(request).first {
+                if let appConfig = try managedObjectContext?.fetch(request).first {
                     value = appConfig
-                } else if let managedObjectContext = self.managedObjectContext,
+                } else if let managedObjectContext = managedObjectContext,
                     let appConfigEntity = NSEntityDescription.entity(forEntityName: "AppConfig",
-                                                                     in: managedObjectContext),
-                    let trackingCapabilitiesEntity = NSEntityDescription.entity(forEntityName: "TrackingCapabilities",
-                                                                                in: managedObjectContext) {
-                    let trackingCapabilities = TrackingCapabilities(entity: trackingCapabilitiesEntity,
-                                                                    insertInto: managedObjectContext)
+                                                                     in: managedObjectContext) {
                     let appConfig = AppConfig(entity: appConfigEntity, insertInto: managedObjectContext)
-                    appConfig.trackingCapabilities = trackingCapabilities
-
+                    appConfig.configId = configId
                     value = appConfig
                 }
             } catch let error as NSError {
@@ -258,15 +253,15 @@ extension CoreDataManager {
         guard let report = fetchReport(userId: userId, actionId: actionId) else { return }
 
         queue.sync {
-            guard let managedObjectContext = self.managedObjectContext,
+            guard let managedObjectContext = managedObjectContext,
                 let entity = NSEntityDescription.entity(forEntityName: "Event", in: managedObjectContext) else {
                 Logger.debug(error: "Could not create entity for event")
                 return
             }
 
             let event = Event(entity: entity, insertInto: managedObjectContext)
-            event.utc = Int64(Date().timeIntervalSince1970 * 1000)
-            event.timezoneOffset = Int64(NSTimeZone.default.secondsFromGMT() * 1000)
+//            event.utc = Int64(Date().timeIntervalSince1970 * 1000)
+//            event.timezoneOffset = Int64(NSTimeZone.default.secondsFromGMT() * 1000)
             do {
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata),
                                         encoding: .utf8)
