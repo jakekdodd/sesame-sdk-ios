@@ -46,16 +46,17 @@ class ViewController: UIViewController, SesameEffectDelegate {
 
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
         print("Got reinforcement:\(reinforcement)")
+        DispatchQueue.main.async {
+            switch reinforcement {
+            case "confetti":
+                self.confettiView.start()
 
-        switch reinforcement {
-        case "confetti":
-            confettiView.start()
+            case "sheen":
+                self.sheenView.start()
 
-        case "sheen":
-            sheenView.start()
-
-        default:
-            break
+            default:
+                break
+            }
         }
     }
 

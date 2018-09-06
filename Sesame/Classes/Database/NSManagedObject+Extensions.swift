@@ -33,18 +33,33 @@ extension User {
     override public func awakeFromInsert() {
         super.awakeFromInsert()
         setPrimitiveValue(UUID().uuidString, forKey: #keyPath(User.id))
+    }
+}
 
-//        // Set free reports to most recent user
-//        let request = NSFetchRequest<Report>(entityName: Report.description())
-//        request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == nil")
-//        do {
-//            if let reports = try managedObjectContext?.fetch(request) {
-//                for report in reports {
-//                    report.user = self
-//                }
-//            }
-//        } catch let error as NSError {
-//            print("Could not fetch. \(error), \(error.userInfo)")
-//        }
+extension Cartridge {
+
+    static let NeutralCartridgeId = "CLIENT_NEUTRAL"
+
+    override public func awakeFromInsert() {
+        super.awakeFromInsert()
+        setPrimitiveValue(Cartridge.NeutralCartridgeId, forKey: #keyPath(Cartridge.cartridgeId))
+    }
+
+    var effectDetailsDictionary: [String: Any]? {
+        get {
+            if let data = effectDetails?.data(using: .utf8),
+                let json = try? JSONSerialization.jsonObject(with: data, options: []),
+                let dict = json as? [String: Any] {
+                return dict
+            }
+            return nil
+        }
+        set {
+            if let dict = newValue,
+                let data = try? JSONSerialization.data(withJSONObject: dict),
+                let str = String(data: data, encoding: .utf8) {
+                effectDetails = str
+            }
+        }
     }
 }

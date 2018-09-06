@@ -9,6 +9,6 @@ import Foundation
 
 extension UserDefaults {
     class var sesame: UserDefaults {
-        return UserDefaults(suiteName: "Sesame") ?? UserDefaults.standard
+        return UserDefaults(suiteName: Sesame.description()) ?? UserDefaults.standard
     }
 }

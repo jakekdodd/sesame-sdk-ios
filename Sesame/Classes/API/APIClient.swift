@@ -10,7 +10,7 @@ import Foundation
 class APIClient: HTTPClient {
 
     enum Endpoint {
-        case boot, track, reinforce
+        case boot, track, refresh
 
         var url: URL {
             switch self {
@@ -18,8 +18,8 @@ class APIClient: HTTPClient {
                 return URL(string: "https://reinforce.boundless.ai/v6/app/boot")!
             case .track:
                 return URL(string: "https://reinforce.boundless.ai/v6/app/track")!
-            case .reinforce:
-                return URL(string: "https://reinforce.boundless.ai/v6/app/boot")!
+            case .refresh:
+                return URL(string: "https://reinforce.boundless.ai/v6/app/refresh")!
             }
         }
     }
@@ -29,24 +29,21 @@ class APIClient: HTTPClient {
     }
 
     func createPayload(for app: Sesame) -> [String: Any] {
+        let config = app.config
         return [ "clientOS": "iOS",
                  "clientOSVersion": UIDevice.current.systemVersion,
                  "clientSDKVersion": Bundle(for: type(of: app).self).shortVersionString ?? "UNKNOWN",
                  "clientBuild": Bundle.main.shortVersionString ?? "UNKNOWN",
 
                  "appId": app.appId,
-                 "versionId": app.appVersionId,
-                 "revision": app.config?.revision ?? 0,
+                 "versionId": config?.versionId ?? "nil",
+                 "revision": config?.revision ?? 0,
                  "secret": app.auth,
-                 "primaryIdentity": app.config?.user?.id ?? "IDUNAVAILABLE",
+                 "primaryIdentity": config?.user?.id ?? "IDUNAVAILABLE",
 
                  "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
                  "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
         ]
-    }
-
-    func reinforce(appVersion: Sesame, completion: (Bool, Cartridge) -> Void) {
-
     }
 
 }

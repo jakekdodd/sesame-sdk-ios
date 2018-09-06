@@ -45,7 +45,6 @@ public class Sesame: NSObject {
     public let UIApplicationDelegate: SesameUIApplicationDelegate
 
     public let appId: String
-    public let appVersionId: String
     public let auth: String
 
     let api: APIClient
@@ -62,21 +61,27 @@ public class Sesame: NSObject {
             UserDefaults.sesame.set(newValue, forKey: #keyPath(Sesame.configId))
         }
     }
-    public var reinforcer: Reinforcer
+//    public var reinforcer: Reinforcer
 
     public init(appId: String, appVersionId: String, auth: String, userId: String) {
         self.UIApplicationDelegate = SesameUIApplicationDelegate()
         self.appId = appId
-        self.appVersionId = appVersionId
         self.auth = auth
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
-        self.reinforcer = Reinforcer()
+//        self.reinforcer = Reinforcer()
 
         super.init()
 
         self.UIApplicationDelegate.app = self
-        self.userId = userId
+        let config = self.config
+        config?.user = coreDataManager.fetchUser(for: userId)
+        if config?.versionId == nil {
+            config?.versionId = appVersionId
+        }
+        coreDataManager.save()
+
+        sendBoot()
     }
 
     var eventUploadCount: Int = 5
@@ -84,17 +89,17 @@ public class Sesame: NSObject {
 
     fileprivate var uploadScheduled = false
 
-    var userId: String {
+    var userId: String? {
         get {
             guard let userId = config?.user?.id else {
                 Logger.debug(error: "User not set")
-                return ""
+                return nil
             }
             return userId
         }
         set {
-            config?.user = coreDataManager.fetchUser(for: newValue)
-            sendBoot()
+            config?.user = newValue == nil ? nil : coreDataManager.fetchUser(for: newValue!)
+            coreDataManager.save()
         }
     }
 
@@ -120,20 +125,22 @@ public extension Sesame {
 extension Sesame {
 
     func receive(appOpenAction: AppOpenAction?) {
+        guard let userId = userId else { return }
+
         switch appOpenAction?.cueCategory {
         case .internal?,
              .external?:
 
-            let reinforcement = reinforcer.cartridge.removeDecision()
-            Logger.debug(confirmed: "Next reinforcement:\(reinforcement)")
-            _effect = (reinforcement, [:])
+            if let cartridge = coreDataManager.fetchCartridge(userId: userId, actionName: "appOpen"),
+                let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
+                let reinforcementName = reinforcement.name {
+                Logger.debug(confirmed: "Next reinforcement:\(reinforcementName)")
+                _effect = (reinforcementName, [:])
+                coreDataManager.delete(object: reinforcement)
+            }
 
             addEvent(for: "appOpen")
-            sendBoot()
-
-            if reinforcer.cartridge.decisions.isEmpty {
-                // TO-DO: refresh cartridge
-            }
+            refresh()
 
         case .synthetic?:
             break
@@ -149,7 +156,7 @@ extension Sesame {
 
 public extension Sesame {
     func addEvent(for actionName: String, metadata: [String: Any] = [:]) {
-        guard case let userId = userId, userId != "" else { return }
+        guard let userId = userId else { return }
 
         coreDataManager.insertEvent(userId: userId, actionName: actionName, metadata: metadata)
         let eventCount = coreDataManager.countEvents(userId: userId)
@@ -168,13 +175,13 @@ public extension Sesame {
 
 // MARK: - Private Methods
 
-private extension Sesame {
+/*private*/ extension Sesame {
 
     func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
         payload["initialBoot"] = false
         payload["inProduction"] = false
-        payload["currentVersion"] = appVersionId
+        payload["currentVersion"] = config?.versionId
         payload["currentConfig"] = "\(config?.revision ?? 0)"
 
         api.post(endpoint: .boot, jsonObject: payload) { response in
@@ -185,9 +192,10 @@ private extension Sesame {
             }
 
             print("before:\(self.config.debugDescription)")
-            if /*let revision = response["revision"] as? Int64,*/
-                let configValues = response["config"] as? [String: Any] {
-//                self.config?.revision = revision
+            if let configValues = response["config"] as? [String: Any] {
+                if let configId = configValues["configId"] as? String {
+                    self.config?.configId = configId
+                }
                 if let trackingEnabled = configValues["trackingEnabled"] as? Bool {
                     self.config?.trackingEnabled = trackingEnabled
                 }
@@ -196,20 +204,33 @@ private extension Sesame {
                         self.config?.trackingCapabilities?.applicationState = applicationState
                     }
                 }
-
-////                config = AppConfig(revision, configValues)
-//                if let context = self.config?.managedObjectContext {
-//                    self.coreDataManager.save()
-//                }
-////                self.coreDataManager.save()
-//                print("after:\(self.config.debugDescription)")
             }
+
+            if let version = response["version"] as? [String: Any] {
+                if let versionId = version["versionID"] as? String {
+                    self.config?.versionId = versionId
+                }
+                if let mappings = version["mappings"] as? [String: [String: Any]],
+                    let userId = self.userId {
+                    for (actionName, effectDetails) in mappings {
+                        if let cartridge = self.coreDataManager.fetchCartridge(userId: userId, actionName: actionName) {
+                            cartridge.effectDetailsDictionary = effectDetails
+                        } else {
+                            self.coreDataManager.insertCartridge(userId: userId,
+                                                                 actionName: actionName,
+                                                                 effectDetails: effectDetails)
+                        }
+                    }
+                }
+            }
+
+            self.coreDataManager.save()
+            completion(true)
             }.start()
     }
 
     func sendTracks(userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
-        payload["versionId"] = appVersionId
         payload["tracks"] = {
             var tracks = [[String: Any]]()
             if let reports = coreDataManager.fetchReports(userId: userId) {
@@ -246,5 +267,41 @@ private extension Sesame {
             }.start()
     }
 
-//    func sendRefresh
+    func refresh() {
+        if let userId = userId,
+            let cartridges = coreDataManager.fetchCartridges(userId: userId) {
+            for cartridge in cartridges {
+                if let actionName = cartridge.actionName,
+                    cartridge.reinforcements?.count == 0 {
+                    sendRefresh(userId: userId, actionName: actionName)
+                }
+            }
+        }
+    }
+
+    func sendRefresh(userId: String, actionName: String, completion: @escaping (Bool) -> Void = {_ in}) {
+        var payload = api.createPayload(for: self)
+        payload["actionName"] = actionName
+
+        api.post(endpoint: .refresh, jsonObject: payload) { response in
+            guard let response = response,
+                let cartridgeId = response["cartridgeId"] as? String,
+                let serverUtc = response["serverUtc"] as? Int64,
+                let ttl = response["ttl"] as? Int64,
+                let actionName = response["actionName"] as? String,
+                let reinforcements = response["reinforcements"] as? [[String: String]] else {
+                    completion(false)
+                    return
+            }
+
+            self.coreDataManager.updateCartridge(userId: userId,
+                                                 actionName: actionName,
+                                                 cartridgeId: cartridgeId,
+                                                 serverUtc: serverUtc,
+                                                 ttl: ttl,
+                                                 reinforcements: reinforcements.compactMap({$0["reinforcementName"]}))
+
+            completion(true)
+            }.start()
+    }
 }

@@ -80,6 +80,14 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
 
+    func delete(object: NSManagedObject) {
+        guard object.managedObjectContext == managedObjectContext else { return }
+        queue.sync {
+            managedObjectContext?.delete(object)
+        }
+        save()
+    }
+
     func deleteObjects() {
         queue.sync {
             let rootModels = [User.self, AppConfig.self]
@@ -279,4 +287,99 @@ extension CoreDataManager {
         save()
     }
 
+    // MARK: Cartridge
+
+    func insertCartridge(userId: String, actionName: String, effectDetails: [String: Any]) {
+        guard let user = fetchUser(for: userId) else { return }
+
+        queue.sync {
+            guard let managedObjectContext = managedObjectContext,
+                let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(),
+                                                        in: managedObjectContext) else {
+                                                            Logger.debug(error: "Could not create entity for cartridge")
+                                                            return
+            }
+
+            let cartridge = Cartridge(entity: entity, insertInto: managedObjectContext)
+            cartridge.actionName = actionName
+            cartridge.effectDetailsDictionary = effectDetails
+            cartridge.user = user
+        }
+
+        save()
+    }
+
+    func fetchCartridge(userId: String, actionName: String) -> Cartridge? {
+        var value: Cartridge?
+
+        queue.sync {
+            let request = NSFetchRequest<Cartridge>(entityName: Cartridge.description())
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(#keyPath(Cartridge.user.id)) == '\(userId)'"),
+                NSPredicate(format: "\(#keyPath(Cartridge.actionName)) == '\(actionName)'")
+                ])
+            request.fetchLimit = 1
+            do {
+                value = try managedObjectContext?.fetch(request).first
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+            }
+        }
+
+        return value
+    }
+
+    func fetchCartridges(userId: String) -> [Cartridge]? {
+        var values: [Cartridge]?
+
+        queue.sync {
+            let request = NSFetchRequest<Cartridge>(entityName: Cartridge.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(Cartridge.user.id)) == '\(userId)'")
+            do {
+                values = try managedObjectContext?.fetch(request)
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+            }
+        }
+
+        return values
+    }
+
+    //swiftlint:disable:next function_parameter_count
+    func updateCartridge(userId: String, actionName: String, cartridgeId: String, serverUtc: Int64, ttl: Int64, reinforcements: [String]) {
+        guard let user = fetchUser(for: userId) else { return }
+        let oldCartridge = fetchCartridge(userId: userId, actionName: actionName)
+
+        queue.sync {
+            guard let managedObjectContext = managedObjectContext,
+                let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(),
+                                                        in: managedObjectContext) else {
+                                                            Logger.debug(error: "Could not create entity for cartridge")
+                                                            return
+            }
+
+            let cartridge = Cartridge(entity: entity, insertInto: managedObjectContext)
+            cartridge.user = user
+            cartridge.actionName = actionName
+            cartridge.cartridgeId = cartridgeId
+            cartridge.serverUtc = serverUtc
+            cartridge.ttl = ttl
+            for reinforcementName in reinforcements {
+                guard let entity = NSEntityDescription.entity(forEntityName: Reinforcement.description(),
+                                                              in: managedObjectContext)
+                    else { continue }
+                let reinforcement = Reinforcement(entity: entity, insertInto: managedObjectContext)
+                reinforcement.name = reinforcementName
+                cartridge.addToReinforcements(reinforcement)
+            }
+            if let oldCartridge = oldCartridge {
+                cartridge.effectDetails = oldCartridge.effectDetails
+                managedObjectContext.delete(oldCartridge)
+            }
+        }
+
+        save()
+    }
+
+    // MARK: Reinforcement
 }

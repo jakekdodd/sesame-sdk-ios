@@ -7,6 +7,7 @@ class Tests: XCTestCase {
         super.setUp()
 
         CoreDataManager().deleteObjects()
+        UserDefaults.sesame.removePersistentDomain(forName: Sesame.description())
     }
 
     override func tearDown() {
@@ -124,6 +125,11 @@ class Tests: XCTestCase {
         Logger.debug("appConfig3?.configId:<\(appConfig3?.configId ?? "nil")>")
     }
 
+    func testUserAddedAfter() {
+        let sesame = Sesame.dev()
+
+    }
+
     func testUserChange() {
         let sesame = Sesame.dev()
         let user1 = "ann"
@@ -136,7 +142,7 @@ class Tests: XCTestCase {
         let deleteReports = { sesame.coreDataManager.deleteReports(userId: currentUser) }
 
         sesame.coreDataManager.deleteObjects()
-        XCTAssert(sesame.userId == "")
+        XCTAssert(sesame.userId == nil)
 
         setUser1()
         XCTAssert(countEvents() == 0)
@@ -165,6 +171,53 @@ class Tests: XCTestCase {
         XCTAssert(countEvents() == 2)
         deleteReports()
         XCTAssert(countEvents() == 0)
+    }
+
+    func testCartridgeStorage() {
+        let sesame = Sesame.dev()
+
+        let promise = expectation(description: "Did boot")
+        sesame.sendBoot { _ in
+            guard let userId = sesame.userId else { fatalError() }
+            for cartridge in sesame.coreDataManager.fetchCartridges(userId: userId) ?? [] {
+                Logger.debug(cartridge.debugDescription)
+            }
+            promise.fulfill()
+        }
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testCartridgeRefresh() {
+        let sesame = Sesame.dev()
+
+        let promise = expectation(description: "Did boot")
+        sesame.sendBoot { _ in
+            guard let userId = sesame.userId else { fatalError() }
+            if let cartridges = sesame.coreDataManager.fetchCartridges(userId: userId) {
+                let group = DispatchGroup()
+                XCTAssert(cartridges.count != 0)
+                for cartridge in cartridges {
+                    group.enter()
+                    XCTAssert(cartridge.reinforcements?.count == 0)
+                    sesame.sendRefresh(userId: userId, actionName: cartridge.actionName!) { _ in
+                        group.leave()
+                    }
+                }
+                group.notify(queue: DispatchQueue.global()) {
+                    if let cartridges = sesame.coreDataManager.fetchCartridges(userId: userId) {
+                        XCTAssert(cartridges.count != 0)
+                        for cartridge in cartridges {
+                            XCTAssert(cartridge.reinforcements!.count > 0)
+                        }
+                        promise.fulfill()
+                    }
+                }
+
+            }
+        }
+
+        waitForExpectations(timeout: 3)
     }
 
 }
