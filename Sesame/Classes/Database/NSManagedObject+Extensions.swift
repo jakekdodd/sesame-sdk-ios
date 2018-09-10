@@ -15,20 +15,6 @@ extension Event {
     }
 }
 
-extension AppConfig {
-    override public func awakeFromInsert() {
-        super.awakeFromInsert()
-        if let managedObjectContext = managedObjectContext,
-            let trackingCapabilitiesEntity = NSEntityDescription.entity(forEntityName: "TrackingCapabilities",
-                                                                        in: managedObjectContext) {
-            let trackingCapabilities = TrackingCapabilities(entity: trackingCapabilitiesEntity,
-                                                            insertInto: managedObjectContext)
-            setPrimitiveValue(trackingCapabilities, forKey: #keyPath(AppConfig.trackingCapabilities))
-            trackingCapabilities.setPrimitiveValue(self, forKey: #keyPath(TrackingCapabilities.appConfig))
-        }
-    }
-}
-
 extension User {
     override public func awakeFromInsert() {
         super.awakeFromInsert()

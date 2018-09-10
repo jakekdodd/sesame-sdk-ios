@@ -8,13 +8,7 @@
 import Foundation
 import CoreData
 
-extension CoreDataManager {
-    class Helper {
-
-    }
-}
-
-class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
+class CoreDataManager: NSObject {
 
     // MARK: - CoreData Objects
 
@@ -50,7 +44,7 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
                                                              NSMigratePersistentStoresAutomaticallyOption: true])
                 return coordinator
             } catch {
-                print(error)
+                Logger.debug(error: error.localizedDescription)
             }
         }
         return nil
@@ -69,10 +63,10 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
     // MARK: - Methods
 
     func save() {
-        queue.sync {
-            if managedObjectContext?.hasChanges ?? false {
+        managedObjectContext?.performAndWait {
+            if self.managedObjectContext?.hasChanges ?? false {
                 do {
-                    try managedObjectContext?.save()
+                    try self.managedObjectContext?.save()
                 } catch {
                     Logger.debug(error: "\(error)")
                 }
@@ -80,16 +74,8 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
 
-    func delete(object: NSManagedObject) {
-        guard object.managedObjectContext == managedObjectContext else { return }
-        queue.sync {
-            managedObjectContext?.delete(object)
-        }
-        save()
-    }
-
     func deleteObjects() {
-        queue.sync {
+        managedObjectContext?.performAndWait {
             let rootModels = [User.self, AppConfig.self]
             for model in rootModels {
                 let request = NSFetchRequest<NSManagedObject>(entityName: model.description())
@@ -100,12 +86,11 @@ class CoreDataManager: NSObject, NSFetchedResultsControllerDelegate {
                         }
                     }
                 } catch {
-                    print(error)
+                    Logger.debug(error: error.localizedDescription)
                 }
             }
+            save()
         }
-
-        save()
     }
 
 }
@@ -116,21 +101,32 @@ extension CoreDataManager {
 
     // MARK: AppConfig
 
-    func fetchAppConfig(_ configId: String? = nil) -> AppConfig? {
-        var value: AppConfig?
+    func newContext() -> NSManagedObjectContext {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.parent = managedObjectContext
+        return context
+    }
 
-        queue.sync {
+    func fetchAppConfig(context: NSManagedObjectContext?, _ configId: String? = nil) -> AppConfig? {
+        var value: AppConfig?
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<AppConfig>(entityName: AppConfig.description())
             let configIdValue = "\(configId == nil ? "nil" : "'\(configId!)'")"
             request.predicate = NSPredicate(format: "\(#keyPath(AppConfig.configId)) == \(configIdValue)")
             request.fetchLimit = 1
             do {
-                if let appConfig = try managedObjectContext?.fetch(request).first {
+                if let appConfig = try context.fetch(request).first {
                     value = appConfig
-                } else if let managedObjectContext = managedObjectContext,
-                    let appConfigEntity = NSEntityDescription.entity(forEntityName: AppConfig.description(),
-                                                                     in: managedObjectContext) {
-                    let appConfig = AppConfig(entity: appConfigEntity, insertInto: managedObjectContext)
+                } else if let appConfigEntity = NSEntityDescription.entity(forEntityName: AppConfig.description(),
+                                                                           in: context) {
+                    let appConfig = AppConfig(entity: appConfigEntity, insertInto: context)
+                    if let trackingCapabilitiesEntity = NSEntityDescription.entity(forEntityName: TrackingCapabilities.description(),
+                                                                                    in: context) {
+                        let trackingCapabilities = TrackingCapabilities(entity: trackingCapabilitiesEntity,
+                                                                        insertInto: context)
+                        appConfig.trackingCapabilities = trackingCapabilities
+                    }
                     appConfig.configId = configId
                     value = appConfig
                 }
@@ -144,21 +140,20 @@ extension CoreDataManager {
 
     // MARK: User
 
-    func fetchUser(for id: String, createIfNotFound: Bool = true) -> User? {
+    func fetchUser(context: NSManagedObjectContext?, for id: String, createIfNotFound: Bool = true) -> User? {
         var value: User?
-
-        queue.sync {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<User>(entityName: User.description())
             request.predicate = NSPredicate(format: "\(#keyPath(User.id)) == '\(id)'")
             request.fetchLimit = 1
             do {
-                if let user = try managedObjectContext?.fetch(request).first {
+                if let user = try context.fetch(request).first {
                     value = user
                 } else if createIfNotFound,
-                    let managedObjectContext = managedObjectContext,
                     let entity = NSEntityDescription.entity(forEntityName: User.description(),
-                                                            in: managedObjectContext) {
-                    let user = User(entity: entity, insertInto: managedObjectContext)
+                                                            in: context) {
+                    let user = User(entity: entity, insertInto: context)
                     user.id = id
                     value = user
                 }
@@ -172,14 +167,14 @@ extension CoreDataManager {
 
     // MARK: Report
 
-    func fetchReports(userId: String) -> [Report]? {
+    func fetchReports(context: NSManagedObjectContext?, userId: String) -> [Report]? {
         var values: [Report]?
-
-        queue.sync {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<Report>(entityName: Report.description())
             request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
             do {
-                values = try managedObjectContext?.fetch(request)
+                values = try context.fetch(request)
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
@@ -188,29 +183,29 @@ extension CoreDataManager {
         return values
     }
 
-    func deleteReports(userId: String) {
-        queue.sync {
+    func deleteReports(context: NSManagedObjectContext?, userId: String) {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<Report>(entityName: Report.description())
             request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
             do {
-                if let reports = try managedObjectContext?.fetch(request) {
-                    Logger.debug("Deleting \(reports.count) events")
-                    for report in reports {
-                        managedObjectContext?.delete(report)
-                    }
+                let reports = try context.fetch(request)
+                Logger.debug("Deleting \(reports.count) events")
+                for report in reports {
+                    context.delete(report)
                 }
+                try context.save()
             } catch {
-                print(error)
+                Logger.debug(error: error.localizedDescription)
             }
+            save()
         }
-
-        save()
     }
 
-    private func fetchReport(userId: String, actionName: String, createIfNotFound: Bool = true) -> Report? {
+    private func fetchReport(context: NSManagedObjectContext?, userId: String, actionName: String, createIfNotFound: Bool = true) -> Report? {
         var value: Report?
-
-        queue.sync {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<Report>(entityName: Report.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "\(#keyPath(Report.actionName)) == '\(actionName)'"),
@@ -218,14 +213,14 @@ extension CoreDataManager {
                 ])
             request.fetchLimit = 1
             do {
-                if let report = try managedObjectContext?.fetch(request).first {
+                if let report = try context.fetch(request).first {
                     value = report
                 } else if createIfNotFound,
-                    let managedObjectContext = managedObjectContext,
                     let entity = NSEntityDescription.entity(forEntityName: Report.description(),
-                                                            in: managedObjectContext) {
-                    let report = Report(entity: entity, insertInto: managedObjectContext)
+                                                            in: context) {
+                    let report = Report(entity: entity, insertInto: context)
                     report.actionName = actionName
+                    report.user = fetchUser(context: context, for: userId)
                     value = report
                 }
             } catch let error as NSError {
@@ -233,26 +228,21 @@ extension CoreDataManager {
             }
         }
 
-        if let report = value,
-            report.user == nil {
-            report.user = fetchUser(for: userId)
-        }
-
         return value
     }
 
     // MARK: Event
 
-    func countEvents(userId: String? = nil) -> Int? {
+    func countEvents(context: NSManagedObjectContext?, userId: String? = nil) -> Int? {
         var value: Int?
-
-        queue.sync {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<Event>(entityName: Event.description())
             if let userId = userId {
                 request.predicate = NSPredicate(format: "\(#keyPath(Event.report.user.id)) == '\(userId)'")
             }
             do {
-                value = try managedObjectContext?.count(for: request)
+                value = try context.count(for: request)
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
@@ -261,58 +251,65 @@ extension CoreDataManager {
         return value
     }
 
-    func insertEvent(userId: String, actionName: String, metadata: [String: Any] = [:]) {
-        guard let report = fetchReport(userId: userId, actionName: actionName) else { return }
-
-        queue.sync {
-            guard let managedObjectContext = managedObjectContext,
-                let entity = NSEntityDescription.entity(forEntityName: Event.description(),
-                                                        in: managedObjectContext) else {
+    func insertEvent(context: NSManagedObjectContext?, userId: String, actionName: String, metadata: [String: Any] = [:]) {
+        let context = context ?? newContext()
+        context.performAndWait {
+            guard let report = fetchReport(context: context, userId: userId, actionName: actionName) else { return }
+            guard let entity = NSEntityDescription.entity(forEntityName: Event.description(),
+                                                        in: context) else {
                 Logger.debug(error: "Could not create entity for event")
                 return
             }
 
-            let event = Event(entity: entity, insertInto: managedObjectContext)
+            let event = Event(entity: entity, insertInto: context)
             do {
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata),
                                         encoding: .utf8)
             } catch {
-                print(error)
+                Logger.debug(error: error.localizedDescription)
             }
             event.report = report
+            do {
+                try context.save()
+            } catch {
+                Logger.debug(error: error.localizedDescription)
+            }
 
             Logger.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
+            save()
         }
 
-        save()
     }
 
     // MARK: Cartridge
 
-    func insertCartridge(userId: String, actionName: String, effectDetails: [String: Any]) {
-        guard let user = fetchUser(for: userId) else { return }
-
-        queue.sync {
-            guard let managedObjectContext = managedObjectContext,
-                let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(),
-                                                        in: managedObjectContext) else {
+    func insertCartridge(context: NSManagedObjectContext?, userId: String, actionName: String, effectDetails: [String: Any]) {
+        let context = context ?? newContext()
+        context.performAndWait {
+            guard let user = fetchUser(context: context, for: userId) else { return }
+            guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(),
+                                                        in: context) else {
                                                             Logger.debug(error: "Could not create entity for cartridge")
                                                             return
             }
 
-            let cartridge = Cartridge(entity: entity, insertInto: managedObjectContext)
+            let cartridge = Cartridge(entity: entity, insertInto: context)
             cartridge.actionName = actionName
             cartridge.effectDetailsDictionary = effectDetails
             cartridge.user = user
+            do {
+                try context.save()
+            } catch {
+                Logger.debug(error: error.localizedDescription)
+            }
+            save()
         }
-
-        save()
     }
 
-    func fetchCartridge(userId: String, actionName: String) -> Cartridge? {
+    func fetchCartridge(context: NSManagedObjectContext?, userId: String, actionName: String) -> Cartridge? {
         var value: Cartridge?
-
-        queue.sync {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<Cartridge>(entityName: Cartridge.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "\(#keyPath(Cartridge.user.id)) == '\(userId)'"),
@@ -320,7 +317,7 @@ extension CoreDataManager {
                 ])
             request.fetchLimit = 1
             do {
-                value = try managedObjectContext?.fetch(request).first
+                value = try context.fetch(request).first
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
@@ -329,14 +326,14 @@ extension CoreDataManager {
         return value
     }
 
-    func fetchCartridges(userId: String) -> [Cartridge]? {
+    func fetchCartridges(context: NSManagedObjectContext?, userId: String) -> [Cartridge]? {
         var values: [Cartridge]?
-
-        queue.sync {
+        let context = context ?? newContext()
+        context.performAndWait {
             let request = NSFetchRequest<Cartridge>(entityName: Cartridge.description())
             request.predicate = NSPredicate(format: "\(#keyPath(Cartridge.user.id)) == '\(userId)'")
             do {
-                values = try managedObjectContext?.fetch(request)
+                values = try context.fetch(request)
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
@@ -346,19 +343,17 @@ extension CoreDataManager {
     }
 
     //swiftlint:disable:next function_parameter_count
-    func updateCartridge(userId: String, actionName: String, cartridgeId: String, serverUtc: Int64, ttl: Int64, reinforcements: [String]) {
-        guard let user = fetchUser(for: userId) else { return }
-        let oldCartridge = fetchCartridge(userId: userId, actionName: actionName)
-
-        queue.sync {
-            guard let managedObjectContext = managedObjectContext,
-                let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(),
-                                                        in: managedObjectContext) else {
-                                                            Logger.debug(error: "Could not create entity for cartridge")
-                                                            return
+    func updateCartridge(context: NSManagedObjectContext?, userId: String, actionName: String, cartridgeId: String, serverUtc: Int64, ttl: Int64, reinforcements: [String]) {
+        let context = context ?? newContext()
+        context.performAndWait {
+            let oldCartridge = fetchCartridge(context: context, userId: userId, actionName: actionName)
+            guard let user = fetchUser(context: context, for: userId) else { return }
+            guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(), in: context) else {
+                Logger.debug(error: "Could not create entity for cartridge")
+                return
             }
 
-            let cartridge = Cartridge(entity: entity, insertInto: managedObjectContext)
+            let cartridge = Cartridge(entity: entity, insertInto: context)
             cartridge.user = user
             cartridge.actionName = actionName
             cartridge.cartridgeId = cartridgeId
@@ -366,19 +361,24 @@ extension CoreDataManager {
             cartridge.ttl = ttl
             for reinforcementName in reinforcements {
                 guard let entity = NSEntityDescription.entity(forEntityName: Reinforcement.description(),
-                                                              in: managedObjectContext)
+                                                              in: context)
                     else { continue }
-                let reinforcement = Reinforcement(entity: entity, insertInto: managedObjectContext)
+                let reinforcement = Reinforcement(entity: entity, insertInto: context)
                 reinforcement.name = reinforcementName
                 cartridge.addToReinforcements(reinforcement)
             }
             if let oldCartridge = oldCartridge {
                 cartridge.effectDetails = oldCartridge.effectDetails
-                managedObjectContext.delete(oldCartridge)
+                context.delete(oldCartridge)
             }
-        }
 
-        save()
+            do {
+                try context.save()
+            } catch {
+                Logger.debug(error: error.localizedDescription)
+            }
+            save()
+        }
     }
 
     // MARK: Reinforcement

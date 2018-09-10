@@ -29,21 +29,25 @@ class APIClient: HTTPClient {
     }
 
     func createPayload(for app: Sesame) -> [String: Any] {
-        let config = app.config
-        return [ "clientOS": "iOS",
-                 "clientOSVersion": UIDevice.current.systemVersion,
-                 "clientSDKVersion": Bundle(for: type(of: app).self).shortVersionString ?? "UNKNOWN",
-                 "clientBuild": Bundle.main.shortVersionString ?? "UNKNOWN",
+        let (context, config, _) = app.contextConfigUser
+        var payload = [String: Any]()
+        context.performAndWait {
+            payload = [ "clientOS": "iOS",
+                        "clientOSVersion": UIDevice.current.systemVersion,
+                        "clientSDKVersion": Bundle(for: type(of: app).self).shortVersionString ?? "UNKNOWN",
+                        "clientBuild": Bundle.main.shortVersionString ?? "UNKNOWN",
 
-                 "appId": app.appId,
-                 "versionId": config?.versionId ?? "nil",
-                 "revision": config?.revision ?? 0,
-                 "secret": app.auth,
-                 "primaryIdentity": config?.user?.id ?? "IDUNAVAILABLE",
+                        "appId": app.appId,
+                        "versionId": config?.versionId ?? "nil",
+                        "revision": config?.revision ?? 0,
+                        "secret": app.auth,
+                        "primaryIdentity": config?.user?.id ?? "IDUNAVAILABLE",
 
-                 "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
-                 "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
-        ]
+                        "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
+                        "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
+            ]
+        }
+        return payload
     }
 
 }
