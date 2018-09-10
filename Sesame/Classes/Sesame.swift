@@ -177,7 +177,7 @@ public extension Sesame {
 
 /*private*/ extension Sesame {
 
-    func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
+    public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         var payload = api.createPayload(for: self)
         payload["initialBoot"] = false
         payload["inProduction"] = false

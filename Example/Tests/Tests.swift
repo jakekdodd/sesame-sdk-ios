@@ -142,6 +142,7 @@ class Tests: XCTestCase {
         let deleteReports = { sesame.coreDataManager.deleteReports(userId: currentUser) }
 
         sesame.coreDataManager.deleteObjects()
+        sesame.userId = nil
         XCTAssert(sesame.userId == nil)
 
         setUser1()
