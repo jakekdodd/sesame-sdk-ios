@@ -16,6 +16,7 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		8472FB82213A7499003B86CE /* Sesame+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472FB80213A7486003B86CE /* Sesame+Extensions.swift */; };
 		8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8491A2E1211CE03B00069B94 /* Utilities.swift */; };
+		84F3955D214798BA0040435C /* Sesame+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472FB80213A7486003B86CE /* Sesame+Extensions.swift */; };
 		928C6686758FC2AEBEADC635 /* Pods_Sesame_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -355,6 +356,7 @@
 				8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				84F3955D214798BA0040435C /* Sesame+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

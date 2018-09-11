@@ -54,19 +54,34 @@ class CoreDataManager: NSObject {
         if let coordinator = persistentStoreCoordinator {
             let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
             managedObjectContext.persistentStoreCoordinator = coordinator
-            managedObjectContext.mergePolicy = NSRollbackMergePolicy
+            managedObjectContext.mergePolicy = NSOverwriteMergePolicy
+            NotificationCenter.default.addObserver(self, selector: #selector(saveChanges(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(saveChanges(_:)), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
             return managedObjectContext
         }
         return nil
     }()
 
+    @objc
+    func saveChanges(_ notification: Notification) {
+        managedObjectContext?.perform {
+            if self.managedObjectContext?.hasChanges ?? false {
+                do {
+                    try self.managedObjectContext?.save()
+                } catch {
+                    Logger.debug(error: "\(error)")
+                }
+            }
+        }
+    }
+
     // MARK: - Methods
 
     func save() {
         managedObjectContext?.performAndWait {
-            if self.managedObjectContext?.hasChanges ?? false {
+            if managedObjectContext?.hasChanges ?? false {
                 do {
-                    try self.managedObjectContext?.save()
+                    try managedObjectContext?.save()
                 } catch {
                     Logger.debug(error: "\(error)")
                 }
@@ -107,13 +122,12 @@ extension CoreDataManager {
         return context
     }
 
-    func fetchAppConfig(context: NSManagedObjectContext?, _ configId: String? = nil) -> AppConfig? {
+    func fetchAppConfig(context: NSManagedObjectContext?, _ configId: String?) -> AppConfig? {
         var value: AppConfig?
         let context = context ?? newContext()
         context.performAndWait {
             let request = NSFetchRequest<AppConfig>(entityName: AppConfig.description())
-            let configIdValue = "\(configId == nil ? "nil" : "'\(configId!)'")"
-            request.predicate = NSPredicate(format: "\(#keyPath(AppConfig.configId)) == \(configIdValue)")
+            request.predicate = NSPredicate(format: "\(#keyPath(AppConfig.configId)) == \(configId.predicateValue)")
             request.fetchLimit = 1
             do {
                 if let appConfig = try context.fetch(request).first {
@@ -140,7 +154,7 @@ extension CoreDataManager {
 
     // MARK: User
 
-    func fetchUser(context: NSManagedObjectContext?, for id: String, createIfNotFound: Bool = true) -> User? {
+    func fetchUser(context: NSManagedObjectContext?, id: String, createIfNotFound: Bool = true) -> User? {
         var value: User?
         let context = context ?? newContext()
         context.performAndWait {
@@ -190,7 +204,6 @@ extension CoreDataManager {
             request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
             do {
                 let reports = try context.fetch(request)
-                Logger.debug("Deleting \(reports.count) events")
                 for report in reports {
                     context.delete(report)
                 }
@@ -220,7 +233,7 @@ extension CoreDataManager {
                                                             in: context) {
                     let report = Report(entity: entity, insertInto: context)
                     report.actionName = actionName
-                    report.user = fetchUser(context: context, for: userId)
+                    report.user = fetchUser(context: context, id: userId)
                     value = report
                 }
             } catch let error as NSError {
@@ -275,7 +288,7 @@ extension CoreDataManager {
                 Logger.debug(error: error.localizedDescription)
             }
 
-            Logger.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
+//            Logger.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
             save()
         }
 
@@ -286,7 +299,7 @@ extension CoreDataManager {
     func insertCartridge(context: NSManagedObjectContext?, userId: String, actionName: String, effectDetails: [String: Any]) {
         let context = context ?? newContext()
         context.performAndWait {
-            guard let user = fetchUser(context: context, for: userId) else { return }
+            guard let user = fetchUser(context: context, id: userId) else { return }
             guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(),
                                                         in: context) else {
                                                             Logger.debug(error: "Could not create entity for cartridge")
@@ -347,7 +360,7 @@ extension CoreDataManager {
         let context = context ?? newContext()
         context.performAndWait {
             let oldCartridge = fetchCartridge(context: context, userId: userId, actionName: actionName)
-            guard let user = fetchUser(context: context, for: userId) else { return }
+            guard let user = fetchUser(context: context, id: userId) else { return }
             guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(), in: context) else {
                 Logger.debug(error: "Could not create entity for cartridge")
                 return

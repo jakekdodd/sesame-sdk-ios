@@ -28,25 +28,19 @@ class APIClient: HTTPClient {
         return super.post(url: endpoint.url, jsonObject: jsonObject, timeout: timeout, completion: completion)
     }
 
-    func createPayload(for app: Sesame) -> [String: Any] {
-        let (context, config, _) = app.contextConfigUser
+    func createPayload(appId: String, versionId: String?, secret: String, primaryIdentity: String?) -> [String: Any] {
         var payload = [String: Any]()
-        context.performAndWait {
-            payload = [ "clientOS": "iOS",
-                        "clientOSVersion": UIDevice.current.systemVersion,
-                        "clientSDKVersion": Bundle(for: type(of: app).self).shortVersionString ?? "UNKNOWN",
-                        "clientBuild": Bundle.main.shortVersionString ?? "UNKNOWN",
-
-                        "appId": app.appId,
-                        "versionId": config?.versionId ?? "nil",
-                        "revision": config?.revision ?? 0,
-                        "secret": app.auth,
-                        "primaryIdentity": config?.user?.id ?? "IDUNAVAILABLE",
-
-                        "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
-                        "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
-            ]
-        }
+        payload = [ "clientOS": "iOS",
+                    "clientOSVersion": UIDevice.current.systemVersion,
+                    "clientSDKVersion": Bundle(for: APIClient.self).shortVersionString ?? "UNKNOWN",
+                    "clientBuild": Bundle.main.shortVersionString ?? "UNKNOWN",
+                    "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
+                    "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000),
+                    "appId": appId,
+                    "versionId": versionId ?? "nil",
+                    "secret": secret,
+                    "primaryIdentity": primaryIdentity ?? "IDUNAVAILABLE"
+        ]
         return payload
     }
 

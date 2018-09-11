@@ -49,3 +49,9 @@ extension Cartridge {
         }
     }
 }
+
+extension Optional where Wrapped == String {
+    var predicateValue: String {
+        return self == nil ? "nil" : "'\(self!)'"
+    }
+}

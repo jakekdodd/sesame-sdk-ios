@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
                                userId: userId))
         Sesame.UIApplicationDelegate?.application(application, didFinishLaunchingWithOptions: launchOptions)
-        Sesame.shared?.sendBoot()
+//        Sesame.shared?.sendBoot()
 
         return true
     }

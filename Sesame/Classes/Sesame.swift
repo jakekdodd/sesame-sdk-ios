@@ -47,19 +47,9 @@ public class Sesame: NSObject {
     public let appId: String
     public let auth: String
 
-    let api: APIClient
-    var contextConfigUser: (NSManagedObjectContext, AppConfig?, User?) {
-        let context = coreDataManager.newContext()
-        var config: AppConfig?
-        var user: User?
-        config = coreDataManager.fetchAppConfig(context: context, configId)
-        context.performAndWait {
-            user = config?.user
-        }
-        return (context, config, user)
-    }
-
+    var api: APIClient
     let coreDataManager: CoreDataManager
+
     @objc var configId: String? {
         get {
             return UserDefaults.sesame.string(forKey: #keyPath(Sesame.configId))
@@ -69,7 +59,7 @@ public class Sesame: NSObject {
         }
     }
 
-    public init(appId: String, appVersionId: String, auth: String, userId: String) {
+    public init(appId: String, appVersionId: String, auth: String, userId: String, manualBoot: Bool = true) {
         self.UIApplicationDelegate = SesameUIApplicationDelegate()
         self.appId = appId
         self.auth = auth
@@ -79,28 +69,17 @@ public class Sesame: NSObject {
         super.init()
 
         self.UIApplicationDelegate.app = self
-
         let context = coreDataManager.newContext()
-        let config = coreDataManager.fetchAppConfig(context: context, configId)
-        let user = coreDataManager.fetchUser(context: context, for: userId)
-        assert(config?.managedObjectContext != nil)
         context.performAndWait {
-            config?.user = user
-            if config?.versionId == nil {
-                config?.versionId = appVersionId
+            coreDataManager.fetchAppConfig(context: context, configId)?.versionId = appVersionId
+            setUserId(userId, context)
+            if !manualBoot {
+                sendBoot()
             }
-            do {
-                try config?.managedObjectContext?.save()
-            } catch {
-                Logger.debug(error: error.localizedDescription)
-            }
-            coreDataManager.save()
         }
-
-        sendBoot()
     }
 
-    var eventUploadCount: Int = 5
+    var eventUploadCount: Int = 10
     var eventUploadPeriod: TimeInterval = 30
 
     fileprivate var uploadScheduled = false
@@ -122,28 +101,38 @@ public extension Sesame {
     }
 
     @objc
-    public func setUserId(_ userId: String?) {
-        let (context, config, _) = contextConfigUser
-        var newUser: User?
-        if let userId = userId {
-            newUser = coreDataManager.fetchUser(context: context, for: userId)
-        }
+    public func setUserId(_ userId: String?, _ context: NSManagedObjectContext? = nil) {
+        let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            config?.user = newUser
+            var newUser: User?
+            if let userId = userId {
+                newUser = coreDataManager.fetchUser(context: context, id: userId)
+            }
+            if let appConfig = coreDataManager.fetchAppConfig(context: context, configId) {
+                appConfig.user = newUser
+            }
             do {
                 try context.save()
             } catch {
                 Logger.debug(error: error.localizedDescription)
             }
         }
+        Logger.debug("set userId:\(String(describing: userId))")
+
+        let newContext = coreDataManager.newContext()
+        newContext.performAndWait {
+            assert(coreDataManager.fetchAppConfig(context: newContext, configId)?.user?.id == userId)
+        }
+        assert(getUserId(nil) == userId)
     }
 
-    @objc func getUserId() -> String? {
-        let (context, _, user) = contextConfigUser
+    @objc func getUserId(_ context: NSManagedObjectContext? = nil) -> String? {
         var userId: String?
+        let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            userId = user?.id
+            userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id
         }
+        Logger.debug("got userId:\(String(describing: userId))")
         return userId
     }
 }
@@ -153,18 +142,13 @@ public extension Sesame {
 extension Sesame {
 
     func receive(appOpenAction: AppOpenAction?) {
-        guard let (context, _, user) = contextConfigUser as? (NSManagedObjectContext, AppConfig?, User) else { return }
-        var userid: String?
-        context.performAndWait {
-            userid = user.id
-        }
-        guard let userId = userid else { return }
-
         switch appOpenAction?.cueCategory {
         case .internal?,
              .external?:
-            let cartridge = coreDataManager.fetchCartridge(context: context, userId: userId, actionName: "appOpen")
+            let context = coreDataManager.newContext()
             context.performAndWait {
+                guard let userId = getUserId(context) else { return }
+                let cartridge = coreDataManager.fetchCartridge(context: context, userId: userId, actionName: "appOpen")
                 if let cartridge = cartridge,
                     let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
                     let reinforcementName = reinforcement.name {
@@ -172,10 +156,10 @@ extension Sesame {
                     _effect = (reinforcementName, [:])
                     context.delete(reinforcement)
                 }
-            }
 
-            addEvent(for: "appOpen")
-            refresh()
+                addEvent(context: context, actionName: "appOpen")
+                refresh()
+            }
 
         case .synthetic?:
             break
@@ -190,20 +174,18 @@ extension Sesame {
 // MARK: - For development
 
 public extension Sesame {
-    func addEvent(for actionName: String, metadata: [String: Any] = [:]) {
-        guard let (context, _, user) = contextConfigUser as? (NSManagedObjectContext, AppConfig?, User) else { return }
-        var userid: String?
+    func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:]) {
+        let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            userid = user.id
-        }
-        guard let userId = userid else { return }
-        coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: metadata)
-        let eventCount = coreDataManager.countEvents(context: context, userId: userId)
+            guard let userId = getUserId(context) else { return }
+            coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: metadata)
+            let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-        Logger.debug("Reported #\(eventCount ?? -1) events total")
+            Logger.debug("Reported #\(eventCount ?? -1) events total for userId:\(userId)")
 
-        if eventCount ?? 0 >= eventUploadCount {
-            sendTracks(userId: userId)
+            if eventCount ?? 0 >= eventUploadCount {
+                sendTracks(context: context, userId: userId)
+            }
         }
     }
 
@@ -218,124 +200,113 @@ public extension Sesame {
 /*private*/ extension Sesame {
 
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
-        var payload = api.createPayload(for: self)
-        payload["initialBoot"] = false
-        payload["inProduction"] = false
-        let (context, config, _) = contextConfigUser
+        let context = coreDataManager.newContext()
         context.performAndWait {
-            payload["currentVersion"] = config?.versionId
-            payload["currentConfig"] = "\(config?.revision ?? 0)"
-        }
+            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
+            var payload = api.createPayload(appId: appId, versionId: appConfig.versionId, secret: auth, primaryIdentity: appConfig.user?.id)
+            payload["initialBoot"] = false
+            payload["inProduction"] = false
+            payload["currentVersion"] = appConfig.versionId
+            payload["currentConfig"] = "0"// "\(config?.revision ?? 0)"
 
-        api.post(endpoint: .boot, jsonObject: payload) { response in
-            guard let response = response,
-                response["errors"] == nil else {
-                    completion(false)
-                    return
-            }
-            let (context, config, _) = self.contextConfigUser
-            if let configValues = response["config"] as? [String: Any] {
+            api.post(endpoint: .boot, jsonObject: payload) { response in
+                guard let response = response,
+                    response["errors"] == nil else {
+                        completion(false)
+                        return
+                }
+                let context = self.coreDataManager.newContext()
+                guard let appConfig = self.coreDataManager.fetchAppConfig(context: context, self.configId) else { return }
                 context.performAndWait {
-                    if let configId = configValues["configId"] as? String {
-                        config?.configId = configId
-                    }
-                    if let trackingEnabled = configValues["trackingEnabled"] as? Bool {
-                        config?.trackingEnabled = trackingEnabled
-                    }
-                    if let trackingCapabilities = configValues["trackingCapabilities"] as? [String: Any] {
-                        if let applicationState = trackingCapabilities["applicationState"] as? Bool {
-                            config?.trackingCapabilities?.applicationState = applicationState
+                    if let configValues = response["config"] as? [String: Any] {
+                        if let configId = configValues["configId"] as? String {
+                            appConfig.configId = configId
                         }
-                    }
-                }
-            }
-
-            if let version = response["version"] as? [String: Any] {
-                if let versionId = version["versionID"] as? String {
-                    context.performAndWait {
-                        config?.versionId = versionId
-                    }
-                }
-                var userId: String?
-                context.performAndWait {
-                    userId = config?.user?.id
-                }
-                if let userId = userId,
-                    let mappings = version["mappings"] as? [String: [String: Any]] {
-                    for (actionName, effectDetails) in mappings {
-                        if let cartridge = self.coreDataManager.fetchCartridge(context: context, userId: userId, actionName: actionName) {
-                            context.performAndWait {
-                                cartridge.effectDetailsDictionary = effectDetails
+                        if let trackingEnabled = configValues["trackingEnabled"] as? Bool {
+                            appConfig.trackingEnabled = trackingEnabled
+                        }
+                        if let trackingCapabilities = configValues["trackingCapabilities"] as? [String: Any] {
+                            if let applicationState = trackingCapabilities["applicationState"] as? Bool {
+                                appConfig.trackingCapabilities?.applicationState = applicationState
                             }
-                        } else {
-                            self.coreDataManager.insertCartridge(context: context,
-                                                                 userId: userId,
-                                                                 actionName: actionName,
-                                                                 effectDetails: effectDetails)
                         }
                     }
-                }
-            }
-            context.performAndWait {
-                do {
-                    try context.save()
-                    self.coreDataManager.save()
-                } catch {
-                    Logger.debug(error: error.localizedDescription)
-                }
-            }
-            completion(true)
-            }.start()
-    }
 
-    func sendTracks(userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
-        var payload = api.createPayload(for: self)
-        payload["tracks"] = {
-            var tracks = [[String: Any]]()
-            let context = coreDataManager.newContext()
-            if let reports = coreDataManager.fetchReports(context: context, userId: userId) {
-                for case let report in reports {
-                    guard let reportEvents = report.events else { continue }
-
-                    var track = [String: Any]()
-                    track["actionName"] = report.actionName
-                    track["type"] = "NON_REINFORCEABLE"
-                    var events = [[String: Any]]()
-                    for case let reportEvent as Event in reportEvents {
-                        var event = [String: Any]()
-                        event["utc"] = reportEvent.utc
-                        event["timezoneOffset"] = reportEvent.timezoneOffset
-                        event["metadata"] = reportEvent.metadata?.jsonDecoded()
-                        events.append(event)
+                    if let version = response["version"] as? [String: Any] {
+                        if let versionId = version["versionID"] as? String {
+                            appConfig.versionId = versionId
+                        }
+                        if let userId = appConfig.user?.id,
+                            let mappings = version["mappings"] as? [String: [String: Any]] {
+                            for (actionName, effectDetails) in mappings {
+                                if let cartridge = self.coreDataManager.fetchCartridge(context: context, userId: userId, actionName: actionName) {
+                                    cartridge.effectDetailsDictionary = effectDetails
+                                } else {
+                                    self.coreDataManager.insertCartridge(context: context,
+                                                                         userId: userId,
+                                                                         actionName: actionName,
+                                                                         effectDetails: effectDetails)
+                                }
+                            }
+                        }
                     }
-                    track["events"] = events
-
-                    tracks.append(track)
+                    do {
+                        try context.save()
+                    } catch {
+                        Logger.debug(error: error.localizedDescription)
+                    }
                 }
-                coreDataManager.deleteReports(context: context, userId: userId)
-            }
-            return tracks
-        }()
-
-        api.post(endpoint: .track, jsonObject: payload) { response in
-            guard let response = response,
-                response["errors"] == nil else {
-                    completion(false)
-                    return
-            }
-            completion(true)
-            }.start()
+                completion(true)
+                }.start()
+        }
     }
 
-    func refresh() {
-        let (context, _, user) = contextConfigUser
-        var userId: String?
+    func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
-            userId = user?.id
+            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
+            var payload = api.createPayload(appId: appId, versionId: appConfig.versionId, secret: auth, primaryIdentity: appConfig.user?.id)
+            payload["tracks"] = {
+                var tracks = [[String: Any]]()
+                if let reports = appConfig.user?.reports?.allObjects as? [Report] {
+                    for case let report in reports {
+                        guard let reportEvents = report.events else { continue }
+
+                        var track = [String: Any]()
+                        track["actionName"] = report.actionName
+                        track["type"] = "NON_REINFORCEABLE"
+                        var events = [[String: Any]]()
+                        for case let reportEvent as Event in reportEvents {
+                            var event = [String: Any]()
+                            event["utc"] = reportEvent.utc
+                            event["timezoneOffset"] = reportEvent.timezoneOffset
+                            event["metadata"] = reportEvent.metadata?.jsonDecoded()
+                            events.append(event)
+                        }
+                        track["events"] = events
+
+                        tracks.append(track)
+                        context.delete(report)
+                    }
+                }
+                return tracks
+            }()
+
+            api.post(endpoint: .track, jsonObject: payload) { response in
+                guard let response = response,
+                    response["errors"] == nil else {
+                        completion(false)
+                        return
+                }
+                completion(true)
+                }.start()
         }
-        if let userId = userId,
-            let cartridges = coreDataManager.fetchCartridges(context: context, userId: userId) {
-            context.performAndWait {
+    }
+
+    func refresh(context: NSManagedObjectContext? = nil) {
+        let context = context ?? coreDataManager.newContext()
+        context.performAndWait {
+            if let userId = getUserId(context),
+                let cartridges = coreDataManager.fetchCartridges(context: context, userId: userId) {
                 for cartridge in cartridges {
                     if let actionName = cartridge.actionName,
                         cartridge.reinforcements?.count == 0 {
@@ -346,35 +317,40 @@ public extension Sesame {
         }
     }
 
-    func sendRefresh(userId: String, actionName: String, completion: @escaping (Bool) -> Void = {_ in}) {
-        var payload = api.createPayload(for: self)
-        payload["actionName"] = actionName
+    func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, completion: @escaping (Bool) -> Void = {_ in}) {
+        let context = context ?? coreDataManager.newContext()
+        context.performAndWait {
+            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
+            var payload = api.createPayload(appId: appId, versionId: appConfig.versionId, secret: auth, primaryIdentity: appConfig.user?.id)
+            payload["actionName"] = actionName
 
-        api.post(endpoint: .refresh, jsonObject: payload) { response in
-            guard let response = response,
-                let cartridgeId = response["cartridgeId"] as? String,
-                let serverUtc = response["serverUtc"] as? Int64,
-                let ttl = response["ttl"] as? Int64,
-                let actionName = response["actionName"] as? String,
-                let reinforcements = response["reinforcements"] as? [[String: String]] else {
-                    completion(false)
-                    return
-            }
-            let context = self.coreDataManager.newContext()
-            self.coreDataManager.updateCartridge(context: context,
-                                                 userId: userId,
-                                                 actionName: actionName,
-                                                 cartridgeId: cartridgeId,
-                                                 serverUtc: serverUtc,
-                                                 ttl: ttl,
-                                                 reinforcements: reinforcements.compactMap({$0["reinforcementName"]}))
-            do {
-                try context.save()
-                self.coreDataManager.save()
-            } catch {
-                Logger.debug(error: error.localizedDescription)
-            }
-            completion(true)
-            }.start()
+            api.post(endpoint: .refresh, jsonObject: payload) { response in
+                guard let response = response,
+                    let cartridgeId = response["cartridgeId"] as? String,
+                    let serverUtc = response["serverUtc"] as? Int64,
+                    let ttl = response["ttl"] as? Int64,
+                    let actionName = response["actionName"] as? String,
+                    let reinforcements = response["reinforcements"] as? [[String: String]] else {
+                        completion(false)
+                        return
+                }
+                let context = self.coreDataManager.newContext()
+                context.performAndWait {
+                    self.coreDataManager.updateCartridge(context: context,
+                                                         userId: userId,
+                                                         actionName: actionName,
+                                                         cartridgeId: cartridgeId,
+                                                         serverUtc: serverUtc,
+                                                         ttl: ttl,
+                                                         reinforcements: reinforcements.compactMap({$0["reinforcementName"]}))
+                    do {
+                        try context.save()
+                    } catch {
+                        Logger.debug(error: error.localizedDescription)
+                    }
+                }
+                completion(true)
+                }.start()
+        }
     }
 }
