@@ -24,29 +24,22 @@ internal class HTTPClient: NSObject {
         do {
             let httpBody = try JSONSerialization.data(withJSONObject: jsonObject)
             request.httpBody = httpBody
+            Logger.print("Sending request to <\(url.absoluteString)>")
             if Logger.preferences.httpRequests {
-                Logger.print("""
-                    Sending request to <\(url.absoluteString)>
-                    with payload:\n<\(String(data: httpBody, encoding: .utf8) as AnyObject)>...
-                    """)
+                Logger.print("with payload:\n<\(String(data: httpBody, encoding: .utf8) as AnyObject)>...")
             }
         } catch {
             let message = "Canceled request to \(url.absoluteString) for non-JSON body"
                 + "\nRequest body <\(jsonObject as AnyObject)>"
             Logger.debug(error: message)
         }
-
         return session.send(request: request) { responseData, responseURL, error in
+            Logger.print("Received response from <\(request.url?.absoluteString ?? "url:nil")>")
             if Logger.preferences.httpResponses {
                 if let responseData = responseData {
-                    Logger.print("""
-                        Received response from <\(request.url?.absoluteString ?? "url:nil")>
-                        with response body <\(String(data: responseData, encoding: .utf8) ?? "nil")>
-                        """)
+                    Logger.print("with response body <\(String(data: responseData, encoding: .utf8) ?? "nil")>")
                 } else {
-                    Logger.print("""
-                        Received no response from <\(request.url?.absoluteString ?? "url:nil")>
-                        """)
+                    Logger.print("Received no response data from <\(request.url?.absoluteString ?? "url:nil")>")
                 }
             }
             let response = self.convertResponseToJSON(url, responseData, responseURL, error)
