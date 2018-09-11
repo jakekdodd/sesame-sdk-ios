@@ -57,14 +57,14 @@ import Foundation
         Logger.print(.error, "❌ \(message)", filePath: filePath, function: function, line: line)
     }
 
-    @objc open class func print(_ logLevel: Level, _ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
-        guard logLevel <= level else { return }
+    @objc open class func print(_ level: Level, _ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
+        guard level <= Logger.level else { return }
         var functionSignature = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
             functionSignature.replaceSubrange(parameterNames, with: "()")
         }
         let fileName = (filePath as NSString).lastPathComponent
-        Swift.print("[\(fileName):\(line):\(functionSignature) \(logLevel)] - \(message)")
+        Swift.print("[\(fileName):\(line):\(functionSignature) \(level)] - \(message)")
     }
 
 }
