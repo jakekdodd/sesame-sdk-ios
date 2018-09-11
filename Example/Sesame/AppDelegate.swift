@@ -18,11 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         Sesame.setShared(.init(appId: "570ffc491b4c6e9869482fbf",
-                               appVersionId: "rams1",
+                               appVersionId: "sesame",
                                auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
-                               userId: userId))
+                               userId: userId,
+                               manualBoot: false))
         Sesame.UIApplicationDelegate?.application(application, didFinishLaunchingWithOptions: launchOptions)
-//        Sesame.shared?.sendBoot()
 
         return true
     }

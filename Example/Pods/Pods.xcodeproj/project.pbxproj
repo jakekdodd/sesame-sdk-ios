@@ -25,6 +25,7 @@
 		7FD0D4BDD656ABBE540E74952D256882 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833C1DD671811011B3967916431B5452 /* HTTPClient.swift */; };
 		84621C82213F490800C405A4 /* NSManagedObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84621C80213F48DD00C405A4 /* NSManagedObject+Extensions.swift */; };
 		8482514D213FB0D30024F12B /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8482514B213FB0960024F12B /* UserDefaults+Extensions.swift */; };
+		84F395602147B4970040435C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F3955E2147B46A0040435C /* Constants.swift */; };
 		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A444C85A3C5555F87549E157A96F79 /* sheen.png */; };
 		906BED40CC3AD2F18BF7F137BCB65462 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522CCCEA4CC0D3DC99B16835B588D1FB /* AudioEffect.swift */; };
 		918A4879E1FACE7033F4A58A35199AB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
@@ -117,6 +118,7 @@
 		8416A2670BB425171834B01BD6444D1B /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		84621C80213F48DD00C405A4 /* NSManagedObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extensions.swift"; sourceTree = "<group>"; };
 		8482514B213FB0960024F12B /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
+		84F3955E2147B46A0040435C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		868E35264AF59C2EBEE4041361A77784 /* UIViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -362,6 +364,7 @@
 			children = (
 				21E0B5A0B2D3E9187F185AD8E0D0F09D /* Logger.swift */,
 				7E05E521C8C46B62818E142482235C27 /* Sesame.swift */,
+				84F3955E2147B46A0040435C /* Constants.swift */,
 				30A8E84F2C2BFC3CD84109639BD6E86D /* API */,
 				C645EA22A8AE2A83426F6E884C23D266 /* Database */,
 				3DE4410A3349F524E77EF46CA618D03A /* Effects */,
@@ -572,6 +575,7 @@
 				906BED40CC3AD2F18BF7F137BCB65462 /* AudioEffect.swift in Sources */,
 				6A95C0D38C845A109743050786D53CF0 /* BundleExtensions.swift in Sources */,
 				7EFF62A7E97B9F33F9E7A6079DED1753 /* CGExtensions.swift in Sources */,
+				84F395602147B4970040435C /* Constants.swift in Sources */,
 				58D83BBF0863A82F5AD67AE834EDA17C /* ConfettiEffectView.swift in Sources */,
 				CD0D5D9F0C7405D1344D5DD7167E6DC1 /* CoreAnimationDelegate.swift in Sources */,
 				EE6DB90CADF6AB9C2D1EEBBC87F0EC71 /* CoreDataManager.swift in Sources */,

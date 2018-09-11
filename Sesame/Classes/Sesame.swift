@@ -114,7 +114,7 @@ public extension Sesame {
             do {
                 try context.save()
             } catch {
-                Logger.debug(error: error.localizedDescription)
+                Logger.debug(error: error)
             }
         }
         Logger.debug("set userId:\(String(describing: userId))")
@@ -147,18 +147,19 @@ extension Sesame {
              .external?:
             let context = coreDataManager.newContext()
             context.performAndWait {
-                guard let userId = getUserId(context) else { return }
-                let cartridge = coreDataManager.fetchCartridge(context: context, userId: userId, actionName: "appOpen")
-                if let cartridge = cartridge,
+                if let userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id,
+                    let cartridge = coreDataManager.fetchCartridge(context: context,
+                                                                   userId: userId,
+                                                                   actionName: SesameConstants.AppOpenAction),
                     let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
                     let reinforcementName = reinforcement.name {
                     Logger.debug(confirmed: "Next reinforcement:\(reinforcementName)")
                     _effect = (reinforcementName, [:])
-                    context.delete(reinforcement)
-                }
 
-                addEvent(context: context, actionName: "appOpen")
-                refresh()
+                    context.delete(reinforcement)
+                    addEvent(context: context, actionName: SesameConstants.AppOpenAction)
+                    sendRefresh(context: context, userId: userId, actionName: SesameConstants.AppOpenAction)
+                }
             }
 
         case .synthetic?:
@@ -199,15 +200,19 @@ public extension Sesame {
 
 /*private*/ extension Sesame {
 
+    //swiftlint:disable:next cyclomatic_complexity function_body_length
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         let context = coreDataManager.newContext()
         context.performAndWait {
             guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
-            var payload = api.createPayload(appId: appId, versionId: appConfig.versionId, secret: auth, primaryIdentity: appConfig.user?.id)
+            var payload = api.createPayload(appId: appId,
+                                            versionId: appConfig.versionId,
+                                            secret: auth,
+                                            primaryIdentity: appConfig.user?.id)
             payload["initialBoot"] = false
             payload["inProduction"] = false
             payload["currentVersion"] = appConfig.versionId
-            payload["currentConfig"] = "0"// "\(config?.revision ?? 0)"
+            payload["currentConfig"] = "\(appConfig.revision)"
 
             api.post(endpoint: .boot, jsonObject: payload) { response in
                 guard let response = response,
@@ -216,7 +221,9 @@ public extension Sesame {
                         return
                 }
                 let context = self.coreDataManager.newContext()
-                guard let appConfig = self.coreDataManager.fetchAppConfig(context: context, self.configId) else { return }
+                guard let appConfig = self.coreDataManager.fetchAppConfig(context: context, self.configId) else {
+                    return
+                }
                 context.performAndWait {
                     if let configValues = response["config"] as? [String: Any] {
                         if let configId = configValues["configId"] as? String {
@@ -224,11 +231,6 @@ public extension Sesame {
                         }
                         if let trackingEnabled = configValues["trackingEnabled"] as? Bool {
                             appConfig.trackingEnabled = trackingEnabled
-                        }
-                        if let trackingCapabilities = configValues["trackingCapabilities"] as? [String: Any] {
-                            if let applicationState = trackingCapabilities["applicationState"] as? Bool {
-                                appConfig.trackingCapabilities?.applicationState = applicationState
-                            }
                         }
                     }
 
@@ -239,7 +241,9 @@ public extension Sesame {
                         if let userId = appConfig.user?.id,
                             let mappings = version["mappings"] as? [String: [String: Any]] {
                             for (actionName, effectDetails) in mappings {
-                                if let cartridge = self.coreDataManager.fetchCartridge(context: context, userId: userId, actionName: actionName) {
+                                if let cartridge = self.coreDataManager.fetchCartridge(context: context,
+                                                                                       userId: userId,
+                                                                                       actionName: actionName) {
                                     cartridge.effectDetailsDictionary = effectDetails
                                 } else {
                                     self.coreDataManager.insertCartridge(context: context,
@@ -251,9 +255,11 @@ public extension Sesame {
                         }
                     }
                     do {
-                        try context.save()
+                        if context.hasChanges {
+                            try context.save()
+                        }
                     } catch {
-                        Logger.debug(error: error.localizedDescription)
+                        Logger.debug(error: error)
                     }
                 }
                 completion(true)
@@ -263,14 +269,19 @@ public extension Sesame {
 
     func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
-            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
-            var payload = api.createPayload(appId: appId, versionId: appConfig.versionId, secret: auth, primaryIdentity: appConfig.user?.id)
+            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId),
+                let userId = appConfig.user?.id else {
+                    return
+            }
+            var payload = api.createPayload(appId: appId,
+                                            versionId: appConfig.versionId,
+                                            secret: auth,
+                                            primaryIdentity: userId)
             payload["tracks"] = {
                 var tracks = [[String: Any]]()
                 if let reports = appConfig.user?.reports?.allObjects as? [Report] {
-                    for case let report in reports {
+                    for report in reports {
                         guard let reportEvents = report.events else { continue }
-
                         var track = [String: Any]()
                         track["actionName"] = report.actionName
                         track["type"] = "NON_REINFORCEABLE"
@@ -288,6 +299,11 @@ public extension Sesame {
                         context.delete(report)
                     }
                 }
+                do {
+                    try context.save()
+                } catch {
+                    Logger.debug(error: error)
+                }
                 return tracks
             }()
 
@@ -302,26 +318,20 @@ public extension Sesame {
         }
     }
 
-    func refresh(context: NSManagedObjectContext? = nil) {
-        let context = context ?? coreDataManager.newContext()
-        context.performAndWait {
-            if let userId = getUserId(context),
-                let cartridges = coreDataManager.fetchCartridges(context: context, userId: userId) {
-                for cartridge in cartridges {
-                    if let actionName = cartridge.actionName,
-                        cartridge.reinforcements?.count == 0 {
-                        sendRefresh(userId: userId, actionName: actionName)
-                    }
-                }
-            }
-        }
-    }
-
-    func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, completion: @escaping (Bool) -> Void = {_ in}) {
+    func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
-            var payload = api.createPayload(appId: appId, versionId: appConfig.versionId, secret: auth, primaryIdentity: appConfig.user?.id)
+            guard let reinforcementCount = coreDataManager.fetchCartridge(context: context,
+                                                                          userId: userId,
+                                                                          actionName: actionName)?
+                .reinforcements?.count,
+                reinforcementCount == 0
+                else { return }
+            var payload = api.createPayload(appId: appId,
+                                            versionId: appConfig.versionId,
+                                            secret: auth,
+                                            primaryIdentity: appConfig.user?.id)
             payload["actionName"] = actionName
 
             api.post(endpoint: .refresh, jsonObject: payload) { response in
@@ -334,6 +344,7 @@ public extension Sesame {
                         completion(false)
                         return
                 }
+                let reinforcementNames = reinforcements.compactMap({$0["reinforcementName"]})
                 let context = self.coreDataManager.newContext()
                 context.performAndWait {
                     self.coreDataManager.updateCartridge(context: context,
@@ -342,11 +353,11 @@ public extension Sesame {
                                                          cartridgeId: cartridgeId,
                                                          serverUtc: serverUtc,
                                                          ttl: ttl,
-                                                         reinforcements: reinforcements.compactMap({$0["reinforcementName"]}))
+                                                         reinforcements: reinforcementNames)
                     do {
                         try context.save()
                     } catch {
-                        Logger.debug(error: error.localizedDescription)
+                        Logger.debug(error: error)
                     }
                 }
                 completion(true)

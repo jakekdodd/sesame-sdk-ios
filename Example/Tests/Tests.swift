@@ -16,7 +16,7 @@ class Tests: XCTestCase {
 
     func testMultipleEvents() {
         let sesame = Sesame.dev()
-        let addEvent = { sesame.addEvent(actionName: "appOpen") }
+        let addEvent = { sesame.addEvent(actionName: SesameConstants.AppOpenAction) }
         let countEvents = { return sesame.coreDataManager.countEvents(context: nil, userId: Sesame.devUserId) }
         XCTAssert(countEvents() == 0)
 
@@ -32,7 +32,7 @@ class Tests: XCTestCase {
         let countReports = { sesame.coreDataManager.fetchReports(context: nil, userId: Sesame.devUserId)?.count }
         XCTAssert(countReports() == 0)
 
-        sesame.addEvent(actionName: "appOpen")
+        sesame.addEvent(actionName: SesameConstants.AppOpenAction)
         XCTAssert(countReports() == 1)
 
         sesame.addEvent(actionName: "appClose")
@@ -44,16 +44,16 @@ class Tests: XCTestCase {
         let countEvents = { sesame.coreDataManager.countEvents(context: nil, userId: Sesame.devUserId) }
         XCTAssert(countEvents() == 0)
 
-        sesame.addEvent(actionName: "appOpen")
-        sesame.addEvent(actionName: "appOpen")
+        sesame.addEvent(actionName: SesameConstants.AppOpenAction)
+        sesame.addEvent(actionName: SesameConstants.AppOpenAction)
         XCTAssert(countEvents() == 2)
 
         sesame.coreDataManager.deleteObjects()
         XCTAssert(countEvents() == 0)
 
         sesame.setUserId(Sesame.devUserId)
-        sesame.addEvent(actionName: "appOpen")
-        sesame.addEvent(actionName: "appOpen")
+        sesame.addEvent(actionName: SesameConstants.AppOpenAction)
+        sesame.addEvent(actionName: SesameConstants.AppOpenAction)
         XCTAssert(countEvents() == 2)
 
     }
@@ -68,7 +68,7 @@ class Tests: XCTestCase {
 //        for iteration in 1...desiredCount {
             switch iteration % 2 {
             case 0:
-                sesame.addEvent(actionName: "appOpen")
+                sesame.addEvent(actionName: SesameConstants.AppOpenAction)
             default:
                 sesame.addEvent(actionName: "appClose")
             }
@@ -102,66 +102,6 @@ class Tests: XCTestCase {
         assertConfigId(testConfigId)
     }
 
-    func testAppConfigChangeInMultipleContext() {
-        let coreDataManager1 = CoreDataManager()
-        let coreDataManager2 = CoreDataManager()
-        let context1 = coreDataManager1.newContext()
-        let context2 = coreDataManager2.newContext()
-        let appConfig1 = coreDataManager1.fetchAppConfig(context: context1, nil)
-        let appConfig2 = coreDataManager2.fetchAppConfig(context: context2, nil)
-        XCTAssert(appConfig1?.managedObjectContext != nil)
-        XCTAssert(appConfig2?.managedObjectContext != nil)
-        let setConfigId: ((AppConfig?, String) -> Void) = { config, configId in
-            config?.managedObjectContext?.performAndWait {
-                config?.configId = configId
-                do {
-                    try config?.managedObjectContext?.save()
-                    config?.managedObjectContext?.parent?.performAndWait {
-                        do {
-                            try config?.managedObjectContext?.parent?.save()
-                        } catch {
-                            Logger.debug(error: error.localizedDescription)
-                        }
-                    }
-                } catch {
-                    Logger.debug(error: error.localizedDescription)
-                }
-            }
-        }
-        let getConfigId: ((AppConfig?) -> String?) = { config in
-            var configId: String?
-            config?.managedObjectContext?.performAndWait {
-                configId = config?.configId
-            }
-            return configId
-        }
-
-        XCTAssert(appConfig1?.configId == appConfig2?.configId)
-
-        Logger.debug("appConfig1?.configId:<\(appConfig1?.configId ?? "nil")>")
-        Logger.debug("appConfig2?.configId:<\(appConfig2?.configId ?? "nil")>")
-        setConfigId(appConfig1, "one")
-        setConfigId(appConfig2, "two")
-        Logger.debug("appConfig1?.configId:<\(appConfig1?.configId ?? "nil")>")
-        Logger.debug("appConfig2?.configId:<\(appConfig2?.configId ?? "nil")>")
-        XCTAssert(appConfig1?.configId != appConfig2?.configId)
-        coreDataManager1.save()
-        Logger.debug("appConfig1?.configId:<\(appConfig1?.configId ?? "nil")>")
-        Logger.debug("appConfig2?.configId:<\(appConfig2?.configId ?? "nil")>")
-        coreDataManager2.save()
-        Logger.debug("appConfig1?.configId:<\(appConfig1?.configId ?? "nil")>")
-        Logger.debug("appConfig2?.configId:<\(appConfig2?.configId ?? "nil")>")
-
-        let coreDataManager3 = CoreDataManager()
-        let appConfig3 = coreDataManager3.fetchAppConfig(context: nil, nil)
-        Logger.debug("appConfig3?.configId:<\(appConfig3?.configId ?? "nil")>")
-    }
-//
-//    func testUserAddedAfter() {
-//        let sesame = Sesame.dev()
-//
-//    }
-
     func testUserChange() {
         let sesame = Sesame.dev()
         let user1 = "ann"
@@ -169,7 +109,7 @@ class Tests: XCTestCase {
         var currentUser = user1
         let setUser1 = { currentUser = user1; sesame.setUserId(currentUser) }
         let setUser2 = { currentUser = user2; sesame.setUserId(currentUser) }
-        let addEvent = { sesame.addEvent(actionName: "appOpen") }
+        let addEvent = { sesame.addEvent(actionName: SesameConstants.AppOpenAction) }
         let countEvents = { return sesame.coreDataManager.countEvents(context: nil, userId: currentUser) ?? -1 }
         let deleteReports = { sesame.coreDataManager.deleteReports(context: nil, userId: currentUser) }
 
@@ -229,30 +169,21 @@ class Tests: XCTestCase {
         sesame.sendBoot { _ in
             let context = sesame.coreDataManager.newContext()
             context.performAndWait {
-                guard let userId = sesame.getUserId(context) else { fatalError() }
-                if let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) {
-                    let group = DispatchGroup()
-                    XCTAssert(cartridges.count != 0)
-                    for cartridge in cartridges {
-                        context.performAndWait {
-                            group.enter()
-                            XCTAssert(cartridge.reinforcements?.count == 0)
-                            sesame.sendRefresh(userId: userId, actionName: cartridge.actionName!) { _ in
-                                group.leave()
+                guard let userId = sesame.getUserId(context),
+                    let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) else {
+                        fatalError()
+                }
+                XCTAssert(cartridges.count != 0)
+                for cartridge in cartridges {
+                    XCTAssert(cartridge.reinforcements?.count == 0)
+                    sesame.sendRefresh(userId: userId, actionName: cartridge.actionName!) { _ in
+                        if let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) {
+                            XCTAssert(cartridges.count != 0)
+                            for cartridge in cartridges {
+                                XCTAssert(cartridge.reinforcements!.count > 0)
                             }
-                        }
-                    }
-                    group.notify(queue: DispatchQueue.global()) {
-                        let context = sesame.coreDataManager.newContext()
-                        context.performAndWait {
-                            if let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) {
-                                XCTAssert(cartridges.count != 0)
-                                for cartridge in cartridges {
-                                    XCTAssert(cartridge.reinforcements!.count > 0)
-                                }
-                                promise.fulfill()
-                            }
-                        }
+                            promise.fulfill()
+                        } else { XCTFail("No cartridges") }
                     }
                 }
             }
