@@ -95,12 +95,12 @@ open class SheenEffectView: OverlayEffectView {
         }
 
         guard let imageView = imageView else {
-            Logger.debug(error: "No image set for sheen")
+            Logger.error("No image set for sheen")
             completion(false)
             return
         }
         guard imageView.isHidden else {
-            Logger.debug(error: "Sheen is already animating")
+            Logger.error("Sheen is already animating")
             completion(false)
             return
         }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06ACB6107D601C1C78A5DA22A936FAE8 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA29DBC305FFA96A047D46935580E81 /* UIWindowExtensions.swift */; };
 		1A44332118CD3C25749798425DE5B85E /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8416A2670BB425171834B01BD6444D1B /* UIColorExtensions.swift */; };
 		1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */; };
 		2270FEF8224CB2DB8F5D28A117A9F340 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868E35264AF59C2EBEE4041361A77784 /* UIViewExtensions.swift */; };
@@ -109,7 +108,6 @@
 		67B65DE86151F902DC148CE273349C6C /* CoreDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		6AD0F9E29AA24DD719DD2EEE990A7B47 /* Pods-Sesame_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6C925174768ABA5F6E50BF25C0F2D97D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6DA29DBC305FFA96A047D46935580E81 /* UIWindowExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
 		7E05E521C8C46B62818E142482235C27 /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
@@ -206,7 +204,6 @@
 				1736C2AC20BC32B2CC28FB6C702C9CC4 /* StringExtensions.swift */,
 				8416A2670BB425171834B01BD6444D1B /* UIColorExtensions.swift */,
 				DF55F3751A9E3B6CB4243189A1FD059F /* UIImageExtensions.swift */,
-				6DA29DBC305FFA96A047D46935580E81 /* UIWindowExtensions.swift */,
 			);
 			name = Extensions;
 			path = Sesame/Classes/Extensions;
@@ -595,7 +592,6 @@
 				FAA72E20D108C6044012E1E2A665F70E /* UIImageExtensions.swift in Sources */,
 				29722554C4914E8E57914445DD04B18D /* UIView+CodelessAnimation.swift in Sources */,
 				2270FEF8224CB2DB8F5D28A117A9F340 /* UIViewExtensions.swift in Sources */,
-				06ACB6107D601C1C78A5DA22A936FAE8 /* UIWindowExtensions.swift in Sources */,
 				A22D502DBCF44ED95A8CE668D872397C /* UserIdSource.swift in Sources */,
 				8482514D213FB0D30024F12B /* UserDefaults+Extensions.swift in Sources */,
 				F3E2173518E6532C365D77C3BF759545 /* VisualEffect.swift in Sources */,

@@ -114,16 +114,11 @@ public extension Sesame {
             do {
                 try context.save()
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
         }
-        Logger.debug("set userId:\(String(describing: userId))")
 
-        let newContext = coreDataManager.newContext()
-        newContext.performAndWait {
-            assert(coreDataManager.fetchAppConfig(context: newContext, configId)?.user?.id == userId)
-        }
-        assert(getUserId(nil) == userId)
+        Logger.info("set userId:\(String(describing: userId))")
     }
 
     @objc func getUserId(_ context: NSManagedObjectContext? = nil) -> String? {
@@ -132,7 +127,7 @@ public extension Sesame {
         context.performAndWait {
             userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id
         }
-        Logger.debug("got userId:\(String(describing: userId))")
+        Logger.verbose("got userId:\(String(describing: userId))")
         return userId
     }
 }
@@ -153,7 +148,7 @@ extension Sesame {
                                                                    actionName: SesameConstants.AppOpenAction),
                     let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
                     let reinforcementName = reinforcement.name {
-                    Logger.debug(confirmed: "Next reinforcement:\(reinforcementName)")
+                    Logger.info(confirmed: "Next reinforcement:\(reinforcementName)")
                     _effect = (reinforcementName, [:])
 
                     context.delete(reinforcement)
@@ -182,7 +177,7 @@ public extension Sesame {
             coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.debug("Reported #\(eventCount ?? -1) events total for userId:\(userId)")
+            Logger.info("Reported #\(eventCount ?? -1) events total for userId:\(userId)")
 
             if eventCount ?? 0 >= eventUploadCount {
                 sendTracks(context: context, userId: userId)
@@ -259,7 +254,7 @@ public extension Sesame {
                             try context.save()
                         }
                     } catch {
-                        Logger.debug(error: error)
+                        Logger.error(error)
                     }
                 }
                 completion(true)
@@ -302,7 +297,7 @@ public extension Sesame {
                 do {
                     try context.save()
                 } catch {
-                    Logger.debug(error: error)
+                    Logger.error(error)
                 }
                 return tracks
             }()
@@ -357,7 +352,7 @@ public extension Sesame {
                     do {
                         try context.save()
                     } catch {
-                        Logger.debug(error: error)
+                        Logger.error(error)
                     }
                 }
                 completion(true)

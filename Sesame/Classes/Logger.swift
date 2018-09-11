@@ -17,111 +17,54 @@ import Foundation
 
 @objc open class Logger: NSObject {
 
-    @objc open class Preferences: NSObject {
-        @objc open var printEnabled = true
-        //    @objc open var debugEnabled = false
-        @objc open var debugEnabled = true
-        @objc open var httpRequests = true
-        @objc open var httpResponses = true
-//        @objc open var httpRequests = false
-//        @objc open var httpResponses = false
+    @objc public static var level = Level.verbose
+
+    @objc public enum Level: Int, CustomStringConvertible, Comparable {
+        case none, error, warning, info, verbose
+
+        public var description: String {
+            switch self {
+            case .none: return "none"
+            case .error: return "error"
+            case .warning: return "warning"
+            case .info: return "info"
+            case .verbose: return "verbose"
+            }
+        }
+
+        public static func < (lhs: Logger.Level, rhs: Logger.Level) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
     }
 
-    @objc open static var preferences = Preferences()
+    @objc open class func verbose(_ message: Any, filePath: String = #file, function: String = #function, line: Int = #line) {
+        Logger.print(.verbose, message, filePath: filePath, function: function, line: line)
+    }
 
-    /// This function prints to the console if preferences.printEnabled is true
-    ///
-    /// - parameters:
-    ///     - message: The debug message.
-    ///     - filePath: Used to get filename of bug. Do not use this parameter. Defaults to #file.
-    ///     - function: Used to get function name of bug. Do not use this parameter. Defaults to #function.
-    ///     - line: Used to get the line of bug. Do not use this parameter. Defaults to #line.
-    ///
-    @objc open class func print(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
-        guard preferences.printEnabled else { return }
-        var functionSignature: String = function
+    @objc open class func info(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
+        Logger.print(.info, message, filePath: filePath, function: function, line: line)
+    }
+
+    @objc open class func info(confirmed message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
+        Logger.print(.info, "✅ \(message)", filePath: filePath, function: function, line: line)
+    }
+
+    @objc open class func warning(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
+        Logger.print(.warning, message, filePath: filePath, function: function, line: line)
+    }
+
+    @objc open class func error(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
+        Logger.print(.error, "❌ \(message)", filePath: filePath, function: function, line: line)
+    }
+
+    @objc open class func print(_ logLevel: Level, _ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
+        guard logLevel <= level else { return }
+        var functionSignature = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
             functionSignature.replaceSubrange(parameterNames, with: "()")
         }
-        let fileName = NSString(string: filePath).lastPathComponent
-        Swift.print("[\(fileName):\(line):\(functionSignature)] - \(message)")
+        let fileName = (filePath as NSString).lastPathComponent
+        Swift.print("[\(fileName):\(line):\(functionSignature) \(logLevel)] - \(message)")
     }
 
-    /// This function prints debug messages to the console
-    /// if preferences.printEnabled and preferences.debugEnabled are true
-    ///
-    /// - parameters:
-    ///     - message: The debug message.
-    ///     - filePath: Used to get filename of bug. Do not use this parameter. Defaults to #file.
-    ///     - function: Used to get function name of bug. Do not use this parameter. Defaults to #function.
-    ///     - line: Used to get the line of bug. Do not use this parameter. Defaults to #line.
-    ///
-    @objc open class func debug(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
-        guard preferences.printEnabled && preferences.debugEnabled else { return }
-        var functionSignature: String = function
-        if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
-            functionSignature.replaceSubrange(parameterNames, with: "()")
-        }
-        let fileName = NSString(string: filePath).lastPathComponent
-        Swift.print("[\(fileName):\(line):\(functionSignature)] - \(message)")
-    }
-
-    /// This function prints confirmation messages to the console
-    /// if preferences.printEnabled and preferences.debugEnabled are true
-    ///
-    /// - parameters:
-    ///     - message: The confirmation message.
-    ///     - filePath: Used to get filename. Do not use this parameter. Defaults to #file.
-    ///     - function: Used to get function name. Do not use this parameter. Defaults to #function.
-    ///     - line: Used to get the line. Do not use this parameter. Defaults to #line.
-    ///
-    @objc open class func debug(confirmed message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
-        guard preferences.printEnabled && preferences.debugEnabled else { return }
-        var functionSignature: String = function
-        if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
-            functionSignature.replaceSubrange(parameterNames, with: "()")
-        }
-        let fileName = NSString(string: filePath).lastPathComponent
-        Swift.print("[\(fileName):\(line):\(functionSignature)] - ✅ \(message)")
-    }
-
-    /// This function prints error messages to the console
-    /// if preferences.printEnabled and preferences.debugEnabled are true
-    ///
-    /// - parameters:
-    ///     - message: The debug message.
-    ///     - visual: If true, also displays an OK alert.
-    ///     - filePath: Used to get filename of bug. Do not use this parameter. Defaults to #file.
-    ///     - function: Used to get function name of bug. Do not use this parameter. Defaults to #function.
-    ///     - line: Used to get the line of bug. Do not use this parameter. Defaults to #line.
-    ///
-    @objc open class func debug(error message: Any, visual: Bool = false, filePath: String = #file, function: String =  #function, line: Int = #line) {
-        guard preferences.printEnabled && preferences.debugEnabled else { return }
-        var functionSignature: String = function
-        if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
-            functionSignature.replaceSubrange(parameterNames, with: "()")
-        }
-        let fileName = NSString(string: filePath).lastPathComponent
-        Swift.print("[\(fileName):\(line):\(functionSignature)] - ❌ \(message)")
-
-        if visual {
-            alert(title: "☠️", message: "🚫 \(message)")
-        }
-    }
-
-    /// This function displays an OK alert if preferences.printEnabled and preferences.debugEnabled are true
-    ///
-    /// - parameters:
-    ///     - message: The debug message.
-    ///     - title: The alert's title.
-    ///
-    @objc open class func alert(title: String, message: String) {
-        guard preferences.printEnabled && preferences.debugEnabled else { return }
-        DispatchQueue.main.async {
-            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(OKAction)
-            UIWindow.presentTopLevelAlert(alertController: alertController)
-        }
-    }
 }

@@ -35,7 +35,7 @@ public extension UIView {
                                   completion: (() -> Void)? = nil
         ) {
         guard let content = content else {
-            Logger.debug(error: "Received nil image content!")
+            Logger.error("Received nil image content!")
             return
         }
 

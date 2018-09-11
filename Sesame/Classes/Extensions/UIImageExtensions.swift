@@ -12,7 +12,7 @@ internal extension UIImage {
         if let imageData = UIImagePNGRepresentation(self) {
             return imageData.base64EncodedString()
         } else {
-            Logger.debug(error: "Could not create PNG representation of UIImage...")
+            Logger.error("Could not create PNG representation of UIImage...")
             return nil
         }
     }

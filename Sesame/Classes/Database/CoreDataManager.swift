@@ -39,7 +39,7 @@ class CoreDataManager: NSObject {
                                                              NSMigratePersistentStoresAutomaticallyOption: true])
                 return coordinator
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
         }
         return nil
@@ -79,7 +79,7 @@ class CoreDataManager: NSObject {
                 do {
                     try self.managedObjectContext?.save()
                 } catch {
-                    Logger.debug(error: "\(error)")
+                    Logger.error("\(error)")
                 }
             }
         }
@@ -91,7 +91,7 @@ class CoreDataManager: NSObject {
                 do {
                     try managedObjectContext?.save()
                 } catch {
-                    Logger.debug(error: "\(error)")
+                    Logger.error("\(error)")
                 }
             }
         }
@@ -109,7 +109,7 @@ class CoreDataManager: NSObject {
                         }
                     }
                 } catch {
-                    Logger.debug(error: error)
+                    Logger.error(error)
                 }
             }
             save()
@@ -142,7 +142,7 @@ extension CoreDataManager {
                     value = appConfig
                 }
             } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
@@ -169,7 +169,7 @@ extension CoreDataManager {
                     value = user
                 }
             } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
@@ -192,15 +192,14 @@ extension CoreDataManager {
                 if let report = try context.fetch(request).first {
                     value = report
                 } else if createIfNotFound,
-                    let entity = NSEntityDescription.entity(forEntityName: Report.description(),
-                                                            in: context) {
+                    let entity = NSEntityDescription.entity(forEntityName: Report.description(), in: context) {
                     let report = Report(entity: entity, insertInto: context)
                     report.actionName = actionName
                     report.user = fetchUser(context: context, id: userId)
                     value = report
                 }
-            } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+            } catch {
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
@@ -216,7 +215,7 @@ extension CoreDataManager {
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
@@ -236,7 +235,7 @@ extension CoreDataManager {
                 try context.save()
                 save()
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
         }
     }
@@ -252,7 +251,7 @@ extension CoreDataManager {
             do {
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata), encoding: .utf8)
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
             event.report = report
             do {
@@ -260,7 +259,7 @@ extension CoreDataManager {
                 save()
 //                Logger.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
         }
     }
@@ -276,7 +275,7 @@ extension CoreDataManager {
             do {
                 value = try context.count(for: request)
             } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
@@ -290,7 +289,7 @@ extension CoreDataManager {
         context.performAndWait {
             guard let user = fetchUser(context: context, id: userId) else { return }
             guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(), in: context) else {
-                Logger.debug(error: "Could not create entity for cartridge")
+                Logger.error("Could not create entity for cartridge")
                 return
             }
             let cartridge = Cartridge(entity: entity, insertInto: context)
@@ -301,7 +300,7 @@ extension CoreDataManager {
                 try context.save()
                 save()
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
         }
     }
@@ -341,7 +340,7 @@ extension CoreDataManager {
                 try context.save()
                 save()
             } catch {
-                Logger.debug(error: error)
+                Logger.error(error)
             }
         }
     }
@@ -359,7 +358,7 @@ extension CoreDataManager {
             do {
                 value = try context.fetch(request).first
             } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
@@ -375,7 +374,7 @@ extension CoreDataManager {
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
+                Logger.error("Could not fetch. \(error)")
             }
         }
 
