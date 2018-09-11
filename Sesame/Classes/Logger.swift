@@ -21,8 +21,10 @@ import Foundation
         @objc open var printEnabled = true
         //    @objc open var debugEnabled = false
         @objc open var debugEnabled = true
-        @objc open var httpRequests = false
+        @objc open var httpRequests = true
         @objc open var httpResponses = true
+//        @objc open var httpRequests = false
+//        @objc open var httpResponses = false
     }
 
     @objc open static var preferences = Preferences()
@@ -35,7 +37,7 @@ import Foundation
     ///     - function: Used to get function name of bug. Do not use this parameter. Defaults to #function.
     ///     - line: Used to get the line of bug. Do not use this parameter. Defaults to #line.
     ///
-    @objc open class func print(_ message: String, filePath: String = #file, function: String =  #function, line: Int = #line) {
+    @objc open class func print(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled else { return }
         var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
@@ -54,7 +56,7 @@ import Foundation
     ///     - function: Used to get function name of bug. Do not use this parameter. Defaults to #function.
     ///     - line: Used to get the line of bug. Do not use this parameter. Defaults to #line.
     ///
-    @objc open class func debug(_ message: String, filePath: String = #file, function: String =  #function, line: Int = #line) {
+    @objc open class func debug(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled && preferences.debugEnabled else { return }
         var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
@@ -73,7 +75,7 @@ import Foundation
     ///     - function: Used to get function name. Do not use this parameter. Defaults to #function.
     ///     - line: Used to get the line. Do not use this parameter. Defaults to #line.
     ///
-    @objc open class func debug(confirmed message: String, filePath: String = #file, function: String =  #function, line: Int = #line) {
+    @objc open class func debug(confirmed message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled && preferences.debugEnabled else { return }
         var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
@@ -93,7 +95,7 @@ import Foundation
     ///     - function: Used to get function name of bug. Do not use this parameter. Defaults to #function.
     ///     - line: Used to get the line of bug. Do not use this parameter. Defaults to #line.
     ///
-    @objc open class func debug(error message: String, visual: Bool = false, filePath: String = #file, function: String =  #function, line: Int = #line) {
+    @objc open class func debug(error message: Any, visual: Bool = false, filePath: String = #file, function: String =  #function, line: Int = #line) {
         guard preferences.printEnabled && preferences.debugEnabled else { return }
         var functionSignature: String = function
         if let parameterNames = functionSignature.range(of: "\\((.*?)\\)", options: .regularExpression) {
