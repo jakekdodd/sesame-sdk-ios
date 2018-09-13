@@ -50,6 +50,8 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
+    var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
+
     @objc var configId: String? {
         get {
             return UserDefaults.sesame.string(forKey: #keyPath(Sesame.configId))
@@ -77,6 +79,8 @@ public class Sesame: NSObject {
                 sendBoot()
             }
         }
+
+        applicationLifecycleTracker?.sesame = self
     }
 
     var eventUploadCount: Int = 10
@@ -177,7 +181,11 @@ public extension Sesame {
             coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.info("Reported #\(eventCount ?? -1) events total for userId:\(userId)")
+            Logger.info("Added event:\(actionName) for userId:\(userId) events total:#\(eventCount ?? -1)")
+
+//            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
+//                Logger.info("Report:\(report.actionName!) events:\(report.events!.count)")
+//            }
 
             if eventCount ?? 0 >= eventUploadCount {
                 sendTracks(context: context, userId: userId)
@@ -264,8 +272,7 @@ public extension Sesame {
 
     func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
-            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId),
-                let userId = appConfig.user?.id else {
+            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else {
                     return
             }
             var payload = api.createPayload(appId: appId,
