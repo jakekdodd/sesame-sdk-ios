@@ -32,6 +32,7 @@ struct AppOpenAction {
     }
 
     let date: Date
+    var eventMetadata = EventMetadata()
     let source: Source
     var cueCategory: Cue.Category {
         return source.cueCategory
@@ -40,6 +41,7 @@ struct AppOpenAction {
     init(source: Source, date: Date = Date()) {
         self.source = source
         self.date = date
+        eventMetadata.update()
     }
 
 }

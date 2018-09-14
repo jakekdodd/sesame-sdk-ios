@@ -7,40 +7,106 @@
 
 import Foundation
 
-class ApplicationLifecycleTracker: NSObject {
+open class ApplicationLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
 
+    fileprivate(set) var appOpenAction: AppOpenAction? {
+        didSet {
+            guard let newValue = appOpenAction else { return }
+            sesame?.add(appOpenEvent: newValue)
+        }
+    }
+
     override init() {
         super.init()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)),
-                                               name: NSNotification.Name.UIApplicationDidFinishLaunching,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)),
-                                               name: NSNotification.Name.UIApplicationWillTerminate,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)),
-                                               name: NSNotification.Name.UIApplicationDidBecomeActive,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)),
-                                               name: NSNotification.Name.UIApplicationWillResignActive,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)),
-                                               name: NSNotification.Name.UIApplicationWillEnterForeground,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)),
-                                               name: NSNotification.Name.UIApplicationDidEnterBackground,
-                                               object: nil)
+        setupNotifications()
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
-    @objc func test(_ notification: Notification) {
-        sesame?.addEvent(actionName: notification.name.rawValue)
-        let context = sesame!.coreDataManager.newContext()
-        sesame?.sendTracks(context: context, userId: sesame!.getUserId(context)!)
+    func setupNotifications() {
+        for notification in [Notification.Name/*.UIApplicationDidFinishLaunching,*/
+                             .UIApplicationWillTerminate,
+                             .UIApplicationDidBecomeActive,
+//                             .UIApplicationWillResignActive,
+//                             .UIApplicationWillEnterForeground,
+                             .UIApplicationDidEnterBackground] {
+                                NotificationCenter.default.addObserver(self,
+                                                                       selector: #selector(receive(_:)),
+                                                                       name: notification,
+                                                                       object: nil)
+        }
+    }
+
+    @objc func receive(_ notification: Notification) {
+        switch notification.name {
+        case .UIApplicationWillTerminate:
+            didTerminate()
+        case .UIApplicationDidBecomeActive:
+            didBecomeActive()
+        case .UIApplicationDidEnterBackground:
+            didEnterBackground()
+        default:
+            break
+        }
+    }
+
+    // MARK: - UIApplicationDidFinishLaunching
+
+    public func didLaunch(_ launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) {
+        if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
+            didPerformShortcut()
+        } else if launchOptions?[.sourceApplication] != nil || launchOptions?[.url]  != nil {
+            didOpenURL()
+        } else if launchOptions?[.remoteNotification] != nil || launchOptions?[.localNotification] != nil {
+            didReceiveNotification()
+        }
+    }
+
+    // MARK: App Open from Shortcut
+
+    public func didPerformShortcut() {
+        if appOpenAction == nil {
+            appOpenAction = AppOpenAction(source: .shortcut)
+        }
+    }
+
+    // MARK: App Open from Deep Link
+
+    public func didOpenURL() {
+        if appOpenAction == nil {
+            appOpenAction = AppOpenAction(source: .deepLink)
+        }
+    }
+
+    // MARK: App Open from Notifications
+
+    public func didReceiveNotification() {
+        if appOpenAction == nil {
+            appOpenAction = AppOpenAction(source: .notification)
+        }
+    }
+
+    // MARK: - UIApplicationWillTerminate
+
+    public func didTerminate() {
+        appOpenAction = nil
+    }
+
+    // MARK: - UIApplicationDidBecomeActive
+
+    public func didBecomeActive() {
+        if appOpenAction == nil {
+            appOpenAction = AppOpenAction(source: .default)
+        }
+    }
+
+    // MARK: - UIApplicationDidEnterBackground
+
+    public func didEnterBackground() {
+        appOpenAction = nil
     }
 }

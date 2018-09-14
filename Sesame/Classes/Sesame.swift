@@ -41,16 +41,13 @@ public class Sesame: NSObject {
         }
     }
 
-    //swiftlint:disable:next weak_delegate
-    public let UIApplicationDelegate: SesameUIApplicationDelegate
-
     public let appId: String
     public let auth: String
 
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
+    public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
 
     @objc var configId: String? {
         get {
@@ -62,7 +59,6 @@ public class Sesame: NSObject {
     }
 
     public init(appId: String, appVersionId: String, auth: String, userId: String, manualBoot: Bool = true) {
-        self.UIApplicationDelegate = SesameUIApplicationDelegate()
         self.appId = appId
         self.auth = auth
         self.api = APIClient()
@@ -70,7 +66,6 @@ public class Sesame: NSObject {
 
         super.init()
 
-        self.UIApplicationDelegate.app = self
         let context = coreDataManager.newContext()
         context.performAndWait {
             coreDataManager.fetchAppConfig(context: context, configId)?.versionId = appVersionId
@@ -97,11 +92,6 @@ public extension Sesame {
     @objc
     public class func setShared(_ sesame: Sesame) {
         shared = sesame
-    }
-
-    @objc
-    public class var UIApplicationDelegate: SesameUIApplicationDelegate? {
-        return shared?.UIApplicationDelegate
     }
 
     @objc
@@ -140,31 +130,35 @@ public extension Sesame {
 
 extension Sesame {
 
-    func receive(appOpenAction: AppOpenAction?) {
-        switch appOpenAction?.cueCategory {
-        case .internal?,
-             .external?:
+    func add(appOpenEvent: AppOpenAction) {
+        switch appOpenEvent.cueCategory {
+        case .internal,
+             .external:
             let context = coreDataManager.newContext()
             context.performAndWait {
                 if let userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id,
                     let cartridge = coreDataManager.fetchCartridge(context: context,
                                                                    userId: userId,
-                                                                   actionName: SesameConstants.AppOpenAction),
-                    let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
-                    let reinforcementName = reinforcement.name {
+                                                                   actionName: SesameConstants.AppOpenAction) {
+                    let reinforcementName: String
+                    if let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
+                        let name = reinforcement.name {
+                        reinforcementName = name
+                        context.delete(reinforcement)
+                    } else {
+                        reinforcementName = "neutral"
+                    }
+
                     Logger.info(confirmed: "Next reinforcement:\(reinforcementName)")
                     _effect = (reinforcementName, [:])
 
-                    context.delete(reinforcement)
-                    addEvent(context: context, actionName: SesameConstants.AppOpenAction)
+                    addEvent(context: context,
+                             actionName: SesameConstants.AppOpenAction,
+                             metadata: appOpenEvent.eventMetadata.metadata)
                     sendRefresh(context: context, userId: userId, actionName: SesameConstants.AppOpenAction)
                 }
             }
-
-        case .synthetic?:
-            break
-
-        case nil:
+        case .synthetic:
             break
         }
     }
@@ -174,14 +168,17 @@ extension Sesame {
 // MARK: - For development
 
 public extension Sesame {
+
     func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:]) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             guard let userId = getUserId(context) else { return }
-            coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: metadata)
+            let eventMetadata = EventMetadata(metadata: metadata)
+            eventMetadata.update()
+            coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: eventMetadata.metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.info("Added event:\(actionName) for userId:\(userId) events total:#\(eventCount ?? -1)")
+            Logger.info("Added event:\(actionName) metadata:\(eventMetadata.metadata) for userId:\(userId) events total:#\(eventCount ?? -1)")
 
 //            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
 //                Logger.info("Report:\(report.actionName!) events:\(report.events!.count)")

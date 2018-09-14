@@ -22,17 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
                                userId: userId,
                                manualBoot: false))
-        Sesame.UIApplicationDelegate?.application(application, didFinishLaunchingWithOptions: launchOptions)
+        Sesame.shared?.applicationLifecycleTracker?.didLaunch(launchOptions)
 
         return true
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        Sesame.UIApplicationDelegate?.applicationDidBecomeActive(application)
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        Sesame.UIApplicationDelegate?.applicationDidEnterBackground(application)
     }
 
 }
