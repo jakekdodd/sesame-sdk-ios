@@ -28,7 +28,7 @@ open class OverlayEffectView: UIView {
         isUserInteractionEnabled = false
     }
 
-    @objc @available(iOS 9.0, *)
+    @objc
     open func constrainToSuperview() {
         // Adjusts to cover the superview
         guard let superview = superview else {
@@ -36,12 +36,16 @@ open class OverlayEffectView: UIView {
             return
         }
         translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: superview.topAnchor),
             bottomAnchor.constraint(equalTo: superview.bottomAnchor),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor),
             leadingAnchor.constraint(equalTo: superview.leadingAnchor)
             ])
+        } else {
+            frame = superview.bounds
+        }
         layoutIfNeeded()
     }
 
