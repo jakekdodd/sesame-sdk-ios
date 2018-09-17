@@ -30,6 +30,7 @@ open class ExplosionEffectView: OverlayEffectView {
     public var hapticFeedback: Bool = false
     public var systemSound: UInt32 = 1007
 
+    //swiftlint:disable:next function_body_length
     public override func start(completion: @escaping () -> Void) {
         guard let image = image else {
             Logger.warning("Image not set")
@@ -39,8 +40,10 @@ open class ExplosionEffectView: OverlayEffectView {
 
         DispatchQueue.main.async {
             let emitter = CAEmitterLayer()
-            emitter.emitterPosition = CGPoint(x: self.location.0 > 1 ? self.location.0 : self.location.0 * self.bounds.width,
-                                              y: self.location.1 > 1 ? self.location.1 : self.location.1 * self.bounds.height)
+            emitter.emitterPosition = CGPoint(
+                x: self.location.0 > 1 ? self.location.0 : self.location.0 * self.bounds.width,
+                y: self.location.1 > 1 ? self.location.1 : self.location.1 * self.bounds.height
+            )
             emitter.beginTime = CACurrentMediaTime() - 0.9
 
             let cell = CAEmitterCell()

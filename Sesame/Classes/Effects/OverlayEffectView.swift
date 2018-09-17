@@ -11,21 +11,17 @@ open class OverlayEffectView: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
     }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+
+        clipsToBounds = true
+        isUserInteractionEnabled = false
     }
 
     convenience init() {
         self.init(frame: .zero)
-    }
-
-    fileprivate func setup() {
-        clipsToBounds = true
-        isUserInteractionEnabled = false
     }
 
     @objc(start)
