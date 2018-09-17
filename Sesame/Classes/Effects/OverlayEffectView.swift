@@ -28,6 +28,16 @@ open class OverlayEffectView: UIView {
         isUserInteractionEnabled = false
     }
 
+    @objc(start)
+    public func objc_start() {
+        self.start()
+    }
+
+    @objc
+    public func start(completion: @escaping () -> Void = {}) {
+        fatalError("Must implement this method")
+    }
+
     @objc
     open func constrainToSuperview() {
         // Adjusts to cover the superview

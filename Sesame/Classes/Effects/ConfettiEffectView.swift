@@ -36,13 +36,7 @@ open class ConfettiEffectView: OverlayEffectView {
     var burstEmitter: CAEmitterLayer?
     var showerEmitter: CAEmitterLayer?
 
-    @objc(start)
-    public func objc_start() {
-        self.start()
-    }
-
-    @objc
-    public func start(completion: @escaping (ConfettiEffectView) -> Void = {_ in}) {
+    override public func start(completion: @escaping () -> Void = {}) {
         self.showConfetti(duration: duration,
                           size: size,
                           shapes: shapes,
@@ -76,7 +70,7 @@ open class ConfettiEffectView: OverlayEffectView {
                                            UIColor.from(rgb: "f7332f", alpha: 0.8) ?? UIColor.red ],
                       hapticFeedback: Bool = false,
                       systemSound: UInt32 = 0,
-                      completion: @escaping (ConfettiEffectView) -> Void = {_ in}) {
+                      completion: @escaping () -> Void = {}) {
         let burstDuration = 0.8
         let showerDuration = max(0, duration - burstDuration)
         self.confettiBurst(duration: burstDuration,
@@ -157,7 +151,7 @@ open class ConfettiEffectView: OverlayEffectView {
                         size: CGSize,
                         shapes: [ConfettiShape],
                         colors: [UIColor],
-                        completion: @escaping (ConfettiEffectView) -> Void) {
+                        completion: @escaping () -> Void) {
         DispatchQueue.main.async {
 
             /* Create showering confetti */
@@ -208,7 +202,7 @@ open class ConfettiEffectView: OverlayEffectView {
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     showerEmitter.removeFromSuperlayer()
                     self.showerEmitter = nil
-                    completion(self)
+                    completion()
                 }
             }
         }

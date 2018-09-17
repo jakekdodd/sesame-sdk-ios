@@ -55,13 +55,8 @@ open class SheenEffectView: OverlayEffectView {
         }
     }
 
-    @objc(start)
-    public func objc_start() {
-        self.start()
-    }
-
     @objc
-    open func start(completion: @escaping (Bool) -> Void = {_ in}) { // swiftlint:disable:this function_body_length
+    override open func start(completion: @escaping () -> Void = {}) { // swiftlint:disable:this function_body_length
         if image == nil,
             let bundle = Bundle.sesame,
             let image = UIImage(named: "sheen", in: bundle, compatibleWith: nil) {
@@ -96,12 +91,12 @@ open class SheenEffectView: OverlayEffectView {
 
         guard let imageView = imageView else {
             Logger.error("No image set for sheen")
-            completion(false)
+            completion()
             return
         }
         guard imageView.isHidden else {
             Logger.error("Sheen is already animating")
-            completion(false)
+            completion()
             return
         }
 
@@ -125,7 +120,7 @@ open class SheenEffectView: OverlayEffectView {
                         self.imageViewAnimationEndConstraint?.isActive = false
                         self.imageViewAnimationStartConstraint?.isActive = true
                         self.layoutIfNeeded()
-                        completion(true)
+                        completion()
         })
     }
 
