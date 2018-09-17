@@ -109,3 +109,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 }
+
+// MARK: - UIApplication
+
+extension UIApplication {
+    func sendToBackground() {
+        DispatchQueue.main.async {
+            UIControl().sendAction(#selector(URLSessionTask.suspend), to: self, for: nil)
+        }
+    }
+}

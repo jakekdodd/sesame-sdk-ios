@@ -21,7 +21,7 @@ open class SheenEffectView: OverlayEffectView {
     @IBInspectable @objc
     public var image: UIImage?
     @IBInspectable @objc
-    public var widthToHeightRatio: CGFloat = WidthToHeightRatio.equal.rawValue {
+    public var widthToHeightRatio: CGFloat = WidthToHeightRatio.wide.rawValue {
         didSet {
             if #available(iOS 9.0, *),
                 imageViewWidthConstraint != nil {

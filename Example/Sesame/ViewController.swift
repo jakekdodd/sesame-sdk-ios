@@ -19,10 +19,6 @@ class ViewController: UIViewController, SesameEffectDelegate {
     lazy var sheenView: SheenEffectView = {
         let view = button!
         let sheenView = SheenEffectView()
-        sheenView.image = UIImage.init(named: "bmind")
-        sheenView.opacityMask = true
-        sheenView.duration = 4
-        sheenView.color = UIColor.from(rgb: "FFD700")
         view.addSubview(sheenView)
         sheenView.constrainToSuperview()
         return sheenView
@@ -31,16 +27,22 @@ class ViewController: UIViewController, SesameEffectDelegate {
     lazy var confettiView: ConfettiEffectView = {
         let view = button!
         let confettiView = ConfettiEffectView()
-        confettiView.duration = 5
         view.addSubview(confettiView)
         confettiView.constrainToSuperview()
         return confettiView
     }()
 
-    var notificationCenter: UNUserNotificationCenter?
+    lazy var emojisplosionView: ExplosionEffectView = {
+        let view = button!
+        let emojisplosionView = ExplosionEffectView()
+        emojisplosionView.clipsToBounds = false
+        view.addSubview(emojisplosionView)
+        emojisplosionView.constrainToSuperview()
+        return emojisplosionView
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        notificationCenter = UNUserNotificationCenter.current()
         Sesame.shared?.effectDelegate = self
     }
 
@@ -53,6 +55,9 @@ class ViewController: UIViewController, SesameEffectDelegate {
 
             case "sheen":
                 self.sheenView.start()
+
+            case "emojisplosion":
+                self.emojisplosionView.start()
 
             default:
                 break
@@ -73,6 +78,17 @@ class ViewController: UIViewController, SesameEffectDelegate {
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {
-        notificationCenter?.scheduleNotification(identifier: "welcomeScreen", body: "Welcome to my App!", time: 2)
+        UNUserNotificationCenter.current().requestPermission(remoteRegistration: false) { success in
+            guard success == true else {
+                print("Notification permission denied")
+                return
+            }
+            UIApplication.shared.sendToBackground()
+            UNUserNotificationCenter.current().scheduleNotification(
+                identifier: "welcomeScreen",
+                body: "Welcome to my App!",
+                time: 2
+            )
+        }
     }
 }

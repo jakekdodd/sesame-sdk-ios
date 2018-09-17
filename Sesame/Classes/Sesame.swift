@@ -175,10 +175,14 @@ public extension Sesame {
             guard let userId = getUserId(context) else { return }
             let eventMetadata = EventMetadata(metadata: metadata)
             eventMetadata.update()
-            coreDataManager.insertEvent(context: context, userId: userId, actionName: actionName, metadata: eventMetadata.metadata)
+            coreDataManager.insertEvent(context: context,
+                                        userId: userId,
+                                        actionName: actionName,
+                                        metadata: eventMetadata.metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.info("Added event:\(actionName) metadata:\(eventMetadata.metadata) for userId:\(userId) events total:#\(eventCount ?? -1)")
+            Logger.info("Added event:\(actionName) metadata:\(eventMetadata.metadata) for userId:\(userId)")
+            Logger.info("Total events for user:#\(eventCount ?? -1)")
 
 //            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
 //                Logger.info("Report:\(report.actionName!) events:\(report.events!.count)")

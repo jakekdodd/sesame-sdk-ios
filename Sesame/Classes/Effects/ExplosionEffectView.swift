@@ -31,7 +31,7 @@ open class ExplosionEffectView: OverlayEffectView {
     public var systemSound: UInt32 = 1007
 
     //swiftlint:disable:next function_body_length
-    public override func start(completion: @escaping () -> Void) {
+    public override func start(completion: @escaping () -> Void = {}) {
         guard let image = image else {
             Logger.warning("Image not set")
             completion()
