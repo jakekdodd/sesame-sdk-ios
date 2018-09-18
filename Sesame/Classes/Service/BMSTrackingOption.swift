@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import CoreTelephony
 
 public typealias BMSTrackingOptions = [BMSTrackingOption]
 
 public extension Array where Element == BMSTrackingOption {
     static var `default`: BMSTrackingOptions {
-        return [.IPAddress, .language, .model]
+        return [.carrier, .deviceModel, .language, .country]
     }
 
     func annotate(_ dict: inout [String: Any]) {
@@ -22,45 +23,21 @@ public extension Array where Element == BMSTrackingOption {
 }
 
 public enum BMSTrackingOption: String {
-    case IPAddress, language, model
+    case carrier, deviceModel, language, country
 
     func getValue() -> Any? {
         switch self {
-        case .IPAddress:
-            var address: String?
-            var ifaddr: UnsafeMutablePointer<ifaddrs>?
-            if getifaddrs(&ifaddr) == 0 {
-                defer { freeifaddrs(ifaddr) }
-                var ptr = ifaddr
-                while ptr != nil {
-                    defer { ptr = ptr?.pointee.ifa_next }
+        case .carrier:
+            return CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName ?? "unknown"
 
-                    if let interface = ptr?.pointee {
-                        let addrFamily = interface.ifa_addr.pointee.sa_family
-                        if addrFamily == UInt8(AF_INET) || addrFamily == UInt8(AF_INET6),
-                            let name = interface.ifa_name,
-                            String(cString: name) == "en0",
-                            let addr = interface.ifa_addr {
-                            var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                            getnameinfo(addr,
-                                        socklen_t(addr.pointee.sa_len),
-                                        &hostname,
-                                        socklen_t(hostname.count),
-                                        nil,
-                                        socklen_t(0),
-                                        NI_NUMERICHOST)
-                            address = String(cString: hostname)
-                        }
-                    }
-                }
-            }
-            return address
+        case .deviceModel:
+            return UIDevice.modelName
 
         case .language:
-            return NSLocale.preferredLanguages.first
+            return NSLocale.preferredLanguages.first ?? "unknown"
 
-        case .model:
-            return UIDevice.modelName
+        case .country:
+            return (Locale.current as NSLocale).object(forKey: .countryCode) as? String ?? "unknown"
         }
     }
 }
