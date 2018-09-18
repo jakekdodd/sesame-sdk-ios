@@ -11,7 +11,7 @@ public typealias BMSTrackingOptions = [BMSTrackingOption]
 
 public extension Array where Element == BMSTrackingOption {
     static var `default`: BMSTrackingOptions {
-        return [.IPAddress, .language]
+        return [.IPAddress, .language, .model]
     }
 
     func annotate(_ dict: inout [String: Any]) {
@@ -22,7 +22,7 @@ public extension Array where Element == BMSTrackingOption {
 }
 
 public enum BMSTrackingOption: String {
-    case IPAddress, language
+    case IPAddress, language, model
 
     func getValue() -> Any? {
         switch self {
@@ -58,6 +58,9 @@ public enum BMSTrackingOption: String {
 
         case .language:
             return NSLocale.preferredLanguages.first
+
+        case .model:
+            return UIDevice.modelName
         }
     }
 }
