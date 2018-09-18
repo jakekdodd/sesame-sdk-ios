@@ -11,19 +11,31 @@ import CoreTelephony
 public typealias BMSTrackingOptions = [BMSTrackingOption]
 
 public extension Array where Element == BMSTrackingOption {
+
     static var `default`: BMSTrackingOptions {
         return [.carrier, .deviceModel, .language, .country]
     }
 
     func annotate(_ dict: inout [String: Any]) {
         for option in self {
-            dict[option.rawValue] = option.getValue()
+            dict[option.key] = option.getValue()
         }
     }
+
 }
 
-public enum BMSTrackingOption: String {
+@objc
+public enum BMSTrackingOption: Int {
     case carrier, deviceModel, language, country
+
+    var key: String {
+        switch self {
+        case .carrier: return "carrier"
+        case .deviceModel: return "deviceModel"
+        case .language: return "language"
+        case .country: return "country"
+        }
+    }
 
     func getValue() -> Any? {
         switch self {
