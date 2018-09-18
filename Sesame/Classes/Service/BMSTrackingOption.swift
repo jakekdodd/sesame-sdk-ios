@@ -1,5 +1,5 @@
 //
-//  EventTracker.swift
+//  BMSTrackingOption.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/13/18.

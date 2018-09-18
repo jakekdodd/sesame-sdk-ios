@@ -18,7 +18,7 @@
 		4192EF17D62CCA0E1CA3F2C5668BF74E /* Pods-Sesame_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 52E8674BB969D65A77D69A63CE3DD61A /* Pods-Sesame_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		48F4388EEEDCF913EF8AF4798E53A52D /* Sesame-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FCECE1067599F3D5463DBC7DB120C1 /* Sesame-dummy.m */; };
 		5664E96852479C20A85BCA56CE6E27A8 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFB107A4DD9AFFE6EBF1207AA2BB03E /* AudioEffect.swift */; };
-		6127673845D4FE9875869A22B4507A58 /* EventTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ED46A4EBE47B2A8406120EB0248C5 /* EventTracker.swift */; };
+		6127673845D4FE9875869A22B4507A58 /* BMSTrackingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ED46A4EBE47B2A8406120EB0248C5 /* BMSTrackingOption.swift */; };
 		65E33CA91C3E6663100BCADBD7DA7505 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
 		6C2F01B98ADB40B860F694C95150E3ED /* ConfettiEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15F32EA0B9A3DAD1A66676A776A6949 /* ConfettiEffectView.swift */; };
 		7429959CBC012D66EA2C5A854F23E06E /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B69B30471D951FA537AC284D393813C /* BundleExtensions.swift */; };
@@ -92,7 +92,7 @@
 		3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3C46D37F2C90130D8F55131F45B0D945 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EACBA9CB94048E20D2E0489C3B1DD63 /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		442ED46A4EBE47B2A8406120EB0248C5 /* EventTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EventTracker.swift; sourceTree = "<group>"; };
+		442ED46A4EBE47B2A8406120EB0248C5 /* BMSTrackingOption.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSTrackingOption.swift; sourceTree = "<group>"; };
 		4D6705D947848C916FC70A7D8692CC19 /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
 		4DA35134CECCDB76540B098946A35C3B /* ExplosionEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExplosionEffectView.swift; sourceTree = "<group>"; };
 		5001C6A902C1189FA7D6308B6A34AC13 /* CoreDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -346,7 +346,7 @@
 				F027920AB4BC54CC48B71CD64352BA07 /* ApplicationLifecycleTracker.swift */,
 				50AFEE7402371CF71C3D746F282264D3 /* AppOpenAction.swift */,
 				9CC5DF75611A71A2C8463DA56E87AECE /* Cue.swift */,
-				442ED46A4EBE47B2A8406120EB0248C5 /* EventTracker.swift */,
+				442ED46A4EBE47B2A8406120EB0248C5 /* BMSTrackingOption.swift */,
 				59A6AEA21BC304A2567FC2DB54DD0CF1 /* UserIdSource.swift */,
 			);
 			name = Service;
@@ -572,7 +572,7 @@
 				3AECF38D8C782990FBE9992FB0CD3BC1 /* CoreDataManager.swift in Sources */,
 				3BBCD31232D230B8C371A7B0B31CDEC4 /* Cue.swift in Sources */,
 				DDD6055EBDB327D6BECB15BE3E76F8B4 /* DelayedSerialQueue.swift in Sources */,
-				6127673845D4FE9875869A22B4507A58 /* EventTracker.swift in Sources */,
+				6127673845D4FE9875869A22B4507A58 /* BMSTrackingOption.swift in Sources */,
 				77FB48C17B4AF10E415E3C7D647E073D /* ExplosionEffectView.swift in Sources */,
 				18A4906CAC2F65F9E0C941FB1F4D46C5 /* HTTPClient.swift in Sources */,
 				84CB1BCA2151894F00A1B8A8 /* UIDeviceExtensions.swift in Sources */,
