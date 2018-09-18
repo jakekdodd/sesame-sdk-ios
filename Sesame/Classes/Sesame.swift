@@ -154,7 +154,7 @@ extension Sesame {
 
                     addEvent(context: context,
                              actionName: SesameConstants.AppOpenAction,
-                             metadata: appOpenEvent.eventMetadata.metadata)
+                             metadata: appOpenEvent.eventMetadata.dict)
                     sendRefresh(context: context, userId: userId, actionName: SesameConstants.AppOpenAction)
                 }
             }
@@ -173,15 +173,15 @@ public extension Sesame {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             guard let userId = getUserId(context) else { return }
-            let eventMetadata = EventMetadata(metadata: metadata)
+            var eventMetadata = BMSMetadata(metadata)
             eventMetadata.update()
             coreDataManager.insertEvent(context: context,
                                         userId: userId,
                                         actionName: actionName,
-                                        metadata: eventMetadata.metadata)
+                                        metadata: eventMetadata.dict)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.info("Added event:\(actionName) metadata:\(eventMetadata.metadata) for userId:\(userId)")
+            Logger.info("Added event:\(actionName) metadata:\(eventMetadata.dict) for userId:\(userId)")
             Logger.info("Total events for user:#\(eventCount ?? -1)")
 
 //            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {

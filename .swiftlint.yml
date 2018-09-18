@@ -6,6 +6,7 @@ line_length:
 identifier_name:
   excluded: 
     - id
+    - i
     - x
     - y
     - r

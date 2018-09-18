@@ -32,7 +32,7 @@ struct AppOpenAction {
     }
 
     let date: Date
-    var eventMetadata = EventMetadata()
+    var eventMetadata = BMSMetadata()
     let source: Source
     var cueCategory: Cue.Category {
         return source.cueCategory
