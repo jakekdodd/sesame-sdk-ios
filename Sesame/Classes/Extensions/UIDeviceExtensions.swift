@@ -18,13 +18,6 @@ internal extension UIDevice {
         }
         func mapToDevice(identifier: String) -> String { // swiftlint:disable:this cyclomatic_complexity function_body_length
             switch identifier {
-            // iPod Touch
-            case "iPod1,1":             return "iPod touch"
-            case "iPod2,1":             return "iPod touch 2"
-            case "iPod3,1":             return "iPod touch 3"
-            case "iPod4,1":             return "iPod touch 4"
-            case "iPod5,1":             return "iPod touch 5"
-            case "iPod7,1":             return "iPod touch 6"
             // iPhone
             case "iPhone1,1":           return "iPhone"
             case "iPhone1,2":           return "iPhone 3G"
@@ -90,15 +83,22 @@ internal extension UIDevice {
             // iPad mini
             case "iPad2,5",
                  "iPad2,6",
-                 "iPad2,7":             return "iPad mini"
+                 "iPad2,7":             return "iPad Mini"
             case "iPad4,4",
                  "iPad4,5",
-                 "iPad4,6":             return "iPad mini 2"
+                 "iPad4,6":             return "iPad Mini 2"
             case "iPad4,7",
                  "iPad4,8",
-                 "iPad4,9":             return "iPad mini 3"
+                 "iPad4,9":             return "iPad Mini 3"
             case "iPad5,1",
-                 "iPad5,2":             return "iPad mini 4"
+                 "iPad5,2":             return "iPad Mini 4"
+            // iPod Touch
+            case "iPod1,1":             return "iPod Touch"
+            case "iPod2,1":             return "iPod Touch 2"
+            case "iPod3,1":             return "iPod Touch 3"
+            case "iPod4,1":             return "iPod Touch 4"
+            case "iPod5,1":             return "iPod Touch 5"
+            case "iPod7,1":             return "iPod Touch 6"
             // AirPods
             case "AirPods1,1":          return "AirPods"
             // HomePod
