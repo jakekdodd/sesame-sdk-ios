@@ -32,7 +32,8 @@ struct AppOpenAction {
     }
 
     let date: Date
-    var eventMetadata = BMSMetadata()
+    var actionName: String { return SesameConstants.AppOpenAction }
+    var metadata = [String: Any]()
     let source: Source
     var cueCategory: Cue.Category {
         return source.cueCategory
@@ -41,7 +42,6 @@ struct AppOpenAction {
     init(source: Source, date: Date = Date()) {
         self.source = source
         self.date = date
-        eventMetadata.update()
     }
 
 }

@@ -7,69 +7,23 @@
 
 import Foundation
 
-struct BMSMetadata: Collection, Sequence {
-    public typealias DictionaryType = [String: Any]
-    private var dictionary: DictionaryType
+public typealias BMSTrackingOptions = [BMSTrackingOption]
 
-    enum Option: String {
-        case IPAddress, language
-    }
-    var options: [Option: Bool]
-
-    init(_ dict: DictionaryType = DictionaryType(),
-         options: [Option: Bool] = [.IPAddress: true,
-                                    .language: true]
-        ) {
-        self.dictionary = dict
-        self.options = options
+public extension Array where Element == BMSTrackingOption {
+    static var `default`: BMSTrackingOptions {
+        return [.IPAddress, .language]
     }
 
-    public var dict: DictionaryType { return dictionary }
-
-    mutating func update() {
-        for (option, enabled) in options {
-            if enabled {
-                dictionary[option.rawValue] = option.getValue()
-            } else {
-                dictionary.removeValue(forKey: option.rawValue)
-            }
+    func annotate(_ dict: inout [String: Any]) {
+        for option in self {
+            dict[option.rawValue] = option.getValue()
         }
     }
-
 }
 
-extension BMSMetadata {
+public enum BMSTrackingOption: String {
+    case IPAddress, language
 
-    // MARK: Collection
-    public typealias Key = DictionaryType.Key
-    public typealias Value = DictionaryType.Value
-    public typealias Index = DictionaryType.Index
-    public typealias Indices = DictionaryType.Indices
-    public typealias Iterator = DictionaryType.Iterator
-    public typealias SubSequence = DictionaryType.SubSequence
-
-    public var indices: Indices { return dictionary.indices }
-    public var startIndex: Index { return dictionary.startIndex }
-    public var endIndex: Index { return dictionary.endIndex }
-
-    public subscript(position: Index) -> Iterator.Element { return dictionary[position] }
-    public subscript(bounds: Range<Index>) -> SubSequence { return dictionary[bounds] }
-    public subscript(key: Key) -> Value? {
-        get { return dictionary[key] }
-        set { dictionary[key] = newValue }
-    }
-
-    public func index(after i: Index) -> Index {
-        return dictionary.index(after: i)
-    }
-
-    // MARK: Sequence
-    public func makeIterator() -> Iterator {
-        return dictionary.makeIterator()
-    }
-}
-
-extension BMSMetadata.Option {
     func getValue() -> Any? {
         switch self {
         case .IPAddress:

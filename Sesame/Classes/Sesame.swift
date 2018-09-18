@@ -47,6 +47,7 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
+    public var trackingOptions = BMSTrackingOptions.default
     public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
 
     @objc var configId: String? {
@@ -154,7 +155,7 @@ extension Sesame {
 
                     addEvent(context: context,
                              actionName: SesameConstants.AppOpenAction,
-                             metadata: appOpenEvent.eventMetadata.dict)
+                             metadata: appOpenEvent.metadata)
                     sendRefresh(context: context, userId: userId, actionName: SesameConstants.AppOpenAction)
                 }
             }
@@ -171,17 +172,17 @@ public extension Sesame {
 
     func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:]) {
         let context = context ?? coreDataManager.newContext()
+        var metadata = metadata
         context.performAndWait {
             guard let userId = getUserId(context) else { return }
-            var eventMetadata = BMSMetadata(metadata)
-            eventMetadata.update()
+            trackingOptions.annotate(&metadata)
             coreDataManager.insertEvent(context: context,
                                         userId: userId,
                                         actionName: actionName,
-                                        metadata: eventMetadata.dict)
+                                        metadata: metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.info("Added event:\(actionName) metadata:\(eventMetadata.dict) for userId:\(userId)")
+            Logger.info("Added event:\(actionName) metadata:\(metadata) for userId:\(userId)")
             Logger.info("Total events for user:#\(eventCount ?? -1)")
 
 //            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
