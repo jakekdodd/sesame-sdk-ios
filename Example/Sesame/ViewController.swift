@@ -10,66 +10,24 @@ import UIKit
 import Sesame
 import UserNotifications
 
-class ViewController: UIViewController, SesameEffectDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
 
-    lazy var sheenView: SheenEffectView = {
-        let view = button!
-        let sheenView = SheenEffectView()
-        view.addSubview(sheenView)
-        sheenView.constrainToSuperview()
-        return sheenView
-    }()
-
-    lazy var confettiView: ConfettiEffectView = {
-        let view = button!
-        let confettiView = ConfettiEffectView()
-        view.addSubview(confettiView)
-        confettiView.constrainToSuperview()
-        return confettiView
-    }()
-
-    lazy var emojisplosionView: ExplosionEffectView = {
-        let view = button!
-        let emojisplosionView = ExplosionEffectView()
-        emojisplosionView.clipsToBounds = false
-        view.addSubview(emojisplosionView)
-        emojisplosionView.constrainToSuperview()
-        return emojisplosionView
-    }()
+    var effectViewContainer = EffectViewContainerViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Sesame.shared?.effectDelegate = self
-    }
-
-    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
-        print("Got reinforcement:\(reinforcement)")
-        DispatchQueue.main.async {
-            switch reinforcement {
-            case "confetti":
-                self.confettiView.start()
-
-            case "sheen":
-                self.sheenView.start()
-
-            case "emojisplosion":
-                self.emojisplosionView.start()
-
-            default:
-                break
-            }
-        }
+        addChildViewController(effectViewContainer)
+        view.addSubview(effectViewContainer.view)
+        Sesame.shared?.effectDelegate = effectViewContainer
     }
 
     @IBAction
     func didTapTest(_ sender: Any) {
-//        confettiView.start()
         Sesame.shared?.addEvent(actionName: "buttonTap")
-
     }
 
     @IBAction
