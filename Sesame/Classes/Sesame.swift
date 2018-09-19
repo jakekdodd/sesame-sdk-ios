@@ -26,7 +26,7 @@ public class Sesame: NSObject {
 
     @objc public static var shared: Sesame?
 
-    @objc public var effectDelegate: SesameEffectDelegate? {
+    @objc public weak var effectDelegate: SesameEffectDelegate? {
         didSet {
             _effect = {_effect}()
         }

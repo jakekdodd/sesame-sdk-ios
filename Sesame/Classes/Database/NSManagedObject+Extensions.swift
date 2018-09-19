@@ -23,7 +23,6 @@ extension User {
 }
 
 extension Cartridge {
-
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
     override public func awakeFromInsert() {
@@ -48,6 +47,10 @@ extension Cartridge {
             }
         }
     }
+}
+
+extension Reinforcement {
+    @objc public static let NeutralName = "NEUTRAL_RESP"
 }
 
 extension Optional where Wrapped == String {

@@ -7,12 +7,14 @@
 
 import Foundation
 
+@objc
 open class OverlayEffectView: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
+    @objc
     public override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -20,17 +22,18 @@ open class OverlayEffectView: UIView {
         isUserInteractionEnabled = false
     }
 
+    @objc
     convenience init() {
         self.init(frame: .zero)
     }
 
-    @objc(start)
-    public func objc_start() {
-        self.start()
+    @objc
+    public func start() {
+        start(completion: {})
     }
 
     @objc
-    public func start(completion: @escaping () -> Void = {}) {
+    public func start(completion: @escaping () -> Void) {
         fatalError("Must implement this method")
     }
 
