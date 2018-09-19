@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 
+@objc
 public protocol SesameEffectDelegate: class {
 
     /// Override this method to receive reinforcements!
@@ -20,11 +21,12 @@ public protocol SesameEffectDelegate: class {
     func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
 }
 
+@objc
 public class Sesame: NSObject {
 
-    public fileprivate(set) static var shared: Sesame?
+    @objc public static var shared: Sesame?
 
-    public var effectDelegate: SesameEffectDelegate? {
+    @objc public var effectDelegate: SesameEffectDelegate? {
         didSet {
             _effect = {_effect}()
         }
@@ -41,14 +43,14 @@ public class Sesame: NSObject {
         }
     }
 
-    public let appId: String
-    public let auth: String
+    @objc public let appId: String
+    @objc public let auth: String
 
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    public var trackingOptions = BMSTrackingOptions.default
-    public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
+    @objc public var trackingOptions: NSArray = BMSTrackingOptions.default as NSArray
+    @objc public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
 
     @objc var configId: String? {
         get {
@@ -59,7 +61,8 @@ public class Sesame: NSObject {
         }
     }
 
-    public init(appId: String, appVersionId: String, auth: String, userId: String, manualBoot: Bool = true) {
+    @objc
+    public init(appId: String, appVersionId: String, auth: String, userId: String, manualBoot: Bool) {
         self.appId = appId
         self.auth = auth
         self.api = APIClient()
@@ -91,12 +94,11 @@ public class Sesame: NSObject {
 public extension Sesame {
 
     @objc
-    public class func setShared(_ sesame: Sesame) {
-        shared = sesame
+    public func setUserId(_ userId: String?) {
+        setUserId(userId, nil)
     }
 
-    @objc
-    public func setUserId(_ userId: String?, _ context: NSManagedObjectContext? = nil) {
+    internal func setUserId(_ userId: String?, _ context: NSManagedObjectContext?) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             var newUser: User?
@@ -116,7 +118,12 @@ public extension Sesame {
         Logger.info("set userId:\(String(describing: userId))")
     }
 
-    @objc func getUserId(_ context: NSManagedObjectContext? = nil) -> String? {
+    @objc
+    public func getUserId() -> String? {
+        return getUserId(nil)
+    }
+
+    internal func getUserId(_ context: NSManagedObjectContext?) -> String? {
         var userId: String?
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
@@ -125,13 +132,49 @@ public extension Sesame {
         Logger.verbose("got userId:\(String(describing: userId))")
         return userId
     }
-}
 
-// MARK: - Internal Methods
+    @objc
+    public func addEvent(actionName: String) {
+        addEvent(context: nil, actionName: actionName, metadata: [:])
+    }
 
-extension Sesame {
+    @objc
+    public func addEvent(actionName: String, metadata: [String: Any]) {
+        addEvent(context: nil, actionName: actionName, metadata: metadata)
+    }
 
-    func add(appOpenEvent: AppOpenAction) {
+    internal func addEvent(context: NSManagedObjectContext?, actionName: String, metadata: [String: Any]) {
+        let context = context ?? coreDataManager.newContext()
+        var metadata = metadata
+        context.performAndWait {
+            guard let userId = getUserId(context) else { return }
+            (trackingOptions as? BMSTrackingOptions)?.annotate(&metadata)
+            coreDataManager.insertEvent(context: context,
+                                        userId: userId,
+                                        actionName: actionName,
+                                        metadata: metadata)
+            let eventCount = coreDataManager.countEvents(context: context, userId: userId)
+
+            Logger.info("Added event:\(actionName) metadata:\(metadata) for userId:\(userId)")
+            Logger.info("Total events for user:#\(eventCount ?? -1)")
+
+//            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
+//                Logger.info("Report:\(report.actionName!) events:\(report.events!.count)")
+//            }
+
+            if eventCount ?? 0 >= eventUploadCount {
+                sendTracks(context: context, userId: userId)
+            }
+        }
+    }
+
+    @objc
+    public func eventCount() -> Int {
+        let context = coreDataManager.newContext()
+        return coreDataManager.countEvents(context: context) ?? 0
+    }
+
+    internal func add(appOpenEvent: AppOpenAction) {
         switch appOpenEvent.cueCategory {
         case .internal,
              .external:
@@ -162,42 +205,6 @@ extension Sesame {
         case .synthetic:
             break
         }
-    }
-
-}
-
-// MARK: - For development
-
-public extension Sesame {
-
-    func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:]) {
-        let context = context ?? coreDataManager.newContext()
-        var metadata = metadata
-        context.performAndWait {
-            guard let userId = getUserId(context) else { return }
-            trackingOptions.annotate(&metadata)
-            coreDataManager.insertEvent(context: context,
-                                        userId: userId,
-                                        actionName: actionName,
-                                        metadata: metadata)
-            let eventCount = coreDataManager.countEvents(context: context, userId: userId)
-
-            Logger.info("Added event:\(actionName) metadata:\(metadata) for userId:\(userId)")
-            Logger.info("Total events for user:#\(eventCount ?? -1)")
-
-//            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
-//                Logger.info("Report:\(report.actionName!) events:\(report.events!.count)")
-//            }
-
-            if eventCount ?? 0 >= eventUploadCount {
-                sendTracks(context: context, userId: userId)
-            }
-        }
-    }
-
-    func eventCount() -> Int {
-        let context = coreDataManager.newContext()
-        return coreDataManager.countEvents(context: context) ?? 0
     }
 }
 
