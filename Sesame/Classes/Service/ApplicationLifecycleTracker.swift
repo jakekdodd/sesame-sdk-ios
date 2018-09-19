@@ -11,7 +11,7 @@ open class ApplicationLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
 
-    fileprivate(set) var appOpenAction: AppOpenAction? {
+    fileprivate(set) var appOpenAction: AppOpenEvent? {
         didSet {
             guard let newValue = appOpenAction else { return }
             sesame?.add(appOpenEvent: newValue)
@@ -70,7 +70,7 @@ open class ApplicationLifecycleTracker: NSObject {
 
     public func didPerformShortcut() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenAction(source: .shortcut)
+            appOpenAction = AppOpenEvent(source: .shortcut)
         }
     }
 
@@ -78,7 +78,7 @@ open class ApplicationLifecycleTracker: NSObject {
 
     public func didOpenURL() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenAction(source: .deepLink)
+            appOpenAction = AppOpenEvent(source: .deepLink)
         }
     }
 
@@ -86,7 +86,7 @@ open class ApplicationLifecycleTracker: NSObject {
 
     public func didReceiveNotification() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenAction(source: .notification)
+            appOpenAction = AppOpenEvent(source: .notification)
         }
     }
 
@@ -100,7 +100,7 @@ open class ApplicationLifecycleTracker: NSObject {
 
     public func didBecomeActive() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenAction(source: .default)
+            appOpenAction = AppOpenEvent(source: .default)
         }
     }
 

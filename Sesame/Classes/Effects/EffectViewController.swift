@@ -1,5 +1,5 @@
 //
-//  EffectViewContainerViewController.swift
+//  EffectViewController.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/19/18.
@@ -7,13 +7,19 @@
 
 import UIKit
 
-open class EffectViewContainerViewController: UIViewController {
+open class EffectViewController: UIViewController {
 
     var overlayEffectView: EffectView?
 
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.isUserInteractionEnabled = false
+    }
+
 }
 
-extension EffectViewContainerViewController: SesameEffectDelegate {
+extension EffectViewController: SesameReinforcementDelegate {
     public func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
         DispatchQueue.main.async {
             switch reinforcement {

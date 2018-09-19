@@ -16,13 +16,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
 
-    var effectViewContainer = EffectViewContainerViewController()
+    var effectViewContainer = EffectViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildViewController(effectViewContainer)
+        effectViewContainer.didMove(toParentViewController: self)
         view.addSubview(effectViewContainer.view)
-        Sesame.shared?.effectDelegate = effectViewContainer
+        Sesame.shared?.reinforcementDelegate = effectViewContainer
     }
 
     @IBAction

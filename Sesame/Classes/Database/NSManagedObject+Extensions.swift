@@ -7,7 +7,13 @@
 
 import CoreData
 
+extension Report {
+    static let NonReinforceableType = "NON_REINFORCEABLE"
+}
+
 extension Event {
+    static let AppOpenName = "appOpen"
+
     override public func awakeFromInsert() {
         super.awakeFromInsert()
         setPrimitiveValue(Int64(Date().timeIntervalSince1970 * 1000), forKey: #keyPath(Event.utc))

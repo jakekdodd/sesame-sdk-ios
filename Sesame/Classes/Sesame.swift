@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 @objc
-public protocol SesameEffectDelegate: class {
+public protocol SesameReinforcementDelegate: class {
 
     /// Override this method to receive reinforcements!
     /// Set this object as the delegate of the Sesame object from your AppDelegate
@@ -26,19 +26,19 @@ public class Sesame: NSObject {
 
     @objc public static var shared: Sesame?
 
-    @objc public weak var effectDelegate: SesameEffectDelegate? {
+    @objc public weak var reinforcementDelegate: SesameReinforcementDelegate? {
         didSet {
-            _effect = {_effect}()
+            _reinforcementEffect = {_reinforcementEffect}()
         }
     }
 
     /// If the delegate isn't set when an effect is supposed to show, the effect is stored until the delegate is set
-    fileprivate var _effect: (String, [String: Any])? {
+    fileprivate var _reinforcementEffect: (String, [String: Any])? {
         didSet {
-            if let effect = _effect,
-                let effectDelegate = effectDelegate {
-                effectDelegate.app(self, didReceiveReinforcement: effect.0, withOptions: effect.1)
-                _effect = nil
+            if let reinforcementEffect = _reinforcementEffect,
+                let delegate = reinforcementDelegate {
+                delegate.app(self, didReceiveReinforcement: reinforcementEffect.0, withOptions: reinforcementEffect.1)
+                _reinforcementEffect = nil
             }
         }
     }
@@ -174,7 +174,7 @@ public extension Sesame {
         return coreDataManager.countEvents(context: context) ?? 0
     }
 
-    internal func add(appOpenEvent: AppOpenAction) {
+    internal func add(appOpenEvent: AppOpenEvent) {
         switch appOpenEvent.cueCategory {
         case .internal,
              .external:
@@ -183,23 +183,23 @@ public extension Sesame {
                 if let userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id,
                     let cartridge = coreDataManager.fetchCartridge(context: context,
                                                                    userId: userId,
-                                                                   actionName: SesameConstants.AppOpenAction) {
+                                                                   actionName: appOpenEvent.name) {
                     let reinforcementName: String
                     if let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
                         let name = reinforcement.name {
                         reinforcementName = name
                         context.delete(reinforcement)
                     } else {
-                        reinforcementName = "neutral"
+                        reinforcementName = Reinforcement.NeutralName
                     }
 
                     Logger.info(confirmed: "Next reinforcement:\(reinforcementName)")
-                    _effect = (reinforcementName, [:])
+                    _reinforcementEffect = (reinforcementName, [:])
 
                     addEvent(context: context,
-                             actionName: SesameConstants.AppOpenAction,
+                             actionName: appOpenEvent.name,
                              metadata: appOpenEvent.metadata)
-                    sendRefresh(context: context, userId: userId, actionName: SesameConstants.AppOpenAction)
+                    sendRefresh(context: context, userId: userId, actionName: appOpenEvent.name)
                 }
             }
         case .synthetic:
@@ -295,7 +295,7 @@ public extension Sesame {
                         guard let reportEvents = report.events else { continue }
                         var track = [String: Any]()
                         track["actionName"] = report.actionName
-                        track["type"] = "NON_REINFORCEABLE"
+                        track["type"] = Report.NonReinforceableType
                         var events = [[String: Any]]()
                         for case let reportEvent as Event in reportEvents {
                             var event = [String: Any]()

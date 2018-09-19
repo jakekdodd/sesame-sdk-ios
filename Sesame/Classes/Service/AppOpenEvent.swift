@@ -1,5 +1,5 @@
 //
-//  AppOpenAction.swift
+//  AppOpenEvent.swift
 //  CueBD
 //
 //  Created by Akash Desai on 8/20/18.
@@ -12,7 +12,7 @@ import Foundation
 /// This struct stores the action and also its cue.
 /// A reward can then adjust according to what cued the user to open the app.
 ///
-struct AppOpenAction {
+struct AppOpenEvent {
 
     enum Source {
         case  `default`, shortcut, deepLink, notification
@@ -32,7 +32,7 @@ struct AppOpenAction {
     }
 
     let date: Date
-    var actionName: String { return SesameConstants.AppOpenAction }
+    var name: String { return Event.AppOpenName }
     var metadata = [String: Any]()
     let source: Source
     var cueCategory: Cue.Category {
