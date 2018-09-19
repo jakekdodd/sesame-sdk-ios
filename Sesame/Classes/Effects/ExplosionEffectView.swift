@@ -30,6 +30,17 @@ open class ExplosionEffectView: OverlayEffectView {
     public var hapticFeedback: Bool = false
     public var systemSound: UInt32 = 1007
 
+    @objc
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        clipsToBounds = false
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     //swiftlint:disable:next function_body_length
     public override func start(completion: @escaping () -> Void = {}) {
         guard let image = image else {
