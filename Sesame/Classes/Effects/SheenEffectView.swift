@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-open class SheenEffectView: OverlayEffectView {
+open class SheenEffectView: EffectView {
 
     public enum WidthToHeightRatio: CGFloat {
         case narrow = 0.333, equal = 1, wide = 1.667

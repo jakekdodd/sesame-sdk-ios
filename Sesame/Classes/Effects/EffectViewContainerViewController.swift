@@ -1,5 +1,5 @@
 //
-//  OverlayEffectViewController.swift
+//  EffectViewContainerViewController.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/19/18.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-open class OverlayEffectViewController: UIViewController {
+open class EffectViewContainerViewController: UIViewController {
 
-    var overlayEffectView: OverlayEffectView?
+    var overlayEffectView: EffectView?
 
 }
 
-extension OverlayEffectViewController: SesameEffectDelegate {
+extension EffectViewContainerViewController: SesameEffectDelegate {
     public func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
         DispatchQueue.main.async {
             switch reinforcement {

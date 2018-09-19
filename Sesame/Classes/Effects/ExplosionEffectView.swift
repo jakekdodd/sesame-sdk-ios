@@ -9,7 +9,7 @@ import Foundation
 import CoreGraphics
 
 @objc
-open class ExplosionEffectView: OverlayEffectView {
+open class ExplosionEffectView: EffectView {
 
     public var location: (CGFloat, CGFloat) = (0.5, 0.5)
     public var image: CGImage? = "❤️".image().cgImage

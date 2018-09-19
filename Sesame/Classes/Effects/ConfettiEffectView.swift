@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @objc
-open class ConfettiEffectView: OverlayEffectView {
+open class ConfettiEffectView: EffectView {
 
     @objc
     public enum ConfettiShape: Int {

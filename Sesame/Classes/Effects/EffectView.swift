@@ -1,5 +1,5 @@
 //
-//  OverlayEffectView.swift
+//  EffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 7/29/18.
@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-open class OverlayEffectView: UIView {
+open class EffectView: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
