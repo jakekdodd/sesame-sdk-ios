@@ -16,7 +16,7 @@ class Tests: XCTestCase {
 
     func testMultipleEvents() {
         let sesame = Sesame.dev()
-        let addEvent = { sesame.addEvent(actionName: Event.AppOpenName) }
+        let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
         let countEvents = { return sesame.coreDataManager.countEvents(context: nil, userId: Sesame.devUserId) }
         XCTAssert(countEvents() == 0)
 
@@ -32,7 +32,7 @@ class Tests: XCTestCase {
         let countReports = { sesame.coreDataManager.fetchReports(context: nil, userId: Sesame.devUserId)?.count }
         XCTAssert(countReports() == 0)
 
-        sesame.addEvent(actionName: Event.AppOpenName)
+        sesame.addEvent(actionName: BMSEvent.AppOpenName)
         XCTAssert(countReports() == 1)
 
         sesame.addEvent(actionName: "appClose")
@@ -44,16 +44,16 @@ class Tests: XCTestCase {
         let countEvents = { sesame.coreDataManager.countEvents(context: nil, userId: Sesame.devUserId) }
         XCTAssert(countEvents() == 0)
 
-        sesame.addEvent(actionName: Event.AppOpenName)
-        sesame.addEvent(actionName: Event.AppOpenName)
+        sesame.addEvent(actionName: BMSEvent.AppOpenName)
+        sesame.addEvent(actionName: BMSEvent.AppOpenName)
         XCTAssert(countEvents() == 2)
 
         sesame.coreDataManager.deleteObjects()
         XCTAssert(countEvents() == 0)
 
         sesame.setUserId(Sesame.devUserId)
-        sesame.addEvent(actionName: Event.AppOpenName)
-        sesame.addEvent(actionName: Event.AppOpenName)
+        sesame.addEvent(actionName: BMSEvent.AppOpenName)
+        sesame.addEvent(actionName: BMSEvent.AppOpenName)
         XCTAssert(countEvents() == 2)
 
     }
@@ -68,7 +68,7 @@ class Tests: XCTestCase {
 //        for iteration in 1...desiredCount {
             switch iteration % 2 {
             case 0:
-                sesame.addEvent(actionName: Event.AppOpenName)
+                sesame.addEvent(actionName: BMSEvent.AppOpenName)
             default:
                 sesame.addEvent(actionName: "appClose")
             }
@@ -109,7 +109,7 @@ class Tests: XCTestCase {
         var currentUser = user1
         let setUser1 = { currentUser = user1; sesame.setUserId(currentUser) }
         let setUser2 = { currentUser = user2; sesame.setUserId(currentUser) }
-        let addEvent = { sesame.addEvent(actionName: Event.AppOpenName) }
+        let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
         let countEvents = { return sesame.coreDataManager.countEvents(context: nil, userId: currentUser) ?? -1 }
         let deleteReports = { sesame.coreDataManager.deleteReports(context: nil, userId: currentUser) }
 

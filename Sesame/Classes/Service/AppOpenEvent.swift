@@ -32,7 +32,7 @@ struct AppOpenEvent {
     }
 
     let date: Date
-    var name: String { return Event.AppOpenName }
+    var name: String { return BMSEvent.AppOpenName }
     var metadata = [String: Any]()
     let source: Source
     var cueCategory: Cue.Category {

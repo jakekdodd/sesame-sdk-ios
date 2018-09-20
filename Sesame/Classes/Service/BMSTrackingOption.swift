@@ -11,7 +11,7 @@ public typealias BMSTrackingOptions = [BMSTrackingOption]
 
 public extension Array where Element == BMSTrackingOption {
 
-    static var `default`: BMSTrackingOptions {
+    static func standard() -> BMSTrackingOptions {
         return [.carrier, .deviceModel, .language, .country]
     }
 

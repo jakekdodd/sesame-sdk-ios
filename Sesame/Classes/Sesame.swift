@@ -49,7 +49,7 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    var trackingOptions = BMSTrackingOptions.default
+    var trackingOptions = BMSTrackingOptions.standard()
 
     @objc public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
 
@@ -102,7 +102,7 @@ public extension Sesame {
     internal func setUserId(_ userId: String?, _ context: NSManagedObjectContext?) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            var newUser: User?
+            var newUser: BMSUser?
             if let userId = userId {
                 newUser = coreDataManager.fetchUser(context: context, id: userId)
             }
@@ -186,12 +186,12 @@ public extension Sesame {
                                                                    userId: userId,
                                                                    actionName: appOpenEvent.name) {
                     let reinforcementName: String
-                    if let reinforcement = cartridge.reinforcements?.firstObject as? Reinforcement,
+                    if let reinforcement = cartridge.reinforcements?.firstObject as? BMSReinforcement,
                         let name = reinforcement.name {
                         reinforcementName = name
                         context.delete(reinforcement)
                     } else {
-                        reinforcementName = Reinforcement.NeutralName
+                        reinforcementName = BMSReinforcement.NeutralName
                     }
 
                     BMSLog.info(confirmed: "Next reinforcement:\(reinforcementName)")
@@ -309,14 +309,14 @@ public extension Sesame {
                                             primaryIdentity: userId)
             payload["tracks"] = {
                 var tracks = [[String: Any]]()
-                if let reports = appConfig.user?.reports?.allObjects as? [Report] {
+                if let reports = appConfig.user?.reports?.allObjects as? [BMSReport] {
                     for report in reports {
                         guard let reportEvents = report.events else { continue }
                         var track = [String: Any]()
                         track["actionName"] = report.actionName
-                        track["type"] = Report.NonReinforceableType
+                        track["type"] = BMSReport.NonReinforceableType
                         var events = [[String: Any]]()
-                        for case let reportEvent as Event in reportEvents {
+                        for case let reportEvent as BMSEvent in reportEvents {
                             var event = [String: Any]()
                             event["utc"] = reportEvent.utc
                             event["timezoneOffset"] = reportEvent.timezoneOffset

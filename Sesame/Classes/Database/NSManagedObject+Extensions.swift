@@ -7,33 +7,33 @@
 
 import CoreData
 
-extension Report {
+extension BMSReport {
     static let NonReinforceableType = "NON_REINFORCEABLE"
 }
 
-extension Event {
+extension BMSEvent {
     static let AppOpenName = "appOpen"
 
     override public func awakeFromInsert() {
         super.awakeFromInsert()
-        setPrimitiveValue(Int64(Date().timeIntervalSince1970 * 1000), forKey: #keyPath(Event.utc))
-        setPrimitiveValue(Int64(NSTimeZone.default.secondsFromGMT() * 1000), forKey: #keyPath(Event.timezoneOffset))
+        setPrimitiveValue(Int64(Date().timeIntervalSince1970 * 1000), forKey: #keyPath(BMSEvent.utc))
+        setPrimitiveValue(Int64(NSTimeZone.default.secondsFromGMT() * 1000), forKey: #keyPath(BMSEvent.timezoneOffset))
     }
 }
 
-extension User {
+extension BMSUser {
     override public func awakeFromInsert() {
         super.awakeFromInsert()
-        setPrimitiveValue(UUID().uuidString, forKey: #keyPath(User.id))
+        setPrimitiveValue(UUID().uuidString, forKey: #keyPath(BMSUser.id))
     }
 }
 
-extension Cartridge {
+extension BMSCartridge {
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
     override public func awakeFromInsert() {
         super.awakeFromInsert()
-        setPrimitiveValue(Cartridge.NeutralCartridgeId, forKey: #keyPath(Cartridge.cartridgeId))
+        setPrimitiveValue(BMSCartridge.NeutralCartridgeId, forKey: #keyPath(BMSCartridge.cartridgeId))
     }
 
     var effectDetailsDictionary: [String: Any]? {
@@ -55,7 +55,7 @@ extension Cartridge {
     }
 }
 
-extension Reinforcement {
+extension BMSReinforcement {
     @objc public static let NeutralName = "NEUTRAL_RESP"
 }
 

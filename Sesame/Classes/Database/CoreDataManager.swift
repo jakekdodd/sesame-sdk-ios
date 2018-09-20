@@ -99,7 +99,7 @@ class CoreDataManager: NSObject {
 
     func deleteObjects() {
         managedObjectContext?.performAndWait {
-            let rootModels = [User.self, AppConfig.self]
+            let rootModels = [BMSUser.self, BMSAppConfig.self]
             for model in rootModels {
                 let request = NSFetchRequest<NSManagedObject>(entityName: model.description())
                 do {
@@ -124,20 +124,20 @@ extension CoreDataManager {
 
     // MARK: AppConfig
 
-    func fetchAppConfig(context: NSManagedObjectContext?, _ configId: String?, createIfNotFound: Bool = true) -> AppConfig? {
-        var value: AppConfig?
+    func fetchAppConfig(context: NSManagedObjectContext?, _ configId: String?, createIfNotFound: Bool = true) -> BMSAppConfig? {
+        var value: BMSAppConfig?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<AppConfig>(entityName: AppConfig.description())
-            request.predicate = NSPredicate(format: "\(#keyPath(AppConfig.configId)) == \(configId.predicateValue)")
+            let request = NSFetchRequest<BMSAppConfig>(entityName: BMSAppConfig.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSAppConfig.configId)) == \(configId.predicateValue)")
             request.fetchLimit = 1
             do {
                 if let appConfig = try context.fetch(request).first {
                     value = appConfig
                 } else if createIfNotFound,
-                    let appConfigEntity = NSEntityDescription.entity(forEntityName: AppConfig.description(),
+                    let appConfigEntity = NSEntityDescription.entity(forEntityName: BMSAppConfig.description(),
                                                                            in: context) {
-                    let appConfig = AppConfig(entity: appConfigEntity, insertInto: context)
+                    let appConfig = BMSAppConfig(entity: appConfigEntity, insertInto: context)
                     appConfig.configId = configId
                     value = appConfig
                 }
@@ -151,20 +151,20 @@ extension CoreDataManager {
 
     // MARK: User
 
-    func fetchUser(context: NSManagedObjectContext?, id: String, createIfNotFound: Bool = true) -> User? {
-        var value: User?
+    func fetchUser(context: NSManagedObjectContext?, id: String, createIfNotFound: Bool = true) -> BMSUser? {
+        var value: BMSUser?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<User>(entityName: User.description())
-            request.predicate = NSPredicate(format: "\(#keyPath(User.id)) == '\(id)'")
+            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
             request.fetchLimit = 1
             do {
                 if let user = try context.fetch(request).first {
                     value = user
                 } else if createIfNotFound,
-                    let entity = NSEntityDescription.entity(forEntityName: User.description(),
+                    let entity = NSEntityDescription.entity(forEntityName: BMSUser.description(),
                                                             in: context) {
-                    let user = User(entity: entity, insertInto: context)
+                    let user = BMSUser(entity: entity, insertInto: context)
                     user.id = id
                     value = user
                 }
@@ -178,22 +178,22 @@ extension CoreDataManager {
 
     // MARK: Report
 
-    private func fetchReport(context: NSManagedObjectContext?, userId: String, actionName: String, createIfNotFound: Bool = true) -> Report? {
-        var value: Report?
+    private func fetchReport(context: NSManagedObjectContext?, userId: String, actionName: String, createIfNotFound: Bool = true) -> BMSReport? {
+        var value: BMSReport?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<Report>(entityName: Report.description())
+            let request = NSFetchRequest<BMSReport>(entityName: BMSReport.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(#keyPath(Report.actionName)) == '\(actionName)'"),
-                NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
+                NSPredicate(format: "\(#keyPath(BMSReport.actionName)) == '\(actionName)'"),
+                NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
                 ])
             request.fetchLimit = 1
             do {
                 if let report = try context.fetch(request).first {
                     value = report
                 } else if createIfNotFound,
-                    let entity = NSEntityDescription.entity(forEntityName: Report.description(), in: context) {
-                    let report = Report(entity: entity, insertInto: context)
+                    let entity = NSEntityDescription.entity(forEntityName: BMSReport.description(), in: context) {
+                    let report = BMSReport(entity: entity, insertInto: context)
                     report.actionName = actionName
                     report.user = fetchUser(context: context, id: userId)
                     value = report
@@ -206,12 +206,12 @@ extension CoreDataManager {
         return value
     }
 
-    func fetchReports(context: NSManagedObjectContext?, userId: String) -> [Report]? {
-        var values: [Report]?
+    func fetchReports(context: NSManagedObjectContext?, userId: String) -> [BMSReport]? {
+        var values: [BMSReport]?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<Report>(entityName: Report.description())
-            request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
+            let request = NSFetchRequest<BMSReport>(entityName: BMSReport.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
@@ -225,8 +225,8 @@ extension CoreDataManager {
     func deleteReports(context: NSManagedObjectContext?, userId: String) {
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<Report>(entityName: Report.description())
-            request.predicate = NSPredicate(format: "\(#keyPath(Report.user.id)) == '\(userId)'")
+            let request = NSFetchRequest<BMSReport>(entityName: BMSReport.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
             do {
                 let reports = try context.fetch(request)
                 for report in reports {
@@ -245,9 +245,11 @@ extension CoreDataManager {
     func insertEvent(context: NSManagedObjectContext?, userId: String, actionName: String, metadata: [String: Any] = [:]) {
         let context = context ?? newContext()
         context.performAndWait {
-            guard let report = fetchReport(context: context, userId: userId, actionName: actionName) else { return }
-            guard let entity = NSEntityDescription.entity(forEntityName: Event.description(), in: context) else {return}
-            let event = Event(entity: entity, insertInto: context)
+            guard let report = fetchReport(context: context, userId: userId, actionName: actionName),
+                let entity = NSEntityDescription.entity(forEntityName: BMSEvent.description(), in: context) else {
+                    return
+            }
+            let event = BMSEvent(entity: entity, insertInto: context)
             do {
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata), encoding: .utf8)
             } catch {
@@ -268,9 +270,9 @@ extension CoreDataManager {
         var value: Int?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<Event>(entityName: Event.description())
+            let request = NSFetchRequest<BMSEvent>(entityName: BMSEvent.description())
             if let userId = userId {
-                request.predicate = NSPredicate(format: "\(#keyPath(Event.report.user.id)) == '\(userId)'")
+                request.predicate = NSPredicate(format: "\(#keyPath(BMSEvent.report.user.id)) == '\(userId)'")
             }
             do {
                 value = try context.count(for: request)
@@ -288,11 +290,11 @@ extension CoreDataManager {
         let context = context ?? newContext()
         context.performAndWait {
             guard let user = fetchUser(context: context, id: userId) else { return }
-            guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(), in: context) else {
+            guard let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) else {
                 BMSLog.error("Could not create entity for cartridge")
                 return
             }
-            let cartridge = Cartridge(entity: entity, insertInto: context)
+            let cartridge = BMSCartridge(entity: entity, insertInto: context)
             cartridge.actionName = actionName
             cartridge.effectDetailsDictionary = effectDetails
             cartridge.user = user
@@ -309,12 +311,12 @@ extension CoreDataManager {
     func updateCartridge(context: NSManagedObjectContext?, userId: String, actionName: String, cartridgeId: String, serverUtc: Int64, ttl: Int64, reinforcements: [String], effectDetails: [String: Any]? = nil) {
         let context = context ?? newContext()
         context.performAndWait {
-            var storedCartridge: Cartridge?
+            var storedCartridge: BMSCartridge?
             if let cartridge = fetchCartridge(context: context, userId: userId, actionName: actionName) {
                 storedCartridge = cartridge
             } else if let user = fetchUser(context: context, id: userId),
-                let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(), in: context) {
-                let cartridge = Cartridge(entity: entity, insertInto: context)
+                let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) {
+                let cartridge = BMSCartridge(entity: entity, insertInto: context)
                 cartridge.user = user
                 cartridge.actionName = actionName
                 cartridge.effectDetailsDictionary = effectDetails ?? [:]
@@ -329,9 +331,10 @@ extension CoreDataManager {
             }
 
             for reinforcementName in reinforcements {
-                guard let entity = NSEntityDescription.entity(forEntityName: Reinforcement.description(), in: context)
+                guard let entity =
+                    NSEntityDescription.entity(forEntityName: BMSReinforcement.description(), in: context)
                     else { continue }
-                let reinforcement = Reinforcement(entity: entity, insertInto: context)
+                let reinforcement = BMSReinforcement(entity: entity, insertInto: context)
                 reinforcement.name = reinforcementName
                 cartridge.addToReinforcements(reinforcement)
             }
@@ -345,14 +348,14 @@ extension CoreDataManager {
         }
     }
 
-    func fetchCartridge(context: NSManagedObjectContext?, userId: String, actionName: String) -> Cartridge? {
-        var value: Cartridge?
+    func fetchCartridge(context: NSManagedObjectContext?, userId: String, actionName: String) -> BMSCartridge? {
+        var value: BMSCartridge?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<Cartridge>(entityName: Cartridge.description())
+            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(#keyPath(Cartridge.user.id)) == '\(userId)'"),
-                NSPredicate(format: "\(#keyPath(Cartridge.actionName)) == '\(actionName)'")
+                NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
+                NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")
                 ])
             request.fetchLimit = 1
             do {
@@ -365,12 +368,12 @@ extension CoreDataManager {
         return value
     }
 
-    func fetchCartridges(context: NSManagedObjectContext?, userId: String) -> [Cartridge]? {
-        var values: [Cartridge]?
+    func fetchCartridges(context: NSManagedObjectContext?, userId: String) -> [BMSCartridge]? {
+        var values: [BMSCartridge]?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<Cartridge>(entityName: Cartridge.description())
-            request.predicate = NSPredicate(format: "\(#keyPath(Cartridge.user.id)) == '\(userId)'")
+            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'")
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
