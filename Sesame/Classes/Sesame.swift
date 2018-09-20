@@ -49,7 +49,7 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    var trackingOptions = BMSTrackingOptions.standard()
+    var trackingOptions = BMSEventMetadataOptions.standard()
 
     @objc public var appLifecycleTracker: BMSAppLifecycleTracker? = .init()
 
@@ -208,21 +208,13 @@ public extension Sesame {
     }
 
     @objc
-    public func tracking(option: BMSTrackingOption, disabled: Bool) {
+    public func tracking(option: BMSEventMetadataOption, disabled: Bool) {
         tracking(option: option, enabled: !disabled)
     }
 
     @objc
-    public func tracking(option: BMSTrackingOption, enabled: Bool) {
-        if enabled {
-            if !trackingOptions.contains(option) {
-                trackingOptions.append(option)
-            }
-        } else {
-            if let index = trackingOptions.index(of: option) {
-                trackingOptions.remove(at: index)
-            }
-        }
+    public func tracking(option: BMSEventMetadataOption, enabled: Bool) {
+        enabled ? trackingOptions.enable(option) : trackingOptions.disable(option)
     }
 }
 
