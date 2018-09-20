@@ -51,8 +51,7 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    var trackingOptions = BMSEventMetadataOptions.standard()
-
+    var trackingOptions: BMSEventMetadataOptions
     var sessionId: BMSSessionId? {
         willSet {
             if sessionId != nil {
@@ -83,6 +82,7 @@ public class Sesame: NSObject {
         self.auth = auth
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
+        self.trackingOptions = .standard()
 
         super.init()
 
