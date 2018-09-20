@@ -1,5 +1,5 @@
 //
-//  ConfettiEffectView.swift
+//  BMSConfettiEffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 7/26/18.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @objc
-open class ConfettiEffectView: EffectView {
+open class BMSConfettiEffectView: BMSEffectView {
 
     @objc
     public enum ConfettiShape: Int {
@@ -296,7 +296,7 @@ fileprivate extension CAEmitterCell {
     }
 }
 
-fileprivate extension ConfettiEffectView.ConfettiShape {
+fileprivate extension BMSConfettiEffectView.ConfettiShape {
 
     fileprivate static func rectangleConfetti(size: CGSize, color: UIColor = UIColor.white) -> CGImage {
         let offset = size.width / CGFloat((arc4random_uniform(7) + 1))

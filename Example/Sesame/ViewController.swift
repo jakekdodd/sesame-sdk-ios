@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
 
-    var effectViewContainer = EffectViewController()
+    var effectViewContainer = BMSEffectViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()

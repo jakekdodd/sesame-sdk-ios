@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal class HTTPClient: NSObject {
+class HTTPClient: NSObject {
 
     private let session: URLSessionProtocol
 
@@ -24,20 +24,20 @@ internal class HTTPClient: NSObject {
         do {
             let httpBody = try JSONSerialization.data(withJSONObject: jsonObject)
             request.httpBody = httpBody
-            Logger.info("Sending request to <\(url.absoluteString)>")
-            if Logger.level == .verbose {
-                Logger.verbose("with payload:\n<\(String(data: httpBody, encoding: .utf8) as AnyObject)>...")
+            BMSLog.info("Sending request to <\(url.absoluteString)>")
+            if BMSLog.level == .verbose {
+                BMSLog.verbose("with payload:\n<\(String(data: httpBody, encoding: .utf8) as AnyObject)>...")
             }
         } catch {
-            Logger.error("Canceled request to \(url.absoluteString) for non-JSON request <\(jsonObject as AnyObject)>")
+            BMSLog.error("Canceled request to \(url.absoluteString) for non-JSON request <\(jsonObject as AnyObject)>")
         }
         return session.send(request: request) { responseData, responseURL, error in
-            Logger.info("Received response from <\(request.url?.absoluteString ?? "url:nil")>")
-            if Logger.level == .verbose {
+            BMSLog.info("Received response from <\(request.url?.absoluteString ?? "url:nil")>")
+            if BMSLog.level == .verbose {
                 if let responseData = responseData {
-                    Logger.verbose("with response body <\(String(data: responseData, encoding: .utf8) ?? "nil")>")
+                    BMSLog.verbose("with response body <\(String(data: responseData, encoding: .utf8) ?? "nil")>")
                 } else {
-                    Logger.verbose("Received no response data from <\(request.url?.absoluteString ?? "url:nil")>")
+                    BMSLog.verbose("Received no response data from <\(request.url?.absoluteString ?? "url:nil")>")
                 }
             }
             let response = self.convertResponseToJSON(url, responseData, responseURL, error)
@@ -47,24 +47,24 @@ internal class HTTPClient: NSObject {
 
     fileprivate func convertResponseToJSON(_ url: URL, _ responseData: Data?, _ responseURL: URLResponse?, _ error: Error?) -> [String: Any]? {
         guard responseURL != nil else {
-            Logger.error("\(url.absoluteString) call got invalid response with error:<\(error as AnyObject)>")
+            BMSLog.error("\(url.absoluteString) call got invalid response with error:<\(error as AnyObject)>")
             return nil
         }
 
         guard let response = responseData else {
-            Logger.verbose("\(url.absoluteString) call got no response data")
+            BMSLog.verbose("\(url.absoluteString) call got no response data")
             return nil
         }
 
         if response.isEmpty {
-            Logger.verbose("\(url.absoluteString) called and got empty response")
+            BMSLog.verbose("\(url.absoluteString) called and got empty response")
             return nil
         } else if let jsonResponse = try? JSONSerialization.jsonObject(with: response) as? [String: AnyObject] {
-            Logger.verbose("\(url.absoluteString) call got json response")
+            BMSLog.verbose("\(url.absoluteString) call got json response")
             return jsonResponse
         } else {
             let dataString = responseData.flatMap({ NSString(data: $0, encoding: String.Encoding.utf8.rawValue) }) ?? ""
-            Logger.error("\(url.absoluteString) call got invalid response\n\t<\(dataString)>")
+            BMSLog.error("\(url.absoluteString) call got invalid response\n\t<\(dataString)>")
             return nil
         }
     }

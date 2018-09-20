@@ -39,7 +39,7 @@ class CoreDataManager: NSObject {
                                                              NSMigratePersistentStoresAutomaticallyOption: true])
                 return coordinator
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
         }
         return nil
@@ -79,7 +79,7 @@ class CoreDataManager: NSObject {
                 do {
                     try self.managedObjectContext?.save()
                 } catch {
-                    Logger.error("\(error)")
+                    BMSLog.error("\(error)")
                 }
             }
         }
@@ -91,7 +91,7 @@ class CoreDataManager: NSObject {
                 do {
                     try managedObjectContext?.save()
                 } catch {
-                    Logger.error("\(error)")
+                    BMSLog.error("\(error)")
                 }
             }
         }
@@ -109,7 +109,7 @@ class CoreDataManager: NSObject {
                         }
                     }
                 } catch {
-                    Logger.error(error)
+                    BMSLog.error(error)
                 }
             }
             save()
@@ -142,7 +142,7 @@ extension CoreDataManager {
                     value = appConfig
                 }
             } catch let error as NSError {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 
@@ -169,7 +169,7 @@ extension CoreDataManager {
                     value = user
                 }
             } catch let error as NSError {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 
@@ -199,7 +199,7 @@ extension CoreDataManager {
                     value = report
                 }
             } catch {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 
@@ -215,7 +215,7 @@ extension CoreDataManager {
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 
@@ -235,7 +235,7 @@ extension CoreDataManager {
                 try context.save()
                 save()
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
         }
     }
@@ -251,15 +251,15 @@ extension CoreDataManager {
             do {
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata), encoding: .utf8)
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
             event.report = report
             do {
                 try context.save()
                 save()
-//                Logger.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
+//                BMSLog.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
         }
     }
@@ -275,7 +275,7 @@ extension CoreDataManager {
             do {
                 value = try context.count(for: request)
             } catch let error as NSError {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 
@@ -289,7 +289,7 @@ extension CoreDataManager {
         context.performAndWait {
             guard let user = fetchUser(context: context, id: userId) else { return }
             guard let entity = NSEntityDescription.entity(forEntityName: Cartridge.description(), in: context) else {
-                Logger.error("Could not create entity for cartridge")
+                BMSLog.error("Could not create entity for cartridge")
                 return
             }
             let cartridge = Cartridge(entity: entity, insertInto: context)
@@ -300,7 +300,7 @@ extension CoreDataManager {
                 try context.save()
                 save()
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
         }
     }
@@ -340,7 +340,7 @@ extension CoreDataManager {
                 try context.save()
                 save()
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
         }
     }
@@ -358,7 +358,7 @@ extension CoreDataManager {
             do {
                 value = try context.fetch(request).first
             } catch let error as NSError {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 
@@ -374,7 +374,7 @@ extension CoreDataManager {
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
-                Logger.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
 

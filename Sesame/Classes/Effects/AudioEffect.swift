@@ -8,7 +8,7 @@
 import Foundation
 import AudioToolbox
 
-internal class AudioEffect: NSObject {
+class AudioEffect: NSObject {
 
     fileprivate static let audioQueue = DelayedSerialQueue(delayAfter: 1, dropCollisions: false)
 

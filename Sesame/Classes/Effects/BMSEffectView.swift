@@ -1,5 +1,5 @@
 //
-//  EffectView.swift
+//  BMSEffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 7/29/18.
@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-open class EffectView: UIView {
+open class BMSEffectView: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

@@ -111,11 +111,11 @@ public extension Sesame {
             do {
                 try context.save()
             } catch {
-                Logger.error(error)
+                BMSLog.error(error)
             }
         }
 
-        Logger.info("set userId:\(String(describing: userId))")
+        BMSLog.info("set userId:\(String(describing: userId))")
     }
 
     @objc
@@ -129,7 +129,7 @@ public extension Sesame {
         context.performAndWait {
             userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id
         }
-        Logger.verbose("got userId:\(String(describing: userId))")
+        BMSLog.verbose("got userId:\(String(describing: userId))")
         return userId
     }
 
@@ -155,11 +155,11 @@ public extension Sesame {
                                         metadata: metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
-            Logger.info("Added event:\(actionName) metadata:\(metadata) for userId:\(userId)")
-            Logger.info("Total events for user:#\(eventCount ?? -1)")
+            BMSLog.info("Added event:\(actionName) metadata:\(metadata) for userId:\(userId)")
+            BMSLog.info("Total events for user:#\(eventCount ?? -1)")
 
 //            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
-//                Logger.info("Report:\(report.actionName!) events:\(report.events!.count)")
+//                BMSLog.info("Report:\(report.actionName!) events:\(report.events!.count)")
 //            }
 
             if eventCount ?? 0 >= eventUploadCount {
@@ -193,7 +193,7 @@ public extension Sesame {
                         reinforcementName = Reinforcement.NeutralName
                     }
 
-                    Logger.info(confirmed: "Next reinforcement:\(reinforcementName)")
+                    BMSLog.info(confirmed: "Next reinforcement:\(reinforcementName)")
                     _reinforcementEffect = (reinforcementName, [:])
 
                     addEvent(context: context,
@@ -271,7 +271,7 @@ public extension Sesame {
                             try context.save()
                         }
                     } catch {
-                        Logger.error(error)
+                        BMSLog.error(error)
                     }
                 }
                 completion(true)
@@ -313,7 +313,7 @@ public extension Sesame {
                 do {
                     try context.save()
                 } catch {
-                    Logger.error(error)
+                    BMSLog.error(error)
                 }
                 return tracks
             }()
@@ -368,7 +368,7 @@ public extension Sesame {
                     do {
                         try context.save()
                     } catch {
-                        Logger.error(error)
+                        BMSLog.error(error)
                     }
                 }
                 completion(true)

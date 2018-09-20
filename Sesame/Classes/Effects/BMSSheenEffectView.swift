@@ -1,5 +1,5 @@
 //
-//  SheenEffectView.swift
+//  BMSSheenEffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 7/26/18.
@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-open class SheenEffectView: EffectView {
+open class BMSSheenEffectView: BMSEffectView {
 
     public enum WidthToHeightRatio: CGFloat {
         case narrow = 0.333, equal = 1, wide = 1.667
@@ -90,12 +90,12 @@ open class SheenEffectView: EffectView {
         }
 
         guard let imageView = imageView else {
-            Logger.error("No image set for sheen")
+            BMSLog.error("No image set for sheen")
             completion()
             return
         }
         guard imageView.isHidden else {
-            Logger.error("Sheen is already animating")
+            BMSLog.error("Sheen is already animating")
             completion()
             return
         }

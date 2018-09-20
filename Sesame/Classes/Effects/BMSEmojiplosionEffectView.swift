@@ -1,5 +1,5 @@
 //
-//  EmojiplosionEffectView.swift
+//  BMSEmojiplosionEffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/15/18.
@@ -9,7 +9,7 @@ import Foundation
 import CoreGraphics
 
 @objc
-open class EmojiplosionEffectView: EffectView {
+open class BMSEmojiplosionEffectView: BMSEffectView {
 
     public var location: (CGFloat, CGFloat) = (0.5, 0.5)
     public var image: CGImage? = "❤️".image().cgImage
@@ -44,7 +44,7 @@ open class EmojiplosionEffectView: EffectView {
     //swiftlint:disable:next function_body_length
     public override func start(completion: @escaping () -> Void = {}) {
         guard let image = image else {
-            Logger.warning("Image not set")
+            BMSLog.warning("Image not set")
             completion()
             return
         }
@@ -83,13 +83,13 @@ open class EmojiplosionEffectView: EffectView {
             emitter.emitterCells = [cell]
 
             self.layer.addSublayer(emitter)
-            Logger.info("💥 Emojiplosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
+            BMSLog.info("💥 Emojiplosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
             AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
             DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
                 emitter.birthRate = 0
                 DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(self.lifetime + self.lifetimeRange)) {
                     emitter.removeFromSuperlayer()
-                    Logger.info("💥 Emojiplosion done")
+                    BMSLog.info("💥 Emojiplosion done")
                     completion()
                 }
             }

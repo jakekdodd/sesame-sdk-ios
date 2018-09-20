@@ -78,7 +78,7 @@ class Tests: XCTestCase {
         XCTAssert(group.wait(timeout: .now() + 2) == .success)
 
         let count = sesame.eventCount()
-        Logger.info("Got count:\(String(describing: count))")
+        BMSLog.info("Got count:\(String(describing: count))")
         XCTAssert(count == desiredCount)
     }
 
@@ -154,7 +154,7 @@ class Tests: XCTestCase {
         sesame.sendBoot { _ in
             guard let userId = sesame.getUserId() else { fatalError() }
             for cartridge in sesame.coreDataManager.fetchCartridges(context: nil, userId: userId) ?? [] {
-                Logger.info(cartridge.debugDescription)
+                BMSLog.info(cartridge.debugDescription)
             }
             promise.fulfill()
         }
