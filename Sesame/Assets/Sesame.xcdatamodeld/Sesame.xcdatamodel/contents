@@ -18,6 +18,7 @@
     </entity>
     <entity name="BMSEvent" representedClassName="BMSEvent" syncable="YES" codeGenerationType="class">
         <attribute name="metadata" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sessionId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="timezoneOffset" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="utc" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="report" maxCount="1" deletionRule="Nullify" destinationEntity="BMSReport" inverseName="events" inverseEntity="BMSReport" syncable="YES"/>
@@ -40,7 +41,7 @@
     <elements>
         <element name="BMSAppConfig" positionX="-1008" positionY="-144" width="128" height="120"/>
         <element name="BMSCartridge" positionX="-1008" positionY="72" width="128" height="150"/>
-        <element name="BMSEvent" positionX="-200" positionY="72" width="128" height="103"/>
+        <element name="BMSEvent" positionX="-200" positionY="72" width="128" height="118"/>
         <element name="BMSReinforcement" positionX="-1188" positionY="144" width="128" height="75"/>
         <element name="BMSReport" positionX="-416" positionY="72" width="128" height="90"/>
         <element name="BMSUser" positionX="-632" positionY="72" width="128" height="105"/>

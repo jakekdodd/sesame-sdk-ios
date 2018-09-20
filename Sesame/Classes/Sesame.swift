@@ -51,6 +51,19 @@ public class Sesame: NSObject {
 
     var trackingOptions = BMSEventMetadataOptions.standard()
 
+    var sessionId: BMSSessionId? {
+        willSet {
+            if sessionId != nil {
+                addEvent(actionName: BMSEvent.SessionEndName)
+            }
+        }
+        didSet {
+            if sessionId != nil {
+                addEvent(actionName: BMSEvent.SessionStartName)
+            }
+        }
+    }
+
     @objc public var appLifecycleTracker: BMSAppLifecycleTracker? = .init()
 
     @objc var configId: String? {
@@ -106,8 +119,13 @@ public extension Sesame {
             if let userId = userId {
                 newUser = coreDataManager.fetchUser(context: context, id: userId)
             }
+            var oldUserId: String?
             if let appConfig = coreDataManager.fetchAppConfig(context: context, configId) {
+                oldUserId = appConfig.user?.id
                 appConfig.user = newUser
+            }
+            if oldUserId != userId {
+                sessionId = .new
             }
             do {
                 try context.save()
@@ -150,9 +168,11 @@ public extension Sesame {
         context.performAndWait {
             guard let userId = getUserId(context) else { return }
             trackingOptions.annotate(&metadata)
+            metadata["sessionTimeElapsed"] = sessionId?.elapsedTime()
             coreDataManager.insertEvent(context: context,
                                         userId: userId,
                                         actionName: actionName,
+                                        sessionId: sessionId as NSNumber?,
                                         metadata: metadata)
             let eventCount = coreDataManager.countEvents(context: context, userId: userId)
 
@@ -218,7 +238,7 @@ public extension Sesame {
     }
 }
 
-// MARK: - Private Methods
+// MARK: - HTTP Methods
 
 /*private*/ extension Sesame {
 

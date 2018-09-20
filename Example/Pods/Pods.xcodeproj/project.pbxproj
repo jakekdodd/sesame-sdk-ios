@@ -23,6 +23,7 @@
 		65E33CA91C3E6663100BCADBD7DA7505 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
 		68A9004B8B89E39A46E348A065AAC428 /* Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60995DB08E4EB79571E12D97971C0A76 /* Sesame.swift */; };
 		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = AFC4F548B8D1F48D6053EC1A0CBA28F8 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8475A6342153579E00BC5148 /* BMSSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475A6332153579E00BC5148 /* BMSSessionId.swift */; };
 		87881270F4C262DFFEF8AB091D33B80C /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC215610DC539887440AA3DEE1591526 /* AudioEffect.swift */; };
 		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3BCE5625084E73B103D57F03524A69 /* sheen.png */; };
 		918A4879E1FACE7033F4A58A35199AB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
@@ -111,6 +112,7 @@
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
 		8372D110003FC7E6D609725BEF59E05F /* Sesame-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-prefix.pch"; sourceTree = "<group>"; };
+		8475A6332153579E00BC5148 /* BMSSessionId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSSessionId.swift; sourceTree = "<group>"; };
 		8527FF8328ACA03689F1F9F75C0C53D6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8905AF99649B74C9E1F559CA59D128CE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A5FD5A342EA075D5B538DCE11398E5C /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				6C9944D6A395764D64591C45BEA389A6 /* BMSAppLifecycleTracker.swift */,
 				CD4B10B2FB3430A64731B53783F4B28C /* BMSEventAppOpen.swift */,
 				62FAA7CEB642C4C5B892A4198C55C9F1 /* BMSEventMetadataOption.swift */,
+				8475A6332153579E00BC5148 /* BMSSessionId.swift */,
 				50C593CF5DCF3E31976A0314741751D5 /* Cue.swift */,
 				30359ED6677C8BEEC94CA05499D5D38F /* UserIdSource.swift */,
 			);
@@ -572,6 +575,7 @@
 				0708214B676B5386751A04F5F02F6488 /* DelayedSerialQueue.swift in Sources */,
 				FC5502851DBA299BAB5737EA6D9CEC73 /* HTTPClient.swift in Sources */,
 				B0E4CBEA88233020F1CDA86B2F32CCB3 /* NSManagedObject+Extensions.swift in Sources */,
+				8475A6342153579E00BC5148 /* BMSSessionId.swift in Sources */,
 				DCFB3FB2339EEBB764EC220C6A1C2BFF /* Sesame-dummy.m in Sources */,
 				68A9004B8B89E39A46E348A065AAC428 /* Sesame.swift in Sources */,
 				DCBBEE500CE7F10F6B10E617AD004630 /* Sesame.xcdatamodeld in Sources */,

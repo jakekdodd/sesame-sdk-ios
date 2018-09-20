@@ -12,9 +12,16 @@ open class BMSAppLifecycleTracker: NSObject {
     weak var sesame: Sesame?
 
     fileprivate(set) var appOpenAction: BMSEventAppOpen? {
+        willSet {
+            if appOpenAction != nil {
+                sesame?.sessionId = nil
+            }
+        }
         didSet {
-            guard let newValue = appOpenAction else { return }
-            sesame?.reinforce(appOpenEvent: newValue)
+            if let appOpenAction = appOpenAction {
+                sesame?.sessionId = .new
+                sesame?.reinforce(appOpenEvent: appOpenAction)
+            }
         }
     }
 

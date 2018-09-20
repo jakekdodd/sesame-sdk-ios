@@ -13,6 +13,8 @@ public extension BMSReinforcement {
 
 extension BMSEvent {
     static let AppOpenName = "appOpen"
+    static let SessionStartName = "BMSSessionStart"
+    static let SessionEndName = "BMSSessionEnd"
 
     override public func awakeFromInsert() {
         super.awakeFromInsert()

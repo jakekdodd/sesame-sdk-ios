@@ -242,7 +242,7 @@ extension CoreDataManager {
 
     // MARK: Event
 
-    func insertEvent(context: NSManagedObjectContext?, userId: String, actionName: String, metadata: [String: Any] = [:]) {
+    func insertEvent(context: NSManagedObjectContext?, userId: String, actionName: String, sessionId: NSNumber?, metadata: [String: Any] = [:]) {
         let context = context ?? newContext()
         context.performAndWait {
             guard let report = fetchReport(context: context, userId: userId, actionName: actionName),
@@ -251,6 +251,7 @@ extension CoreDataManager {
             }
             let event = BMSEvent(entity: entity, insertInto: context)
             do {
+                event.sessionId = sessionId
                 event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata), encoding: .utf8)
             } catch {
                 BMSLog.error(error)
