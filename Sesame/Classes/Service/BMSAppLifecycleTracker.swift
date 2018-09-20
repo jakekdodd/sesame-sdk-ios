@@ -11,21 +11,7 @@ open class BMSAppLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
 
-    var appIsInterrupted = false {
-        didSet (appWasInterrupted) {
-            switch (appWasInterrupted, appIsInterrupted) {
-            case (false, true):
-                sesame?.addEvent(actionName: BMSEvent.SessionInterruptionStartName)
-
-            case (true, false):
-                sesame?.addEvent(actionName: BMSEvent.SessionInterruptionEndName)
-
-            default: break
-            }
-        }
-    }
-
-    fileprivate(set) var appOpenAction: BMSEventAppOpen? {
+    fileprivate var appOpenAction: BMSEventAppOpen? {
         willSet {
             if appOpenAction != nil {
                 sesame?.sessionId = nil
@@ -39,16 +25,19 @@ open class BMSAppLifecycleTracker: NSObject {
         }
     }
 
+    fileprivate var appIsInterrupted = false {
+        didSet (appWasInterrupted) {
+            switch (appWasInterrupted, appIsInterrupted) {
+            case (false, true): sesame?.addEvent(actionName: BMSEvent.SessionInterruptionStartName)
+            case (true, false): sesame?.addEvent(actionName: BMSEvent.SessionInterruptionEndName)
+            default: break
+            }
+        }
+    }
+
     override init() {
         super.init()
-        setupNotifications()
-    }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    func setupNotifications() {
         for notification in [Notification.Name.UIApplicationWillTerminate,
                              .UIApplicationDidBecomeActive,
                              .UIApplicationWillResignActive,
@@ -61,18 +50,17 @@ open class BMSAppLifecycleTracker: NSObject {
         }
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc func receive(_ notification: Notification) {
         switch notification.name {
-        case .UIApplicationWillTerminate:
-            didTerminate()
-        case .UIApplicationDidBecomeActive:
-            didBecomeActive()
-        case .UIApplicationWillResignActive:
-            willResignActive()
-        case .UIApplicationDidEnterBackground:
-            didEnterBackground()
-        default:
-            break
+        case .UIApplicationWillTerminate:       didTerminate()
+        case .UIApplicationDidBecomeActive:     didBecomeActive()
+        case .UIApplicationWillResignActive:    willResignActive()
+        case .UIApplicationDidEnterBackground:  didEnterBackground()
+        default: break
         }
     }
 }
@@ -83,6 +71,12 @@ extension BMSAppLifecycleTracker {
 
     // MARK: - UIApplicationDidFinishLaunching
 
+    /// Optional: This method can be called to make the Sesame effect behave differently
+    /// depending on how the app was opened.
+    /// It is optional because if appOpenAction is not created here, it will be created
+    /// when receiving the UIApplicationDidBecomeActive notification.
+    ///
+    /// - Parameter launchOptions: launchOptions
     @objc
     public func didLaunch(_ launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) {
         if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
