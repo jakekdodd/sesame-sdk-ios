@@ -296,7 +296,7 @@ extension CoreDataManager {
             }
             let cartridge = BMSCartridge(entity: entity, insertInto: context)
             cartridge.actionName = actionName
-            cartridge.effectDetailsDictionary = effectDetails
+            cartridge.effectDetailsAsDictionary = effectDetails
             cartridge.user = user
             do {
                 try context.save()
@@ -319,7 +319,7 @@ extension CoreDataManager {
                 let cartridge = BMSCartridge(entity: entity, insertInto: context)
                 cartridge.user = user
                 cartridge.actionName = actionName
-                cartridge.effectDetailsDictionary = effectDetails ?? [:]
+                cartridge.effectDetailsAsDictionary = effectDetails ?? [:]
             }
 
             guard let cartridge = storedCartridge else { return }
@@ -327,7 +327,7 @@ extension CoreDataManager {
             cartridge.serverUtc = serverUtc
             cartridge.ttl = ttl
             if let effectDetails = effectDetails {
-                cartridge.effectDetailsDictionary = effectDetails
+                cartridge.effectDetailsAsDictionary = effectDetails
             }
 
             for reinforcementName in reinforcements {

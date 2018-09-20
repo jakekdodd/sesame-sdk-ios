@@ -51,7 +51,7 @@ public class Sesame: NSObject {
 
     var trackingOptions = BMSTrackingOptions.standard()
 
-    @objc public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
+    @objc public var appLifecycleTracker: BMSAppLifecycleTracker? = .init()
 
     @objc var configId: String? {
         get {
@@ -80,7 +80,7 @@ public class Sesame: NSObject {
             }
         }
 
-        applicationLifecycleTracker?.sesame = self
+        appLifecycleTracker?.sesame = self
     }
 
     var eventUploadCount: Int = 10
@@ -175,7 +175,7 @@ public extension Sesame {
         return coreDataManager.countEvents(context: context) ?? 0
     }
 
-    internal func reinforce(appOpenEvent: AppOpenEvent) {
+    internal func reinforce(appOpenEvent: BMSEventAppOpen) {
         switch appOpenEvent.cueCategory {
         case .internal,
              .external:
@@ -192,14 +192,13 @@ public extension Sesame {
                         context.delete(reinforcement)
                     } else {
                         reinforcementName = BMSReinforcement.NeutralName
+                        BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
                     }
 
                     BMSLog.info(confirmed: "Next reinforcement:\(reinforcementName)")
                     _reinforcementEffect = (reinforcementName, [:])
 
-                    addEvent(context: context,
-                             actionName: appOpenEvent.name,
-                             metadata: appOpenEvent.metadata)
+                    addEvent(context: context, actionName: appOpenEvent.name, metadata: appOpenEvent.metadata)
                     sendRefresh(context: context, userId: userId, actionName: appOpenEvent.name)
                 }
             }
@@ -275,7 +274,7 @@ public extension Sesame {
                                 if let cartridge = self.coreDataManager.fetchCartridge(context: context,
                                                                                        userId: userId,
                                                                                        actionName: actionName) {
-                                    cartridge.effectDetailsDictionary = effectDetails
+                                    cartridge.effectDetailsAsDictionary = effectDetails
                                 } else {
                                     self.coreDataManager.insertCartridge(context: context,
                                                                          userId: userId,

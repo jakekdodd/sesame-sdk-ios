@@ -83,13 +83,13 @@ open class BMSEmojiplosionEffectView: BMSEffectView {
             emitter.emitterCells = [cell]
 
             self.layer.addSublayer(emitter)
-            BMSLog.info("💥 Emojiplosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
+            BMSLog.verbose("💥 Emojiplosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
             AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
             DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
                 emitter.birthRate = 0
                 DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(self.lifetime + self.lifetimeRange)) {
                     emitter.removeFromSuperlayer()
-                    BMSLog.info("💥 Emojiplosion done")
+                    BMSLog.verbose("💥 Emojiplosion done")
                     completion()
                 }
             }

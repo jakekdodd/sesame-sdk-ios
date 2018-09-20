@@ -7,8 +7,8 @@
 
 import CoreData
 
-extension BMSReport {
-    static let NonReinforceableType = "NON_REINFORCEABLE"
+public extension BMSReinforcement {
+    @objc static let NeutralName = "NEUTRAL_RESP"
 }
 
 extension BMSEvent {
@@ -21,11 +21,8 @@ extension BMSEvent {
     }
 }
 
-extension BMSUser {
-    override public func awakeFromInsert() {
-        super.awakeFromInsert()
-        setPrimitiveValue(UUID().uuidString, forKey: #keyPath(BMSUser.id))
-    }
+extension BMSReport {
+    static let NonReinforceableType = "NON_REINFORCEABLE"
 }
 
 extension BMSCartridge {
@@ -36,7 +33,7 @@ extension BMSCartridge {
         setPrimitiveValue(BMSCartridge.NeutralCartridgeId, forKey: #keyPath(BMSCartridge.cartridgeId))
     }
 
-    var effectDetailsDictionary: [String: Any]? {
+    var effectDetailsAsDictionary: [String: Any]? {
         get {
             if let data = effectDetails?.data(using: .utf8),
                 let json = try? JSONSerialization.jsonObject(with: data, options: []),
@@ -55,8 +52,11 @@ extension BMSCartridge {
     }
 }
 
-extension BMSReinforcement {
-    @objc public static let NeutralName = "NEUTRAL_RESP"
+extension BMSUser {
+    override public func awakeFromInsert() {
+        super.awakeFromInsert()
+        setPrimitiveValue(UUID().uuidString, forKey: #keyPath(BMSUser.id))
+    }
 }
 
 extension Optional where Wrapped == String {

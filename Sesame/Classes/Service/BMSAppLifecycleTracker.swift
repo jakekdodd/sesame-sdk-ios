@@ -1,5 +1,5 @@
 //
-//  ApplicationLifecycleTracker.swift
+//  BMSApplicationLifecycleTracker.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/13/18.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-open class ApplicationLifecycleTracker: NSObject {
+open class BMSAppLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
 
-    fileprivate(set) var appOpenAction: AppOpenEvent? {
+    fileprivate(set) var appOpenAction: BMSEventAppOpen? {
         didSet {
             guard let newValue = appOpenAction else { return }
             sesame?.reinforce(appOpenEvent: newValue)
@@ -54,10 +54,11 @@ open class ApplicationLifecycleTracker: NSObject {
 
 // MARK: - Tracked Events
 
-extension ApplicationLifecycleTracker {
+extension BMSAppLifecycleTracker {
 
     // MARK: - UIApplicationDidFinishLaunching
 
+    @objc
     public func didLaunch(_ launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) {
         if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
             didPerformShortcut()
@@ -70,44 +71,50 @@ extension ApplicationLifecycleTracker {
 
     // MARK: App Open from Shortcut
 
+    @objc
     public func didPerformShortcut() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenEvent(source: .shortcut)
+            appOpenAction = BMSEventAppOpen(source: .shortcut)
         }
     }
 
     // MARK: App Open from Deep Link
 
+    @objc
     public func didOpenURL() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenEvent(source: .deepLink)
+            appOpenAction = BMSEventAppOpen(source: .deepLink)
         }
     }
 
     // MARK: App Open from Notifications
 
+    @objc
     public func didReceiveNotification() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenEvent(source: .notification)
+            appOpenAction = BMSEventAppOpen(source: .notification)
         }
     }
 
     // MARK: - UIApplicationWillTerminate
 
+    @objc
     public func didTerminate() {
         appOpenAction = nil
     }
 
     // MARK: - UIApplicationDidBecomeActive
 
+    @objc
     public func didBecomeActive() {
         if appOpenAction == nil {
-            appOpenAction = AppOpenEvent(source: .default)
+            appOpenAction = BMSEventAppOpen(source: .default)
         }
     }
 
     // MARK: - UIApplicationDidEnterBackground
 
+    @objc
     public func didEnterBackground() {
         appOpenAction = nil
     }
