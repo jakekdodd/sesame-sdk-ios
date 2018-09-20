@@ -124,9 +124,7 @@ public extension Sesame {
                 oldUserId = appConfig.user?.id
                 appConfig.user = newUser
             }
-            if oldUserId != userId {
-                sessionId = .new
-            }
+
             do {
                 try context.save()
             } catch {
