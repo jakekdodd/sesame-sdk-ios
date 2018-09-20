@@ -15,6 +15,8 @@ extension BMSEvent {
     static let AppOpenName = "appOpen"
     static let SessionStartName = "BMSSessionStart"
     static let SessionEndName = "BMSSessionEnd"
+    static let SessionInterruptionStartName = "BMSSessionInterruptionStart"
+    static let SessionInterruptionEndName = "BMSSessionInterruptionEnd"
 
     override public func awakeFromInsert() {
         super.awakeFromInsert()

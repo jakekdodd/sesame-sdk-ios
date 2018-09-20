@@ -11,6 +11,20 @@ open class BMSAppLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
 
+    var appIsInterrupted = false {
+        didSet (appWasInterrupted) {
+            switch (appWasInterrupted, appIsInterrupted) {
+            case (false, true):
+                sesame?.addEvent(actionName: BMSEvent.SessionInterruptionStartName)
+
+            case (true, false):
+                sesame?.addEvent(actionName: BMSEvent.SessionInterruptionEndName)
+
+            default: break
+            }
+        }
+    }
+
     fileprivate(set) var appOpenAction: BMSEventAppOpen? {
         willSet {
             if appOpenAction != nil {
@@ -37,11 +51,13 @@ open class BMSAppLifecycleTracker: NSObject {
     func setupNotifications() {
         for notification in [Notification.Name.UIApplicationWillTerminate,
                              .UIApplicationDidBecomeActive,
-                             .UIApplicationDidEnterBackground] {
-                                NotificationCenter.default.addObserver(self,
-                                                                       selector: #selector(receive(_:)),
-                                                                       name: notification,
-                                                                       object: nil)
+                             .UIApplicationWillResignActive,
+                             .UIApplicationDidEnterBackground
+            ] {
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(receive(_:)),
+                                                       name: notification,
+                                                       object: nil)
         }
     }
 
@@ -51,6 +67,8 @@ open class BMSAppLifecycleTracker: NSObject {
             didTerminate()
         case .UIApplicationDidBecomeActive:
             didBecomeActive()
+        case .UIApplicationWillResignActive:
+            willResignActive()
         case .UIApplicationDidEnterBackground:
             didEnterBackground()
         default:
@@ -117,6 +135,14 @@ extension BMSAppLifecycleTracker {
         if appOpenAction == nil {
             appOpenAction = BMSEventAppOpen(source: .default)
         }
+        appIsInterrupted = false
+    }
+
+    // MARK: - UIApplicationWillResignActive
+
+    @objc
+    public func willResignActive() {
+        appIsInterrupted = true
     }
 
     // MARK: - UIApplicationDidEnterBackground
