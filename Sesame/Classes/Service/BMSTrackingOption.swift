@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreTelephony
 
 public typealias BMSTrackingOptions = [BMSTrackingOption]
 
@@ -40,7 +39,7 @@ public enum BMSTrackingOption: Int {
     func getValue() -> Any? {
         switch self {
         case .carrier:
-            return CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName ?? "unknown"
+            return UIDevice.carrier ?? "unknown"
 
         case .deviceModel:
             return UIDevice.modelName

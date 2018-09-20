@@ -9,7 +9,7 @@ import UIKit
 
 open class BMSEffectViewController: UIViewController {
 
-    var overlayEffectView: BMSEffectView?
+    var effectView: BMSEffectView?
 
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,34 +24,34 @@ extension BMSEffectViewController: SesameReinforcementDelegate {
         DispatchQueue.main.async {
             switch reinforcement {
             case "confetti":
-                if self.overlayEffectView as? BMSConfettiEffectView == nil {
-                    self.overlayEffectView?.removeFromSuperview()
+                if self.effectView as? BMSConfettiEffectView == nil {
+                    self.effectView?.removeFromSuperview()
                     let confettiView = BMSConfettiEffectView()
                     self.view.addSubview(confettiView)
                     confettiView.constrainToSuperview()
-                    self.overlayEffectView = confettiView
+                    self.effectView = confettiView
                 }
-                self.overlayEffectView?.start()
+                self.effectView?.start()
 
             case "sheen":
-                if self.overlayEffectView as? BMSSheenEffectView == nil {
-                    self.overlayEffectView?.removeFromSuperview()
+                if self.effectView as? BMSSheenEffectView == nil {
+                    self.effectView?.removeFromSuperview()
                     let sheenView = BMSSheenEffectView()
                     self.view.addSubview(sheenView)
                     sheenView.constrainToSuperview()
-                    self.overlayEffectView = sheenView
+                    self.effectView = sheenView
                 }
-                self.overlayEffectView?.start()
+                self.effectView?.start()
 
             case "emojisplosion":
-                if self.overlayEffectView as? BMSEmojiplosionEffectView == nil {
-                    self.overlayEffectView?.removeFromSuperview()
+                if self.effectView as? BMSEmojiplosionEffectView == nil {
+                    self.effectView?.removeFromSuperview()
                     let emojiView = BMSEmojiplosionEffectView()
                     self.view.addSubview(emojiView)
                     emojiView.constrainToSuperview()
-                    self.overlayEffectView = emojiView
+                    self.effectView = emojiView
                 }
-                self.overlayEffectView?.start()
+                self.effectView?.start()
 
             default:
                 break

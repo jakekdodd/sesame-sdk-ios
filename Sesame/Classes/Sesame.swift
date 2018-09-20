@@ -49,7 +49,8 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    @objc public var trackingOptions: NSArray = BMSTrackingOptions.default as NSArray
+    var trackingOptions = BMSTrackingOptions.default
+
     @objc public var applicationLifecycleTracker: ApplicationLifecycleTracker? = .init()
 
     @objc var configId: String? {
@@ -148,7 +149,7 @@ public extension Sesame {
         var metadata = metadata
         context.performAndWait {
             guard let userId = getUserId(context) else { return }
-            (trackingOptions as? BMSTrackingOptions)?.annotate(&metadata)
+            trackingOptions.annotate(&metadata)
             coreDataManager.insertEvent(context: context,
                                         userId: userId,
                                         actionName: actionName,
@@ -174,7 +175,7 @@ public extension Sesame {
         return coreDataManager.countEvents(context: context) ?? 0
     }
 
-    internal func add(appOpenEvent: AppOpenEvent) {
+    internal func reinforce(appOpenEvent: AppOpenEvent) {
         switch appOpenEvent.cueCategory {
         case .internal,
              .external:
@@ -204,6 +205,24 @@ public extension Sesame {
             }
         case .synthetic:
             break
+        }
+    }
+
+    @objc
+    public func tracking(option: BMSTrackingOption, disabled: Bool) {
+        tracking(option: option, enabled: !disabled)
+    }
+
+    @objc
+    public func tracking(option: BMSTrackingOption, enabled: Bool) {
+        if enabled {
+            if !trackingOptions.contains(option) {
+                trackingOptions.append(option)
+            }
+        } else {
+            if let index = trackingOptions.index(of: option) {
+                trackingOptions.remove(at: index)
+            }
         }
     }
 }

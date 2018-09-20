@@ -1,6 +1,6 @@
 //
 //  AppOpenEvent.swift
-//  CueBD
+//  Sesame
 //
 //  Created by Akash Desai on 8/20/18.
 //

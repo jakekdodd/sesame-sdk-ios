@@ -6,8 +6,14 @@
 //
 
 import Foundation
+import CoreTelephony
 
 internal extension UIDevice {
+
+    static let carrier: String? = {
+        return CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
+    }()
+
     static let modelName: String = {
         var systemInfo = utsname()
         uname(&systemInfo)

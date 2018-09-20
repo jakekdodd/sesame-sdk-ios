@@ -14,7 +14,7 @@ open class ApplicationLifecycleTracker: NSObject {
     fileprivate(set) var appOpenAction: AppOpenEvent? {
         didSet {
             guard let newValue = appOpenAction else { return }
-            sesame?.add(appOpenEvent: newValue)
+            sesame?.reinforce(appOpenEvent: newValue)
         }
     }
 
