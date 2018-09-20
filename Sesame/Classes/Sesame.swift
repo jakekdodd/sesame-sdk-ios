@@ -26,17 +26,19 @@ public class Sesame: NSObject {
 
     @objc public static var shared: Sesame?
 
+
+    /// If the delegate is not set, the reinforcement effect will affect the whole screen
     @objc public weak var reinforcementDelegate: SesameReinforcementDelegate? {
         didSet {
             _reinforcementEffect = {_reinforcementEffect}()
         }
     }
 
-    /// If the delegate isn't set when an effect is supposed to show, the effect is stored until the delegate is set
+    /// The effect is shown using the custom reinforcementDelegate or the top UIWindow
     fileprivate var _reinforcementEffect: (String, [String: Any])? {
         didSet {
             if let reinforcementEffect = _reinforcementEffect,
-                let delegate = reinforcementDelegate {
+                let delegate = reinforcementDelegate ?? UIWindow.topWindow {
                 delegate.app(self, didReceiveReinforcement: reinforcementEffect.0, withOptions: reinforcementEffect.1)
                 _reinforcementEffect = nil
             }

@@ -7,46 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01F8C7BA0E86A9AE156AF427D68FF7C5 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B755AA5CFCBAF05B9E1333C9F9919AC /* UserDefaults+Extensions.swift */; };
-		0708214B676B5386751A04F5F02F6488 /* DelayedSerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2301BF3C44C1E85FFF5740F7E975C3D /* DelayedSerialQueue.swift */; };
-		07F3F3D50ABF7363F687A50220491350 /* BMSEventMetadataOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FAA7CEB642C4C5B892A4198C55C9F1 /* BMSEventMetadataOption.swift */; };
-		0E5B9E7163F1EDE577DA15ED25494F0B /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D333A7CB580809B354E70DCA0D15C879 /* BundleExtensions.swift */; };
-		10BA91F2C9F0E40DE2B8A2E0C96C5CB3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AFEF9D0DECC2081D5E591F3B91FC0C /* UIViewExtensions.swift */; };
-		11D5A90584F680889C1D71C480D23D87 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E4EBAE161B4D6AC8784ADD933570D /* UIColorExtensions.swift */; };
-		138EE3E75F605F1E3C8D606DCBB3943F /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC2358CA189DA7C64C2D1C530DFB549 /* CGExtensions.swift */; };
+		107DE4643D8422A380F86DDBBC71A714 /* NSManagedObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D0C8F2EB00C8171D7DF1106F3B3C9E /* NSManagedObject+Extensions.swift */; };
 		1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */; };
-		1E970BAC699D5C350913ECCB709FC339 /* BMSSheenEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4F7AF5E4B0208F854ECA5027472D88 /* BMSSheenEffectView.swift */; };
-		20227F88CD8B6D00B9CFAC9C6145DFA3 /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C31458239DD4CBBE68A5E3195CB47ED /* UIDeviceExtensions.swift */; };
-		34D5602AC5B4C85EA3DE04F6E688D1FF /* BMSEventAppOpen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4B10B2FB3430A64731B53783F4B28C /* BMSEventAppOpen.swift */; };
+		1E4DF67DFA651BB1DF5BA3929B74DAE7 /* Cue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D2CB8BCD7C7063D9DEC323212FD4DB /* Cue.swift */; };
+		26B62EB4D94F618125F26BDE67A44065 /* BMSEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE727B08BC48244DFDFB365FC771EB9 /* BMSEffectView.swift */; };
+		3AE126F8C20933B7DC86C4B3F2BE41A8 /* BMSAppLifecycleTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3311B7F40AE7FF28F42FEFA13CE81315 /* BMSAppLifecycleTracker.swift */; };
 		4192EF17D62CCA0E1CA3F2C5668BF74E /* Pods-Sesame_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 52E8674BB969D65A77D69A63CE3DD61A /* Pods-Sesame_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4507A9133C1A26083873BE75B5A6054C /* Cue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C593CF5DCF3E31976A0314741751D5 /* Cue.swift */; };
+		454D51AC1C61A41D9B8BD63EF3675671 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAE3AA0E7ED7463B761A7B97EC29180 /* CGExtensions.swift */; };
+		55091EBCA8B013A65FE0A6B12ABD9C74 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF9C2A4E5EBAF99F2E3166831F45464 /* UserDefaults+Extensions.swift */; };
+		558861AD1DD5F813781187F51BF2E1DB /* BMSConfettiEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EABE371777763A8572AC82CB1AE145 /* BMSConfettiEffectView.swift */; };
+		56A890E8DDEC15C04490A2478DA08429 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8778C20E9BB3960B380216E25EE30C /* UIColorExtensions.swift */; };
+		58B1941BCCA4B99B6593376530BFD7BE /* Sesame-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 919FFD08E08164CDE9308E2667BA0310 /* Sesame-dummy.m */; };
+		5BDD8A9A1832D930BFF868F217579BBF /* BMSSheenEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1465E7CF2CEF54F1A0698F6EE5F1FCCE /* BMSSheenEffectView.swift */; };
+		604E3D705B3551458956BFE9274FCA68 /* Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EC6A7795590345D93F56A6741A6E18 /* Sesame.swift */; };
 		65E33CA91C3E6663100BCADBD7DA7505 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
-		68A9004B8B89E39A46E348A065AAC428 /* Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60995DB08E4EB79571E12D97971C0A76 /* Sesame.swift */; };
-		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = AFC4F548B8D1F48D6053EC1A0CBA28F8 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8475A6342153579E00BC5148 /* BMSSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475A6332153579E00BC5148 /* BMSSessionId.swift */; };
-		87881270F4C262DFFEF8AB091D33B80C /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC215610DC539887440AA3DEE1591526 /* AudioEffect.swift */; };
-		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3BCE5625084E73B103D57F03524A69 /* sheen.png */; };
+		6CBDDF5A5A20CD19579B3381064DDF66 /* BMSEventMetadataOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E327ECE170A3D8EA8E508B13A2707DA2 /* BMSEventMetadataOption.swift */; };
+		6CD464C8B7DC6796952F5C4D7A93D2D9 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED996BACE38B9D7D8CE3005F7F0B5F5 /* BundleExtensions.swift */; };
+		7607190E26529268CB95C82AFC83D1B0 /* UserIdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17ABB02668BEF54936FC98F9A36714B /* UserIdSource.swift */; };
+		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5648A1BEAFDBC78CB2F2288541A40627 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8475A6362153860800BC5148 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475A6352153860800BC5148 /* UIWindowExtensions.swift */; };
+		85F6FB4ED113EE23282119055C001A12 /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F6DFAC6E8D74B3562CAA058BA723 /* UIDeviceExtensions.swift */; };
+		87E508B5D7F5765D4F48D74328FFC967 /* Sesame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1590AD197D5A5DFB3810903137139832 /* Sesame.xcdatamodeld */; };
+		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = 91E203756688002BDD8451C80641DA44 /* sheen.png */; };
 		918A4879E1FACE7033F4A58A35199AB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
-		942C9F09D699C774FD9E4E05BBA7F690 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258E67EF6AFF4FFE4052AD3A3E5670A /* CoreDataManager.swift */; };
-		9922B442E122876251C287F99E66C712 /* BMSEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E50C22BDCC8301774235FF7EEB9AEAC /* BMSEffectView.swift */; };
-		B0E4CBEA88233020F1CDA86B2F32CCB3 /* NSManagedObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B46AEE37AC9830A3221DDD691BEE5BB /* NSManagedObject+Extensions.swift */; };
-		BE1CCE43401D875351CEEE95E5AA8BE4 /* BMSEmojiplosionEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD20FB1CF2986246759B42EF3424661 /* BMSEmojiplosionEffectView.swift */; };
-		C05CE6157495354127285DE647060FE4 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12F313C77A17A5D5A1FC46E0C5C5C4 /* UIImageExtensions.swift */; };
+		B7D1F89FF33D46C5E062FE425A02D274 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FA82DE77FD14A152382B8F2A9A3E4F /* UIViewExtensions.swift */; };
+		BE3129BCCFD91C659DBD51A59F129358 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAE19680ABBFB35B6E09898D76F5DA8 /* CoreDataManager.swift */; };
+		BEA2FD10124E7527799107ACB556D9B8 /* DelayedSerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8616307E5890BB3AF0E3F405CEE2388 /* DelayedSerialQueue.swift */; };
 		C26FDB83473646EADEFE16405B8D9EE6 /* Pods-Sesame_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C665C207DEB21B62788B8FE899164199 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40948C50C588ED6005E71B0246F7F34D /* APIClient.swift */; };
+		C879F9E9AFE2128794EBBC309EC0E10B /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB51DA4D5AE4A9E6BDA19FF2B2DF147 /* HTTPClient.swift */; };
+		CC792817AD55985DF2ACC92B8965DA9A /* BMSEmojiplosionEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E96F4F89BD9D03281C7B7E1AAA9A6B /* BMSEmojiplosionEffectView.swift */; };
+		CCBA26C2F817CE8F68C1D52E2D9FB21A /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943B97748475CE423B14529C6536B082 /* UIImageExtensions.swift */; };
+		D25BCB2A04CF97EE9E439F5A500AE78E /* BMSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870AAD033896FF379E20B564E6C3CAB8 /* BMSLog.swift */; };
 		D973E3BFCA386C12EF284207B6E8D303 /* Pods-Sesame_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 13802097F96956396CF62876DBBB6CE0 /* Pods-Sesame_Tests-dummy.m */; };
-		DCBBEE500CE7F10F6B10E617AD004630 /* Sesame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 483E123276CE13E440B4104322F62483 /* Sesame.xcdatamodeld */; };
-		DCFB3FB2339EEBB764EC220C6A1C2BFF /* Sesame-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D9304043B04951C2EE2E1BB11B9F50A4 /* Sesame-dummy.m */; };
-		DF18DB4DC6C77FB08A4E22130312CCA1 /* BMSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23B57AA9318D717E6A99DB2FBD7189C /* BMSLog.swift */; };
-		E1C8ED8F7CD1D2E2CA6F93A314053F9A /* BMSEffectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E16F7BD38697DE226CCE8CB1D52EAAD /* BMSEffectViewController.swift */; };
 		E55797A0B17DF24B1CA15FAE2C1BB33D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A7BE07A93D389088D0712B8DA370ED /* CoreData.framework */; };
-		E6AC1F34A3A49FCEC6DA4A5227B578F7 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30871EC3E9D3CA2AD2A57B270AF9598F /* StringExtensions.swift */; };
-		E7463527E9CFF0FD3F22FFB01645521F /* BMSAppLifecycleTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9944D6A395764D64591C45BEA389A6 /* BMSAppLifecycleTracker.swift */; };
-		EBB52444CED07B7DA5B00D5E323C5B8F /* UserIdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30359ED6677C8BEEC94CA05499D5D38F /* UserIdSource.swift */; };
+		EE8A185C61AEE1D225FA8D8B032FB626 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09CD1D7FB86614A84A28131306579985 /* StringExtensions.swift */; };
+		F00D3D29A8D9462C4D957B551EEA0431 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A773043BA0B9CB720A1C8FA79DD51F4 /* AudioEffect.swift */; };
+		F3F9B6197191E0DBC048B2C32D883052 /* BMSEventAppOpen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BF6679A88BAEAC5FB4A8D6F3853DF /* BMSEventAppOpen.swift */; };
+		F4D876C439A65967374D9AD06C55002F /* BMSSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FD21D28B4520C3D3EEC2048ED8D11E /* BMSSessionId.swift */; };
+		F610940256589BF1E1AD39AF325B0F7D /* BMSEffectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA9FAFC2517FEA83553BD052A7F7136 /* BMSEffectViewController.swift */; };
 		F62BDF3C3B8F6231AA2CD883CFCCEC45 /* Sesame.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */; };
+		F654B8E5888C801D24C64C670CBB9AD6 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0177904B6719480A3C71BC040326EEE /* APIClient.swift */; };
 		F82B6F7F41AF0050E92996B56DAEB3FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
-		F8ECC7BE43F3F113CC87F4183834604A /* BMSConfettiEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06BD500B411F0002D11448CBC3DAF /* BMSConfettiEffectView.swift */; };
-		FC5502851DBA299BAB5737EA6D9CEC73 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F246FB7008601BEADF5E09803BAA27 /* HTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,69 +77,70 @@
 /* Begin PBXFileReference section */
 		02E57E757A8A4354713EC136929BA111 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0954B47DB180D4FDDCCD01311785CD70 /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		0B755AA5CFCBAF05B9E1333C9F9919AC /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
-		0C31458239DD4CBBE68A5E3195CB47ED /* UIDeviceExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIDeviceExtensions.swift; sourceTree = "<group>"; };
-		0EC2358CA189DA7C64C2D1C530DFB549 /* CGExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		09CD1D7FB86614A84A28131306579985 /* StringExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		0D4ABC299E967534188649E96B9596E1 /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
 		13802097F96956396CF62876DBBB6CE0 /* Pods-Sesame_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sesame_Tests-dummy.m"; sourceTree = "<group>"; };
-		1DD20FB1CF2986246759B42EF3424661 /* BMSEmojiplosionEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEmojiplosionEffectView.swift; sourceTree = "<group>"; };
-		2258E67EF6AFF4FFE4052AD3A3E5670A /* CoreDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		1465E7CF2CEF54F1A0698F6EE5F1FCCE /* BMSSheenEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSSheenEffectView.swift; sourceTree = "<group>"; };
+		1D8778C20E9BB3960B380216E25EE30C /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		22E96F4F89BD9D03281C7B7E1AAA9A6B /* BMSEmojiplosionEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEmojiplosionEffectView.swift; sourceTree = "<group>"; };
 		231C325760A9C9A0F6A4EE831A059EAE /* Pods-Sesame_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-resources.sh"; sourceTree = "<group>"; };
-		2E4F7AF5E4B0208F854ECA5027472D88 /* BMSSheenEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSSheenEffectView.swift; sourceTree = "<group>"; };
-		30359ED6677C8BEEC94CA05499D5D38F /* UserIdSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserIdSource.swift; sourceTree = "<group>"; };
-		30871EC3E9D3CA2AD2A57B270AF9598F /* StringExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		291E1C76742C0EFA48B0A7FAD2E84EC6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2DE727B08BC48244DFDFB365FC771EB9 /* BMSEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEffectView.swift; sourceTree = "<group>"; };
 		31F5F6810ED7D05E34FBC5D440F9755E /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3311B7F40AE7FF28F42FEFA13CE81315 /* BMSAppLifecycleTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppLifecycleTracker.swift; sourceTree = "<group>"; };
 		3427FBADB6ACE92DD4BB0A3D70704E48 /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		36FD21D28B4520C3D3EEC2048ED8D11E /* BMSSessionId.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSSessionId.swift; sourceTree = "<group>"; };
 		3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		3AB37E5919A5BCA6C6D56057EAABCD09 /* Sesame-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-prefix.pch"; sourceTree = "<group>"; };
 		3C46D37F2C90130D8F55131F45B0D945 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3E16F7BD38697DE226CCE8CB1D52EAAD /* BMSEffectViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEffectViewController.swift; sourceTree = "<group>"; };
-		3E50C22BDCC8301774235FF7EEB9AEAC /* BMSEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEffectView.swift; sourceTree = "<group>"; };
-		40948C50C588ED6005E71B0246F7F34D /* APIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		50C593CF5DCF3E31976A0314741751D5 /* Cue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Cue.swift; sourceTree = "<group>"; };
+		4D6069A2E8A606179E0C75DE94A7385B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4ED996BACE38B9D7D8CE3005F7F0B5F5 /* BundleExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
+		4FAE19680ABBFB35B6E09898D76F5DA8 /* CoreDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		519399B67D41AFED8F2A1E60D874C33D /* Pods-Sesame_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Tests-resources.sh"; sourceTree = "<group>"; };
-		52AFEF9D0DECC2081D5E591F3B91FC0C /* UIViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		52E8674BB969D65A77D69A63CE3DD61A /* Pods-Sesame_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Tests-umbrella.h"; sourceTree = "<group>"; };
 		54C2AD22FEA7896F65F496251A010D04 /* Pods-Sesame_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		5648A1BEAFDBC78CB2F2288541A40627 /* Sesame-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-umbrella.h"; sourceTree = "<group>"; };
 		588E24ADFD51ECC045E9453F7CB7FCDE /* Pods-Sesame_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sesame_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		5938A1FFB92D40ABAF4F84E7C034DB71 /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B3BCE5625084E73B103D57F03524A69 /* sheen.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sheen.png; path = Sesame/Assets/sheen.png; sourceTree = "<group>"; };
+		5A773043BA0B9CB720A1C8FA79DD51F4 /* AudioEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
 		5DD0B4F60CDCA0172F58397CA167CDB3 /* Pods-Sesame_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Tests-frameworks.sh"; sourceTree = "<group>"; };
-		60995DB08E4EB79571E12D97971C0A76 /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
-		62FAA7CEB642C4C5B892A4198C55C9F1 /* BMSEventMetadataOption.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEventMetadataOption.swift; sourceTree = "<group>"; };
-		6A12F313C77A17A5D5A1FC46E0C5C5C4 /* UIImageExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
+		63FA82DE77FD14A152382B8F2A9A3E4F /* UIViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		6AD0F9E29AA24DD719DD2EEE990A7B47 /* Pods-Sesame_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		6C9944D6A395764D64591C45BEA389A6 /* BMSAppLifecycleTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppLifecycleTracker.swift; sourceTree = "<group>"; };
+		75D0C8F2EB00C8171D7DF1106F3B3C9E /* NSManagedObject+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extensions.swift"; sourceTree = "<group>"; };
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
-		7B46AEE37AC9830A3221DDD691BEE5BB /* NSManagedObject+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extensions.swift"; sourceTree = "<group>"; };
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
-		8372D110003FC7E6D609725BEF59E05F /* Sesame-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-prefix.pch"; sourceTree = "<group>"; };
-		8475A6332153579E00BC5148 /* BMSSessionId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSSessionId.swift; sourceTree = "<group>"; };
-		8527FF8328ACA03689F1F9F75C0C53D6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		8905AF99649B74C9E1F559CA59D128CE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8A5FD5A342EA075D5B538DCE11398E5C /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
-		8AE06BD500B411F0002D11448CBC3DAF /* BMSConfettiEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSConfettiEffectView.swift; sourceTree = "<group>"; };
-		8B7FC64D74EE5C6C25A11A85E6273C1F /* Sesame.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sesame.xcconfig; sourceTree = "<group>"; };
-		8BFD4FBBD0945F4BB1B31B75288EB366 /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
+		8475A6352153860800BC5148 /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
+		870AAD033896FF379E20B564E6C3CAB8 /* BMSLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BMSLog.swift; path = Sesame/Classes/BMSLog.swift; sourceTree = "<group>"; };
+		88EABE371777763A8572AC82CB1AE145 /* BMSConfettiEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSConfettiEffectView.swift; sourceTree = "<group>"; };
+		8B22A3039C626149919692CB690EF412 /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		8C2BF6679A88BAEAC5FB4A8D6F3853DF /* BMSEventAppOpen.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEventAppOpen.swift; sourceTree = "<group>"; };
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
-		936E4EBAE161B4D6AC8784ADD933570D /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		8EB51DA4D5AE4A9E6BDA19FF2B2DF147 /* HTTPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		8FA9FAFC2517FEA83553BD052A7F7136 /* BMSEffectViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEffectViewController.swift; sourceTree = "<group>"; };
+		919FFD08E08164CDE9308E2667BA0310 /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
+		91E203756688002BDD8451C80641DA44 /* sheen.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sheen.png; path = Sesame/Assets/sheen.png; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9F41C6587A6D8E285BD1B69C60691652 /* Sesame.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = Sesame.xcdatamodel; sourceTree = "<group>"; };
-		A1F246FB7008601BEADF5E09803BAA27 /* HTTPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
-		A2301BF3C44C1E85FFF5740F7E975C3D /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
+		943B97748475CE423B14529C6536B082 /* UIImageExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
+		9AAE3AA0E7ED7463B761A7B97EC29180 /* CGExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		A17ABB02668BEF54936FC98F9A36714B /* UserIdSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserIdSource.swift; sourceTree = "<group>"; };
 		AB895FADDBD0F9AC58F5C6B69A218187 /* Pods-Sesame_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		AC215610DC539887440AA3DEE1591526 /* AudioEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
 		AC7F04CDF8CCA509E6588E4389CE16F2 /* Sesame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sesame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AFC4F548B8D1F48D6053EC1A0CBA28F8 /* Sesame-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-umbrella.h"; sourceTree = "<group>"; };
+		B6EFD4461CDD3EAC66B69E4F82DD66FB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		BC7915A09521E093504F8CB6E66FDB80 /* Pods-Sesame_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Example.modulemap"; sourceTree = "<group>"; };
-		CD4B10B2FB3430A64731B53783F4B28C /* BMSEventAppOpen.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEventAppOpen.swift; sourceTree = "<group>"; };
-		D23B57AA9318D717E6A99DB2FBD7189C /* BMSLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BMSLog.swift; path = Sesame/Classes/BMSLog.swift; sourceTree = "<group>"; };
-		D333A7CB580809B354E70DCA0D15C879 /* BundleExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
-		D9304043B04951C2EE2E1BB11B9F50A4 /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
-		DF9991D00CBE88BE9675A12B9892A9F7 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		BEF9C2A4E5EBAF99F2E3166831F45464 /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
+		C7D2CB8BCD7C7063D9DEC323212FD4DB /* Cue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Cue.swift; sourceTree = "<group>"; };
+		C8616307E5890BB3AF0E3F405CEE2388 /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
+		C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sesame.xcconfig; sourceTree = "<group>"; };
+		D7EC6A7795590345D93F56A6741A6E18 /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
 		E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sesame.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1355CD91A7A9447E37FC5971EC8689B /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		E327ECE170A3D8EA8E508B13A2707DA2 /* BMSEventMetadataOption.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEventMetadataOption.swift; sourceTree = "<group>"; };
+		EB43F6DFAC6E8D74B3562CAA058BA723 /* UIDeviceExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIDeviceExtensions.swift; sourceTree = "<group>"; };
+		EBD417559602415F2A0EB2DA76FF0F53 /* Sesame.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = Sesame.xcdatamodel; sourceTree = "<group>"; };
+		F0177904B6719480A3C71BC040326EEE /* APIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		F2E846F19171FD5D0B774660CAF1D75C /* Pods-Sesame_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sesame_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		F7A7BE07A93D389088D0712B8DA370ED /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
+		F8AE557A24CF60E400389C94CC4690A4 /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
 		FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sesame_Example-dummy.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -178,44 +180,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0A9E08FFA5EFDD78B247F3653E0EB8BE /* Extensions */ = {
+		17E98D3869B61254C4BF4B0182A2B54C /* Effects */ = {
 			isa = PBXGroup;
 			children = (
-				D333A7CB580809B354E70DCA0D15C879 /* BundleExtensions.swift */,
-				0EC2358CA189DA7C64C2D1C530DFB549 /* CGExtensions.swift */,
-				A2301BF3C44C1E85FFF5740F7E975C3D /* DelayedSerialQueue.swift */,
-				30871EC3E9D3CA2AD2A57B270AF9598F /* StringExtensions.swift */,
-				936E4EBAE161B4D6AC8784ADD933570D /* UIColorExtensions.swift */,
-				0C31458239DD4CBBE68A5E3195CB47ED /* UIDeviceExtensions.swift */,
-				6A12F313C77A17A5D5A1FC46E0C5C5C4 /* UIImageExtensions.swift */,
-				52AFEF9D0DECC2081D5E591F3B91FC0C /* UIViewExtensions.swift */,
+				5A773043BA0B9CB720A1C8FA79DD51F4 /* AudioEffect.swift */,
+				88EABE371777763A8572AC82CB1AE145 /* BMSConfettiEffectView.swift */,
+				2DE727B08BC48244DFDFB365FC771EB9 /* BMSEffectView.swift */,
+				8FA9FAFC2517FEA83553BD052A7F7136 /* BMSEffectViewController.swift */,
+				22E96F4F89BD9D03281C7B7E1AAA9A6B /* BMSEmojiplosionEffectView.swift */,
+				1465E7CF2CEF54F1A0698F6EE5F1FCCE /* BMSSheenEffectView.swift */,
 			);
-			name = Extensions;
-			path = Sesame/Classes/Extensions;
+			name = Effects;
+			path = Sesame/Classes/Effects;
 			sourceTree = "<group>";
 		};
-		2764BE156D2241F27260A123D4568CFD /* Service */ = {
+		30630B4A347FD058106448FC67F44235 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6C9944D6A395764D64591C45BEA389A6 /* BMSAppLifecycleTracker.swift */,
-				CD4B10B2FB3430A64731B53783F4B28C /* BMSEventAppOpen.swift */,
-				62FAA7CEB642C4C5B892A4198C55C9F1 /* BMSEventMetadataOption.swift */,
-				8475A6332153579E00BC5148 /* BMSSessionId.swift */,
-				50C593CF5DCF3E31976A0314741751D5 /* Cue.swift */,
-				30359ED6677C8BEEC94CA05499D5D38F /* UserIdSource.swift */,
+				1590AD197D5A5DFB3810903137139832 /* Sesame.xcdatamodeld */,
+				91E203756688002BDD8451C80641DA44 /* sheen.png */,
 			);
-			name = Service;
-			path = Sesame/Classes/Service;
-			sourceTree = "<group>";
-		};
-		27A93CFCB1DE70DDC3BF523D26876443 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				DF9991D00CBE88BE9675A12B9892A9F7 /* LICENSE */,
-				8527FF8328ACA03689F1F9F75C0C53D6 /* README.md */,
-				F1355CD91A7A9447E37FC5971EC8689B /* Sesame.podspec */,
-			);
-			name = Pod;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		366FC10CB5456B9E273809EEA5E3D52A /* Pods-Sesame_Example */ = {
@@ -236,6 +221,23 @@
 			path = "Target Support Files/Pods-Sesame_Example";
 			sourceTree = "<group>";
 		};
+		42302DA7B921945815C6735444FFCE16 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4ED996BACE38B9D7D8CE3005F7F0B5F5 /* BundleExtensions.swift */,
+				9AAE3AA0E7ED7463B761A7B97EC29180 /* CGExtensions.swift */,
+				C8616307E5890BB3AF0E3F405CEE2388 /* DelayedSerialQueue.swift */,
+				09CD1D7FB86614A84A28131306579985 /* StringExtensions.swift */,
+				1D8778C20E9BB3960B380216E25EE30C /* UIColorExtensions.swift */,
+				EB43F6DFAC6E8D74B3562CAA058BA723 /* UIDeviceExtensions.swift */,
+				943B97748475CE423B14529C6536B082 /* UIImageExtensions.swift */,
+				63FA82DE77FD14A152382B8F2A9A3E4F /* UIViewExtensions.swift */,
+				8475A6352153860800BC5148 /* UIWindowExtensions.swift */,
+			);
+			name = Extensions;
+			path = Sesame/Classes/Extensions;
+			sourceTree = "<group>";
+		};
 		433CD3331B6C3787F473C941B61FC68F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,39 +246,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		486FB968EC47E2AF3990C52D23E76CB6 /* API */ = {
+		62C84700BA5083094FCF3BD1DD649C5A /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				40948C50C588ED6005E71B0246F7F34D /* APIClient.swift */,
-				A1F246FB7008601BEADF5E09803BAA27 /* HTTPClient.swift */,
+				4D6069A2E8A606179E0C75DE94A7385B /* Info.plist */,
+				F8AE557A24CF60E400389C94CC4690A4 /* ResourceBundle-Sesame-Info.plist */,
+				0D4ABC299E967534188649E96B9596E1 /* Sesame.modulemap */,
+				C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */,
+				919FFD08E08164CDE9308E2667BA0310 /* Sesame-dummy.m */,
+				3AB37E5919A5BCA6C6D56057EAABCD09 /* Sesame-prefix.pch */,
+				5648A1BEAFDBC78CB2F2288541A40627 /* Sesame-umbrella.h */,
 			);
-			name = API;
-			path = Sesame/Classes/API;
-			sourceTree = "<group>";
-		};
-		7595BDC40BCB1E5317BAF294CAB7D681 /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				2258E67EF6AFF4FFE4052AD3A3E5670A /* CoreDataManager.swift */,
-				7B46AEE37AC9830A3221DDD691BEE5BB /* NSManagedObject+Extensions.swift */,
-				0B755AA5CFCBAF05B9E1333C9F9919AC /* UserDefaults+Extensions.swift */,
-			);
-			name = Database;
-			path = Sesame/Classes/Database;
-			sourceTree = "<group>";
-		};
-		771C48FA90D8F26FFB339C6D092E5C97 /* Effects */ = {
-			isa = PBXGroup;
-			children = (
-				AC215610DC539887440AA3DEE1591526 /* AudioEffect.swift */,
-				8AE06BD500B411F0002D11448CBC3DAF /* BMSConfettiEffectView.swift */,
-				3E50C22BDCC8301774235FF7EEB9AEAC /* BMSEffectView.swift */,
-				3E16F7BD38697DE226CCE8CB1D52EAAD /* BMSEffectViewController.swift */,
-				1DD20FB1CF2986246759B42EF3424661 /* BMSEmojiplosionEffectView.swift */,
-				2E4F7AF5E4B0208F854ECA5027472D88 /* BMSSheenEffectView.swift */,
-			);
-			name = Effects;
-			path = Sesame/Classes/Effects;
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/Sesame";
 			sourceTree = "<group>";
 		};
 		788D7DA7D6782ED5B7E3FCC5AA032772 /* Pods-Sesame_Tests */ = {
@@ -328,54 +310,75 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B284F2C5467F41931D1827F39602A37F /* Resources */ = {
+		B9E9EA77EB065E053E5DBEB65B4046EF /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				483E123276CE13E440B4104322F62483 /* Sesame.xcdatamodeld */,
-				5B3BCE5625084E73B103D57F03524A69 /* sheen.png */,
+				B6EFD4461CDD3EAC66B69E4F82DD66FB /* LICENSE */,
+				291E1C76742C0EFA48B0A7FAD2E84EC6 /* README.md */,
+				8B22A3039C626149919692CB690EF412 /* Sesame.podspec */,
 			);
-			name = Resources;
+			name = Pod;
 			sourceTree = "<group>";
 		};
 		BE74E06097FC79957CA6632EA64268C3 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D046A443F2BBDB0D6DC7B9C93AF8FFC7 /* Sesame */,
+				CBB14A40D6EAE89A905A93392125A8EB /* Sesame */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		D046A443F2BBDB0D6DC7B9C93AF8FFC7 /* Sesame */ = {
+		C581BFA8FCCB8790B7FD76446B427D5B /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				D23B57AA9318D717E6A99DB2FBD7189C /* BMSLog.swift */,
-				60995DB08E4EB79571E12D97971C0A76 /* Sesame.swift */,
-				486FB968EC47E2AF3990C52D23E76CB6 /* API */,
-				7595BDC40BCB1E5317BAF294CAB7D681 /* Database */,
-				771C48FA90D8F26FFB339C6D092E5C97 /* Effects */,
-				0A9E08FFA5EFDD78B247F3653E0EB8BE /* Extensions */,
-				27A93CFCB1DE70DDC3BF523D26876443 /* Pod */,
-				B284F2C5467F41931D1827F39602A37F /* Resources */,
-				2764BE156D2241F27260A123D4568CFD /* Service */,
-				D465F6F8CF94D2103CDE4CE2E286A85E /* Support Files */,
+				4FAE19680ABBFB35B6E09898D76F5DA8 /* CoreDataManager.swift */,
+				75D0C8F2EB00C8171D7DF1106F3B3C9E /* NSManagedObject+Extensions.swift */,
+				BEF9C2A4E5EBAF99F2E3166831F45464 /* UserDefaults+Extensions.swift */,
+			);
+			name = Database;
+			path = Sesame/Classes/Database;
+			sourceTree = "<group>";
+		};
+		CBB14A40D6EAE89A905A93392125A8EB /* Sesame */ = {
+			isa = PBXGroup;
+			children = (
+				870AAD033896FF379E20B564E6C3CAB8 /* BMSLog.swift */,
+				D7EC6A7795590345D93F56A6741A6E18 /* Sesame.swift */,
+				DFB2189A5987B0FDCA9AD5755F778929 /* API */,
+				C581BFA8FCCB8790B7FD76446B427D5B /* Database */,
+				17E98D3869B61254C4BF4B0182A2B54C /* Effects */,
+				42302DA7B921945815C6735444FFCE16 /* Extensions */,
+				B9E9EA77EB065E053E5DBEB65B4046EF /* Pod */,
+				30630B4A347FD058106448FC67F44235 /* Resources */,
+				ED105F0CCB6257F991CB6D46E0328B98 /* Service */,
+				62C84700BA5083094FCF3BD1DD649C5A /* Support Files */,
 			);
 			name = Sesame;
 			path = ../..;
 			sourceTree = "<group>";
 		};
-		D465F6F8CF94D2103CDE4CE2E286A85E /* Support Files */ = {
+		DFB2189A5987B0FDCA9AD5755F778929 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				8905AF99649B74C9E1F559CA59D128CE /* Info.plist */,
-				8BFD4FBBD0945F4BB1B31B75288EB366 /* ResourceBundle-Sesame-Info.plist */,
-				8A5FD5A342EA075D5B538DCE11398E5C /* Sesame.modulemap */,
-				8B7FC64D74EE5C6C25A11A85E6273C1F /* Sesame.xcconfig */,
-				D9304043B04951C2EE2E1BB11B9F50A4 /* Sesame-dummy.m */,
-				8372D110003FC7E6D609725BEF59E05F /* Sesame-prefix.pch */,
-				AFC4F548B8D1F48D6053EC1A0CBA28F8 /* Sesame-umbrella.h */,
+				F0177904B6719480A3C71BC040326EEE /* APIClient.swift */,
+				8EB51DA4D5AE4A9E6BDA19FF2B2DF147 /* HTTPClient.swift */,
 			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/Sesame";
+			name = API;
+			path = Sesame/Classes/API;
+			sourceTree = "<group>";
+		};
+		ED105F0CCB6257F991CB6D46E0328B98 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				3311B7F40AE7FF28F42FEFA13CE81315 /* BMSAppLifecycleTracker.swift */,
+				8C2BF6679A88BAEAC5FB4A8D6F3853DF /* BMSEventAppOpen.swift */,
+				E327ECE170A3D8EA8E508B13A2707DA2 /* BMSEventMetadataOption.swift */,
+				36FD21D28B4520C3D3EEC2048ED8D11E /* BMSSessionId.swift */,
+				C7D2CB8BCD7C7063D9DEC323212FD4DB /* Cue.swift */,
+				A17ABB02668BEF54936FC98F9A36714B /* UserIdSource.swift */,
+			);
+			name = Service;
+			path = Sesame/Classes/Service;
 			sourceTree = "<group>";
 		};
 		F0B555B44F6756E727677EDFF2995F9D /* Targets Support Files */ = {
@@ -474,7 +477,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7829688744268BB15E71164D9724418C /* Build configuration list for PBXNativeTarget "Sesame" */;
 			buildPhases = (
-				3F5A2B3AD5629ADFB9A7A88C983300AB /* Sources */,
+				08F85029B01500334AD47EB2CF40A91F /* Sources */,
 				82F89BA89E8D8FC5E623B41FA09662B4 /* Frameworks */,
 				0008149B56834FD63B65E57E80697CED /* Resources */,
 				381ECDCFFFCA3C4EE13901E1BFCE462F /* Headers */,
@@ -538,6 +541,43 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		08F85029B01500334AD47EB2CF40A91F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F654B8E5888C801D24C64C670CBB9AD6 /* APIClient.swift in Sources */,
+				F00D3D29A8D9462C4D957B551EEA0431 /* AudioEffect.swift in Sources */,
+				3AE126F8C20933B7DC86C4B3F2BE41A8 /* BMSAppLifecycleTracker.swift in Sources */,
+				558861AD1DD5F813781187F51BF2E1DB /* BMSConfettiEffectView.swift in Sources */,
+				26B62EB4D94F618125F26BDE67A44065 /* BMSEffectView.swift in Sources */,
+				F610940256589BF1E1AD39AF325B0F7D /* BMSEffectViewController.swift in Sources */,
+				CC792817AD55985DF2ACC92B8965DA9A /* BMSEmojiplosionEffectView.swift in Sources */,
+				F3F9B6197191E0DBC048B2C32D883052 /* BMSEventAppOpen.swift in Sources */,
+				6CBDDF5A5A20CD19579B3381064DDF66 /* BMSEventMetadataOption.swift in Sources */,
+				D25BCB2A04CF97EE9E439F5A500AE78E /* BMSLog.swift in Sources */,
+				F4D876C439A65967374D9AD06C55002F /* BMSSessionId.swift in Sources */,
+				5BDD8A9A1832D930BFF868F217579BBF /* BMSSheenEffectView.swift in Sources */,
+				6CD464C8B7DC6796952F5C4D7A93D2D9 /* BundleExtensions.swift in Sources */,
+				454D51AC1C61A41D9B8BD63EF3675671 /* CGExtensions.swift in Sources */,
+				BE3129BCCFD91C659DBD51A59F129358 /* CoreDataManager.swift in Sources */,
+				1E4DF67DFA651BB1DF5BA3929B74DAE7 /* Cue.swift in Sources */,
+				BEA2FD10124E7527799107ACB556D9B8 /* DelayedSerialQueue.swift in Sources */,
+				8475A6362153860800BC5148 /* UIWindowExtensions.swift in Sources */,
+				C879F9E9AFE2128794EBBC309EC0E10B /* HTTPClient.swift in Sources */,
+				107DE4643D8422A380F86DDBBC71A714 /* NSManagedObject+Extensions.swift in Sources */,
+				58B1941BCCA4B99B6593376530BFD7BE /* Sesame-dummy.m in Sources */,
+				604E3D705B3551458956BFE9274FCA68 /* Sesame.swift in Sources */,
+				87E508B5D7F5765D4F48D74328FFC967 /* Sesame.xcdatamodeld in Sources */,
+				EE8A185C61AEE1D225FA8D8B032FB626 /* StringExtensions.swift in Sources */,
+				56A890E8DDEC15C04490A2478DA08429 /* UIColorExtensions.swift in Sources */,
+				85F6FB4ED113EE23282119055C001A12 /* UIDeviceExtensions.swift in Sources */,
+				CCBA26C2F817CE8F68C1D52E2D9FB21A /* UIImageExtensions.swift in Sources */,
+				B7D1F89FF33D46C5E062FE425A02D274 /* UIViewExtensions.swift in Sources */,
+				55091EBCA8B013A65FE0A6B12ABD9C74 /* UserDefaults+Extensions.swift in Sources */,
+				7607190E26529268CB95C82AFC83D1B0 /* UserIdSource.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2687B25AD5071A078C4F64CF7D17AE56 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -550,42 +590,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3F5A2B3AD5629ADFB9A7A88C983300AB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C665C207DEB21B62788B8FE899164199 /* APIClient.swift in Sources */,
-				87881270F4C262DFFEF8AB091D33B80C /* AudioEffect.swift in Sources */,
-				E7463527E9CFF0FD3F22FFB01645521F /* BMSAppLifecycleTracker.swift in Sources */,
-				F8ECC7BE43F3F113CC87F4183834604A /* BMSConfettiEffectView.swift in Sources */,
-				9922B442E122876251C287F99E66C712 /* BMSEffectView.swift in Sources */,
-				E1C8ED8F7CD1D2E2CA6F93A314053F9A /* BMSEffectViewController.swift in Sources */,
-				BE1CCE43401D875351CEEE95E5AA8BE4 /* BMSEmojiplosionEffectView.swift in Sources */,
-				34D5602AC5B4C85EA3DE04F6E688D1FF /* BMSEventAppOpen.swift in Sources */,
-				DF18DB4DC6C77FB08A4E22130312CCA1 /* BMSLog.swift in Sources */,
-				1E970BAC699D5C350913ECCB709FC339 /* BMSSheenEffectView.swift in Sources */,
-				07F3F3D50ABF7363F687A50220491350 /* BMSEventMetadataOption.swift in Sources */,
-				0E5B9E7163F1EDE577DA15ED25494F0B /* BundleExtensions.swift in Sources */,
-				138EE3E75F605F1E3C8D606DCBB3943F /* CGExtensions.swift in Sources */,
-				942C9F09D699C774FD9E4E05BBA7F690 /* CoreDataManager.swift in Sources */,
-				4507A9133C1A26083873BE75B5A6054C /* Cue.swift in Sources */,
-				0708214B676B5386751A04F5F02F6488 /* DelayedSerialQueue.swift in Sources */,
-				FC5502851DBA299BAB5737EA6D9CEC73 /* HTTPClient.swift in Sources */,
-				B0E4CBEA88233020F1CDA86B2F32CCB3 /* NSManagedObject+Extensions.swift in Sources */,
-				8475A6342153579E00BC5148 /* BMSSessionId.swift in Sources */,
-				DCFB3FB2339EEBB764EC220C6A1C2BFF /* Sesame-dummy.m in Sources */,
-				68A9004B8B89E39A46E348A065AAC428 /* Sesame.swift in Sources */,
-				DCBBEE500CE7F10F6B10E617AD004630 /* Sesame.xcdatamodeld in Sources */,
-				E6AC1F34A3A49FCEC6DA4A5227B578F7 /* StringExtensions.swift in Sources */,
-				11D5A90584F680889C1D71C480D23D87 /* UIColorExtensions.swift in Sources */,
-				20227F88CD8B6D00B9CFAC9C6145DFA3 /* UIDeviceExtensions.swift in Sources */,
-				C05CE6157495354127285DE647060FE4 /* UIImageExtensions.swift in Sources */,
-				10BA91F2C9F0E40DE2B8A2E0C96C5CB3 /* UIViewExtensions.swift in Sources */,
-				01F8C7BA0E86A9AE156AF427D68FF7C5 /* UserDefaults+Extensions.swift in Sources */,
-				EBB52444CED07B7DA5B00D5E323C5B8F /* UserIdSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,7 +698,7 @@
 		};
 		29E271A017AA792B3151CE43AF6333E7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B7FC64D74EE5C6C25A11A85E6273C1F /* Sesame.xcconfig */;
+			baseConfigurationReference = C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Sesame";
@@ -865,7 +869,7 @@
 		};
 		8BACC58279BF9E2B534DA8AF682D770C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B7FC64D74EE5C6C25A11A85E6273C1F /* Sesame.xcconfig */;
+			baseConfigurationReference = C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Sesame";
@@ -881,7 +885,7 @@
 		};
 		AECC98EC5E2FC8FFA880DB7396815FCD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B7FC64D74EE5C6C25A11A85E6273C1F /* Sesame.xcconfig */;
+			baseConfigurationReference = C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -949,7 +953,7 @@
 		};
 		F3C9D8E17B25B8FD5C86656A2BD912D0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B7FC64D74EE5C6C25A11A85E6273C1F /* Sesame.xcconfig */;
+			baseConfigurationReference = C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1031,12 +1035,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		483E123276CE13E440B4104322F62483 /* Sesame.xcdatamodeld */ = {
+		1590AD197D5A5DFB3810903137139832 /* Sesame.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				9F41C6587A6D8E285BD1B69C60691652 /* Sesame.xcdatamodel */,
+				EBD417559602415F2A0EB2DA76FF0F53 /* Sesame.xcdatamodel */,
 			);
-			currentVersion = 9F41C6587A6D8E285BD1B69C60691652 /* Sesame.xcdatamodel */;
+			currentVersion = EBD417559602415F2A0EB2DA76FF0F53 /* Sesame.xcdatamodel */;
 			name = Sesame.xcdatamodeld;
 			path = Sesame/Assets/Sesame.xcdatamodeld;
 			sourceTree = "<group>";
