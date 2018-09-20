@@ -1,6 +1,6 @@
 //
 //  AudioEffect.swift
-//  BoundlessKit
+//  Sesame
 //
 //  Created by Akash Desai on 11/29/17.
 //

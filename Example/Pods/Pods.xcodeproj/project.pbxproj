@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		085EF677C364B86B723D19A11B56834C /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B14D7BE1E5FE51B2C89607C79CC8A0 /* UIViewExtensions.swift */; };
 		0ABC0B0182FF0AF9A345901196AE5B11 /* Cue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B02FB755DC4C285C16108E0467F422 /* Cue.swift */; };
-		0C21801332761591646159E69E3F723F /* ExplosionEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367EFA928278A62BEF50245C8D878AD0 /* ExplosionEffectView.swift */; };
+		0C21801332761591646159E69E3F723F /* EmojiplosionEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367EFA928278A62BEF50245C8D878AD0 /* EmojiplosionEffectView.swift */; };
 		1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */; };
 		2EA5BD302DD734BB3CD5E0A0C3261A6D /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F1D300D42DC90A6420AFE90BD3226 /* UIColorExtensions.swift */; };
 		3E748B8274FE60167D1717E19E5538E3 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0552E8BEEE4ABF36DA366F50ED454C9F /* BundleExtensions.swift */; };
@@ -39,7 +39,7 @@
 		CF0380C79F985B50FB3CAAD06C556369 /* EffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9860FC2F90203BFE6E63599B3879BEB1 /* EffectView.swift */; };
 		D973E3BFCA386C12EF284207B6E8D303 /* Pods-Sesame_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 13802097F96956396CF62876DBBB6CE0 /* Pods-Sesame_Tests-dummy.m */; };
 		E55797A0B17DF24B1CA15FAE2C1BB33D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A7BE07A93D389088D0712B8DA370ED /* CoreData.framework */; };
-		E6DED7B843A8C3C83A7C53A781CEE879 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC1E5B14830573F15CAF5311C0489C3 /* Logger.swift */; };
+		E6DED7B843A8C3C83A7C53A781CEE879 /* BMSLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC1E5B14830573F15CAF5311C0489C3 /* BMSLogger.swift */; };
 		E85D174CB6F479C5F55429106906B52F /* BMSTrackingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9BDD7B5001EBE3A0FC1D4312F2A69C /* BMSTrackingOption.swift */; };
 		F62BDF3C3B8F6231AA2CD883CFCCEC45 /* Sesame.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */; };
 		F82B6F7F41AF0050E92996B56DAEB3FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */; };
@@ -90,10 +90,10 @@
 		320F4884682F078C9922A0CB09AF1BB5 /* sheen.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sheen.png; path = Sesame/Assets/sheen.png; sourceTree = "<group>"; };
 		33730913B04FB49D02D4D665BE6BBC4C /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
 		3427FBADB6ACE92DD4BB0A3D70704E48 /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		367EFA928278A62BEF50245C8D878AD0 /* ExplosionEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExplosionEffectView.swift; sourceTree = "<group>"; };
+		367EFA928278A62BEF50245C8D878AD0 /* EmojiplosionEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EmojiplosionEffectView.swift; sourceTree = "<group>"; };
 		3792A683529B65B8837AD54D85BA6912 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3C46D37F2C90130D8F55131F45B0D945 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3DC1E5B14830573F15CAF5311C0489C3 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Sesame/Classes/Logger.swift; sourceTree = "<group>"; };
+		3DC1E5B14830573F15CAF5311C0489C3 /* BMSLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BMSLogger.swift; path = Sesame/Classes/BMSLogger.swift; sourceTree = "<group>"; };
 		46A4564D508B586D28D48069CDFB065F /* UIDeviceExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIDeviceExtensions.swift; sourceTree = "<group>"; };
 		4F6F1D300D42DC90A6420AFE90BD3226 /* UIColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		507E21FFAC839D3514E3180987A7356F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -205,7 +205,7 @@
 		36728C3D21BE3C90653DC5CE4FADC0A9 /* Sesame */ = {
 			isa = PBXGroup;
 			children = (
-				3DC1E5B14830573F15CAF5311C0489C3 /* Logger.swift */,
+				3DC1E5B14830573F15CAF5311C0489C3 /* BMSLogger.swift */,
 				33730913B04FB49D02D4D665BE6BBC4C /* Sesame.swift */,
 				4CC95496B58E51D48483C7EF2466F7C9 /* API */,
 				DC70332BEB403BC0B213A84D4299CCC5 /* Database */,
@@ -346,7 +346,7 @@
 			children = (
 				9CC17DA028F638C2F11C328F8ED5CE36 /* AudioEffect.swift */,
 				02231CF7382A295E86A8B2615F00A170 /* ConfettiEffectView.swift */,
-				367EFA928278A62BEF50245C8D878AD0 /* ExplosionEffectView.swift */,
+				367EFA928278A62BEF50245C8D878AD0 /* EmojiplosionEffectView.swift */,
 				9860FC2F90203BFE6E63599B3879BEB1 /* EffectView.swift */,
 				6CBA1E9863AFFDEE0BCD8243FE1396BA /* EffectViewController.swift */,
 				01A5051D4E1ABD41E2BFD3B6C479C16B /* SheenEffectView.swift */,
@@ -565,9 +565,9 @@
 				C34F38EBE340A4248F018E742F47BF23 /* CoreDataManager.swift in Sources */,
 				0ABC0B0182FF0AF9A345901196AE5B11 /* Cue.swift in Sources */,
 				A4F9F8A9A0F6C978D9A64E2D6D8F60D5 /* DelayedSerialQueue.swift in Sources */,
-				0C21801332761591646159E69E3F723F /* ExplosionEffectView.swift in Sources */,
+				0C21801332761591646159E69E3F723F /* EmojiplosionEffectView.swift in Sources */,
 				BEF2721EC5CECD7F5F93B257C22A78EC /* HTTPClient.swift in Sources */,
-				E6DED7B843A8C3C83A7C53A781CEE879 /* Logger.swift in Sources */,
+				E6DED7B843A8C3C83A7C53A781CEE879 /* BMSLogger.swift in Sources */,
 				493941D4150E1BC121A6DAAE398029EB /* NSManagedObject+Extensions.swift in Sources */,
 				CF0380C79F985B50FB3CAAD06C556369 /* EffectView.swift in Sources */,
 				7C1CDDE8CAE7B5F84B2E1FD296E7DB24 /* EffectViewController.swift in Sources */,

@@ -1,6 +1,6 @@
 //
 //  Extensions.swift
-//  BoundlessKit
+//  Sesame
 //
 //  Created by Akash Desai on 11/27/17.
 //

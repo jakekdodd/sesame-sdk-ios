@@ -28,11 +28,8 @@ open class ApplicationLifecycleTracker: NSObject {
     }
 
     func setupNotifications() {
-        for notification in [Notification.Name/*.UIApplicationDidFinishLaunching,*/
-                             .UIApplicationWillTerminate,
+        for notification in [Notification.Name.UIApplicationWillTerminate,
                              .UIApplicationDidBecomeActive,
-//                             .UIApplicationWillResignActive,
-//                             .UIApplicationWillEnterForeground,
                              .UIApplicationDidEnterBackground] {
                                 NotificationCenter.default.addObserver(self,
                                                                        selector: #selector(receive(_:)),
@@ -53,6 +50,11 @@ open class ApplicationLifecycleTracker: NSObject {
             break
         }
     }
+}
+
+// MARK: - Tracked Events
+
+extension ApplicationLifecycleTracker {
 
     // MARK: - UIApplicationDidFinishLaunching
 

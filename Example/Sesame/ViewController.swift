@@ -20,6 +20,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         addChildViewController(effectViewContainer)
         effectViewContainer.didMove(toParentViewController: self)
         view.addSubview(effectViewContainer.view)

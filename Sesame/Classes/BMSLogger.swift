@@ -1,16 +1,8 @@
 //
-//  Logger.swift
+//  BMSLogger.swift
 //  Sesame
 //
 //  Created by Akash Desai on 7/23/18.
-//
-
-import Foundation
-//
-//  BKLog.swift
-//  BoundlessKit
-//
-//  Created by Akash Desai on 3/14/18.
 //
 
 import Foundation

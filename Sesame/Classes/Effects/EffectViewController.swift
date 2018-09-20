@@ -44,9 +44,9 @@ extension EffectViewController: SesameReinforcementDelegate {
                 self.overlayEffectView?.start()
 
             case "emojisplosion":
-                if self.overlayEffectView as? ExplosionEffectView == nil {
+                if self.overlayEffectView as? EmojiplosionEffectView == nil {
                     self.overlayEffectView?.removeFromSuperview()
-                    let emojiView = ExplosionEffectView()
+                    let emojiView = EmojiplosionEffectView()
                     self.view.addSubview(emojiView)
                     emojiView.constrainToSuperview()
                     self.overlayEffectView = emojiView

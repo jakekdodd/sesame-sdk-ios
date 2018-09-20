@@ -1,5 +1,5 @@
 //
-//  ExplosionEffectView.swift
+//  EmojiplosionEffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/15/18.
@@ -9,7 +9,7 @@ import Foundation
 import CoreGraphics
 
 @objc
-open class ExplosionEffectView: EffectView {
+open class EmojiplosionEffectView: EffectView {
 
     public var location: (CGFloat, CGFloat) = (0.5, 0.5)
     public var image: CGImage? = "❤️".image().cgImage
@@ -83,13 +83,13 @@ open class ExplosionEffectView: EffectView {
             emitter.emitterCells = [cell]
 
             self.layer.addSublayer(emitter)
-            Logger.info("💥 Explosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
+            Logger.info("💥 Emojiplosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
             AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
             DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
                 emitter.birthRate = 0
                 DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(self.lifetime + self.lifetimeRange)) {
                     emitter.removeFromSuperlayer()
-                    Logger.info("💥 Explosion done")
+                    Logger.info("💥 Emojiplosion done")
                     completion()
                 }
             }

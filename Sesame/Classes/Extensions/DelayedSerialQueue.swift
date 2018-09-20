@@ -1,6 +1,6 @@
 //
 //  DelayedSerialQueue.swift
-//  BoundlessKit
+//  Sesame
 //
 //  Created by Akash Desai on 3/14/18.
 //
