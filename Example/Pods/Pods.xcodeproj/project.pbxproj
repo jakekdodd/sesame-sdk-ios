@@ -25,6 +25,7 @@
 		6CD464C8B7DC6796952F5C4D7A93D2D9 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED996BACE38B9D7D8CE3005F7F0B5F5 /* BundleExtensions.swift */; };
 		7607190E26529268CB95C82AFC83D1B0 /* UserIdSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17ABB02668BEF54936FC98F9A36714B /* UserIdSource.swift */; };
 		77B3A2C90CD5B3C4EC795334768932DC /* Sesame-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5648A1BEAFDBC78CB2F2288541A40627 /* Sesame-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		841CABD721571CD10050E3F3 /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841CABD521571CC10050E3F3 /* UIApplicationExtensions.swift */; };
 		8475A6362153860800BC5148 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475A6352153860800BC5148 /* UIWindowExtensions.swift */; };
 		85F6FB4ED113EE23282119055C001A12 /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB43F6DFAC6E8D74B3562CAA058BA723 /* UIDeviceExtensions.swift */; };
 		87E508B5D7F5765D4F48D74328FFC967 /* Sesame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1590AD197D5A5DFB3810903137139832 /* Sesame.xcdatamodeld */; };
@@ -110,6 +111,7 @@
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
 		811338186FAD9CB998F2AF32C12060AF /* Pods-Sesame_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Tests.modulemap"; sourceTree = "<group>"; };
 		830D67AD50CEE37E48749F46FE510947 /* Pods-Sesame_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Example-frameworks.sh"; sourceTree = "<group>"; };
+		841CABD521571CC10050E3F3 /* UIApplicationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensions.swift; sourceTree = "<group>"; };
 		8475A6352153860800BC5148 /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		870AAD033896FF379E20B564E6C3CAB8 /* BMSLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BMSLog.swift; path = Sesame/Classes/BMSLog.swift; sourceTree = "<group>"; };
 		88EABE371777763A8572AC82CB1AE145 /* BMSConfettiEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSConfettiEffectView.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				943B97748475CE423B14529C6536B082 /* UIImageExtensions.swift */,
 				63FA82DE77FD14A152382B8F2A9A3E4F /* UIViewExtensions.swift */,
 				8475A6352153860800BC5148 /* UIWindowExtensions.swift */,
+				841CABD521571CC10050E3F3 /* UIApplicationExtensions.swift */,
 			);
 			name = Extensions;
 			path = Sesame/Classes/Extensions;
@@ -500,6 +503,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					59EC070CDD1C0BA9E906746C0D87B8FC = {
+						LastSwiftMigration = 0940;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -552,6 +560,7 @@
 				26B62EB4D94F618125F26BDE67A44065 /* BMSEffectView.swift in Sources */,
 				F610940256589BF1E1AD39AF325B0F7D /* BMSEffectViewController.swift in Sources */,
 				CC792817AD55985DF2ACC92B8965DA9A /* BMSEmojiplosionEffectView.swift in Sources */,
+				841CABD721571CD10050E3F3 /* UIApplicationExtensions.swift in Sources */,
 				F3F9B6197191E0DBC048B2C32D883052 /* BMSEventAppOpen.swift in Sources */,
 				6CBDDF5A5A20CD19579B3381064DDF66 /* BMSEventMetadataOption.swift in Sources */,
 				D25BCB2A04CF97EE9E439F5A500AE78E /* BMSLog.swift in Sources */,
@@ -630,6 +639,7 @@
 			baseConfigurationReference = 7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -654,6 +664,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -920,6 +931,7 @@
 			baseConfigurationReference = 6AD0F9E29AA24DD719DD2EEE990A7B47 /* Pods-Sesame_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -945,6 +957,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

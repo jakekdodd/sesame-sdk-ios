@@ -9,10 +9,11 @@ import Foundation
 
 extension UIWindow {
     class var topWindow: UIWindow? {
-        if let window = UIApplication.shared.keyWindow {
+        guard let sharedApplication = UIApplication.sharedIfAvailable else { return nil }
+        if let window = sharedApplication.keyWindow {
             return window
         }
-        for window in UIApplication.shared.windows.reversed() {
+        for window in sharedApplication.windows.reversed() {
             if window.windowLevel == UIWindowLevelNormal && !window.isHidden && window.frame != CGRect.zero {
                 return window
             }
