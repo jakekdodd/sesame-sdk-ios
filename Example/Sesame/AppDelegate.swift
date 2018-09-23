@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
                                userId: userId,
                                manualBoot: false)
-        Sesame.shared?.appLifecycleTracker?.didLaunch(launchOptions)
+        Sesame.shared?.appLifecycleTracker.didLaunch(launchOptions)
 
         return true
     }

@@ -26,7 +26,6 @@ public class Sesame: NSObject {
 
     @objc public static var shared: Sesame?
 
-
     /// If the delegate is not set, the reinforcement effect will affect the whole screen
     @objc public weak var reinforcementDelegate: SesameReinforcementDelegate? {
         didSet {
@@ -65,7 +64,7 @@ public class Sesame: NSObject {
         }
     }
 
-    @objc public var appLifecycleTracker: BMSAppLifecycleTracker? = .init()
+    @objc public var appLifecycleTracker = BMSAppLifecycleTracker()
 
     @objc var configId: String? {
         get {
@@ -74,6 +73,11 @@ public class Sesame: NSObject {
         set {
             UserDefaults.sesame.set(newValue, forKey: #keyPath(Sesame.configId))
         }
+    }
+
+    @objc
+    public convenience init(appId: String, appVersionId: String, auth: String, userId: String) {
+        self.init(appId: appId, appVersionId: appVersionId, auth: auth, userId: userId, manualBoot: false)
     }
 
     @objc
@@ -95,7 +99,8 @@ public class Sesame: NSObject {
             }
         }
 
-        appLifecycleTracker?.sesame = self
+        appLifecycleTracker.sesame = self
+        appLifecycleTracker.isRegisteredForNotification = true
     }
 
     var eventUploadCount: Int = 10

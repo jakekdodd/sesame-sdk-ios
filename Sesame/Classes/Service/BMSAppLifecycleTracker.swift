@@ -10,6 +10,15 @@ import Foundation
 open class BMSAppLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
+    public var isRegisteredForNotification = false {
+        didSet {
+            switch (oldValue, isRegisteredForNotification) {
+            case (false, true): registerNotifications(); print("registered")
+            case (true, false): unregisterNotifications(); print("unregistered")
+            default: break
+            }
+        }
+    }
 
     fileprivate var appOpenAction: BMSEventAppOpen? {
         willSet {
@@ -34,27 +43,32 @@ open class BMSAppLifecycleTracker: NSObject {
             }
         }
     }
-
-    override init() {
-        super.init()
-
-        for notification in [Notification.Name.UIApplicationWillTerminate,
-                             .UIApplicationDidBecomeActive,
-                             .UIApplicationWillResignActive,
-                             .UIApplicationDidEnterBackground
-            ] {
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(receive(_:)),
-                                                       name: notification,
-                                                       object: nil)
-        }
-    }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
+    public var notificationsToRegister: [Notification.Name] = [
+        .UIApplicationWillTerminate,
+        .UIApplicationDidBecomeActive,
+        .UIApplicationWillResignActive,
+        .UIApplicationDidEnterBackground
+    ]
+
+    func registerNotifications() {
+        for notification in notificationsToRegister { //swiftlint:disable:next line_length
+            NotificationCenter.default.addObserver(self, selector: #selector(receive(_:)), name: notification, object: nil)
+        }
+    }
+
+    func unregisterNotifications() {
+        for notification in notificationsToRegister {
+            NotificationCenter.default.removeObserver(self, name: notification, object: nil)
+        }
+    }
+
     @objc func receive(_ notification: Notification) {
+        BMSLog.verbose("Got notification:\(notification.name)")
         switch notification.name {
         case .UIApplicationWillTerminate:       didTerminate()
         case .UIApplicationDidBecomeActive:     didBecomeActive()
