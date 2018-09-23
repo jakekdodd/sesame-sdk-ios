@@ -14,14 +14,14 @@ open class BMSConfettiEffectView: BMSEffectView {
 
     @objc
     public enum ConfettiShape: Int {
-        case rectangle, circle, spiral
+        case rectangle, circle, triangle, spiral
     }
 
     @IBInspectable @objc
     public var duration: Double = 2
     @IBInspectable @objc
     public var size: CGSize = CGSize(width: 9, height: 6)
-    public var shapes: [ConfettiShape] = [.rectangle, .rectangle, .circle, .spiral]
+    public var shapes: [ConfettiShape] = [.rectangle, .rectangle, .circle, .triangle, .spiral]
     @objc
     public var colors: [UIColor] = [UIColor.from(rgb: "4d81fb", alpha: 0.8) ?? UIColor.purple,
                                     UIColor.from(rgb: "4ac4fb", alpha: 0.8) ?? UIColor.blue,
@@ -60,16 +60,12 @@ open class BMSConfettiEffectView: BMSEffectView {
                     If `0` no sound is played. Default is set to `0`.
      - completion: Completion handler performated at the end of animation.
      */
-    func showConfetti(duration: TimeInterval = 2,
-                      size: CGSize = CGSize(width: 9, height: 6),
-                      shapes: [ConfettiShape] = [.rectangle, .rectangle, .circle, .spiral],
-                      colors: [UIColor] = [UIColor.from(rgb: "4d81fb", alpha: 0.8) ?? UIColor.purple,
-                                           UIColor.from(rgb: "4ac4fb", alpha: 0.8) ?? UIColor.blue,
-                                           UIColor.from(rgb: "9243f9", alpha: 0.8) ?? UIColor.purple,
-                                           UIColor.from(rgb: "fdc33b", alpha: 0.8) ?? UIColor.orange,
-                                           UIColor.from(rgb: "f7332f", alpha: 0.8) ?? UIColor.red ],
-                      hapticFeedback: Bool = false,
-                      systemSound: UInt32 = 0,
+    func showConfetti(duration: TimeInterval,
+                      size: CGSize,
+                      shapes: [ConfettiShape],
+                      colors: [UIColor],
+                      hapticFeedback: Bool,
+                      systemSound: UInt32,
                       completion: @escaping () -> Void = {}) {
         let burstDuration = 0.8
         let showerDuration = max(0, duration - burstDuration)
@@ -100,18 +96,10 @@ open class BMSConfettiEffectView: BMSEffectView {
 
             var cells: [CAEmitterCell] = []
             for shape in shapes {
-                let confettiImage: CGImage
-                switch shape {
-                case .rectangle:
-                    confettiImage = ConfettiShape.rectangleConfetti(size: size)
-                case .circle:
-                    confettiImage = ConfettiShape.circleConfetti(size: size)
-                case .spiral:
-                    confettiImage = ConfettiShape.spiralConfetti(size: size)
-                }
+                let confettoImage = shape.createImage(size: size)
                 for color in colors {
                     let cell = CAEmitterCell()
-                    cell.contents = confettiImage
+                    cell.contents = confettoImage
                     cell.color = color.cgColor
                     cell.setValuesForBurstPhase1()
                     cells.append(cell)
@@ -161,18 +149,10 @@ open class BMSConfettiEffectView: BMSEffectView {
 
             var cells: [CAEmitterCell] = []
             for shape in shapes {
-                let confettiImage: CGImage
-                switch shape {
-                case .rectangle:
-                    confettiImage = ConfettiShape.rectangleConfetti(size: size)
-                case .circle:
-                    confettiImage = ConfettiShape.circleConfetti(size: size)
-                case .spiral:
-                    confettiImage = ConfettiShape.spiralConfetti(size: size)
-                }
+                let confettoImage: CGImage = shape.createImage(size: size)
                 for color in colors {
                     let cell = CAEmitterCell()
-                    cell.contents = confettiImage
+                    cell.contents = confettoImage
                     cell.color = color.cgColor
                     cell.setValuesForShower()
                     cells.append(cell)
@@ -180,7 +160,7 @@ open class BMSConfettiEffectView: BMSEffectView {
                     let rand = Int(arc4random_uniform(2))
                     if rand != 0 {
                         let blurredCell = CAEmitterCell()
-                        blurredCell.contents = confettiImage.blurImage(radius: rand)
+                        blurredCell.contents = confettoImage.blurImage(radius: rand)
                         blurredCell.color = color.cgColor
                         blurredCell.setValuesForShowerBlurred(scale: rand)
                         cells.append(blurredCell)
@@ -298,60 +278,49 @@ fileprivate extension CAEmitterCell {
 
 fileprivate extension BMSConfettiEffectView.ConfettiShape {
 
-    fileprivate static func rectangleConfetti(size: CGSize, color: UIColor = UIColor.white) -> CGImage {
-        let offset = size.width / CGFloat((arc4random_uniform(7) + 1))
-
+    fileprivate func createImage(size: CGSize, color: UIColor = UIColor.white) -> CGImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()!
-
         color.set()
-        context.beginPath()
-        context.move(to: CGPoint(x: offset, y: 0))
-        context.addLine(to: CGPoint(x: size.width, y: 0))
-        context.addLine(to: CGPoint(x: size.width - offset, y: size.height))
-        context.addLine(to: CGPoint(x: 0, y: size.height))
-        context.closePath()
-        context.fillPath()
+
+        switch self {
+        case .rectangle:
+            let offset = size.width / CGFloat((arc4random_uniform(7) + 1))
+            context.beginPath()
+            context.move(to: CGPoint(x: offset, y: 0))
+            context.addLine(to: CGPoint(x: size.width, y: 0))
+            context.addLine(to: CGPoint(x: size.width - offset, y: size.height))
+            context.addLine(to: CGPoint(x: 0, y: size.height))
+            context.closePath()
+            context.fillPath()
+
+        case .circle:
+            let diameter = min(size.width, size.height)
+            context.fillEllipse(in: CGRect(origin: .zero, size: CGSize(width: diameter, height: diameter)))
+
+        case .triangle:
+            let offset = size.width / CGFloat((arc4random_uniform(7) + 1))
+            context.beginPath()
+            context.move(to: CGPoint(x: offset, y: 0))
+            context.addLine(to: CGPoint(x: size.width, y: size.height))
+            context.addLine(to: CGPoint(x: 0, y: size.height))
+            context.closePath()
+            context.fillPath()
+
+        case .spiral:
+            let lineWidth: CGFloat = size.width / 8.0
+            let halfLineWidth = lineWidth / 2.0
+            context.beginPath()
+            context.setLineWidth(lineWidth)
+            context.move(to: CGPoint(x: halfLineWidth, y: halfLineWidth))
+            context.addCurve(to: CGPoint(x: size.width - halfLineWidth, y: size.height - halfLineWidth),
+                             control1: CGPoint(x: 0.25*size.width, y: size.height),
+                             control2: CGPoint(x: 0.75*size.width, y: 0))
+            context.strokePath()
+        }
 
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
-        return image!.cgImage!
-    }
-
-    fileprivate static func spiralConfetti(size: CGSize, color: UIColor = UIColor.white) -> CGImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        let context = UIGraphicsGetCurrentContext()!
-
-        color.set()
-        let lineWidth: CGFloat = size.width / 8.0
-        let halfLineWidth = lineWidth / 2.0
-        context.beginPath()
-        context.setLineWidth(lineWidth)
-        context.move(to: CGPoint(x: halfLineWidth, y: halfLineWidth))
-        context.addCurve(to: CGPoint(x: size.width - halfLineWidth, y: size.height - halfLineWidth),
-                         control1: CGPoint(x: 0.25*size.width, y: size.height),
-                         control2: CGPoint(x: 0.75*size.width, y: 0))
-        context.strokePath()
-
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return image!.cgImage!
-    }
-
-    fileprivate static func circleConfetti(size: CGSize, color: UIColor = UIColor.white) -> CGImage {
-        let diameter = min(size.width, size.height)
-
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        let context = UIGraphicsGetCurrentContext()!
-
-        color.set()
-        context.fillEllipse(in: CGRect(origin: .zero, size: CGSize(width: diameter, height: diameter)))
-
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
         return image!.cgImage!
     }
 }
