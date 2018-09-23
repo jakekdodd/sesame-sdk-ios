@@ -898,6 +898,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -968,6 +969,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C935D32EF55E40B74C5607DD9EBBBA4A /* Sesame.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
