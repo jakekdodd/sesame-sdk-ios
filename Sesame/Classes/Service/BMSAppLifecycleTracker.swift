@@ -11,10 +11,10 @@ open class BMSAppLifecycleTracker: NSObject {
 
     weak var sesame: Sesame?
     public var isRegisteredForNotification = false {
-        didSet {
-            switch (oldValue, isRegisteredForNotification) {
-            case (false, true): registerNotifications(); print("registered")
-            case (true, false): unregisterNotifications(); print("unregistered")
+        didSet (wasRegisteredForNotification) {
+            switch (wasRegisteredForNotification, isRegisteredForNotification) {
+            case (false, true): registerNotifications()
+            case (true, false): unregisterNotifications()
             default: break
             }
         }
@@ -43,10 +43,6 @@ open class BMSAppLifecycleTracker: NSObject {
             }
         }
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 
     public var notificationsToRegister: [Notification.Name] = [
         .UIApplicationWillTerminate,
@@ -55,16 +51,24 @@ open class BMSAppLifecycleTracker: NSObject {
         .UIApplicationDidEnterBackground
     ]
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     func registerNotifications() {
         for notification in notificationsToRegister { //swiftlint:disable:next line_length
             NotificationCenter.default.addObserver(self, selector: #selector(receive(_:)), name: notification, object: nil)
         }
+        isRegisteredForNotification = true
+        BMSLog.info("did register for notifications")
     }
 
     func unregisterNotifications() {
         for notification in notificationsToRegister {
             NotificationCenter.default.removeObserver(self, name: notification, object: nil)
         }
+        isRegisteredForNotification = false
+        BMSLog.info("did unregister for notifications")
     }
 
     @objc func receive(_ notification: Notification) {
