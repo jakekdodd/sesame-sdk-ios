@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 12/1/17.
 //
 
-import Foundation
+import UIKit
 
 public extension UIColor {
 

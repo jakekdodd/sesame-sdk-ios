@@ -6,7 +6,6 @@
 //  Copyright © 2018 BoundlessMind. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 @objc
@@ -59,7 +58,7 @@ open class BMSConfettiEffectView: BMSEffectView {
      - systemSound: The SystemSoundId to play at the start of animation.
                     If `0` no sound is played. Default is set to `0`.
      - completion: Completion handler performated at the end of animation.
-     */
+     */ //swiftlint:disable:next function_parameter_count
     func showConfetti(duration: TimeInterval,
                       size: CGSize,
                       shapes: [ConfettiShape],

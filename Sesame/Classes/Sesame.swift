@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 7/23/18.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 @objc
@@ -108,6 +108,7 @@ public class Sesame: NSObject {
 
     fileprivate var uploadScheduled = false
 
+    // let text = UIApplication.shared
 }
 
 // MARK: - Public Methods
@@ -126,9 +127,9 @@ public extension Sesame {
             if let userId = userId {
                 newUser = coreDataManager.fetchUser(context: context, id: userId)
             }
-            var oldUserId: String?
+//            var oldUserId: String?
             if let appConfig = coreDataManager.fetchAppConfig(context: context, configId) {
-                oldUserId = appConfig.user?.id
+//                oldUserId = appConfig.user?.id
                 appConfig.user = newUser
             }
 

@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 9/17/18.
 //
 
-import Foundation
+import UIKit
 import CoreTelephony
 
 internal extension UIDevice {

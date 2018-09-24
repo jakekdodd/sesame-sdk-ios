@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 9/22/18.
 //
 
-import Foundation
+import UIKit
 
 extension UIApplication {
     static var sharedIfAvailable: UIApplication? {

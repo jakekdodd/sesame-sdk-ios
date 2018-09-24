@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 7/29/18.
 //
 
-import Foundation
+import UIKit
 
 @objc
 open class BMSEffectView: UIView {

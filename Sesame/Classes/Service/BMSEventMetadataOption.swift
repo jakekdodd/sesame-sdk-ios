@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 9/13/18.
 //
 
-import Foundation
+import UIKit
 
 public typealias BMSEventMetadataOptions = [BMSEventMetadataOption]
 

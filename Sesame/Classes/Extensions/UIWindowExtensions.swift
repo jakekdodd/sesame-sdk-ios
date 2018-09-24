@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 9/20/18.
 //
 
-import Foundation
+import UIKit
 
 extension UIWindow {
     class var topWindow: UIWindow? {

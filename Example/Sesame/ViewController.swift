@@ -25,7 +25,8 @@ class ViewController: UIViewController {
     func didTapLabel(_ sender: Any) {
 //        Sesame.shared?.reinforcementDelegate = button
 
-        Sesame.shared?.appLifecycleTracker.isRegisteredForNotification = !Sesame.shared!.appLifecycleTracker.isRegisteredForNotification
+        Sesame.shared?.appLifecycleTracker.didEnterBackground()
+        Sesame.shared?.appLifecycleTracker.didBecomeActive()
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {

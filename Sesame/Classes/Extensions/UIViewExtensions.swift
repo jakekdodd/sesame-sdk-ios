@@ -5,7 +5,7 @@
 //  Created by Akash Desai on 12/1/17.
 //
 
-import Foundation
+import UIKit
 
 extension UIView: SesameReinforcementDelegate {
     public func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
