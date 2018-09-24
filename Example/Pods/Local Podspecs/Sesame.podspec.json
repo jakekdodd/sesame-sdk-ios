@@ -18,11 +18,11 @@
   "platforms": {
     "ios": "8.0"
   },
-  "public_header_files": "Pod/Classes/**/*.h",
-  "source_files": "Sesame/Classes/**/*",
+  "swift_version": "4.1",
+  "source_files": "Sesame/Classes/**/*.swift",
   "resource_bundles": {
     "Sesame": [
-      "Sesame/Assets/*.{png}"
+      "Sesame/Assets/*.png"
     ]
   },
   "resources": "Sesame/Assets/*.xcdatamodeld",
@@ -30,6 +30,5 @@
     "Foundation",
     "UIKit",
     "CoreData"
-  ],
-  "swift_version": "4.1"
+  ]
 }
