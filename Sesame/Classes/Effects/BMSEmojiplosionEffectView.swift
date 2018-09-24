@@ -5,14 +5,13 @@
 //  Created by Akash Desai on 9/15/18.
 //
 
-import Foundation
-import CoreGraphics
+import UIKit
 
 @objc
 open class BMSEmojiplosionEffectView: BMSEffectView {
 
     public var location: (CGFloat, CGFloat) = (0.5, 0.5)
-    public var image: CGImage? = "❤️".image().cgImage
+    public var image: UIImage? = UIImage(text: "❤️")
     public var scale: CGFloat = 0.6
     public var scaleSpeed: CGFloat = 0.2
     public var scaleRange: CGFloat = 0.2
@@ -42,7 +41,7 @@ open class BMSEmojiplosionEffectView: BMSEffectView {
     }
 
     public override func start(completion: @escaping () -> Void = {}) {
-        guard let image = image else {
+        guard let cgImage = image?.cgImage else {
             BMSLog.warning("Image not set")
             completion()
             return
@@ -54,7 +53,7 @@ open class BMSEmojiplosionEffectView: BMSEffectView {
             emitter.beginTime = CACurrentMediaTime() - 0.9
 
             let cell = CAEmitterCell()
-            cell.contents = image
+            cell.contents = cgImage
             cell.birthRate = self.rate
             cell.lifetime = self.lifetime
             cell.lifetimeRange = self.lifetimeRange

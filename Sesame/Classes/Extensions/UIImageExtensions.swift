@@ -5,16 +5,36 @@
 //  Created by Akash Desai on 12/1/17.
 //
 
-import Foundation
+import UIKit
 
-internal extension UIImage {
-    func base64EncodedPNGString() -> String? {
-        if let imageData = UIImagePNGRepresentation(self) {
-            return imageData.base64EncodedString()
-        } else {
-            BMSLog.error("Could not create PNG representation of UIImage...")
-            return nil
-        }
+///
+/// For creating an emojisplosion image from text
+public extension UIImage {
+
+    /// Creates an image of the given text.
+    /// Uses a default font of UIFont.systemFont(ofSize 24)
+    ///
+    /// - Parameter text: The text create an image for. Supports emojis!
+    @objc
+    convenience init?(text: String) {
+        self.init(text: text, font: .systemFont(ofSize: 24))
+    }
+
+    /// Creates an image of the given text
+    ///
+    /// - Parameters:
+    ///   - text: The text create an image for. Supports emojis!
+    ///   - font: The font to use when drawing the text
+    @objc
+    convenience init?(text: String, font: UIFont) {
+        let size = text.size(withAttributes: [.font: font])
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        text.draw(at: .zero, withAttributes: [.font: font])
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        guard let cgImage = image?.cgImage else { return nil }
+        self.init(cgImage: cgImage)
     }
 }
 
@@ -66,7 +86,7 @@ extension UIImage {
         }
     }
 
-    private func modifiedImage( draw: (CGContext, CGRect) -> Void) -> UIImage {
+    private func modifiedImage(draw: (CGContext, CGRect) -> Void) -> UIImage {
 
         // using scale correctly preserves retina images
         UIGraphicsBeginImageContextWithOptions(size, false, scale)

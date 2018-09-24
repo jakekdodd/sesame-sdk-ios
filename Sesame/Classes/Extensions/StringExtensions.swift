@@ -27,19 +27,4 @@ public extension NSString {
             return self
         }
     }
-
-    @objc
-    func image() -> UIImage {
-        return image(font: .systemFont(ofSize: 24))
-    }
-
-    @objc
-    func image(font: UIFont) -> UIImage {
-        let size = self.size(withAttributes: [NSAttributedStringKey.font: font])
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        self.draw(at: .zero, withAttributes: [NSAttributedStringKey.font: font])
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image!
-    }
 }
