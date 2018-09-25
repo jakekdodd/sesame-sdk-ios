@@ -44,11 +44,11 @@ open class BMSAppLifecycleTracker: NSObject {
         }
     }
 
-    public var notificationsToRegister: [Notification.Name] = [
-        .UIApplicationWillTerminate,
-        .UIApplicationDidBecomeActive,
-        .UIApplicationWillResignActive,
-        .UIApplicationDidEnterBackground
+    public var notificationsToRegister = [
+        UIApplication.willTerminateNotification,
+        UIApplication.didBecomeActiveNotification,
+        UIApplication.willResignActiveNotification,
+        UIApplication.didEnterBackgroundNotification
     ]
 
     deinit {
@@ -74,10 +74,10 @@ open class BMSAppLifecycleTracker: NSObject {
     @objc func receive(_ notification: Notification) {
         BMSLog.verbose("Got notification:\(notification.name)")
         switch notification.name {
-        case .UIApplicationWillTerminate:       didTerminate()
-        case .UIApplicationDidBecomeActive:     didBecomeActive()
-        case .UIApplicationWillResignActive:    willResignActive()
-        case .UIApplicationDidEnterBackground:  didEnterBackground()
+        case UIApplication.willTerminateNotification:       didTerminate()
+        case UIApplication.didBecomeActiveNotification:     didBecomeActive()
+        case UIApplication.willResignActiveNotification:    willResignActive()
+        case UIApplication.didEnterBackgroundNotification:  didEnterBackground()
         default: break
         }
     }
@@ -96,7 +96,7 @@ extension BMSAppLifecycleTracker {
     ///
     /// - Parameter launchOptions: launchOptions
     @objc
-    public func didLaunch(_ launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) {
+    public func didLaunch(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
         if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
             didPerformShortcut()
         } else if launchOptions?[.sourceApplication] != nil || launchOptions?[.url]  != nil {

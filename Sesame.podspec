@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
     s.source                    = { :git => 'https://github.com/BoundlessAI/sesame-sdk-ios', :tag => s.version.to_s }
     s.platform                  = :ios
     s.ios.deployment_target     = '8.0'
-    s.swift_version             = '4.1'
+    s.swift_version             = '4.2'
     s.source_files              = 'Sesame/Classes/**/*.swift'
     s.resource_bundles          = { 'Sesame' => ['Sesame/Assets/*.png'] }
     s.resources                 = 'Sesame/Assets/*.xcdatamodeld'

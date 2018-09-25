@@ -200,7 +200,7 @@ open class BMSConfettiEffectView: BMSEffectView {
 
     fileprivate func setEmitterPositionAndSize(_ emitter: CAEmitterLayer) {
         emitter.emitterPosition = CGPoint(x: bounds.width / 2, y: -30)
-        emitter.emitterShape = kCAEmitterLayerLine
+        emitter.emitterShape = .line
         emitter.emitterSize = CGSize(width: bounds.width, height: 0)
     }
 }

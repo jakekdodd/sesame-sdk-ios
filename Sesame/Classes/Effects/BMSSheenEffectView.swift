@@ -42,7 +42,7 @@ open class BMSSheenEffectView: BMSEffectView {
     @IBInspectable @objc
     public var systemSound: UInt32 = 0
 
-    public var animationOptions: UIViewAnimationOptions = []
+    public var animationOptions: AnimationOptions = []
 
     fileprivate var imageViewAnimationStartConstraint: NSLayoutConstraint?
     fileprivate var imageViewAnimationEndConstraint: NSLayoutConstraint?

@@ -68,7 +68,7 @@ public extension UNUserNotificationCenter {
                     completion?(granted)
                 }
 
-            case .authorized:
+            case .authorized, .provisional:
                 completion?(true)
 
             case .denied:

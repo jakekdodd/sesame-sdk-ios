@@ -9,7 +9,7 @@
   "homepage": "https://github.com/BoundlessAI/sesame-sdk-ios",
   "social_media_url": "https://twitter.com/BoundlessAI",
   "authors": {
-    "BoundlessMind": "team@boundless.ai"
+    "BoundlessAI": "team@boundless.ai"
   },
   "source": {
     "git": "https://github.com/BoundlessAI/sesame-sdk-ios",
@@ -18,7 +18,7 @@
   "platforms": {
     "ios": "8.0"
   },
-  "swift_version": "4.1",
+  "swift_version": "4.2",
   "source_files": "Sesame/Classes/**/*.swift",
   "resource_bundles": {
     "Sesame": [

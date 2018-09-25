@@ -14,7 +14,7 @@ extension UIWindow {
             return window
         }
         for window in sharedApplication.windows.reversed() {
-            if window.windowLevel == UIWindowLevelNormal && !window.isHidden && window.frame != CGRect.zero {
+            if window.windowLevel == .normal && !window.isHidden && window.frame != .zero {
                 return window
             }
         }

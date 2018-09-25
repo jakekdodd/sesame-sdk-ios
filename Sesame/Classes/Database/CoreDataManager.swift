@@ -53,11 +53,11 @@ class CoreDataManager: NSObject {
             // Setup notifications
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(saveChanges(_:)),
-                                                   name: NSNotification.Name.UIApplicationDidEnterBackground,
+                                                   name: UIApplication.didEnterBackgroundNotification,
                                                    object: nil)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(saveChanges(_:)),
-                                                   name: NSNotification.Name.UIApplicationWillTerminate,
+                                                   name: UIApplication.willTerminateNotification,
                                                    object: nil)
             return managedObjectContext
         }
