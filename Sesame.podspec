@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
     s.license                   = { :type => 'MIT', :file => 'LICENSE' }
     s.homepage                  = 'https://github.com/BoundlessAI/sesame-sdk-ios'
     s.social_media_url          = 'https://twitter.com/BoundlessAI'
-    s.author                    = { 'BoundlessMind' => 'team@boundless.ai' }
+    s.author                    = { 'BoundlessAI' => 'team@boundless.ai' }
     s.source                    = { :git => 'https://github.com/BoundlessAI/sesame-sdk-ios', :tag => s.version.to_s }
     s.platform                  = :ios
     s.ios.deployment_target     = '8.0'
@@ -15,4 +15,3 @@ Pod::Spec.new do |s|
     s.resources                 = 'Sesame/Assets/*.xcdatamodeld'
     s.frameworks                = 'Foundation', 'UIKit', 'CoreData'
 end
-
