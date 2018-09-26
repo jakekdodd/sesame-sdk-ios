@@ -99,7 +99,7 @@ class CoreDataManager: NSObject {
 
     func deleteObjects() {
         managedObjectContext?.performAndWait {
-            let rootModels = [BMSUser.self, BMSAppConfig.self]
+            let rootModels = [BMSUser.self, BMSAppState.self]
             for model in rootModels {
                 let request = NSFetchRequest<NSManagedObject>(entityName: model.description())
                 do {
@@ -122,24 +122,24 @@ class CoreDataManager: NSObject {
 
 extension CoreDataManager {
 
-    // MARK: AppConfig
+    // MARK: AppState
 
-    func fetchAppConfig(context: NSManagedObjectContext?, _ configId: String?, createIfNotFound: Bool = true) -> BMSAppConfig? {
-        var value: BMSAppConfig?
+    func fetchAppState(context: NSManagedObjectContext?, _ configId: String?, createIfNotFound: Bool = true) -> BMSAppState? {
+        var value: BMSAppState?
         let context = context ?? newContext()
         context.performAndWait {
-            let request = NSFetchRequest<BMSAppConfig>(entityName: BMSAppConfig.description())
-            request.predicate = NSPredicate(format: "\(#keyPath(BMSAppConfig.configId)) == \(configId.predicateValue)")
+            let request = NSFetchRequest<BMSAppState>(entityName: BMSAppState.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSAppState.configId)) == \(configId.predicateValue)")
             request.fetchLimit = 1
             do {
-                if let appConfig = try context.fetch(request).first {
-                    value = appConfig
+                if let appState = try context.fetch(request).first {
+                    value = appState
                 } else if createIfNotFound,
-                    let appConfigEntity = NSEntityDescription.entity(forEntityName: BMSAppConfig.description(),
+                    let appStateEntity = NSEntityDescription.entity(forEntityName: BMSAppState.description(),
                                                                            in: context) {
-                    let appConfig = BMSAppConfig(entity: appConfigEntity, insertInto: context)
-                    appConfig.configId = configId
-                    value = appConfig
+                    let appState = BMSAppState(entity: appStateEntity, insertInto: context)
+                    appState.configId = configId
+                    value = appState
                 }
             } catch let error as NSError {
                 BMSLog.error("Could not fetch. \(error)")
@@ -383,5 +383,11 @@ extension CoreDataManager {
         }
 
         return values
+    }
+}
+
+extension Optional where Wrapped == String {
+    var predicateValue: String {
+        return self == nil ? "nil" : "'\(self!)'"
     }
 }

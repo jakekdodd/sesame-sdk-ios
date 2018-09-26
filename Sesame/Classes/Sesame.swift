@@ -27,11 +27,7 @@ public class Sesame: NSObject {
     @objc public static var shared: Sesame?
 
     /// If the delegate is not set, the reinforcement effect will affect the whole screen
-    @objc public weak var reinforcementDelegate: SesameReinforcementDelegate? {
-        didSet {
-            _reinforcementEffect = {_reinforcementEffect}()
-        }
-    }
+    @objc public weak var reinforcementDelegate: SesameReinforcementDelegate?
 
     /// The effect is shown using the custom reinforcementDelegate or the top UIWindow
     fileprivate var _reinforcementEffect: (String, [String: Any])? {
@@ -92,7 +88,7 @@ public class Sesame: NSObject {
 
         let context = coreDataManager.newContext()
         context.performAndWait {
-            coreDataManager.fetchAppConfig(context: context, configId)?.versionId = appVersionId
+            coreDataManager.fetchAppState(context: context, configId)?.versionId = appVersionId
             setUserId(userId, context)
             if !manualBoot {
                 sendBoot()
@@ -128,9 +124,9 @@ public extension Sesame {
                 newUser = coreDataManager.fetchUser(context: context, id: userId)
             }
 //            var oldUserId: String?
-            if let appConfig = coreDataManager.fetchAppConfig(context: context, configId) {
-//                oldUserId = appConfig.user?.id
-                appConfig.user = newUser
+            if let appState = coreDataManager.fetchAppState(context: context, configId) {
+//                oldUserId = appState.user?.id
+                appState.user = newUser
             }
 
             do {
@@ -152,7 +148,7 @@ public extension Sesame {
         var userId: String?
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id
+            userId = coreDataManager.fetchAppState(context: context, configId)?.user?.id
         }
         BMSLog.verbose("got userId:\(String(describing: userId))")
         return userId
@@ -207,7 +203,7 @@ public extension Sesame {
              .external:
             let context = coreDataManager.newContext()
             context.performAndWait {
-                if let userId = coreDataManager.fetchAppConfig(context: context, configId)?.user?.id,
+                if let userId = coreDataManager.fetchAppState(context: context, configId)?.user?.id,
                     let cartridge = coreDataManager.fetchCartridge(context: context,
                                                                    userId: userId,
                                                                    actionName: appOpenEvent.name) {
@@ -252,15 +248,15 @@ public extension Sesame {
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         let context = coreDataManager.newContext()
         context.performAndWait {
-            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
+            guard let appState = coreDataManager.fetchAppState(context: context, configId) else { return }
             var payload = api.createPayload(appId: appId,
-                                            versionId: appConfig.versionId,
+                                            versionId: appState.versionId,
                                             secret: auth,
-                                            primaryIdentity: appConfig.user?.id)
+                                            primaryIdentity: appState.user?.id)
             payload["initialBoot"] = false
             payload["inProduction"] = false
-            payload["currentVersion"] = appConfig.versionId
-            payload["currentConfig"] = "\(appConfig.revision)"
+            payload["currentVersion"] = appState.versionId
+            payload["currentConfig"] = "\(appState.revision)"
 
             api.post(endpoint: .boot, jsonObject: payload) { response in
                 guard let response = response,
@@ -269,24 +265,24 @@ public extension Sesame {
                         return
                 }
                 let context = self.coreDataManager.newContext()
-                guard let appConfig = self.coreDataManager.fetchAppConfig(context: context, self.configId) else {
+                guard let appState = self.coreDataManager.fetchAppState(context: context, self.configId) else {
                     return
                 }
                 context.performAndWait {
                     if let configValues = response["config"] as? [String: Any] {
                         if let configId = configValues["configId"] as? String {
-                            appConfig.configId = configId
+                            appState.configId = configId
                         }
                         if let trackingEnabled = configValues["trackingEnabled"] as? Bool {
-                            appConfig.trackingEnabled = trackingEnabled
+                            appState.trackingEnabled = trackingEnabled
                         }
                     }
 
                     if let version = response["version"] as? [String: Any] {
                         if let versionId = version["versionID"] as? String {
-                            appConfig.versionId = versionId
+                            appState.versionId = versionId
                         }
-                        if let userId = appConfig.user?.id,
+                        if let userId = appState.user?.id,
                             let mappings = version["mappings"] as? [String: [String: Any]] {
                             for (actionName, effectDetails) in mappings {
                                 if let cartridge = self.coreDataManager.fetchCartridge(context: context,
@@ -317,16 +313,16 @@ public extension Sesame {
 
     func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
-            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else {
+            guard let appState = coreDataManager.fetchAppState(context: context, configId) else {
                     return
             }
             var payload = api.createPayload(appId: appId,
-                                            versionId: appConfig.versionId,
+                                            versionId: appState.versionId,
                                             secret: auth,
                                             primaryIdentity: userId)
             payload["tracks"] = {
                 var tracks = [[String: Any]]()
-                if let reports = appConfig.user?.reports?.allObjects as? [BMSReport] {
+                if let reports = appState.user?.reports?.allObjects as? [BMSReport] {
                     for report in reports {
                         guard let reportEvents = report.events else { continue }
                         var track = [String: Any]()
@@ -368,7 +364,7 @@ public extension Sesame {
     func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            guard let appConfig = coreDataManager.fetchAppConfig(context: context, configId) else { return }
+            guard let appState = coreDataManager.fetchAppState(context: context, configId) else { return }
             guard let reinforcementCount = coreDataManager.fetchCartridge(context: context,
                                                                           userId: userId,
                                                                           actionName: actionName)?
@@ -376,9 +372,9 @@ public extension Sesame {
                 reinforcementCount == 0
                 else { return }
             var payload = api.createPayload(appId: appId,
-                                            versionId: appConfig.versionId,
+                                            versionId: appState.versionId,
                                             secret: auth,
-                                            primaryIdentity: appConfig.user?.id)
+                                            primaryIdentity: appState.user?.id)
             payload["actionName"] = actionName
 
             api.post(endpoint: .refresh, jsonObject: payload) { response in

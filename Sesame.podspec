@@ -12,6 +12,6 @@ Pod::Spec.new do |s|
     s.swift_version             = '4.2'
     s.source_files              = 'Sesame/Classes/**/*.swift'
     s.resource_bundles          = { 'Sesame' => ['Sesame/Assets/*.png'] }
-    s.resources                 = 'Sesame/Assets/*.xcdatamodeld'
+    s.resources                 = 'Sesame/Classes/Database/CoreData/*.xcdatamodeld'
     s.frameworks                = 'Foundation', 'UIKit', 'CoreData'
 end

@@ -82,7 +82,7 @@ class Tests: XCTestCase {
         XCTAssert(count == desiredCount)
     }
 
-    func testAppConfigRemeberLast() {
+    func testAppStateRemeberLast() {
         var sesame = Sesame.dev()
         let testConfigId = "0123"
         let setConfigId = { sesame.configId = testConfigId }
@@ -90,7 +90,7 @@ class Tests: XCTestCase {
             XCTAssert(sesame.configId == configId)
             let context = sesame.coreDataManager.newContext()
             context.performAndWait {
-                let config = sesame.coreDataManager.fetchAppConfig(context: context, sesame.configId)
+                let config = sesame.coreDataManager.fetchAppState(context: context, sesame.configId)
                 XCTAssert(config?.configId == configId)
             }
         }

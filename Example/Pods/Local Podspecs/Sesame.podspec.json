@@ -25,7 +25,7 @@
       "Sesame/Assets/*.png"
     ]
   },
-  "resources": "Sesame/Assets/*.xcdatamodeld",
+  "resources": "Sesame/Classes/Database/CoreData/*.xcdatamodeld",
   "frameworks": [
     "Foundation",
     "UIKit",
