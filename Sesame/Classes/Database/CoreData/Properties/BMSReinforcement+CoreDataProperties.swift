@@ -15,7 +15,7 @@ extension BMSReinforcement {
         return NSFetchRequest<BMSReinforcement>(entityName: "BMSReinforcement")
     }
 
-    @NSManaged var name: String?
-    @NSManaged var cartridge: BMSCartridge?
+    @NSManaged var name: String
+    @NSManaged var cartridge: BMSCartridge
 
 }

@@ -19,6 +19,6 @@ extension BMSEvent {
     @NSManaged var sessionId: NSNumber?
     @NSManaged var timezoneOffset: Int64
     @NSManaged var utc: Int64
-    @NSManaged var report: BMSReport?
+    @NSManaged var report: BMSReport
 
 }

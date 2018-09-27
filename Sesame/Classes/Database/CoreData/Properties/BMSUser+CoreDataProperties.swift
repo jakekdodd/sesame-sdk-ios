@@ -15,10 +15,10 @@ extension BMSUser {
         return NSFetchRequest<BMSUser>(entityName: "BMSUser")
     }
 
-    @NSManaged var id: String?
+    @NSManaged var id: String
     @NSManaged var appState: BMSAppState?
-    @NSManaged var cartridges: NSSet?
-    @NSManaged var reports: NSSet?
+    @NSManaged var cartridges: NSSet
+    @NSManaged var reports: NSSet
 
 }
 

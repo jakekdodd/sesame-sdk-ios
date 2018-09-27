@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="Sesame">
     <entity name="BMSAppState" representedClassName="BMSAppState" syncable="YES">
+        <attribute name="appId" attributeType="String" syncable="YES"/>
+        <attribute name="auth" attributeType="String" syncable="YES"/>
         <attribute name="configId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="revision" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="trackingEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
@@ -39,11 +41,11 @@
         <relationship name="reports" toMany="YES" deletionRule="Cascade" destinationEntity="BMSReport" inverseName="user" inverseEntity="BMSReport" syncable="YES"/>
     </entity>
     <elements>
-        <element name="BMSAppState" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="BMSCartridge" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="BMSEvent" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="BMSReinforcement" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="BMSReport" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="BMSUser" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="BMSAppState" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="BMSCartridge" positionX="-1008" positionY="72" width="128" height="150"/>
+        <element name="BMSEvent" positionX="-200" positionY="72" width="128" height="120"/>
+        <element name="BMSReinforcement" positionX="-1188" positionY="144" width="128" height="75"/>
+        <element name="BMSReport" positionX="-416" positionY="72" width="128" height="90"/>
+        <element name="BMSUser" positionX="-632" positionY="72" width="128" height="105"/>
     </elements>
 </model>

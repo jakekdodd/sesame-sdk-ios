@@ -40,9 +40,6 @@ public class Sesame: NSObject {
         }
     }
 
-    @objc public let appId: String
-    @objc public let auth: String
-
     var api: APIClient
     let coreDataManager: CoreDataManager
 
@@ -78,8 +75,6 @@ public class Sesame: NSObject {
 
     @objc
     public init(appId: String, appVersionId: String, auth: String, userId: String, manualBoot: Bool) {
-        self.appId = appId
-        self.auth = auth
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.trackingOptions = .standard()
@@ -88,7 +83,10 @@ public class Sesame: NSObject {
 
         let context = coreDataManager.newContext()
         context.performAndWait {
-            coreDataManager.fetchAppState(context: context, configId)?.versionId = appVersionId
+            let appState = coreDataManager.fetchAppState(context: context, configId)
+            appState?.versionId = appVersionId
+            appState?.appId = appId
+            appState?.auth = auth
             setUserId(userId, context)
             if !manualBoot {
                 sendBoot()
@@ -208,9 +206,8 @@ public extension Sesame {
                                                                    userId: userId,
                                                                    actionName: appOpenEvent.name) {
                     let reinforcementName: String
-                    if let reinforcement = cartridge.reinforcements?.firstObject as? BMSReinforcement,
-                        let name = reinforcement.name {
-                        reinforcementName = name
+                    if let reinforcement = cartridge.reinforcements.firstObject as? BMSReinforcement {
+                        reinforcementName = reinforcement.name
                         context.delete(reinforcement)
                     } else {
                         reinforcementName = BMSReinforcement.NeutralName
@@ -249,9 +246,9 @@ public extension Sesame {
         let context = coreDataManager.newContext()
         context.performAndWait {
             guard let appState = coreDataManager.fetchAppState(context: context, configId) else { return }
-            var payload = api.createPayload(appId: appId,
+            var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,
-                                            secret: auth,
+                                            secret: appState.auth,
                                             primaryIdentity: appState.user?.id)
             payload["initialBoot"] = false
             payload["inProduction"] = false
@@ -316,20 +313,19 @@ public extension Sesame {
             guard let appState = coreDataManager.fetchAppState(context: context, configId) else {
                     return
             }
-            var payload = api.createPayload(appId: appId,
+            var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,
-                                            secret: auth,
+                                            secret: appState.auth,
                                             primaryIdentity: userId)
             payload["tracks"] = {
                 var tracks = [[String: Any]]()
-                if let reports = appState.user?.reports?.allObjects as? [BMSReport] {
+                if let reports = appState.user?.reports.allObjects as? [BMSReport] {
                     for report in reports {
-                        guard let reportEvents = report.events else { continue }
                         var track = [String: Any]()
                         track["actionName"] = report.actionName
                         track["type"] = BMSReport.NonReinforceableType
                         var events = [[String: Any]]()
-                        for case let reportEvent as BMSEvent in reportEvents {
+                        for case let reportEvent as BMSEvent in report.events {
                             var event = [String: Any]()
                             event["utc"] = reportEvent.utc
                             event["timezoneOffset"] = reportEvent.timezoneOffset
@@ -368,12 +364,12 @@ public extension Sesame {
             guard let reinforcementCount = coreDataManager.fetchCartridge(context: context,
                                                                           userId: userId,
                                                                           actionName: actionName)?
-                .reinforcements?.count,
+                .reinforcements.count,
                 reinforcementCount == 0
                 else { return }
-            var payload = api.createPayload(appId: appId,
+            var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,
-                                            secret: auth,
+                                            secret: appState.auth,
                                             primaryIdentity: appState.user?.id)
             payload["actionName"] = actionName
 

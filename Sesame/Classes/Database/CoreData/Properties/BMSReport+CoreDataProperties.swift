@@ -15,9 +15,9 @@ extension BMSReport {
         return NSFetchRequest<BMSReport>(entityName: "BMSReport")
     }
 
-    @NSManaged var actionName: String?
-    @NSManaged var events: NSOrderedSet?
-    @NSManaged var user: BMSUser?
+    @NSManaged var actionName: String
+    @NSManaged var events: NSOrderedSet
+    @NSManaged var user: BMSUser
 
 }
 

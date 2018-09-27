@@ -175,12 +175,12 @@ class Tests: XCTestCase {
                 }
                 XCTAssert(cartridges.count != 0)
                 for cartridge in cartridges {
-                    XCTAssert(cartridge.reinforcements?.count == 0)
-                    sesame.sendRefresh(userId: userId, actionName: cartridge.actionName!) { _ in
+                    XCTAssert(cartridge.reinforcements.count == 0)
+                    sesame.sendRefresh(userId: userId, actionName: cartridge.actionName) { _ in
                         if let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) {
                             XCTAssert(cartridges.count != 0)
                             for cartridge in cartridges {
-                                XCTAssert(cartridge.reinforcements!.count > 0)
+                                XCTAssert(cartridge.reinforcements.count > 0)
                             }
                             promise.fulfill()
                         } else { XCTFail("No cartridges") }

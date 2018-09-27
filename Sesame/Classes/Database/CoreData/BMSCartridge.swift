@@ -20,7 +20,7 @@ class BMSCartridge: NSManagedObject {
 
     var effectDetailsAsDictionary: [String: Any]? {
         get {
-            if let data = effectDetails?.data(using: .utf8),
+            if let data = effectDetails.data(using: .utf8),
                 let json = try? JSONSerialization.jsonObject(with: data, options: []),
                 let dict = json as? [String: Any] {
                 return dict

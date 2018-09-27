@@ -192,10 +192,11 @@ extension CoreDataManager {
                 if let report = try context.fetch(request).first {
                     value = report
                 } else if createIfNotFound,
+                    let user = fetchUser(context: context, id: userId),
                     let entity = NSEntityDescription.entity(forEntityName: BMSReport.description(), in: context) {
                     let report = BMSReport(entity: entity, insertInto: context)
                     report.actionName = actionName
-                    report.user = fetchUser(context: context, id: userId)
+                    report.user = user
                     value = report
                 }
             } catch {
