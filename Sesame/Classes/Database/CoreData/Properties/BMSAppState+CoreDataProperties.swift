@@ -15,8 +15,8 @@ extension BMSAppState {
         return NSFetchRequest<BMSAppState>(entityName: "BMSAppState")
     }
 
-    @NSManaged var appId: String
-    @NSManaged var auth: String
+    @NSManaged var appId: String?
+    @NSManaged var auth: String?
     @NSManaged var configId: String?
     @NSManaged var revision: Int64
     @NSManaged var trackingEnabled: Bool

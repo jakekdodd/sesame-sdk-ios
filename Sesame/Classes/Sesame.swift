@@ -83,11 +83,9 @@ public class Sesame: NSObject {
 
         let context = coreDataManager.newContext()
         context.performAndWait {
-            let appState = coreDataManager.fetchAppState(context: context, configId)
+            let appState = coreDataManager.fetchAppState(context: context, appId: appId, auth: auth, configId: configId)
             appState?.versionId = appVersionId
-            appState?.appId = appId
-            appState?.auth = auth
-            setUserId(userId, context)
+            setUserId(context, userId)
             if !manualBoot {
                 sendBoot()
             }
@@ -111,10 +109,10 @@ public extension Sesame {
 
     @objc
     public func setUserId(_ userId: String?) {
-        setUserId(userId, nil)
+        setUserId(nil, userId)
     }
 
-    internal func setUserId(_ userId: String?, _ context: NSManagedObjectContext?) {
+    internal func setUserId( _ context: NSManagedObjectContext?, _ userId: String?) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             var newUser: BMSUser?
@@ -122,19 +120,21 @@ public extension Sesame {
                 newUser = coreDataManager.fetchUser(context: context, id: userId)
             }
 //            var oldUserId: String?
-            if let appState = coreDataManager.fetchAppState(context: context, configId) {
+            if let appState = coreDataManager.fetchAppState(context: context, configId: configId) {
 //                oldUserId = appState.user?.id
                 appState.user = newUser
             }
 
             do {
                 try context.save()
+                coreDataManager.save()
             } catch {
                 BMSLog.error(error)
             }
         }
 
         BMSLog.info("set userId:\(String(describing: userId))")
+        coreDataManager.save()
     }
 
     @objc
@@ -146,7 +146,7 @@ public extension Sesame {
         var userId: String?
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            userId = coreDataManager.fetchAppState(context: context, configId)?.user?.id
+            userId = coreDataManager.fetchAppState(context: context, configId: configId)?.user?.id
         }
         BMSLog.verbose("got userId:\(String(describing: userId))")
         return userId
@@ -201,7 +201,7 @@ public extension Sesame {
              .external:
             let context = coreDataManager.newContext()
             context.performAndWait {
-                if let userId = coreDataManager.fetchAppState(context: context, configId)?.user?.id,
+                if let userId = coreDataManager.fetchAppState(context: context, configId: configId)?.user?.id,
                     let cartridge = coreDataManager.fetchCartridge(context: context,
                                                                    userId: userId,
                                                                    actionName: appOpenEvent.name) {
@@ -245,10 +245,13 @@ public extension Sesame {
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         let context = coreDataManager.newContext()
         context.performAndWait {
-            guard let appState = coreDataManager.fetchAppState(context: context, configId) else { return }
-            var payload = api.createPayload(appId: appState.appId,
+            guard let appState = coreDataManager.fetchAppState(context: context, configId: configId),
+            let appId = appState.appId,
+            let auth = appState.auth
+                else { return }
+            var payload = api.createPayload(appId: appId,
                                             versionId: appState.versionId,
-                                            secret: appState.auth,
+                                            secret: auth,
                                             primaryIdentity: appState.user?.id)
             payload["initialBoot"] = false
             payload["inProduction"] = false
@@ -262,7 +265,7 @@ public extension Sesame {
                         return
                 }
                 let context = self.coreDataManager.newContext()
-                guard let appState = self.coreDataManager.fetchAppState(context: context, self.configId) else {
+                guard let appState = self.coreDataManager.fetchAppState(context: context, configId: self.configId) else {
                     return
                 }
                 context.performAndWait {
@@ -310,12 +313,13 @@ public extension Sesame {
 
     func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
-            guard let appState = coreDataManager.fetchAppState(context: context, configId) else {
-                    return
-            }
-            var payload = api.createPayload(appId: appState.appId,
+            guard let appState = coreDataManager.fetchAppState(context: context, configId: configId),
+                let appId = appState.appId,
+                let auth = appState.auth
+                else { return }
+            var payload = api.createPayload(appId: appId,
                                             versionId: appState.versionId,
-                                            secret: appState.auth,
+                                            secret: auth,
                                             primaryIdentity: userId)
             payload["tracks"] = {
                 var tracks = [[String: Any]]()
@@ -360,16 +364,19 @@ public extension Sesame {
     func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            guard let appState = coreDataManager.fetchAppState(context: context, configId) else { return }
+            guard let appState = coreDataManager.fetchAppState(context: context, configId: configId),
+                let appId = appState.appId,
+                let auth = appState.auth
+                else { return }
             guard let reinforcementCount = coreDataManager.fetchCartridge(context: context,
                                                                           userId: userId,
                                                                           actionName: actionName)?
                 .reinforcements.count,
                 reinforcementCount == 0
                 else { return }
-            var payload = api.createPayload(appId: appState.appId,
+            var payload = api.createPayload(appId: appId,
                                             versionId: appState.versionId,
-                                            secret: appState.auth,
+                                            secret: auth,
                                             primaryIdentity: appState.user?.id)
             payload["actionName"] = actionName
 

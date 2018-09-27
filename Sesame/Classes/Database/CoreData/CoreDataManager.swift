@@ -124,7 +124,7 @@ extension CoreDataManager {
 
     // MARK: AppState
 
-    func fetchAppState(context: NSManagedObjectContext?, _ configId: String?, createIfNotFound: Bool = true) -> BMSAppState? {
+    func fetchAppState(context: NSManagedObjectContext?, appId: String? = nil, auth: String? = nil, configId: String?) -> BMSAppState? {
         var value: BMSAppState?
         let context = context ?? newContext()
         context.performAndWait {
@@ -134,15 +134,16 @@ extension CoreDataManager {
             do {
                 if let appState = try context.fetch(request).first {
                     value = appState
-                } else if createIfNotFound,
-                    let appStateEntity = NSEntityDescription.entity(forEntityName: BMSAppState.description(),
+                } else if let appStateEntity = NSEntityDescription.entity(forEntityName: BMSAppState.description(),
                                                                            in: context) {
                     let appState = BMSAppState(entity: appStateEntity, insertInto: context)
                     appState.configId = configId
+                    appState.appId = appId
+                    appState.auth = auth
                     value = appState
                 }
             } catch let error as NSError {
-                BMSLog.error("Could not fetch. \(error)")
+                BMSLog.error("Could not fetch or insert. \(error)")
             }
         }
 
