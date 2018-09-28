@@ -9,7 +9,7 @@
 import UIKit
 
 @objc
-open class BMSConfettiEffectView: BMSEffectView {
+open class BMSConfettiEffectView: BMSVisualEffectView {
 
     @objc
     public enum ConfettiShape: Int {
@@ -72,7 +72,7 @@ open class BMSConfettiEffectView: BMSEffectView {
                            size: size,
                            shapes: shapes,
                            colors: colors) {
-            AudioEffect.play(systemSound, vibrate: hapticFeedback)
+            BMSSoundEffect.play(systemSound, vibrate: hapticFeedback)
             self.confettiShower(duration: showerDuration,
                                 size: size,
                                 shapes: shapes,

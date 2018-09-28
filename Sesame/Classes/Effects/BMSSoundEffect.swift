@@ -1,5 +1,5 @@
 //
-//  AudioEffect.swift
+//  BMSSoundEffect.swift
 //  Sesame
 //
 //  Created by Akash Desai on 11/29/17.
@@ -8,7 +8,7 @@
 import Foundation
 import AudioToolbox
 
-class AudioEffect: NSObject {
+class BMSSoundEffect: NSObject {
 
     fileprivate static let audioQueue = DelayedSerialQueue(delayAfter: 1, dropCollisions: false)
 

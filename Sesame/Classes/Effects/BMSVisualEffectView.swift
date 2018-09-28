@@ -1,5 +1,5 @@
 //
-//  BMSEffectView.swift
+//  BMSVisualEffectView.swift
 //  Sesame
 //
 //  Created by Akash Desai on 7/29/18.
@@ -8,7 +8,7 @@
 import UIKit
 
 @objc
-open class BMSEffectView: UIView {
+open class BMSVisualEffectView: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

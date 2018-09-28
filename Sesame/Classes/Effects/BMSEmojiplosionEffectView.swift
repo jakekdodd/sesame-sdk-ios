@@ -8,7 +8,7 @@
 import UIKit
 
 @objc
-open class BMSEmojiplosionEffectView: BMSEffectView {
+open class BMSEmojiplosionEffectView: BMSVisualEffectView {
 
     public var location: (CGFloat, CGFloat) = (0.5, 0.5)
     public var image: UIImage? = UIImage(text: "❤️")
@@ -79,7 +79,7 @@ open class BMSEmojiplosionEffectView: BMSEffectView {
 
             self.layer.addSublayer(emitter)
             BMSLog.verbose("💥 Emojiplosion on <\(NSStringFromClass(type(of: self)))> at <\(emitter.emitterPosition)>!")
-            AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
+            BMSSoundEffect.play(self.systemSound, vibrate: self.hapticFeedback)
             DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
                 emitter.birthRate = 0
                 DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(self.lifetime + self.lifetimeRange)) {

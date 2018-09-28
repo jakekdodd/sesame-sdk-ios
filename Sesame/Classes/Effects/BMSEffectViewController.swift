@@ -11,7 +11,7 @@ typealias ReinforcementEffect = (String, [String: Any])
 
 open class BMSEffectViewController: UIViewController {
 
-    var effectView: BMSEffectView?
+    var effectView: BMSVisualEffectView?
     var reinforcement: ReinforcementEffect?
 
     open override func viewDidLoad() {

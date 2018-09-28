@@ -8,7 +8,7 @@
 import UIKit
 
 @objc
-open class BMSSheenEffectView: BMSEffectView {
+open class BMSSheenEffectView: BMSVisualEffectView {
 
     public enum WidthToHeightRatio: CGFloat {
         case narrow = 0.333, equal = 1, wide = 1.667
@@ -113,7 +113,7 @@ open class BMSSheenEffectView: BMSEffectView {
                         self.imageViewAnimationStartConstraint?.isActive = false
                         self.imageViewAnimationEndConstraint?.isActive = true
                         self.layoutIfNeeded()
-                        AudioEffect.play(self.systemSound, vibrate: self.hapticFeedback)
+                        BMSSoundEffect.play(self.systemSound, vibrate: self.hapticFeedback)
         },
                        completion: { _ in
                         imageView.isHidden = true
