@@ -1,5 +1,5 @@
 //
-//  UIApplicationExtensions.swift
+//  UIApplication+Extensions.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/22/18.

@@ -1,5 +1,5 @@
 //
-//  Extensions.swift
+//  Bundle+Extensions.swift
 //  Sesame
 //
 //  Created by Akash Desai on 11/27/17.

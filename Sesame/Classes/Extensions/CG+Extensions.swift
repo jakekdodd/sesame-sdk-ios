@@ -1,5 +1,5 @@
 //
-//  CGExtensions.swift
+//  CG+Extensions.swift
 //  Sesame
 //
 //  Created by Akash Desai on 12/1/17.

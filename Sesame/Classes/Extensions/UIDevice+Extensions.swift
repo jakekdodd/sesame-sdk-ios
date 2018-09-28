@@ -1,5 +1,5 @@
 //
-//  UIDeviceExtensions.swift
+//  UIDevice+Extensions.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/17/18.
