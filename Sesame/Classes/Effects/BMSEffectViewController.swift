@@ -7,54 +7,42 @@
 
 import UIKit
 
+typealias ReinforcementEffect = (String, [String: Any])
+
 open class BMSEffectViewController: UIViewController {
 
     var effectView: BMSEffectView?
+    var reinforcement: ReinforcementEffect?
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
         view.isUserInteractionEnabled = false
+
+        guard let reinforcement = reinforcement else { return }
+        effectView = {
+            switch reinforcement.0 {
+            case "confetti":        return BMSConfettiEffectView()
+            case "sheen":           return BMSSheenEffectView()
+            case "emojisplosion":   return BMSEmojiplosionEffectView()
+            default:                return nil
+            }
+        }()
     }
 
-}
-
-extension BMSEffectViewController: SesameReinforcementDelegate {
-    public func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?) {
+    func showEffect(_ completion: @escaping (Bool) -> Void = {_ in}) {
         DispatchQueue.main.async {
-            switch reinforcement {
-            case "confetti":
-                if self.effectView as? BMSConfettiEffectView == nil {
-                    self.effectView?.removeFromSuperview()
-                    let confettiView = BMSConfettiEffectView()
-                    self.view.addSubview(confettiView)
-                    confettiView.constrainToSuperview()
-                    self.effectView = confettiView
+            guard let effectView = self.effectView,
+                effectView.superview == nil else {
+                    completion(false)
+                    return
+            }
+            self.view.addSubview(effectView)
+            effectView.constrainToSuperview()
+            effectView.start {
+                DispatchQueue.main.async {
+                    effectView.removeFromSuperview()
+                    completion(true)
                 }
-                self.effectView?.start()
-
-            case "sheen":
-                if self.effectView as? BMSSheenEffectView == nil {
-                    self.effectView?.removeFromSuperview()
-                    let sheenView = BMSSheenEffectView()
-                    self.view.addSubview(sheenView)
-                    sheenView.constrainToSuperview()
-                    self.effectView = sheenView
-                }
-                self.effectView?.start()
-
-            case "emojisplosion":
-                if self.effectView as? BMSEmojiplosionEffectView == nil {
-                    self.effectView?.removeFromSuperview()
-                    let emojiView = BMSEmojiplosionEffectView()
-                    self.view.addSubview(emojiView)
-                    emojiView.constrainToSuperview()
-                    self.effectView = emojiView
-                }
-                self.effectView?.start()
-
-            default:
-                break
             }
         }
     }

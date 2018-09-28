@@ -21,17 +21,3 @@ extension UIWindow {
         return nil
     }
 }
-
-//extension UIWindow: SesameReinforcementDelegate {
-//
-//    public func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController) {
-//        DispatchQueue.main.async {
-//            self.addSubview(effectViewController.view)
-//            print("Check if same:\(self.rootViewController!.view == self.vi)")
-//            self.rootViewController?.addChild(effectViewController)
-//            effectViewController.didMove(toParent: self.rootViewController)
-//            effectViewController.showEffect()
-//        }
-//    }
-//
-//}

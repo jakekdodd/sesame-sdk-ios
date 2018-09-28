@@ -18,7 +18,7 @@ public protocol SesameReinforcementDelegate: class {
     ///   - app: The Sesame app
     ///   - reinforcement: A string representing the reinforcement effect configured on the web dashboard
     ///   - options: A dictionary with any additional options configured on the web dashboard
-    func app(_ app: Sesame, didReceiveReinforcement reinforcement: String, withOptions options: [String: Any]?)
+    func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController)
 }
 
 @objc
@@ -30,11 +30,17 @@ public class Sesame: NSObject {
     @objc public weak var reinforcementDelegate: SesameReinforcementDelegate?
 
     /// The effect is shown using the custom reinforcementDelegate or the top UIWindow
-    fileprivate var _reinforcementEffect: (String, [String: Any])? {
+    fileprivate var _reinforcementEffect: ReinforcementEffect? {
         didSet {
-            if let reinforcementEffect = _reinforcementEffect,
-                let delegate = reinforcementDelegate ?? UIWindow.topWindow {
-                delegate.app(self, didReceiveReinforcement: reinforcementEffect.0, withOptions: reinforcementEffect.1)
+            if let reinforcementEffect = _reinforcementEffect {
+                DispatchQueue.main.async {
+                    guard let delegate = self.reinforcementDelegate
+                        ?? UIWindow.topWindow?.rootViewController
+                        else { return }
+                    let effectViewController = BMSEffectViewController()
+                    effectViewController.reinforcement = reinforcementEffect
+                    delegate.reinforce(sesame: self, effectViewController: effectViewController)
+                }
                 _reinforcementEffect = nil
             }
         }
@@ -57,7 +63,7 @@ public class Sesame: NSObject {
         }
     }
 
-    @objc public var appLifecycleTracker = BMSAppLifecycleTracker()
+    @objc public var appLifecycleTracker: BMSAppLifecycleTracker
 
     @objc var configId: String? {
         get {
@@ -78,6 +84,7 @@ public class Sesame: NSObject {
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.trackingOptions = .standard()
+        self.appLifecycleTracker = BMSAppLifecycleTracker()
 
         super.init()
 
