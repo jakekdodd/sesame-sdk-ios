@@ -9,13 +9,9 @@ import Foundation
 
 class HTTPClient: NSObject {
 
-    private let session: URLSessionProtocol
+    private let session = URLSession.shared
 
-    public init(session: URLSessionProtocol = URLSession.shared) {
-        self.session = session
-    }
-
-    func post(url: URL, jsonObject: [String: Any], timeout: TimeInterval = 3.0, completion: @escaping ([String: Any]?) -> Void) -> URLSessionDataTaskProtocol {
+    func post(url: URL, jsonObject: [String: Any], timeout: TimeInterval = 3.0, completion: @escaping ([String: Any]?) -> Void) {
 
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -31,7 +27,7 @@ class HTTPClient: NSObject {
         } catch {
             BMSLog.error("Canceled request to \(url.absoluteString) for non-JSON request <\(jsonObject as AnyObject)>")
         }
-        return session.send(request: request) { responseData, responseURL, error in
+        session.dataTask(with: request) { responseData, responseURL, error in
             BMSLog.info("Received response from <\(request.url?.absoluteString ?? "url:nil")>")
             if BMSLog.level == .verbose {
                 if let responseData = responseData {
@@ -42,7 +38,7 @@ class HTTPClient: NSObject {
             }
             let response = self.convertResponseToJSON(url, responseData, responseURL, error)
             completion(response)
-        }
+        }.resume()
     }
 
     fileprivate func convertResponseToJSON(_ url: URL, _ responseData: Data?, _ responseURL: URLResponse?, _ error: Error?) -> [String: Any]? {
@@ -67,25 +63,5 @@ class HTTPClient: NSObject {
             BMSLog.error("\(url.absoluteString) call got invalid response\n\t<\(dataString)>")
             return nil
         }
-    }
-}
-
-protocol URLSessionProtocol {
-    func send(request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol
-}
-
-extension URLSession: URLSessionProtocol {
-    func send(request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
-        return dataTask(with: request, completionHandler: completionHandler)
-    }
-}
-
-protocol URLSessionDataTaskProtocol {
-    func start()
-}
-
-extension URLSessionDataTask: URLSessionDataTaskProtocol {
-    func start() {
-        resume()
     }
 }

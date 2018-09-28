@@ -24,8 +24,8 @@ class APIClient: HTTPClient {
         }
     }
 
-    func post(endpoint: Endpoint, jsonObject: [String: Any], timeout: TimeInterval = 3.0, completion: @escaping ([String: Any]?) -> Void) -> URLSessionDataTaskProtocol {
-        return super.post(url: endpoint.url, jsonObject: jsonObject, timeout: timeout, completion: completion)
+    func post(endpoint: Endpoint, jsonObject: [String: Any], timeout: TimeInterval = 3.0, completion: @escaping ([String: Any]?) -> Void) {
+        post(url: endpoint.url, jsonObject: jsonObject, timeout: timeout, completion: completion)
     }
 
     func createPayload(appId: String, versionId: String?, secret: String, primaryIdentity: String?) -> [String: Any] {

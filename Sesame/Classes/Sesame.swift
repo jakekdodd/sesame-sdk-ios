@@ -314,7 +314,7 @@ public extension Sesame {
                     }
                 }
                 completion(true)
-                }.start()
+            }
         }
     }
 
@@ -364,7 +364,7 @@ public extension Sesame {
                         return
                 }
                 completion(true)
-                }.start()
+            }
         }
     }
 
@@ -414,7 +414,7 @@ public extension Sesame {
                     }
                 }
                 completion(true)
-                }.start()
+            }
         }
     }
 }
