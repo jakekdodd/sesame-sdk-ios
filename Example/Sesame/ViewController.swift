@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var button: UIButton!
 
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { return .all }
+
     @IBAction
     func didTapTest(_ sender: Any) {
         Sesame.shared?.addEvent(actionName: "buttonTap")
@@ -23,8 +25,6 @@ class ViewController: UIViewController {
 
     @IBAction
     func didTapLabel(_ sender: Any) {
-//        Sesame.shared?.reinforcementDelegate = button
-
         Sesame.shared?.appLifecycleTracker.didEnterBackground()
         Sesame.shared?.appLifecycleTracker.didBecomeActive()
     }
