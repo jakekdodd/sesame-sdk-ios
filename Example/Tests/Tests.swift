@@ -17,7 +17,7 @@ class Tests: XCTestCase {
     func testMultipleEvents() {
         let sesame = Sesame.dev()
         let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
-        let countEvents = { return sesame.coreDataManager.countEvents(context: nil, userId: Sesame.devUserId) }
+        let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: Sesame.devUserId) }
         XCTAssert(countEvents() == 0)
 
         addEvent()
@@ -29,7 +29,7 @@ class Tests: XCTestCase {
 
     func testMultipleReports() {
         let sesame = Sesame.dev()
-        let countReports = { sesame.coreDataManager.fetchReports(context: nil, userId: Sesame.devUserId)?.count }
+        let countReports = { BMSReport.fetch(context: sesame.coreDataManager.newContext(), userId: Sesame.devUserId)?.count }
         XCTAssert(countReports() == 0)
 
         sesame.addEvent(actionName: BMSEvent.AppOpenName)
@@ -41,7 +41,7 @@ class Tests: XCTestCase {
 
     func testDeleteData() {
         let sesame = Sesame.dev()
-        let countEvents = { sesame.coreDataManager.countEvents(context: nil, userId: Sesame.devUserId) }
+        let countEvents = { BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: Sesame.devUserId) }
         XCTAssert(countEvents() == 0)
 
         sesame.addEvent(actionName: BMSEvent.AppOpenName)
@@ -90,7 +90,7 @@ class Tests: XCTestCase {
             XCTAssert(sesame.configId == configId)
             let context = sesame.coreDataManager.newContext()
             context.performAndWait {
-                let config = sesame.coreDataManager.fetchAppState(context: context, configId: sesame.configId)
+                let config = BMSAppState.fetch(context: context, configId: sesame.configId)
                 XCTAssert(config?.configId == configId)
             }
         }
@@ -110,8 +110,8 @@ class Tests: XCTestCase {
         let setUser1 = { currentUser = user1; sesame.setUserId(currentUser) }
         let setUser2 = { currentUser = user2; sesame.setUserId(currentUser) }
         let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
-        let countEvents = { return sesame.coreDataManager.countEvents(context: nil, userId: currentUser) ?? -1 }
-        let deleteReports = { sesame.coreDataManager.deleteReports(context: nil, userId: currentUser) }
+        let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: currentUser) ?? -1 }
+        let deleteReports = { BMSReport.delete(context: sesame.coreDataManager.newContext(), userId: currentUser) }
 
         sesame.coreDataManager.deleteObjects()
         sesame.setUserId(nil)
@@ -153,7 +153,8 @@ class Tests: XCTestCase {
         let promise = expectation(description: "Did boot")
         sesame.sendBoot { _ in
             guard let userId = sesame.getUserId() else { fatalError() }
-            for cartridge in sesame.coreDataManager.fetchCartridges(context: nil, userId: userId) ?? [] {
+            let context = sesame.coreDataManager.newContext()
+            for cartridge in BMSCartridge.fetch(context: context, userId: userId) ?? [] {
                 BMSLog.info(cartridge.debugDescription)
             }
             promise.fulfill()
@@ -169,21 +170,25 @@ class Tests: XCTestCase {
         sesame.sendBoot { _ in
             let context = sesame.coreDataManager.newContext()
             context.performAndWait {
-                guard let userId = sesame.getUserId(context),
-                    let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) else {
-                        fatalError()
+                guard let userId = sesame.getUserId(context) else {
+                    fatalError()
                 }
-                XCTAssert(cartridges.count != 0)
+                let cartridges = BMSCartridge.fetch(context: context, userId: userId) ?? []
+                XCTAssert(!cartridges.isEmpty)
                 for cartridge in cartridges {
                     XCTAssert(cartridge.reinforcements.count == 0)
-                    sesame.sendRefresh(userId: userId, actionName: cartridge.actionName) { _ in
-                        if let cartridges = sesame.coreDataManager.fetchCartridges(context: context, userId: userId) {
-                            XCTAssert(cartridges.count != 0)
-                            for cartridge in cartridges {
-                                XCTAssert(cartridge.reinforcements.count > 0)
-                            }
-                            promise.fulfill()
-                        } else { XCTFail("No cartridges") }
+                    sesame.sendRefresh(context: context, userId: userId, actionName: cartridge.actionName) { success in
+                        XCTAssert(success)
+                        let context = sesame.coreDataManager.newContext()
+                        context.performAndWait {
+                            let cartridges = BMSCartridge.fetch(context: context, userId: userId) ?? []
+                            if !cartridges.isEmpty {
+                                for cartridge in cartridges {
+                                    XCTAssert(cartridge.reinforcements.count > 0)
+                                }
+                                promise.fulfill()
+                            } else { XCTFail("No cartridges") }
+                        }
                     }
                 }
             }

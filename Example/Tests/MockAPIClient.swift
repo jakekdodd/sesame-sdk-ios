@@ -28,7 +28,7 @@ class MockAPIClient: APIClient {
 }
 
 extension MockAPIClient {
-    static func mockResponse(for endpoint: Endpoint, errors: Bool = true) -> [String: Any] {
+    static func mockResponse(for endpoint: Endpoint, errors: Bool = false) -> [String: Any] {
         guard !errors else {
             return ["errors": ["mock_error"]]
         }
@@ -85,16 +85,16 @@ extension MockAPIClient {
             break
 
         case .refresh:
-            response["serverUtc"] = 1538162488492
+            response["cartridgeId"] = "DEVELOPMENT"
+            response["serverUtc"] = 1538162488492 as Int64
+            response["ttl"] = 86400000 as Int64
             response["actionName"] = "appOpen"
-            response["ttl"] = 86400000
             response["reinforcements"] = [
                 ["reinforcementName": "NEUTRAL_RESP"],
                 ["reinforcementName": "confetti"],
                 ["reinforcementName": "sheen"],
                 ["reinforcementName": "emojisplosion"]
             ]
-            response["cartridgeId"] = "DEVELOPMENT"
 
         }
         return response
