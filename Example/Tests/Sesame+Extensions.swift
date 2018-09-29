@@ -16,8 +16,7 @@ extension Sesame {
         let sesame = Sesame(appId: "570ffc491b4c6e9869482fbf",
                       appVersionId: "sesame2",
                       auth: "d388c7074d8a283bff1f01eb932c1c9e6bec3b10",
-                      userId: userId,
-                      manualBoot: true)
+                      userId: userId)
         sesame.api = MockAPIClient()
         sesame.sendBoot()
         return sesame

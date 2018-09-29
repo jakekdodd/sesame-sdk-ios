@@ -75,12 +75,7 @@ public class Sesame: NSObject {
     }
 
     @objc
-    public convenience init(appId: String, appVersionId: String, auth: String, userId: String) {
-        self.init(appId: appId, appVersionId: appVersionId, auth: auth, userId: userId, manualBoot: false)
-    }
-
-    @objc
-    public init(appId: String, appVersionId: String, auth: String, userId: String, manualBoot: Bool) {
+    public init(appId: String, appVersionId: String, auth: String, userId: String) {
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.trackingOptions = .standard()
@@ -93,9 +88,6 @@ public class Sesame: NSObject {
             let appState = BMSAppState.fetch(context: context, configId: configId, appId: appId, auth: auth)
             appState?.versionId = appVersionId
             setUserId(context, userId)
-            if !manualBoot {
-                sendBoot()
-            }
         }
 
         appLifecycleTracker.sesame = self
@@ -106,8 +98,6 @@ public class Sesame: NSObject {
     var eventUploadPeriod: TimeInterval = 30
 
     fileprivate var uploadScheduled = false
-
-    // let text = UIApplication.shared
 }
 
 // MARK: - Public Methods
@@ -246,7 +236,7 @@ public extension Sesame {
 
 // MARK: - HTTP Methods
 
-/*private*/ extension Sesame {
+extension Sesame {
 
     //swiftlint:disable:next cyclomatic_complexity function_body_length
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
@@ -260,7 +250,7 @@ public extension Sesame {
                                             versionId: appState.versionId,
                                             secret: auth,
                                             primaryIdentity: appState.user?.id)
-            payload["initialBoot"] = false
+            payload["initialBoot"] = (UserDefaults.sesame.initialBootDate == nil)
             payload["inProduction"] = false
             payload["currentVersion"] = appState.versionId
             payload["currentConfig"] = "\(appState.revision)"

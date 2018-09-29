@@ -97,6 +97,8 @@ extension BMSAppLifecycleTracker {
     /// - Parameter launchOptions: launchOptions
     @objc
     public func didLaunch(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
+        sesame?.sendBoot()
+
         if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
             didPerformShortcut()
         } else if launchOptions?[.sourceApplication] != nil || launchOptions?[.url]  != nil {
