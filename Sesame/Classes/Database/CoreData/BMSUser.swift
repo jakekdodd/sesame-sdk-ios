@@ -18,3 +18,30 @@ class BMSUser: NSManagedObject {
     }
 
 }
+
+extension BMSUser {
+    class func fetch(context: NSManagedObjectContext, id: String, createIfNotFound: Bool = true) -> BMSUser? {
+        var value: BMSUser?
+        context.performAndWait {
+            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
+            request.fetchLimit = 1
+            do {
+                if let user = try context.fetch(request).first {
+                    value = user
+                } else if createIfNotFound,
+                    let entity = NSEntityDescription.entity(forEntityName: BMSUser.description(),
+                                                            in: context) {
+                    let user = BMSUser(entity: entity, insertInto: context)
+                    user.id = id
+                    value = user
+                    try context.save()
+                }
+            } catch let error as NSError {
+                BMSLog.error("Could not fetch. \(error)")
+            }
+        }
+
+        return value
+    }
+}
