@@ -15,12 +15,24 @@ extension BMSAppState {
         return NSFetchRequest<BMSAppState>(entityName: "BMSAppState")
     }
 
-    @NSManaged var appId: String?
-    @NSManaged var auth: String?
+    @NSManaged var appId: String
+    @NSManaged var auth: String
+    @NSManaged var versionId: String?
     @NSManaged var configId: String?
     @NSManaged var revision: Int64
     @NSManaged var trackingEnabled: Bool
-    @NSManaged var versionId: String?
     @NSManaged var user: BMSUser?
+    @NSManaged var effectDetails: String
+
+    var effectDetailsAsDictionary: [String: Any]? {
+        get {
+            return .from(string: effectDetails)
+        }
+        set {
+            if let dict = newValue.toString() {
+                effectDetails = dict
+            }
+        }
+    }
 
 }

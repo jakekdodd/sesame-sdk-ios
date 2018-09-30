@@ -17,8 +17,7 @@ extension BMSCartridge {
 
     @NSManaged var actionName: String
     @NSManaged var cartridgeId: String
-    @NSManaged var effectDetails: String
-    @NSManaged var serverUtc: Int64
+    @NSManaged var utc: Int64
     @NSManaged var ttl: Int64
     @NSManaged var reinforcements: NSOrderedSet
     @NSManaged var user: BMSUser

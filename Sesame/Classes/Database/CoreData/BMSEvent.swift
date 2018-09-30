@@ -26,27 +26,29 @@ class BMSEvent: NSManagedObject {
 
 extension BMSEvent {
 
-    class func insert(context: NSManagedObjectContext, userId: String, actionName: String, sessionId: NSNumber?, metadata: [String: Any] = [:]) {
+    @discardableResult
+    class func insert(context: NSManagedObjectContext, userId: String, actionName: String, reinforcement: BMSReinforcement? = nil, sessionId: NSNumber? = nil, metadata: [String: Any] = [:]) -> BMSEvent? {
+        var value: BMSEvent?
         context.performAndWait {
-            guard let report = BMSReport.fetch(context: context, userId: userId, actionName: actionName),
+            guard let report = BMSReport.fetch(context: context, userId: userId, actionName: actionName) ??
+                BMSReport.insert(context: context, userId: userId, actionName: actionName),
                 let entity = NSEntityDescription.entity(forEntityName: BMSEvent.description(), in: context) else {
                     return
             }
             let event = BMSEvent(entity: entity, insertInto: context)
-            do {
-                event.sessionId = sessionId
-                event.metadata = String(data: try JSONSerialization.data(withJSONObject: metadata), encoding: .utf8)
-            } catch {
-                BMSLog.error(error)
-            }
             event.report = report
+            event.reinforcement = reinforcement
+            event.sessionId = sessionId
+            event.metadataAsDictionary = metadata
             do {
                 try context.save()
-//                BMSLog.debug("Logged event #\(report.events?.count ?? -1) with actionName:\(actionName)")
+                BMSLog.info("Logged event #\(report.events.count) with actionName:\(actionName)")
             } catch {
                 BMSLog.error(error)
             }
+            value = event
         }
+        return value
     }
 
     class func count(context: NSManagedObjectContext, userId: String? = nil) -> Int? {
@@ -62,7 +64,6 @@ extension BMSEvent {
                 BMSLog.error("Could not fetch. \(error)")
             }
         }
-
         return value
     }
 

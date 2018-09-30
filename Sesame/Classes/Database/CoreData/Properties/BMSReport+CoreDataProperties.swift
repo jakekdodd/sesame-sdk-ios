@@ -9,12 +9,23 @@
 import Foundation
 import CoreData
 
+@objc enum BMSReportType: Int32 {
+    case reinforceable, nonreinforceable
+    var stringValue: String {
+        switch self {
+        case .reinforceable:    return "REINFORCEABLE"
+        case .nonreinforceable: return "NON_REINFORCEABLE"
+        }
+    }
+}
+
 extension BMSReport {
 
     @nonobjc class func fetchRequest() -> NSFetchRequest<BMSReport> {
         return NSFetchRequest<BMSReport>(entityName: "BMSReport")
     }
 
+    @NSManaged var type: BMSReportType
     @NSManaged var actionName: String
     @NSManaged var events: NSOrderedSet
     @NSManaged var user: BMSUser

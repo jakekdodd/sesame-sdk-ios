@@ -29,7 +29,14 @@ open class BMSAppLifecycleTracker: NSObject {
         didSet {
             if let appOpenAction = appOpenAction {
                 sesame?.sessionId = .new
-                sesame?.reinforce(appOpenEvent: appOpenAction)
+                let reinforce: Bool
+                switch appOpenAction.cueCategory {
+                case .external, .internal:
+                    reinforce = true
+                case .synthetic:
+                    reinforce = false
+                }
+                sesame?.addEvent(actionName: appOpenAction.name, metadata: appOpenAction.metadata, reinforce: reinforce)
             }
         }
     }

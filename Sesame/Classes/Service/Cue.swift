@@ -5,7 +5,7 @@
 //
 
 class Cue {
-    enum Category {
+    enum Category: String {
         case `internal`, external, synthetic
     }
 }

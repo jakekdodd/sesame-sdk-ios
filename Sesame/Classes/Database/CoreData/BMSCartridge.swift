@@ -11,6 +11,7 @@ import CoreData
 
 @objc(BMSCartridge)
 class BMSCartridge: NSManagedObject {
+
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
     override public func awakeFromInsert() {
@@ -18,46 +19,25 @@ class BMSCartridge: NSManagedObject {
         setPrimitiveValue(BMSCartridge.NeutralCartridgeId, forKey: #keyPath(BMSCartridge.cartridgeId))
     }
 
-    var effectDetailsAsDictionary: [String: Any]? {
-        get {
-            if let data = effectDetails.data(using: .utf8),
-                let json = try? JSONSerialization.jsonObject(with: data, options: []),
-                let dict = json as? [String: Any] {
-                return dict
-            }
-            return nil
-        }
-        set {
-            if let dict = newValue,
-                let data = try? JSONSerialization.data(withJSONObject: dict),
-                let str = String(data: data, encoding: .utf8) {
-                effectDetails = str
+    var nextReinforcement: BMSReinforcement? {
+        guard let context = managedObjectContext else { return nil }
+        var value: BMSReinforcement?
+        context.performAndWait {
+            if let reinforcements = reinforcements.array as? [BMSReinforcement],
+                let reinforcement = reinforcements.filter({$0.event == nil}).first {
+                value = reinforcement
+            } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
+                let reinforcement = BMSReinforcement.insert(context: context, cartridge: self, name: BMSReinforcement.NeutralName) {
+                BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
+                value = reinforcement
             }
         }
+        return value
     }
 
 }
 
 extension BMSCartridge {
-
-    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSCartridge? {
-        var value: BMSCartridge?
-        context.performAndWait {
-            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
-                NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")
-                ])
-            request.fetchLimit = 1
-            do {
-                value = try context.fetch(request).first
-            } catch let error as NSError {
-                BMSLog.error("Could not fetch. \(error)")
-            }
-        }
-
-        return value
-    }
 
     class func fetch(context: NSManagedObjectContext, userId: String) -> [BMSCartridge]? {
         var value: [BMSCartridge]?
@@ -70,65 +50,71 @@ extension BMSCartridge {
                 BMSLog.error("Could not fetch. \(error)")
             }
         }
-
         return value
     }
 
-    class func insert(context: NSManagedObjectContext, userId: String, actionName: String, effectDetails: [String: Any]) {
+    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSCartridge? {
+        var value: BMSCartridge?
         context.performAndWait {
-            guard let user = BMSUser.fetch(context: context, id: userId) else { return }
-            guard let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) else {
-                BMSLog.error("Could not create entity for cartridge")
-                return
-            }
-            let cartridge = BMSCartridge(entity: entity, insertInto: context)
-            cartridge.actionName = actionName
-            cartridge.effectDetailsAsDictionary = effectDetails
-            cartridge.user = user
+            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
+                NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")
+                ])
+            request.sortDescriptors = [NSSortDescriptor(key: #keyPath(BMSCartridge.utc), ascending: false)]
+            request.fetchLimit = 1
             do {
-                try context.save()
-            } catch {
-                BMSLog.error(error)
+                value = try context.fetch(request).first
+            } catch let error as NSError {
+                BMSLog.error("Could not fetch. \(error)")
             }
         }
+        return value
     }
 
-    //swiftlint:disable:next function_parameter_count
-    class func update(context: NSManagedObjectContext, userId: String, actionName: String, cartridgeId: String, serverUtc: Int64, ttl: Int64, reinforcements: [String], effectDetails: [String: Any]? = nil) {
+    class func fetchValid(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSCartridge? {
+        var value: BMSCartridge?
         context.performAndWait {
-            var storedCartridge: BMSCartridge?
-            if let cartridge = BMSCartridge.fetch(context: context, userId: userId, actionName: actionName) {
-                storedCartridge = cartridge
-            } else if let user = BMSUser.fetch(context: context, id: userId),
+            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
+                NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")
+                ])
+            request.sortDescriptors = [NSSortDescriptor(key: #keyPath(BMSCartridge.utc), ascending: false)]
+            do {
+                let now = Int64(Date().timeIntervalSinceNow * 1000)
+                value = try context.fetch(request).filter({ now >= ($0.utc + $0.ttl) }).first
+            } catch let error as NSError {
+                BMSLog.error("Could not fetch. \(error)")
+            }
+        }
+        return value
+    }
+
+    @discardableResult
+    class func insert(context: NSManagedObjectContext, userId: String, actionName: String, cartridgeId: String = BMSCartridge.NeutralCartridgeId, utc: Int64 = Int64(Date().timeIntervalSinceNow * 1000), ttl: Int64 = 0, reinforcementNames: [String] = []) -> BMSCartridge? {
+        var value: BMSCartridge?
+        context.performAndWait {
+            if let user = BMSUser.fetch(context: context, id: userId),
                 let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) {
                 let cartridge = BMSCartridge(entity: entity, insertInto: context)
                 cartridge.user = user
                 cartridge.actionName = actionName
-                cartridge.effectDetailsAsDictionary = effectDetails ?? [:]
-            }
-
-            guard let cartridge = storedCartridge else { return }
-            cartridge.cartridgeId = cartridgeId
-            cartridge.serverUtc = serverUtc
-            cartridge.ttl = ttl
-            if let effectDetails = effectDetails {
-                cartridge.effectDetailsAsDictionary = effectDetails
-            }
-
-            for reinforcementName in reinforcements {
-                guard let entity =
-                    NSEntityDescription.entity(forEntityName: BMSReinforcement.description(), in: context)
-                    else { continue }
-                let reinforcement = BMSReinforcement(entity: entity, insertInto: context)
-                reinforcement.name = reinforcementName
-                cartridge.addToReinforcements(reinforcement)
-            }
-
-            do {
-                try context.save()
-            } catch {
-                BMSLog.error(error)
+                cartridge.cartridgeId = cartridgeId
+                cartridge.utc = utc
+                cartridge.ttl = ttl
+                _ = reinforcementNames.compactMap({
+                    BMSReinforcement.insert(context: context, cartridge: cartridge, name: $0)
+                })
+                do {
+                    try context.save()
+                } catch let error as NSError {
+                    BMSLog.error("Could not insert. \(error)")
+                }
+                value = cartridge
             }
         }
+        return value
     }
+
 }

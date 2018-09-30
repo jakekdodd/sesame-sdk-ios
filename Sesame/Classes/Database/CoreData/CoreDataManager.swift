@@ -123,3 +123,23 @@ extension Optional where Wrapped == String {
         return self == nil ? "nil" : "'\(self!)'"
     }
 }
+
+extension Optional where Wrapped == [String: Any] {
+    static func from(string: String) -> [String: Any]? {
+        if let data = string.data(using: .utf8),
+            let json = try? JSONSerialization.jsonObject(with: data, options: []),
+            let dict = json as? [String: Any] {
+            return dict
+        }
+        return nil
+    }
+
+    func toString() -> String? {
+        if let dict = self,
+            let data = try? JSONSerialization.data(withJSONObject: dict),
+            let string = String(data: data, encoding: .utf8) {
+            return string
+        }
+        return nil
+    }
+}

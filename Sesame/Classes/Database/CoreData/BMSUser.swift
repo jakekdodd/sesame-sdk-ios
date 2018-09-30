@@ -20,28 +20,55 @@ class BMSUser: NSManagedObject {
 }
 
 extension BMSUser {
-    class func fetch(context: NSManagedObjectContext, id: String, createIfNotFound: Bool = true) -> BMSUser? {
+
+    class func fetch(context: NSManagedObjectContext, id: String) -> BMSUser? {
         var value: BMSUser?
         context.performAndWait {
             let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
             request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
             request.fetchLimit = 1
             do {
-                if let user = try context.fetch(request).first {
-                    value = user
-                } else if createIfNotFound,
-                    let entity = NSEntityDescription.entity(forEntityName: BMSUser.description(),
-                                                            in: context) {
-                    let user = BMSUser(entity: entity, insertInto: context)
-                    user.id = id
-                    value = user
-                    try context.save()
-                }
+                value = try context.fetch(request).first
             } catch let error as NSError {
                 BMSLog.error("Could not fetch. \(error)")
             }
         }
+        return value
+    }
 
+    @discardableResult
+    class func delete(context: NSManagedObjectContext) -> Int? {
+        var value: Int?
+        context.performAndWait {
+            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            do {
+                value = try context.fetch(request).map({context.delete($0)}).count
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+                BMSLog.error(error)
+            }
+        }
+        return value
+    }
+
+    class func insert(context: NSManagedObjectContext, id: String) -> BMSUser? {
+        var value: BMSUser?
+        context.performAndWait {
+            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
+            if let entity = NSEntityDescription.entity(forEntityName: BMSUser.description(), in: context) {
+                let user = BMSUser(entity: entity, insertInto: context)
+                user.id = id
+                do {
+                    try context.save()
+                } catch let error as NSError {
+                    BMSLog.error("Could not fetch. \(error)")
+                }
+                value = user
+            }
+        }
         return value
     }
 }

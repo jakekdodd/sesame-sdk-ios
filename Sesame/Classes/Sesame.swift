@@ -49,6 +49,7 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
+    @objc public var appLifecycleTracker: BMSAppLifecycleTracker
     var trackingOptions: BMSEventMetadataOptions
     var sessionId: BMSSessionId? {
         willSet {
@@ -62,31 +63,29 @@ public class Sesame: NSObject {
             }
         }
     }
-
-    @objc public var appLifecycleTracker: BMSAppLifecycleTracker
-
-    @objc var configId: String? {
-        get {
-            return UserDefaults.sesame.string(forKey: #keyPath(Sesame.configId))
-        }
-        set {
-            UserDefaults.sesame.set(newValue, forKey: #keyPath(Sesame.configId))
-        }
-    }
+    let appId: String
 
     @objc
-    public init(appId: String, appVersionId: String, auth: String, userId: String) {
+    public init(appId: String, auth: String, versionId: String?, userId: String) {
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.trackingOptions = .standard()
         self.appLifecycleTracker = BMSAppLifecycleTracker()
+        self.appId = appId
 
         super.init()
 
         let context = coreDataManager.newContext()
         context.performAndWait {
-            let appState = BMSAppState.fetch(context: context, configId: configId, appId: appId, auth: auth)
-            appState?.versionId = appVersionId
+            if let appState = BMSAppState.fetch(context: context, appId: appId) ??
+                BMSAppState.insert(context: context, appId: appId, auth: auth, versionId: versionId) {
+                if appState.auth != auth {
+                    // when switching auth keys clear app state and erase users
+                    BMSAppState.delete(context: context, appId: appId)
+                    BMSUser.delete(context: context)
+                    _ = BMSAppState.insert(context: context, appId: appId, auth: auth, versionId: versionId)
+                }
+            }
             setUserId(context, userId)
         }
 
@@ -106,32 +105,35 @@ public extension Sesame {
 
     @objc
     public func setUserId(_ userId: String?) {
-        setUserId(nil, userId)
+        setUserId(coreDataManager.newContext(), userId)
     }
 
-    internal func setUserId( _ context: NSManagedObjectContext?, _ userId: String?) {
-        let context = context ?? coreDataManager.newContext()
+    internal func setUserId( _ context: NSManagedObjectContext, _ userId: String?) {
         context.performAndWait {
-            var newUser: BMSUser?
+            guard let appState = BMSAppState.fetch(context: context, appId: appId) else {
+                BMSLog.error("setUserId without an appState")
+                return
+            }
             if let userId = userId {
-                newUser = BMSUser.fetch(context: context, id: userId)
+                guard let user = BMSUser.fetch(context: context, id: userId) ?? BMSUser.insert(context: context, id: userId) else {
+                    BMSLog.error("Could not find or insert user")
+                    return
+                }
+                appState.user = user
+                if BMSCartridge.fetchValid(context: context, userId: user.id, actionName: BMSEvent.AppOpenName) == nil {
+                    _ = BMSCartridge.insert(context: context, userId: user.id, actionName: BMSEvent.AppOpenName)
+                }
+            } else {
+                appState.user = nil
             }
-//            var oldUserId: String?
-            if let appState = BMSAppState.fetch(context: context, configId: configId) {
-//                oldUserId = appState.user?.id
-                appState.user = newUser
-            }
-
             do {
                 try context.save()
                 coreDataManager.save()
             } catch {
                 BMSLog.error(error)
             }
+            BMSLog.info("set userId:\(String(describing: userId))")
         }
-
-        BMSLog.info("set userId:\(String(describing: userId))")
-        coreDataManager.save()
     }
 
     @objc
@@ -143,45 +145,55 @@ public extension Sesame {
         var userId: String?
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            userId = BMSAppState.fetch(context: context, configId: configId)?.user?.id
+            userId = BMSAppState.fetch(context: context, appId: appId)?.user?.id
         }
         BMSLog.verbose("got userId:\(String(describing: userId))")
         return userId
     }
 
-    @objc
-    public func addEvent(actionName: String) {
-        addEvent(context: nil, actionName: actionName, metadata: [:])
-    }
-
-    @objc
-    public func addEvent(actionName: String, metadata: [String: Any]) {
-        addEvent(context: nil, actionName: actionName, metadata: metadata)
-    }
-
-    internal func addEvent(context: NSManagedObjectContext?, actionName: String, metadata: [String: Any]) {
+    internal func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
+        var reinforcementName: String?
         let context = context ?? coreDataManager.newContext()
-        var metadata = metadata
         context.performAndWait {
-            guard let userId = getUserId(context) else { return }
+            guard let appState = BMSAppState.fetch(context: context, appId: appId),
+                let user = appState.user
+                else { return }
+            var metadata = metadata
             trackingOptions.annotate(&metadata)
             metadata["sessionTimeElapsed"] = sessionId?.elapsedTime()
-            BMSEvent.insert(context: context,
-                            userId: userId,
-                            actionName: actionName,
-                            sessionId: sessionId as NSNumber?,
-                            metadata: metadata)
-            let eventCount = BMSEvent.count(context: context, userId: userId)
+            guard let event = BMSEvent.insert(context: context,
+                                              userId: user.id,
+                                              actionName: actionName,
+                                              sessionId: sessionId as NSNumber?,
+                                              metadata: metadata) else { return }
+            if reinforce,
+                let cartridge = BMSCartridge.fetchValid(context: context, userId: user.id, actionName: actionName) ??
+                    BMSCartridge.insert(context: context,
+                                        userId: user.id,
+                                        actionName: actionName,
+                                        cartridgeId: BMSCartridge.NeutralCartridgeId),
+                let reinforcement = cartridge.nextReinforcement {
+                event.reinforcement = reinforcement
+                reinforcementName = reinforcement.name
+            }
 
-            BMSLog.info("Added event:\(actionName) metadata:\(metadata) for userId:\(userId)")
+            let eventCount = BMSEvent.count(context: context, userId: user.id)
+            BMSLog.info("Added event:\(actionName) metadata:\(metadata) for userId:\(user.id)")
             BMSLog.info("Total events for user:#\(eventCount ?? -1)")
-
-//            for report in coreDataManager.fetchReports(context: context, userId: userId) ?? [] {
-//                BMSLog.info("Report:\(report.actionName!) events:\(report.events!.count)")
-//            }
-            coreDataManager.save()
+            do {
+                try context.save()
+                coreDataManager.save()
+            } catch {
+                BMSLog.error(error)
+            }
             if eventCount ?? 0 >= eventUploadCount {
-                sendTracks(context: context, userId: userId)
+                sendTracks(context: context, userId: user.id)
+            }
+
+            if let reinforcementName = reinforcementName {
+                BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
+                _reinforcementEffect = (reinforcementName, [:])
+                sendRefresh(context: context, userId: user.id, actionName: actionName)
             }
         }
     }
@@ -190,37 +202,6 @@ public extension Sesame {
     public func eventCount() -> Int {
         let context = coreDataManager.newContext()
         return BMSEvent.count(context: context) ?? 0
-    }
-
-    internal func reinforce(appOpenEvent: BMSEventAppOpen) {
-        switch appOpenEvent.cueCategory {
-        case .internal,
-             .external:
-            let context = coreDataManager.newContext()
-            context.performAndWait {
-                if let userId = BMSAppState.fetch(context: context, configId: configId)?.user?.id,
-                    let cartridge = BMSCartridge.fetch(context: context,
-                                                       userId: userId,
-                                                       actionName: appOpenEvent.name) {
-                    let reinforcementName: String
-                    if let reinforcement = cartridge.reinforcements.firstObject as? BMSReinforcement {
-                        reinforcementName = reinforcement.name
-                        context.delete(reinforcement)
-                    } else {
-                        reinforcementName = BMSReinforcement.NeutralName
-                        BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
-                    }
-
-                    BMSLog.info(confirmed: "Next reinforcement:\(reinforcementName)")
-                    _reinforcementEffect = (reinforcementName, [:])
-
-                    addEvent(context: context, actionName: appOpenEvent.name, metadata: appOpenEvent.metadata)
-                    sendRefresh(context: context, userId: userId, actionName: appOpenEvent.name)
-                }
-            }
-        case .synthetic:
-            break
-        }
     }
 
     @objc
@@ -238,21 +219,18 @@ public extension Sesame {
 
 extension Sesame {
 
-    //swiftlint:disable:next cyclomatic_complexity function_body_length
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         let context = coreDataManager.newContext()
         context.performAndWait {
-            guard let appState = BMSAppState.fetch(context: context, configId: configId),
-            let appId = appState.appId,
-            let auth = appState.auth
+            guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else { return }
             var payload = api.createPayload(appId: appId,
                                             versionId: appState.versionId,
-                                            secret: auth,
+                                            secret: appState.auth,
                                             primaryIdentity: appState.user?.id)
             payload["initialBoot"] = (UserDefaults.sesame.initialBootDate == nil)
             payload["inProduction"] = false
-            payload["currentVersion"] = appState.versionId
+            payload["currentVersion"] = appState.versionId ?? "nil"
             payload["currentConfig"] = "\(appState.revision)"
 
             api.post(endpoint: .boot, jsonObject: payload) { response in
@@ -262,10 +240,10 @@ extension Sesame {
                         return
                 }
                 let context = self.coreDataManager.newContext()
-                guard let appState = BMSAppState.fetch(context: context, configId: self.configId) else {
-                    return
-                }
                 context.performAndWait {
+                    guard let appState = BMSAppState.fetch(context: context, appId: self.appId) else {
+                        return
+                    }
                     if let configValues = response["config"] as? [String: Any] {
                         if let configId = configValues["configId"] as? String {
                             appState.configId = configId
@@ -274,25 +252,12 @@ extension Sesame {
                             appState.trackingEnabled = trackingEnabled
                         }
                     }
-
                     if let version = response["version"] as? [String: Any] {
                         if let versionId = version["versionID"] as? String {
                             appState.versionId = versionId
                         }
-                        if let userId = appState.user?.id,
-                            let mappings = version["mappings"] as? [String: [String: Any]] {
-                            for (actionName, effectDetails) in mappings {
-                                if let cartridge = BMSCartridge.fetch(context: context,
-                                                                      userId: userId,
-                                                                      actionName: actionName) {
-                                    cartridge.effectDetailsAsDictionary = effectDetails
-                                } else {
-                                    BMSCartridge.insert(context: context,
-                                                        userId: userId,
-                                                        actionName: actionName,
-                                                        effectDetails: effectDetails)
-                                }
-                            }
+                        if let mappings = version["mappings"] as? [String: [String: Any]] {
+                            appState.effectDetailsAsDictionary = mappings
                         }
                     }
                     do {
@@ -311,13 +276,11 @@ extension Sesame {
 
     func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
-            guard let appState = BMSAppState.fetch(context: context, configId: configId),
-                let appId = appState.appId,
-                let auth = appState.auth
+            guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else { return }
-            var payload = api.createPayload(appId: appId,
+            var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,
-                                            secret: auth,
+                                            secret: appState.auth,
                                             primaryIdentity: userId)
             payload["tracks"] = {
                 var tracks = [[String: Any]]()
@@ -325,7 +288,7 @@ extension Sesame {
                     for report in reports {
                         var track = [String: Any]()
                         track["actionName"] = report.actionName
-                        track["type"] = BMSReport.NonReinforceableType
+                        track["type"] = report.type.stringValue
                         var events = [[String: Any]]()
                         for case let reportEvent as BMSEvent in report.events {
                             var event = [String: Any]()
@@ -362,19 +325,17 @@ extension Sesame {
     func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            guard let appState = BMSAppState.fetch(context: context, configId: configId),
-                let appId = appState.appId,
-                let auth = appState.auth
+            guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else { return }
-            guard let reinforcementCount = BMSCartridge.fetch(context: context,
-                                                              userId: userId,
-                                                              actionName: actionName)?
-                .reinforcements.count,
-                reinforcementCount == 0
-                else { return }
-            var payload = api.createPayload(appId: appId,
+            let reinforcementCount = BMSCartridge.fetch(context: context,
+                                                        userId: userId,
+                                                        actionName: actionName)?
+                .reinforcements.count
+            guard reinforcementCount == nil || reinforcementCount == 0 else { return }
+
+            var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,
-                                            secret: auth,
+                                            secret: appState.auth,
                                             primaryIdentity: appState.user?.id)
             payload["actionName"] = actionName
 
@@ -390,13 +351,13 @@ extension Sesame {
                 }
                 let reinforcementNames = reinforcements.compactMap({$0["reinforcementName"]})
                 context.performAndWait {
-                    BMSCartridge.update(context: context,
+                    BMSCartridge.insert(context: context,
                                         userId: userId,
                                         actionName: actionName,
                                         cartridgeId: cartridgeId,
-                                        serverUtc: serverUtc,
+                                        utc: serverUtc,
                                         ttl: ttl,
-                                        reinforcements: reinforcementNames)
+                                        reinforcementNames: reinforcementNames)
                     do {
                         try context.save()
                         self.coreDataManager.save()

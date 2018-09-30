@@ -15,3 +15,24 @@ public class BMSReinforcement: NSManagedObject {
     @objc public static let NeutralName = "NEUTRAL_RESP"
 
 }
+
+extension BMSReinforcement {
+    class func insert(context: NSManagedObjectContext, cartridge: BMSCartridge, name: String) -> BMSReinforcement? {
+        var value: BMSReinforcement?
+        context.performAndWait {
+            if let entity =
+                NSEntityDescription.entity(forEntityName: BMSReinforcement.description(), in: context) {
+                let reinforcement = BMSReinforcement(entity: entity, insertInto: context)
+                reinforcement.cartridge = cartridge
+                reinforcement.name = name
+                do {
+                    try context.save()
+                } catch let error as NSError {
+                    BMSLog.error("Could not insert. \(error)")
+                }
+                value = reinforcement
+            }
+        }
+        return value
+    }
+}

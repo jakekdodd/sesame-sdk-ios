@@ -20,7 +20,7 @@ class ViewController: UIViewController {
 
     @IBAction
     func didTapTest(_ sender: Any) {
-        Sesame.shared?.addEvent(actionName: "buttonTap")
+//        Sesame.shared?.addEvent(actionName: "buttonTap")
     }
 
     @IBAction

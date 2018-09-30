@@ -42,6 +42,7 @@ struct BMSEventAppOpen {
     init(source: Source, date: Date = Date()) {
         self.source = source
         self.date = date
+        self.metadata = ["BMSCueCategory": source.cueCategory.rawValue]
     }
 
 }
