@@ -93,7 +93,7 @@ public class Sesame: NSObject {
         appLifecycleTracker.isRegisteredForNotification = true
     }
 
-    var eventUploadCount: Int = 10
+    var eventUploadCount: Int = 20
     var eventUploadPeriod: TimeInterval = 30
 
     fileprivate var uploadScheduled = false
@@ -115,14 +115,12 @@ public extension Sesame {
                 return
             }
             if let userId = userId {
-                guard let user = BMSUser.fetch(context: context, id: userId) ?? BMSUser.insert(context: context, id: userId) else {
-                    BMSLog.error("Could not find or insert user")
-                    return
+                guard let user = BMSUser.fetch(context: context, id: userId) ??
+                    BMSUser.insert(context: context, id: userId) else {
+                        BMSLog.error("Could not find or insert user")
+                        return
                 }
                 appState.user = user
-                if BMSCartridge.fetchValid(context: context, userId: user.id, actionName: BMSEvent.AppOpenName) == nil {
-                    _ = BMSCartridge.insert(context: context, userId: user.id, actionName: BMSEvent.AppOpenName)
-                }
             } else {
                 appState.user = nil
             }
@@ -167,12 +165,15 @@ public extension Sesame {
                                               sessionId: sessionId as NSNumber?,
                                               metadata: metadata) else { return }
             if reinforce,
-                let cartridge = BMSCartridge.fetchValid(context: context, userId: user.id, actionName: actionName) ??
-                    BMSCartridge.insert(context: context,
-                                        userId: user.id,
-                                        actionName: actionName,
-                                        cartridgeId: BMSCartridge.NeutralCartridgeId),
-                let reinforcement = cartridge.nextReinforcement {
+                let reinforcement = BMSCartridge.fetch(context: context,
+                                                       userId: user.id,
+                                                       actionName: actionName)?.first?
+                    .nextReinforcement
+                    ?? BMSCartridge.insert(context: context,
+                                           userId: user.id,
+                                           actionName: actionName,
+                                           cartridgeId: BMSCartridge.NeutralCartridgeId)?
+                        .nextReinforcement {
                 event.reinforcement = reinforcement
                 reinforcementName = reinforcement.name
             }
@@ -325,13 +326,11 @@ extension Sesame {
     func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
-            guard let appState = BMSAppState.fetch(context: context, appId: appId)
+            guard let appState = BMSAppState.fetch(context: context, appId: appId),
+                BMSCartridge.fetch(context: context,
+                                   userId: userId,
+                                   actionName: actionName)?.first?.needsRefresh ?? true
                 else { return }
-            let reinforcementCount = BMSCartridge.fetch(context: context,
-                                                        userId: userId,
-                                                        actionName: actionName)?
-                .reinforcements.count
-            guard reinforcementCount == nil || reinforcementCount == 0 else { return }
 
             var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,

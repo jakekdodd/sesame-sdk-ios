@@ -99,7 +99,12 @@ class CoreDataManager: NSObject {
 
     func deleteObjects() {
         managedObjectContext?.performAndWait {
-            let rootModels = [BMSUser.self, BMSAppState.self]
+            let rootModels = [BMSReinforcement.self,
+                              BMSCartridge.self,
+                              BMSEvent.self,
+                              BMSReport.self,
+                              BMSUser.self,
+                              BMSAppState.self]
             for model in rootModels {
                 let request = NSFetchRequest<NSManagedObject>(entityName: model.description())
                 do {

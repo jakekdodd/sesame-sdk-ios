@@ -10,9 +10,7 @@ import Foundation
 import CoreData
 
 @objc(BMSReport)
-class BMSReport: NSManagedObject {
-
-}
+class BMSReport: NSManagedObject { }
 
 extension BMSReport {
 

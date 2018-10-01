@@ -14,9 +14,8 @@ class BMSCartridge: NSManagedObject {
 
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
-    override public func awakeFromInsert() {
-        super.awakeFromInsert()
-        setPrimitiveValue(BMSCartridge.NeutralCartridgeId, forKey: #keyPath(BMSCartridge.cartridgeId))
+    var needsRefresh: Bool {
+        return (reinforcements.array as? [BMSReinforcement])?.filter({$0.event == nil}).isEmpty ?? false
     }
 
     var nextReinforcement: BMSReinforcement? {
@@ -26,8 +25,11 @@ class BMSCartridge: NSManagedObject {
             if let reinforcements = reinforcements.array as? [BMSReinforcement],
                 let reinforcement = reinforcements.filter({$0.event == nil}).first {
                 value = reinforcement
+                BMSLog.warning("Reinforcements:\(reinforcements.count)")
             } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
-                let reinforcement = BMSReinforcement.insert(context: context, cartridge: self, name: BMSReinforcement.NeutralName) {
+                let reinforcement = BMSReinforcement.insert(context: context,
+                                                            cartridge: self,
+                                                            name: BMSReinforcement.NeutralName) {
                 BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
                 value = reinforcement
             }
@@ -53,27 +55,8 @@ extension BMSCartridge {
         return value
     }
 
-    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSCartridge? {
-        var value: BMSCartridge?
-        context.performAndWait {
-            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
-                NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")
-                ])
-            request.sortDescriptors = [NSSortDescriptor(key: #keyPath(BMSCartridge.utc), ascending: false)]
-            request.fetchLimit = 1
-            do {
-                value = try context.fetch(request).first
-            } catch let error as NSError {
-                BMSLog.error("Could not fetch. \(error)")
-            }
-        }
-        return value
-    }
-
-    class func fetchValid(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSCartridge? {
-        var value: BMSCartridge?
+    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> [BMSCartridge]? {
+        var value: [BMSCartridge]?
         context.performAndWait {
             let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
@@ -82,8 +65,7 @@ extension BMSCartridge {
                 ])
             request.sortDescriptors = [NSSortDescriptor(key: #keyPath(BMSCartridge.utc), ascending: false)]
             do {
-                let now = Int64(Date().timeIntervalSinceNow * 1000)
-                value = try context.fetch(request).filter({ now >= ($0.utc + $0.ttl) }).first
+                value = try context.fetch(request)
             } catch let error as NSError {
                 BMSLog.error("Could not fetch. \(error)")
             }
