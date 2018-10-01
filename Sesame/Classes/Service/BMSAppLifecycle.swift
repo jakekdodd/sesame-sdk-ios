@@ -42,16 +42,6 @@ open class BMSAppLifecycle: NSObject {
         }
     }
 
-    fileprivate var appIsInterrupted = false {
-        didSet (appWasInterrupted) {
-            switch (appWasInterrupted, appIsInterrupted) {
-            case (false, true): listener?.appLifecycleSessionInterrupetionWillStart(self)
-            case (true, false): listener?.appLifecycleSessionInterrupetionDidEnd(self)
-            default: break
-            }
-        }
-    }
-
     var sessionId: BMSSessionId? {
         willSet {
             if sessionId != nil {
@@ -65,7 +55,18 @@ open class BMSAppLifecycle: NSObject {
         }
     }
 
+    var appIsInterrupted = false {
+        didSet (appWasInterrupted) {
+            switch (appWasInterrupted, appIsInterrupted) {
+            case (false, true): listener?.appLifecycleSessionInterrupetionWillStart(self)
+            case (true, false): listener?.appLifecycleSessionInterrupetionDidEnd(self)
+            default: break
+            }
+        }
+    }
+
     fileprivate var notificationsToRegister = [
+        UIApplication.didFinishLaunchingNotification,
         UIApplication.willTerminateNotification,
         UIApplication.didBecomeActiveNotification,
         UIApplication.willResignActiveNotification,
@@ -84,8 +85,9 @@ open class BMSAppLifecycle: NSObject {
     }
 
     @objc func receive(_ notification: Notification) {
-        BMSLog.verbose("Got notification:\(notification.name)")
+        BMSLog.verbose("Got notification:\(notification.name) info:\(notification.userInfo as AnyObject)")
         switch notification.name {
+        case UIApplication.didFinishLaunchingNotification:  didLaunch(notification.userInfo)
         case UIApplication.willTerminateNotification:       didTerminate()
         case UIApplication.didBecomeActiveNotification:     didBecomeActive()
         case UIApplication.willResignActiveNotification:    willResignActive()
@@ -101,21 +103,16 @@ extension BMSAppLifecycle {
 
     // MARK: - UIApplicationDidFinishLaunching
 
-    /// Optional: This method can be called to make the Sesame effect behave differently
-    /// depending on how the app was opened.
-    /// It is optional because if appOpenAction is not created here, it will be created
-    /// when receiving the UIApplicationDidBecomeActive notification.
-    ///
-    /// - Parameter launchOptions: launchOptions
     @objc
-    public func didLaunch(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
-//        sesame?.sendBoot()
-
-        if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
+    public func didLaunch(_ userInfo: [AnyHashable: Any]?) {
+        if #available(iOS 9.0, *),
+            userInfo?[UIApplication.LaunchOptionsKey.shortcutItem] != nil {
             didPerformShortcut()
-        } else if launchOptions?[.sourceApplication] != nil || launchOptions?[.url]  != nil {
+        } else if userInfo?[UIApplication.LaunchOptionsKey.sourceApplication] != nil
+            || userInfo?[UIApplication.LaunchOptionsKey.url]  != nil {
             didOpenURL()
-        } else if launchOptions?[.remoteNotification] != nil || launchOptions?[.localNotification] != nil {
+        } else if userInfo?[UIApplication.LaunchOptionsKey.remoteNotification] != nil
+            || userInfo?[UIApplication.LaunchOptionsKey.localNotification] != nil {
             didReceiveNotification()
         }
     }

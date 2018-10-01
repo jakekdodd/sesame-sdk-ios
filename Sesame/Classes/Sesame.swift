@@ -209,11 +209,14 @@ extension Sesame: BMSAppLifecycleListener {
 
     func appLifecycleSessionDidStart(_ appLifecycle: BMSAppLifecycle, lastSession: BMSSessionId?) {
         addEvent(actionName: BMSSessionId.StartName)
+        if lastSession == nil {
+            sendBoot()
+        }
     }
 
     func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool) {
         guard let appOpenAction = appLifecycle.appOpenAction else { return }
-//        addEvent(actionName: BMSSessionId.AppOpenName)
+        addEvent(actionName: BMSSessionId.AppOpenName)
         addEvent(actionName: BMSEvent.AppOpenName,
                  metadata: appOpenAction.metadata,
                  reinforce: reinforceable)
@@ -316,7 +319,7 @@ extension Sesame {
                             var event = [String: Any]()
                             event["utc"] = reportEvent.utc
                             event["timezoneOffset"] = reportEvent.timezoneOffset
-                            event["metadata"] = reportEvent.metadata?.jsonDecoded()
+                            event["metadata"] = reportEvent.metadataAsDictionary
                             events.append(event)
                             context.delete(reportEvent)
                         }
