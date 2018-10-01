@@ -17,7 +17,7 @@ extension BMSReport {
     class func fetch(context: NSManagedObjectContext, userId: String) -> [BMSReport]? {
         var values: [BMSReport]?
         context.performAndWait {
-            let request = NSFetchRequest<BMSReport>(entityName: BMSReport.description())
+            let request = BMSReport.request()
             request.predicate = NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
             do {
                 values = try context.fetch(request)
@@ -31,7 +31,7 @@ extension BMSReport {
     class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSReport? {
         var value: BMSReport?
         context.performAndWait {
-            let request = NSFetchRequest<BMSReport>(entityName: BMSReport.description())
+            let request = BMSReport.request()
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'"),
                 NSPredicate(format: "\(#keyPath(BMSReport.actionName)) == '\(actionName)'")
@@ -50,7 +50,7 @@ extension BMSReport {
     class func delete(context: NSManagedObjectContext, userId: String) -> Int? {
         var value: Int?
         context.performAndWait {
-            let request = NSFetchRequest<BMSReport>(entityName: BMSReport.description())
+            let request = BMSReport.request()
             request.predicate = NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
             do {
                 value = try context.fetch(request).map({context.delete($0)}).count

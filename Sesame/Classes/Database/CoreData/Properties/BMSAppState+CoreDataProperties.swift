@@ -11,7 +11,7 @@ import CoreData
 
 extension BMSAppState {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<BMSAppState> {
+    class func request() -> NSFetchRequest<BMSAppState> {
         return NSFetchRequest<BMSAppState>(entityName: "BMSAppState")
     }
 

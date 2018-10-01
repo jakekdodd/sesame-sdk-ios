@@ -44,7 +44,7 @@ extension BMSCartridge {
     class func fetch(context: NSManagedObjectContext, userId: String) -> [BMSCartridge]? {
         var value: [BMSCartridge]?
         context.performAndWait {
-            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
+            let request = BMSCartridge.request()
             request.predicate = NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'")
             do {
                 value = try context.fetch(request)
@@ -58,7 +58,7 @@ extension BMSCartridge {
     class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> [BMSCartridge]? {
         var value: [BMSCartridge]?
         context.performAndWait {
-            let request = NSFetchRequest<BMSCartridge>(entityName: BMSCartridge.description())
+            let request = BMSCartridge.request()
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
                 NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")

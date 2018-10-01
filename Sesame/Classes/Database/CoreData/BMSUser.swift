@@ -24,7 +24,7 @@ extension BMSUser {
     class func fetch(context: NSManagedObjectContext, id: String) -> BMSUser? {
         var value: BMSUser?
         context.performAndWait {
-            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            let request = BMSUser.request()
             request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
             request.fetchLimit = 1
             do {
@@ -40,7 +40,7 @@ extension BMSUser {
     class func delete(context: NSManagedObjectContext) -> Int? {
         var value: Int?
         context.performAndWait {
-            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            let request = BMSUser.request()
             do {
                 value = try context.fetch(request).map({context.delete($0)}).count
                 if context.hasChanges {
@@ -56,7 +56,7 @@ extension BMSUser {
     class func insert(context: NSManagedObjectContext, id: String) -> BMSUser? {
         var value: BMSUser?
         context.performAndWait {
-            let request = NSFetchRequest<BMSUser>(entityName: BMSUser.description())
+            let request = BMSUser.request()
             request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
             if let entity = NSEntityDescription.entity(forEntityName: BMSUser.description(), in: context) {
                 let user = BMSUser(entity: entity, insertInto: context)

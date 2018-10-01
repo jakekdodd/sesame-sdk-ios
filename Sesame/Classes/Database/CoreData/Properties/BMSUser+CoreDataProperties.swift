@@ -11,7 +11,7 @@ import CoreData
 
 extension BMSUser {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<BMSUser> {
+    @nonobjc public class func request() -> NSFetchRequest<BMSUser> {
         return NSFetchRequest<BMSUser>(entityName: "BMSUser")
     }
 

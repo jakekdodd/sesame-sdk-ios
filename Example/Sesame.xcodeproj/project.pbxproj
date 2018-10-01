@@ -18,6 +18,7 @@
 		847734F6215EAE6E00D97B7C /* MockAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847734F5215EAE6E00D97B7C /* MockAPIClient.swift */; };
 		848553F22160D02D003DAE63 /* TestCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848553F12160D02D003DAE63 /* TestCoreData.swift */; };
 		8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8491A2E1211CE03B00069B94 /* Utilities.swift */; };
+		849B508221620E370096A91C /* TestApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B508121620E370096A91C /* TestApiClient.swift */; };
 		928C6686758FC2AEBEADC635 /* Pods_Sesame_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +53,7 @@
 		847734F5215EAE6E00D97B7C /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
 		848553F12160D02D003DAE63 /* TestCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestCoreData.swift; path = "/Users/cuddergambino/boundless/sesame-sdk-ios/Example/Tests/TestCoreData.swift"; sourceTree = "<absolute>"; };
 		8491A2E1211CE03B00069B94 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		849B508121620E370096A91C /* TestApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestApiClient.swift; sourceTree = "<group>"; };
 		B88D121BCE5EF6408FE87B07 /* Sesame.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Sesame.podspec; path = ../Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		DD22E7534AAD9CEB9629A0DB /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E79B94BD43C4858BD5BB6A7A /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +139,7 @@
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				848553F12160D02D003DAE63 /* TestCoreData.swift */,
+				849B508121620E370096A91C /* TestApiClient.swift */,
 				8472FB80213A7486003B86CE /* Sesame+Extensions.swift */,
 				847734F5215EAE6E00D97B7C /* MockAPIClient.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
@@ -368,6 +371,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				849B508221620E370096A91C /* TestApiClient.swift in Sources */,
 				848553F22160D02D003DAE63 /* TestCoreData.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				8472FB82213A7499003B86CE /* Sesame+Extensions.swift in Sources */,

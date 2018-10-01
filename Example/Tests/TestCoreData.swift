@@ -124,7 +124,9 @@ class TestCoreData: XCTestCase {
 
         coreData.inNewContext { context in
             guard let user = BMSUser.insert(context: context, id: testUserId) else { fatalError() }
-            XCTAssert(BMSCartridge.fetch(context: context, userId: testUserId, actionName: testActionName)?.isEmpty ?? false)
+            XCTAssert(BMSCartridge.fetch(context: context,
+                                         userId: testUserId,
+                                         actionName: testActionName)?.isEmpty ?? false)
 
             guard let cartridge = BMSCartridge.insert(context: context,
                                                       userId: user.id,

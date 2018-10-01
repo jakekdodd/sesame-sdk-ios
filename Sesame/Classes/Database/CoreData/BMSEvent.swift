@@ -54,7 +54,7 @@ extension BMSEvent {
     class func count(context: NSManagedObjectContext, userId: String? = nil) -> Int? {
         var value: Int?
         context.performAndWait {
-            let request = NSFetchRequest<BMSEvent>(entityName: BMSEvent.description())
+            let request = BMSEvent.request()
             if let userId = userId {
                 request.predicate = NSPredicate(format: "\(#keyPath(BMSEvent.report.user.id)) == '\(userId)'")
             }

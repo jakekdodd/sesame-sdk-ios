@@ -11,7 +11,7 @@ import CoreData
 
 extension BMSEvent {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<BMSEvent> {
+    @nonobjc class func request() -> NSFetchRequest<BMSEvent> {
         return NSFetchRequest<BMSEvent>(entityName: "BMSEvent")
     }
 

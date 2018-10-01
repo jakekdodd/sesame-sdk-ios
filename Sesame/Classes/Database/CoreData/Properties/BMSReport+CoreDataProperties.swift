@@ -21,7 +21,7 @@ import CoreData
 
 extension BMSReport {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<BMSReport> {
+    @nonobjc class func request() -> NSFetchRequest<BMSReport> {
         return NSFetchRequest<BMSReport>(entityName: "BMSReport")
     }
 

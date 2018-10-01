@@ -11,7 +11,7 @@ import CoreData
 
 extension BMSCartridge {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<BMSCartridge> {
+    @nonobjc class func request() -> NSFetchRequest<BMSCartridge> {
         return NSFetchRequest<BMSCartridge>(entityName: "BMSCartridge")
     }
 

@@ -11,7 +11,7 @@ import CoreData
 
 extension BMSReinforcement {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<BMSReinforcement> {
+    @nonobjc class func request() -> NSFetchRequest<BMSReinforcement> {
         return NSFetchRequest<BMSReinforcement>(entityName: "BMSReinforcement")
     }
 
