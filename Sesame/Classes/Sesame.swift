@@ -49,20 +49,8 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    @objc public var appLifecycleTracker: BMSAppLifecycleTracker
+    @objc public var appLifecycleTracker: BMSAppLifecycle
     var trackingOptions: BMSEventMetadataOptions
-    var sessionId: BMSSessionId? {
-        willSet {
-            if sessionId != nil {
-                addEvent(actionName: BMSEvent.SessionEndName)
-            }
-        }
-        didSet {
-            if sessionId != nil {
-                addEvent(actionName: BMSEvent.SessionStartName)
-            }
-        }
-    }
     let appId: String
 
     @objc
@@ -70,7 +58,7 @@ public class Sesame: NSObject {
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.trackingOptions = .standard()
-        self.appLifecycleTracker = BMSAppLifecycleTracker()
+        self.appLifecycleTracker = BMSAppLifecycle()
         self.appId = appId
 
         super.init()
@@ -89,8 +77,7 @@ public class Sesame: NSObject {
             setUserId(context, userId)
         }
 
-        appLifecycleTracker.sesame = self
-        appLifecycleTracker.isRegisteredForNotification = true
+        appLifecycleTracker.listener = self
     }
 
     var eventUploadCount: Int = 20
@@ -158,11 +145,11 @@ public extension Sesame {
                 else { return }
             var metadata = metadata
             trackingOptions.annotate(&metadata)
-            metadata["sessionTimeElapsed"] = sessionId?.elapsedTime()
+            metadata[BMSSessionId.TimeElapsedName] = appLifecycleTracker.sessionId?.timeElapsed()
             guard let event = BMSEvent.insert(context: context,
                                               userId: user.id,
                                               actionName: actionName,
-                                              sessionId: sessionId as NSNumber?,
+                                              sessionId: appLifecycleTracker.sessionId as NSNumber?,
                                               metadata: metadata) else { return }
             if reinforce,
                 let reinforcement = BMSCartridge.fetch(context: context,
@@ -214,6 +201,40 @@ public extension Sesame {
     public func tracking(option: BMSEventMetadataOption, enabled: Bool) {
         enabled ? trackingOptions.enable(option) : trackingOptions.disable(option)
     }
+}
+
+// MARK: - App Open Reinforcement
+
+extension Sesame: BMSAppLifecycleListener {
+
+    func appLifecycleSessionDidStart(_ appLifecycle: BMSAppLifecycle, lastSession: BMSSessionId?) {
+        addEvent(actionName: BMSSessionId.StartName)
+    }
+
+    func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool) {
+        guard let appOpenAction = appLifecycle.appOpenAction else { return }
+//        addEvent(actionName: BMSSessionId.AppOpenName)
+        addEvent(actionName: BMSEvent.AppOpenName,
+                 metadata: appOpenAction.metadata,
+                 reinforce: reinforceable)
+    }
+
+    func appLifecycleSessionInterrupetionWillStart(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.InterruptionStartName)
+    }
+
+    func appLifecycleSessionInterrupetionDidEnd(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.InterruptionEndName)
+    }
+
+    func appLifecycleSessionAppWillClose(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.AppCloseName)
+    }
+
+    func appLifecycleSessionWillEnd(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.EndName)
+    }
+
 }
 
 // MARK: - HTTP Methods
@@ -297,11 +318,11 @@ extension Sesame {
                             event["timezoneOffset"] = reportEvent.timezoneOffset
                             event["metadata"] = reportEvent.metadata?.jsonDecoded()
                             events.append(event)
+                            context.delete(reportEvent)
                         }
                         track["events"] = events
 
                         tracks.append(track)
-                        context.delete(report)
                     }
                 }
                 do {

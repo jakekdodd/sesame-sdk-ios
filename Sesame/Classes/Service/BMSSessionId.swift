@@ -14,7 +14,15 @@ extension Optional where Wrapped == BMSSessionId {
 }
 
 extension BMSSessionId {
-    func elapsedTime() -> Int64 {
+    static let AppOpenName = "BMSSessionSessionAppOpen"
+    static let AppCloseName = "BMSSessionAppClose"
+    static let StartName = "BMSSessionStart"
+    static let EndName = "BMSSessionEnd"
+    static let InterruptionStartName = "BMSSessionInterruptionStart"
+    static let InterruptionEndName = "BMSSessionInterruptionEnd"
+    static let TimeElapsedName = "BMSSessionTimeElapsed"
+
+    func timeElapsed() -> Int64 {
         return BMSSessionId?.new - self
     }
 }

@@ -30,8 +30,8 @@
 		8F2A9291849E50AA25DDB898F9CB859E /* sheen.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BC4F1E3BA6FC4B4E0E9C1CFD6071D4 /* sheen.png */; };
 		90A05C5F662265D038C91FDDEB72C3E1 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA174BA53EBFB08103B5EF836738590 /* String+Extensions.swift */; };
 		92061D1CA96BAC237DB507F7355A0F3D /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A0A459A230193A25C87C9FB8440A1B /* UIWindow+Extensions.swift */; };
-		975DF83E6E873E60F51D6CB6B09CD71A /* BMSEventAppOpen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D8C5D6917F302C4E8A35C78FF68E08 /* BMSEventAppOpen.swift */; };
-		98E619883FA8A7E52558F65E4C5D92ED /* BMSAppLifecycleTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FEE33548A82522370C1B08414D14F8 /* BMSAppLifecycleTracker.swift */; };
+		975DF83E6E873E60F51D6CB6B09CD71A /* BMSAppOpenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D8C5D6917F302C4E8A35C78FF68E08 /* BMSAppOpenAction.swift */; };
+		98E619883FA8A7E52558F65E4C5D92ED /* BMSAppLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FEE33548A82522370C1B08414D14F8 /* BMSAppLifecycle.swift */; };
 		9AF5E50A0A2FA504A2FBA198F55E1D85 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802956692EEBC0793EC391D8B4C18586 /* CoreDataManager.swift */; };
 		A4D8D1570A8CCB194B4B7C26F8272D60 /* BMSUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92ED6960FE9C7A55ECF1AABA888C89D /* BMSUser.swift */; };
 		A9AB64B2D40C7401643B1C187C50743D /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C902FAAB62E299BD79BC4FE6A50789 /* UIDevice+Extensions.swift */; };
@@ -125,7 +125,7 @@
 		6CBA969CFB372812E1B1AFFC32B83A69 /* BMSReport+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSReport+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7473EBBED7EA098CC0C970F550A56FDC /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		74E966C4F71780B838BB85CCD2BA4A8A /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
-		74FEE33548A82522370C1B08414D14F8 /* BMSAppLifecycleTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppLifecycleTracker.swift; sourceTree = "<group>"; };
+		74FEE33548A82522370C1B08414D14F8 /* BMSAppLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppLifecycle.swift; sourceTree = "<group>"; };
 		79E1B86EF9C5348E5701E2EF04245555 /* BMSReinforcement.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSReinforcement.swift; sourceTree = "<group>"; };
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
 		7DE93E5B05373DFCBEDF8A57FB6D3615 /* BMSEventMetadataOption.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEventMetadataOption.swift; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 		9660611AFCE8D5424B7D6117413D3BCA /* Sesame.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sesame.xcconfig; sourceTree = "<group>"; };
 		984AE0F0FFF54104CED8C53AC457B957 /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
 		A0B908D7CFD332B21CBC2E4D272D388B /* BMSLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BMSLog.swift; path = Sesame/Classes/BMSLog.swift; sourceTree = "<group>"; };
-		A3D8C5D6917F302C4E8A35C78FF68E08 /* BMSEventAppOpen.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEventAppOpen.swift; sourceTree = "<group>"; };
+		A3D8C5D6917F302C4E8A35C78FF68E08 /* BMSAppOpenAction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppOpenAction.swift; sourceTree = "<group>"; };
 		A9CB68DA9C4353641F03FC630D33994F /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
 		AB895FADDBD0F9AC58F5C6B69A218187 /* Pods-Sesame_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		ABE71E5B9F315C1DDB0FBB9D8FDE9A63 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
@@ -438,8 +438,8 @@
 		F7BD4DFE20A0D232B5232F2D1227626A /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				74FEE33548A82522370C1B08414D14F8 /* BMSAppLifecycleTracker.swift */,
-				A3D8C5D6917F302C4E8A35C78FF68E08 /* BMSEventAppOpen.swift */,
+				74FEE33548A82522370C1B08414D14F8 /* BMSAppLifecycle.swift */,
+				A3D8C5D6917F302C4E8A35C78FF68E08 /* BMSAppOpenAction.swift */,
 				7DE93E5B05373DFCBEDF8A57FB6D3615 /* BMSEventMetadataOption.swift */,
 				58DEFBB37F7FC7352D038C9ED467B7F5 /* BMSSessionId.swift */,
 				472CF8824EEFA047DC3EF6599E244490 /* Cue.swift */,
@@ -620,7 +620,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F068960388D38A4165A23F888E8E7FC /* APIClient.swift in Sources */,
-				98E619883FA8A7E52558F65E4C5D92ED /* BMSAppLifecycleTracker.swift in Sources */,
+				98E619883FA8A7E52558F65E4C5D92ED /* BMSAppLifecycle.swift in Sources */,
 				5385C978D0B75C9B573ABD46C6E5F433 /* BMSAppState+CoreDataProperties.swift in Sources */,
 				3AF7E6FACB227C6339C34ED4CC73338C /* BMSAppState.swift in Sources */,
 				C0CC95467BB7FC7AF98D38D212417365 /* BMSCartridge+CoreDataProperties.swift in Sources */,
@@ -630,7 +630,7 @@
 				C0565FA12D372E467C55C435A4C30C37 /* BMSEmojiplosionEffectView.swift in Sources */,
 				C61A5E01E8F71D984D183B71E09FAD61 /* BMSEvent+CoreDataProperties.swift in Sources */,
 				BDF59434AC5604F6F1FBF5AC964AF0E7 /* BMSEvent.swift in Sources */,
-				975DF83E6E873E60F51D6CB6B09CD71A /* BMSEventAppOpen.swift in Sources */,
+				975DF83E6E873E60F51D6CB6B09CD71A /* BMSAppOpenAction.swift in Sources */,
 				3B04C86D1E0E6DC73E950B6A77BD7988 /* BMSEventMetadataOption.swift in Sources */,
 				B9E4B53028BAAD1F9CEED6341BC7958A /* BMSLog.swift in Sources */,
 				FB3CE4CE1B9D12E881F262BC27993A17 /* BMSReinforcement+CoreDataProperties.swift in Sources */,

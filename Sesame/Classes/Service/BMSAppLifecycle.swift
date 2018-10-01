@@ -1,5 +1,5 @@
 //
-//  BMSApplicationLifecycleTracker.swift
+//  BMSAppLifecycleTracker.swift
 //  Sesame
 //
 //  Created by Akash Desai on 9/13/18.
@@ -7,28 +7,29 @@
 
 import UIKit
 
-open class BMSAppLifecycleTracker: NSObject {
+protocol BMSAppLifecycleListener: class {
+    func appLifecycleSessionDidStart(_ appLifecycle: BMSAppLifecycle, lastSession: BMSSessionId?)
+    func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool)
+    func appLifecycleSessionInterrupetionWillStart(_ appLifecycle: BMSAppLifecycle)
+    func appLifecycleSessionInterrupetionDidEnd(_ appLifecycle: BMSAppLifecycle)
+    func appLifecycleSessionAppWillClose(_ appLifecycle: BMSAppLifecycle)
+    func appLifecycleSessionWillEnd(_ appLifecycle: BMSAppLifecycle)
+}
 
-    weak var sesame: Sesame?
-    public var isRegisteredForNotification = false {
-        didSet (wasRegisteredForNotification) {
-            switch (wasRegisteredForNotification, isRegisteredForNotification) {
-            case (false, true): registerNotifications()
-            case (true, false): unregisterNotifications()
-            default: break
-            }
-        }
-    }
+open class BMSAppLifecycle: NSObject {
 
-    fileprivate var appOpenAction: BMSEventAppOpen? {
+    weak var listener: BMSAppLifecycleListener?
+
+    var appOpenAction: BMSAppOpenAction? {
         willSet {
             if appOpenAction != nil {
-                sesame?.sessionId = nil
+                listener?.appLifecycleSessionAppWillClose(self)
+                sessionId = nil
             }
         }
         didSet {
             if let appOpenAction = appOpenAction {
-                sesame?.sessionId = .new
+                sessionId = .new
                 let reinforce: Bool
                 switch appOpenAction.cueCategory {
                 case .external, .internal:
@@ -36,7 +37,7 @@ open class BMSAppLifecycleTracker: NSObject {
                 case .synthetic:
                     reinforce = false
                 }
-                sesame?.addEvent(actionName: appOpenAction.name, metadata: appOpenAction.metadata, reinforce: reinforce)
+                listener?.appLifecycleSessionAppDidOpen(self, reinforceable: reinforce)
             }
         }
     }
@@ -44,38 +45,42 @@ open class BMSAppLifecycleTracker: NSObject {
     fileprivate var appIsInterrupted = false {
         didSet (appWasInterrupted) {
             switch (appWasInterrupted, appIsInterrupted) {
-            case (false, true): sesame?.addEvent(actionName: BMSEvent.SessionInterruptionStartName)
-            case (true, false): sesame?.addEvent(actionName: BMSEvent.SessionInterruptionEndName)
+            case (false, true): listener?.appLifecycleSessionInterrupetionWillStart(self)
+            case (true, false): listener?.appLifecycleSessionInterrupetionDidEnd(self)
             default: break
             }
         }
     }
 
-    public var notificationsToRegister = [
+    var sessionId: BMSSessionId? {
+        willSet {
+            if sessionId != nil {
+                listener?.appLifecycleSessionWillEnd(self)
+            }
+        }
+        didSet {
+            if sessionId != nil {
+                listener?.appLifecycleSessionDidStart(self, lastSession: oldValue)
+            }
+        }
+    }
+
+    fileprivate var notificationsToRegister = [
         UIApplication.willTerminateNotification,
         UIApplication.didBecomeActiveNotification,
         UIApplication.willResignActiveNotification,
         UIApplication.didEnterBackgroundNotification
     ]
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    func registerNotifications() {
+    public override init() {
+        super.init()
         for notification in notificationsToRegister { //swiftlint:disable:next line_length
             NotificationCenter.default.addObserver(self, selector: #selector(receive(_:)), name: notification, object: nil)
         }
-        isRegisteredForNotification = true
-        BMSLog.info("did register for notifications")
     }
 
-    func unregisterNotifications() {
-        for notification in notificationsToRegister {
-            NotificationCenter.default.removeObserver(self, name: notification, object: nil)
-        }
-        isRegisteredForNotification = false
-        BMSLog.info("did unregister for notifications")
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     @objc func receive(_ notification: Notification) {
@@ -92,7 +97,7 @@ open class BMSAppLifecycleTracker: NSObject {
 
 // MARK: - Tracked Events
 
-extension BMSAppLifecycleTracker {
+extension BMSAppLifecycle {
 
     // MARK: - UIApplicationDidFinishLaunching
 
@@ -104,7 +109,7 @@ extension BMSAppLifecycleTracker {
     /// - Parameter launchOptions: launchOptions
     @objc
     public func didLaunch(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
-        sesame?.sendBoot()
+//        sesame?.sendBoot()
 
         if #available(iOS 9.0, *), launchOptions?[.shortcutItem] != nil {
             didPerformShortcut()
@@ -120,7 +125,7 @@ extension BMSAppLifecycleTracker {
     @objc
     public func didPerformShortcut() {
         if appOpenAction == nil {
-            appOpenAction = BMSEventAppOpen(source: .shortcut)
+            appOpenAction = BMSAppOpenAction(source: .shortcut)
         }
     }
 
@@ -129,7 +134,7 @@ extension BMSAppLifecycleTracker {
     @objc
     public func didOpenURL() {
         if appOpenAction == nil {
-            appOpenAction = BMSEventAppOpen(source: .deepLink)
+            appOpenAction = BMSAppOpenAction(source: .deepLink)
         }
     }
 
@@ -138,7 +143,7 @@ extension BMSAppLifecycleTracker {
     @objc
     public func didReceiveNotification() {
         if appOpenAction == nil {
-            appOpenAction = BMSEventAppOpen(source: .notification)
+            appOpenAction = BMSAppOpenAction(source: .notification)
         }
     }
 
@@ -154,7 +159,7 @@ extension BMSAppLifecycleTracker {
     @objc
     public func didBecomeActive() {
         if appOpenAction == nil {
-            appOpenAction = BMSEventAppOpen(source: .default)
+            appOpenAction = BMSAppOpenAction(source: .default)
         }
         appIsInterrupted = false
     }

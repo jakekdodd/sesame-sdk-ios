@@ -1,5 +1,5 @@
 //
-//  BMSEventAppOpen.swift
+//  BMSAppOpenAction.swift
 //  Sesame
 //
 //  Created by Akash Desai on 8/20/18.
@@ -12,9 +12,9 @@ import Foundation
 /// This struct stores the action and also its cue.
 /// A reward can then adjust according to what cued the user to open the app.
 ///
-struct BMSEventAppOpen {
+struct BMSAppOpenAction {
 
-    enum Source {
+    enum Source: String {
         case  `default`, shortcut, deepLink, notification
 
         public var cueCategory: Cue.Category {
@@ -39,10 +39,13 @@ struct BMSEventAppOpen {
         return source.cueCategory
     }
 
-    init(source: Source, date: Date = Date()) {
+    init(source: Source, metadata: [String: Any] = [:], date: Date = Date()) {
         self.source = source
         self.date = date
-        self.metadata = ["BMSCueCategory": source.cueCategory.rawValue]
+        self.metadata =  metadata
+
+        self.metadata["BMSAppOpenActionSource"] = source.rawValue
+        self.metadata["BMSCueCategory"] = source.cueCategory.rawValue
     }
 
 }

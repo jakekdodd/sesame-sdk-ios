@@ -46,24 +46,6 @@ extension BMSReport {
         return value
     }
 
-    @discardableResult
-    class func delete(context: NSManagedObjectContext, userId: String) -> Int? {
-        var value: Int?
-        context.performAndWait {
-            let request = BMSReport.request()
-            request.predicate = NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
-            do {
-                value = try context.fetch(request).map({context.delete($0)}).count
-                if context.hasChanges {
-                    try context.save()
-                }
-            } catch {
-                BMSLog.error(error)
-            }
-        }
-        return value
-    }
-
     class func insert(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSReport? {
         var value: BMSReport?
         context.performAndWait {

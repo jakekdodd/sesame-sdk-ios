@@ -1,5 +1,5 @@
 //
-//  TestCoreData.swift
+//  Test+CoreData.swift
 //  
 //
 //  Created by Akash Desai on 9/30/18.
@@ -194,6 +194,7 @@ extension CoreDataManager {
         let context = newContext()
         context.performAndWait {
             completion(context)
+            try? context.save()
         }
     }
 }
