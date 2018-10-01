@@ -92,7 +92,13 @@ class Tests: XCTestCase {
         let setUser2 = { currentUser = user2; sesame.setUserId(currentUser) }
         let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
         let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: currentUser) ?? -1 }
-        let deleteReports = { BMSReport.delete(context: sesame.coreDataManager.newContext(), userId: currentUser) }
+        let deleteEvents = {
+            sesame.coreDataManager.inNewContext { context in
+                _ = (BMSReport.fetch(context: context, userId: currentUser, actionName: BMSEvent.AppOpenName)?
+                    .events.array as? [BMSEvent])?
+                    .map({context.delete($0)})
+            }
+        }
 
         sesame.setUserId(nil)
         XCTAssert(sesame.getUserId() == nil)
@@ -118,12 +124,12 @@ class Tests: XCTestCase {
         setUser2()
         XCTAssert(sesame.getUserId() == user2)
         XCTAssert(countEvents() == 1)
-        deleteReports()
+        deleteEvents()
         XCTAssert(countEvents() == 0)
 
         setUser1()
         XCTAssert(countEvents() == 2)
-        deleteReports()
+        deleteEvents()
         XCTAssert(countEvents() == 0)
     }
 
