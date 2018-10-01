@@ -42,7 +42,7 @@ import Foundation
     }
 
     @objc open class func warning(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
-        BMSLog.print(.warning, message, filePath: filePath, function: function, line: line)
+        BMSLog.print(.warning, "⚠️ \(message)", filePath: filePath, function: function, line: line)
     }
 
     @objc open class func error(_ message: Any, filePath: String = #file, function: String =  #function, line: Int = #line) {
