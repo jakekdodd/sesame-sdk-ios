@@ -5,9 +5,7 @@ target 'Sesame_Example' do
   pod 'Sesame', :path => '../'
 
   target 'Sesame_Tests' do
-    inherit! :search_paths
-
-    
+      inherit! :search_paths
   end
 end
 
