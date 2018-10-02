@@ -22,10 +22,11 @@ class BMSCartridge: NSManagedObject {
         guard let context = managedObjectContext else { return nil }
         var value: BMSReinforcement?
         context.performAndWait {
+//            BMSLog.warning("Total Cartridges: \(BMSCartridge.fetch(context: context, userId: user.id)?.count ?? -1)")
             if let reinforcements = reinforcements.array as? [BMSReinforcement],
                 let reinforcement = reinforcements.filter({$0.event == nil}).first {
                 value = reinforcement
-                BMSLog.warning("Reinforcements:\(reinforcements.count)")
+//                BMSLog.warning("Available Reinforcements:\(reinforcements.filter({$0.event == nil}).count)")
             } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
                 let reinforcement = BMSReinforcement.insert(context: context,
                                                             cartridge: self,
