@@ -339,15 +339,15 @@ extension Sesame {
                 }
                 return tracks
             }()
-            api.post(endpoint: .track, jsonObject: payload) { response in
-                guard let response = response,
-                    response["errors"] == nil else {
-                        completion(false)
-                        return
-                }
+//            api.post(endpoint: .track, jsonObject: payload) { response in
+//                guard let response = response,
+//                    response["errors"] == nil else {
+//                        completion(false)
+//                        return
+//                }
                 completion(true)
                 self.uploadScheduled = false
-            }
+//            }
         }
     }
 
