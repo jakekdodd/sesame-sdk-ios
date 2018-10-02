@@ -12,7 +12,8 @@ public typealias BMSEventMetadataOptions = [BMSEventMetadataOption]
 public extension Array where Element == BMSEventMetadataOption {
 
     static func standard() -> BMSEventMetadataOptions {
-        return [.deviceModel, .carrier, .country, .language]
+//        return [.deviceModel, .carrier, .country, .language]
+        return []
     }
 
     mutating func enable(_ option: BMSEventMetadataOption) {
