@@ -136,7 +136,7 @@ public extension Sesame {
         return userId
     }
 
-    internal func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
+    public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
         var reinforcementName: String?
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
@@ -177,12 +177,12 @@ public extension Sesame {
             if eventCount ?? 0 >= eventUploadCount {
                 sendTracks(context: context, userId: user.id)
             }
+        }
 
-            if let reinforcementName = reinforcementName {
-                BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
-                _reinforcementEffect = (reinforcementName, [:])
-                sendRefresh(context: context, userId: user.id, actionName: actionName)
-            }
+        if let reinforcementName = reinforcementName {
+            BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
+            _reinforcementEffect = (reinforcementName, [:])
+            self.sendRefresh(actionName: actionName)
         }
     }
 
@@ -209,9 +209,6 @@ extension Sesame: BMSAppLifecycleListener {
 
     func appLifecycleSessionDidStart(_ appLifecycle: BMSAppLifecycle, lastSession: BMSSessionId?) {
         addEvent(actionName: BMSSessionId.StartName)
-        if lastSession == nil {
-            sendBoot()
-        }
     }
 
     func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool) {
@@ -301,6 +298,8 @@ extension Sesame {
 
     func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
+            guard !uploadScheduled else { return }
+            uploadScheduled = true
             guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else { return }
             var payload = api.createPayload(appId: appState.appId,
@@ -327,15 +326,19 @@ extension Sesame {
 
                         tracks.append(track)
                     }
-                }
-                do {
-                    try context.save()
-                } catch {
-                    BMSLog.error(error)
+                    // delete empty cartridges after reinforcements are deleted with events
+                    _ = BMSCartridge.fetch(context: context, userId: userId)?
+                        .filter({$0.reinforcements.count == 0})
+                        .map({context.delete($0)})
+
+                    do {
+                        try context.save()
+                    } catch {
+                        BMSLog.error(error)
+                    }
                 }
                 return tracks
             }()
-
             api.post(endpoint: .track, jsonObject: payload) { response in
                 guard let response = response,
                     response["errors"] == nil else {
@@ -343,14 +346,16 @@ extension Sesame {
                         return
                 }
                 completion(true)
+                self.uploadScheduled = false
             }
         }
     }
 
-    func sendRefresh(context: NSManagedObjectContext? = nil, userId: String, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
+    func sendRefresh(context: NSManagedObjectContext? = nil, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             guard let appState = BMSAppState.fetch(context: context, appId: appId),
+                let userId = appState.user?.id,
                 BMSCartridge.fetch(context: context,
                                    userId: userId,
                                    actionName: actionName)?.first?.needsRefresh ?? true
@@ -359,7 +364,7 @@ extension Sesame {
             var payload = api.createPayload(appId: appState.appId,
                                             versionId: appState.versionId,
                                             secret: appState.auth,
-                                            primaryIdentity: appState.user?.id)
+                                            primaryIdentity: userId)
             payload["actionName"] = actionName
 
             api.post(endpoint: .refresh, jsonObject: payload) { response in
@@ -373,6 +378,7 @@ extension Sesame {
                         return
                 }
                 let reinforcementNames = reinforcements.compactMap({$0["reinforcementName"]})
+                let context = self.coreDataManager.newContext()
                 context.performAndWait {
                     BMSCartridge.insert(context: context,
                                         userId: userId,

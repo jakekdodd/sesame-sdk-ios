@@ -23,8 +23,8 @@
         <attribute name="sessionId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="timezoneOffset" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="utc" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="reinforcement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BMSReinforcement" inverseName="event" inverseEntity="BMSReinforcement" syncable="YES"/>
-        <relationship name="report" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BMSReport" inverseName="events" inverseEntity="BMSReport" syncable="YES"/>
+        <relationship name="reinforcement" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BMSReinforcement" inverseName="event" inverseEntity="BMSReinforcement" syncable="YES"/>
+        <relationship name="report" maxCount="1" deletionRule="Cascade" destinationEntity="BMSReport" inverseName="events" inverseEntity="BMSReport" syncable="YES"/>
     </entity>
     <entity name="BMSReinforcement" representedClassName="BMSReinforcement" syncable="YES">
         <attribute name="name" attributeType="String" syncable="YES"/>

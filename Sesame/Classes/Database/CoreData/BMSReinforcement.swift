@@ -23,8 +23,8 @@ extension BMSReinforcement {
             if let entity =
                 NSEntityDescription.entity(forEntityName: BMSReinforcement.description(), in: context) {
                 let reinforcement = BMSReinforcement(entity: entity, insertInto: context)
-                reinforcement.cartridge = cartridge
                 reinforcement.name = name
+                cartridge.addToReinforcements(reinforcement)
                 do {
                     try context.save()
                 } catch let error as NSError {

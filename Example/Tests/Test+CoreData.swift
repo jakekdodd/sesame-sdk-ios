@@ -116,6 +116,10 @@ class TestCoreData: XCTestCase {
                 else { fatalError() }
 
             guard cartridge.nextReinforcement == nil else { fatalError() }
+
+            _ = (BMSReport.fetch(context: context, userId: user.id)?
+                .flatMap({$0.events}) as? [BMSEvent])?.compactMap({context.delete($0)})
+            XCTAssert(BMSReport.fetch(context: context, userId: user.id)?.count == 0)
         }
     }
 
