@@ -27,6 +27,7 @@
         <relationship name="report" maxCount="1" deletionRule="Cascade" destinationEntity="BMSReport" inverseName="events" inverseEntity="BMSReport" syncable="YES"/>
     </entity>
     <entity name="BMSReinforcement" representedClassName="BMSReinforcement" syncable="YES">
+        <attribute name="idx" optional="YES" attributeType="Integer 32" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="cartridge" maxCount="1" deletionRule="Nullify" destinationEntity="BMSCartridge" inverseName="reinforcements" inverseEntity="BMSCartridge" syncable="YES"/>
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BMSEvent" inverseName="reinforcement" inverseEntity="BMSEvent" syncable="YES"/>
@@ -47,7 +48,7 @@
         <element name="BMSAppState" positionX="160" positionY="192" width="128" height="165"/>
         <element name="BMSCartridge" positionX="-1008" positionY="72" width="128" height="135"/>
         <element name="BMSEvent" positionX="-200" positionY="72" width="128" height="135"/>
-        <element name="BMSReinforcement" positionX="-1188" positionY="144" width="128" height="90"/>
+        <element name="BMSReinforcement" positionX="-1188" positionY="144" width="128" height="105"/>
         <element name="BMSReport" positionX="-416" positionY="72" width="128" height="105"/>
         <element name="BMSUser" positionX="-632" positionY="72" width="128" height="105"/>
     </elements>

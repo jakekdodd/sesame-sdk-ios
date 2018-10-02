@@ -30,7 +30,9 @@ class BMSCartridge: NSManagedObject {
             } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
                 let reinforcement = BMSReinforcement.insert(context: context,
                                                             cartridge: self,
-                                                            name: BMSReinforcement.NeutralName) {
+                                                            name: BMSReinforcement.NeutralName,
+                                                            idx: Int32(reinforcements.count)
+                                                            ) {
                 BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
                 value = reinforcement
             }
@@ -86,8 +88,10 @@ extension BMSCartridge {
                 cartridge.cartridgeId = cartridgeId
                 cartridge.utc = utc
                 cartridge.ttl = ttl
+                var idx: Int32 = 0
                 _ = reinforcementNames.compactMap({
-                    BMSReinforcement.insert(context: context, cartridge: cartridge, name: $0)
+                    _ = BMSReinforcement.insert(context: context, cartridge: cartridge, name: $0, idx: idx)
+                    idx += 1
                 })
                 do {
                     try context.save()

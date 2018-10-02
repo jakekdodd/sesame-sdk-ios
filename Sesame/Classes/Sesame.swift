@@ -319,6 +319,8 @@ extension Sesame {
                             event["utc"] = reportEvent.utc
                             event["timezoneOffset"] = reportEvent.timezoneOffset
                             event["metadata"] = reportEvent.metadataAsDictionary
+                            event["reinforcementDecision"] = reportEvent.reinforcement?.name
+                            event["idx"] = reportEvent.reinforcement?.idx
                             events.append(event)
                             context.delete(reportEvent)
                         }
@@ -337,6 +339,7 @@ extension Sesame {
                         BMSLog.error(error)
                     }
                 }
+                BMSLog.verbose(tracks as AnyObject)
                 return tracks
             }()
 //            api.post(endpoint: .track, jsonObject: payload) { response in

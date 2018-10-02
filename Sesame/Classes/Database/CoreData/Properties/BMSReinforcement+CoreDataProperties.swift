@@ -16,6 +16,7 @@ extension BMSReinforcement {
     }
 
     @NSManaged var name: String
+    @NSManaged var idx: Int32
     @NSManaged var cartridge: BMSCartridge
     @NSManaged var event: BMSEvent?
 
