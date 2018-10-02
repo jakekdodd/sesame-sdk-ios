@@ -105,6 +105,9 @@ extension BMSAppLifecycle {
 
     @objc
     public func didLaunch(_ userInfo: [AnyHashable: Any]?) {
+        if let sesame = listener as? Sesame {
+            sesame.sendBoot()
+        }
         if #available(iOS 9.0, *),
             userInfo?[UIApplication.LaunchOptionsKey.shortcutItem] != nil {
             didPerformShortcut()
