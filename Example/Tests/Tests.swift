@@ -133,6 +133,25 @@ class Tests: XCTestCase {
         XCTAssert(countEvents() == 0)
     }
 
+    func testSendTracks() {
+        let sesame = Sesame.dev()
+
+        sesame.addEvent(actionName: "action1")
+        sesame.addEvent(actionName: "action1")
+        sesame.addEvent(actionName: "action2")
+
+        let promise = expectation(description: "Did send tracks")
+        sesame.sendTracks(context: sesame.coreDataManager.newContext(), userId: sesame.getUserId()!) { success in
+            XCTAssert(success)
+            XCTAssert(BMSReport.fetch(context: sesame.coreDataManager.newContext(),
+                                      userId: sesame.getUserId()!)?
+                .count == 0)
+            promise.fulfill()
+        }
+
+        waitForExpectations(timeout: 3)
+    }
+
     func testCartridgeStorage() {
         let sesame = Sesame.dev()
 
@@ -152,29 +171,20 @@ class Tests: XCTestCase {
     func testCartridgeRefresh() {
         let sesame = Sesame.dev()
 
-        let promise = expectation(description: "Did boot")
+        let promise = expectation(description: "Did refresh")
         sesame.sendBoot { _ in
             let context = sesame.coreDataManager.newContext()
             context.performAndWait {
                 guard let userId = sesame.getUserId(context) else {
                     fatalError()
                 }
-                let cartridges = BMSCartridge.fetch(context: context, userId: userId) ?? []
-//                XCTAssert(!cartridges.isEmpty)
-                for cartridge in cartridges {
-                    XCTAssert(cartridge.reinforcements.count == 0)
-                    sesame.sendRefresh(context: context, userId: userId, actionName: cartridge.actionName) { success in
-                        XCTAssert(success)
-                        let context = sesame.coreDataManager.newContext()
-                        context.performAndWait {
-                            let cartridges = BMSCartridge.fetch(context: context, userId: userId) ?? []
-                            if !cartridges.isEmpty {
-                                for cartridge in cartridges {
-                                    XCTAssert(cartridge.reinforcements.count > 0)
-                                }
-                                promise.fulfill()
-                            } else { XCTFail("No cartridges") }
-                        }
+                sesame.sendRefresh(context: context, actionName: BMSEvent.AppOpenName) { success in
+                    XCTAssert(success)
+                    let context = sesame.coreDataManager.newContext()
+                    context.performAndWait {
+                        guard let cartridges = BMSCartridge.fetch(context: context, userId: userId)?.first else { fatalError() }
+                        XCTAssert(!cartridges.reinforcements.array.isEmpty)
+                        promise.fulfill()
                     }
                 }
             }
