@@ -15,7 +15,7 @@ extension BMSCartridge {
         return NSFetchRequest<BMSCartridge>(entityName: "BMSCartridge")
     }
 
-    @NSManaged var actionName: String
+    @NSManaged var actionId: String
     @NSManaged var cartridgeId: String
     @NSManaged var utc: Int64
     @NSManaged var ttl: Int64

@@ -138,6 +138,7 @@ public extension Sesame {
 
     public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
         var reinforcementName: String?
+        var eventCount = 0
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             guard let appState = BMSAppState.fetch(context: context, appId: appId),
@@ -152,37 +153,40 @@ public extension Sesame {
                                               sessionId: appLifecycleTracker.sessionId as NSNumber?,
                                               metadata: metadata) else { return }
             if reinforce,
+                let effectDetails = appState.effectDetailsAsDictionary,
+                let reinforcedAction = (effectDetails["reinforcedActions"] as? [[String: Any]])?
+                    .filter({$0["name"] as? String == actionName}).first,
+                let actionId = reinforcedAction["id"] as? String,
                 let reinforcement = BMSCartridge.fetch(context: context,
                                                        userId: user.id,
-                                                       actionName: actionName)?.first?
+                                                       actionId: actionId)?.first?
                     .nextReinforcement
                     ?? BMSCartridge.insert(context: context,
                                            userId: user.id,
-                                           actionName: actionName,
+                                           actionId: actionId,
                                            cartridgeId: BMSCartridge.NeutralCartridgeId)?
                         .nextReinforcement {
                 event.reinforcement = reinforcement
                 reinforcementName = reinforcement.name
             }
 
-            let eventCount = BMSEvent.count(context: context, userId: user.id)
+            eventCount = BMSEvent.count(context: context, userId: user.id) ?? 0
             BMSLog.info("Added event:\(actionName) metadata:\(metadata) for userId:\(user.id)")
-            BMSLog.info("Total events for user:#\(eventCount ?? -1)")
+            BMSLog.info("Total events for user:#\(eventCount)")
             do {
                 try context.save()
                 coreDataManager.save()
             } catch {
                 BMSLog.error(error)
             }
-            if eventCount ?? 0 >= eventUploadCount {
-                sendTracks(context: context, userId: user.id)
-            }
         }
 
         if let reinforcementName = reinforcementName {
             BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
             _reinforcementEffect = (reinforcementName, [:])
-            self.sendRefresh(actionName: actionName)
+            sendReinforce(context: context)
+        } else if eventCount >= eventUploadCount {
+            sendReinforce(context: context)
         }
     }
 
@@ -246,14 +250,12 @@ extension Sesame {
         context.performAndWait {
             guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else { return }
-            var payload = api.createPayload(appId: appId,
-                                            versionId: appState.versionId,
+            let payload = api.createPayload(appId: appId,
                                             secret: appState.auth,
-                                            primaryIdentity: appState.user?.id)
-            payload["initialBoot"] = (UserDefaults.sesame.initialBootDate == nil)
-            payload["inProduction"] = false
-            payload["currentVersion"] = appState.versionId ?? "nil"
-            payload["currentConfig"] = "\(appState.revision)"
+                                            versionId: appState.versionId,
+                                            revision: Int(appState.revision),
+                                            primaryIdentity: nil,
+                                            timestamps: false)
 
             api.post(endpoint: .boot, jsonObject: payload) { response in
                 guard let response = response,
@@ -266,20 +268,12 @@ extension Sesame {
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId) else {
                         return
                     }
-                    if let configValues = response["config"] as? [String: Any] {
-                        if let configId = configValues["configId"] as? String {
-                            appState.configId = configId
-                        }
-                        if let trackingEnabled = configValues["trackingEnabled"] as? Bool {
-                            appState.trackingEnabled = trackingEnabled
-                        }
+                    if let revision = response["revision"] as? Int {
+                        appState.revision = Int64(revision)
                     }
-                    if let version = response["version"] as? [String: Any] {
-                        if let versionId = version["versionID"] as? String {
-                            appState.versionId = versionId
-                        }
-                        if let mappings = version["mappings"] as? [String: [String: Any]] {
-                            appState.effectDetailsAsDictionary = mappings
+                    if let config = response["config"] as? [String: Any] {
+                        if let reinforcedActions = config["reinforcedActions"] as? [[String: Any]] {
+                            appState.effectDetailsAsDictionary = ["reinforcedActions": reinforcedActions]
                         }
                     }
                     do {
@@ -296,22 +290,34 @@ extension Sesame {
         }
     }
 
-    func sendTracks(context: NSManagedObjectContext, userId: String, completion: @escaping (Bool) -> Void = {_ in}) {
+    func sendReinforce(context: NSManagedObjectContext, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
             guard !uploadScheduled else { return }
             uploadScheduled = true
-            guard let appState = BMSAppState.fetch(context: context, appId: appId)
-                else { return }
+            guard let appState = BMSAppState.fetch(context: context, appId: appId),
+                let user = appState.user,
+                let allActionIds = (appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.compactMap({$0["id"] as? String})
+                else {
+                    uploadScheduled = false
+                    return
+            }
+            let actionIds = BMSCartridge.needsRefresh(context: context, userId: user.id, actionIds: allActionIds)
+            guard !actionIds.isEmpty else {
+                uploadScheduled = false
+                return
+            }
             var payload = api.createPayload(appId: appState.appId,
-                                            versionId: appState.versionId,
                                             secret: appState.auth,
-                                            primaryIdentity: userId)
-            payload["tracks"] = {
+                                            versionId: appState.versionId,
+                                            revision: Int(appState.revision),
+                                            primaryIdentity: user.id,
+                                            timestamps: true)
+            payload["reports"] = {
                 var tracks = [[String: Any]]()
                 if let reports = appState.user?.reports.allObjects as? [BMSReport] {
                     for report in reports {
                         var track = [String: Any]()
-                        track["actionName"] = report.actionName
+                        track["actionId"] = report.actionName
                         track["type"] = report.type.stringValue
                         var events = [[String: Any]]()
                         for case let reportEvent as BMSEvent in report.events {
@@ -329,9 +335,8 @@ extension Sesame {
                         tracks.append(track)
                     }
                     // delete empty cartridges after reinforcements are deleted with events
-                    _ = BMSCartridge.fetch(context: context, userId: userId)?
-                        .filter({$0.reinforcements.count == 0})
-                        .map({context.delete($0)})
+                    let deletedCartridges = BMSCartridge.deleteStale(context: context, userId: user.id)
+                    BMSLog.warning("Deleted \(deletedCartridges) stale cartridges")
 
                     do {
                         try context.save()
@@ -339,64 +344,51 @@ extension Sesame {
                         BMSLog.error(error)
                     }
                 }
-                BMSLog.verbose(tracks as AnyObject)
                 return tracks
             }()
-//            api.post(endpoint: .track, jsonObject: payload) { response in
-//                guard let response = response,
-//                    response["errors"] == nil else {
-//                        completion(false)
-//                        return
-//                }
-                completion(true)
-                self.uploadScheduled = false
-//            }
-        }
-    }
 
-    func sendRefresh(context: NSManagedObjectContext? = nil, actionName: String, force: Bool = false, completion: @escaping (Bool) -> Void = {_ in}) {
-        let context = context ?? coreDataManager.newContext()
-        context.performAndWait {
-            guard let appState = BMSAppState.fetch(context: context, appId: appId),
-                let userId = appState.user?.id,
-                BMSCartridge.fetch(context: context,
-                                   userId: userId,
-                                   actionName: actionName)?.first?.needsRefresh ?? true
-                else { return }
+            payload["refresh"] = {
+                var refresh = [[String: Any]]()
+                for actionId in actionIds {
+                    refresh.append(["actionId": actionId, "size": 5])
+                }
 
-            var payload = api.createPayload(appId: appState.appId,
-                                            versionId: appState.versionId,
-                                            secret: appState.auth,
-                                            primaryIdentity: userId)
-            payload["actionName"] = actionName
+                return refresh
+            }()
 
-            api.post(endpoint: .refresh, jsonObject: payload) { response in
+            api.post(endpoint: .reinforce, jsonObject: payload) { response in
                 guard let response = response,
-                    let cartridgeId = response["cartridgeId"] as? String,
-                    let serverUtc = response["serverUtc"] as? Int64,
-                    let ttl = response["ttl"] as? Int64,
-                    let actionName = response["actionName"] as? String,
-                    let reinforcements = response["reinforcements"] as? [[String: String]] else {
+                    response["errors"] == nil,
+                    let utc = response["utc"] as? Int64 else {
+                        BMSLog.error("Bad response")
+                        self.uploadScheduled = false
                         completion(false)
                         return
                 }
-                let reinforcementNames = reinforcements.compactMap({$0["reinforcementName"]})
                 let context = self.coreDataManager.newContext()
                 context.performAndWait {
-                    BMSCartridge.insert(context: context,
-                                        userId: userId,
-                                        actionName: actionName,
-                                        cartridgeId: cartridgeId,
-                                        utc: serverUtc,
-                                        ttl: ttl,
-                                        reinforcementNames: reinforcementNames)
-                    do {
-                        try context.save()
-                        self.coreDataManager.save()
-                    } catch {
-                        BMSLog.error(error)
+                    guard let appState = BMSAppState.fetch(context: context, appId: self.appId),
+                        let user = appState.user
+                        else { return }
+                    for cartridgeInfo in response["cartridges"] as? [[String: Any]] ?? [] {
+                        if let ttl = cartridgeInfo["ttl"] as? Int64,
+                            let actionId = cartridgeInfo["actionId"] as? String,
+                            let cartridgeId = cartridgeInfo["cartridgeId"] as? String,
+                            let reinforcementIds = (cartridgeInfo["reinforcements"] as? [[String: String]])?.compactMap({$0["reinforcementId"]}),
+                            let reinforcedAction = (appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.filter({$0["id"] as? String == actionId}).first,
+                            let reinforcements = reinforcedAction["reinforcements"] as? [[String: Any]] {
+                            var reinforcementIdsAndNames = [(String, String)]()
+                            for id in reinforcementIds {
+                                if let name = reinforcements.filter({$0["id"] as? String == id}).first?["name"] as? String {
+                                    reinforcementIdsAndNames.append((id, name))
+                                }
+                            }
+                            BMSCartridge.insert(context: context, userId: user.id, actionId: actionId, cartridgeId: cartridgeId, utc: utc, ttl: ttl, reinforcementIdAndName: reinforcementIdsAndNames)
+                        }
                     }
                 }
+                self.coreDataManager.save()
+                self.uploadScheduled = false
                 completion(true)
             }
         }

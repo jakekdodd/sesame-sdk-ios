@@ -17,12 +17,13 @@ public class BMSReinforcement: NSManagedObject {
 }
 
 extension BMSReinforcement {
-    class func insert(context: NSManagedObjectContext, cartridge: BMSCartridge, name: String, idx: Int32) -> BMSReinforcement? {
+    class func insert(context: NSManagedObjectContext, cartridge: BMSCartridge, id: String, name: String, idx: Int32) -> BMSReinforcement? {
         var value: BMSReinforcement?
         context.performAndWait {
             if let entity =
                 NSEntityDescription.entity(forEntityName: BMSReinforcement.description(), in: context) {
                 let reinforcement = BMSReinforcement(entity: entity, insertInto: context)
+                reinforcement.id = id
                 reinforcement.name = name
                 reinforcement.idx = idx
                 cartridge.addToReinforcements(reinforcement)

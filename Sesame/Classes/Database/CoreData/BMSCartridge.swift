@@ -14,22 +14,20 @@ class BMSCartridge: NSManagedObject {
 
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
-    var needsRefresh: Bool {
-        return (reinforcements.array as? [BMSReinforcement])?.filter({$0.event == nil}).isEmpty ?? false
-    }
-
     var nextReinforcement: BMSReinforcement? {
         guard let context = managedObjectContext else { return nil }
         var value: BMSReinforcement?
         context.performAndWait {
-//            BMSLog.warning("Total Cartridges: \(BMSCartridge.fetch(context: context, userId: user.id)?.count ?? -1)")
-            if let reinforcements = reinforcements.array as? [BMSReinforcement],
+            BMSLog.warning("Total Cartridges: \(BMSCartridge.fetch(context: context, userId: user.id)?.compactMap({$0}) as AnyObject)")
+            if (utc + ttl) >= Int64(1000 * Date().timeIntervalSince1970),
+                let reinforcements = reinforcements.array as? [BMSReinforcement],
                 let reinforcement = reinforcements.filter({$0.event == nil}).first {
                 value = reinforcement
-//                BMSLog.warning("Available Reinforcements:\(reinforcements.filter({$0.event == nil}).count)")
+                BMSLog.warning("Available Reinforcements:\(reinforcements.filter({$0.event == nil}).count)")
             } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
                 let reinforcement = BMSReinforcement.insert(context: context,
                                                             cartridge: self,
+                                                            id: BMSReinforcement.NeutralName,
                                                             name: BMSReinforcement.NeutralName,
                                                             idx: Int32(reinforcements.count)
                                                             ) {
@@ -43,6 +41,26 @@ class BMSCartridge: NSManagedObject {
 }
 
 extension BMSCartridge {
+
+    class func needsRefresh(context: NSManagedObjectContext, userId: String, actionIds: [String]) -> [String] {
+        var value = [String]()
+        context.performAndWait {
+            let now = Int64(Date().timeIntervalSince1970 * 1000)
+            for actionId in actionIds {
+                guard let cartridge = BMSCartridge.fetch(context: context, userId: userId, actionId: actionId)?.first else {
+                    value.append(actionId)
+                    continue
+                }
+                if cartridge.cartridgeId == BMSCartridge.NeutralCartridgeId ||
+                    cartridge.utc + cartridge.ttl < now ||
+                    cartridge.reinforcements.filter({($0 as? BMSReinforcement)?.event == nil}).isEmpty {
+                    value.append(actionId)
+                    continue
+                }
+            }
+        }
+        return value
+    }
 
     class func fetch(context: NSManagedObjectContext, userId: String) -> [BMSCartridge]? {
         var value: [BMSCartridge]?
@@ -58,13 +76,13 @@ extension BMSCartridge {
         return value
     }
 
-    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> [BMSCartridge]? {
+    class func fetch(context: NSManagedObjectContext, userId: String, actionId: String) -> [BMSCartridge]? {
         var value: [BMSCartridge]?
         context.performAndWait {
             let request = BMSCartridge.request()
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "\(#keyPath(BMSCartridge.user.id)) == '\(userId)'"),
-                NSPredicate(format: "\(#keyPath(BMSCartridge.actionName)) == '\(actionName)'")
+                NSPredicate(format: "\(#keyPath(BMSCartridge.actionId)) == '\(actionId)'")
                 ])
             request.sortDescriptors = [NSSortDescriptor(key: #keyPath(BMSCartridge.utc), ascending: false)]
             do {
@@ -77,22 +95,43 @@ extension BMSCartridge {
     }
 
     @discardableResult
-    class func insert(context: NSManagedObjectContext, userId: String, actionName: String, cartridgeId: String = BMSCartridge.NeutralCartridgeId, utc: Int64 = Int64(Date().timeIntervalSinceNow * 1000), ttl: Int64 = 0, reinforcementNames: [String] = []) -> BMSCartridge? {
+    class func deleteStale(context: NSManagedObjectContext, userId: String) -> Int {
+        var value = 0
+        context.performAndWait {
+            let now = Int64(Date().timeIntervalSince1970 * 1000)
+            for cartridge in fetch(context: context, userId: userId) ?? [] {
+                if (cartridge.utc + cartridge.ttl) < now {
+                    if cartridge.reinforcements.array.filter({($0 as? BMSReinforcement)?.event != nil}).isEmpty {
+                        context.delete(cartridge)
+                        value += 1
+                    }
+                } else if cartridge.reinforcements.array.isEmpty {
+                    context.delete(cartridge)
+                    value += 1
+                }
+            }
+        }
+        return value
+    }
+
+    @discardableResult
+    class func insert(context: NSManagedObjectContext, userId: String, actionId: String, cartridgeId: String = BMSCartridge.NeutralCartridgeId, utc: Int64 = Int64(Date().timeIntervalSince1970 * 1000), ttl: Int64 = 0, reinforcementIdAndName: [(String, String)] = []) -> BMSCartridge? {
         var value: BMSCartridge?
         context.performAndWait {
             if let user = BMSUser.fetch(context: context, id: userId),
                 let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) {
                 let cartridge = BMSCartridge(entity: entity, insertInto: context)
                 cartridge.user = user
-                cartridge.actionName = actionName
+                cartridge.actionId = actionId
                 cartridge.cartridgeId = cartridgeId
                 cartridge.utc = utc
                 cartridge.ttl = ttl
                 var idx: Int32 = 0
-                _ = reinforcementNames.compactMap({
-                    _ = BMSReinforcement.insert(context: context, cartridge: cartridge, name: $0, idx: idx)
+                _ = reinforcementIdAndName.compactMap({
+                    _ = BMSReinforcement.insert(context: context, cartridge: cartridge, id: $0.0, name: $0.1, idx: idx)
                     idx += 1
                 })
+                BMSLog.warning("Inserted cartridge with :\(cartridge.reinforcements.count) reinforcements")
                 do {
                     try context.save()
                 } catch let error as NSError {

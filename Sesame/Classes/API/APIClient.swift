@@ -10,16 +10,16 @@ import UIKit
 class APIClient: HTTPClient {
 
     enum Endpoint {
-        case boot, track, refresh
+        case boot, reinforce
 
         var url: URL {
             switch self {
             case .boot:
-                return URL(string: "https://reinforce.boundless.ai/v6/app/boot")!
-            case .track:
-                return URL(string: "https://reinforce.boundless.ai/v6/app/track")!
-            case .refresh:
-                return URL(string: "https://reinforce.boundless.ai/v6/app/refresh")!
+//                return URL(string: "https://reinforce.boundless.ai/v6/app/boot")!
+                return URL(string: "http://localhost:8080/v1/boot")!
+            case .reinforce:
+//                return URL(string: "https://reinforce.boundless.ai/v6/app/report")!
+                return URL(string: "http://localhost:8080/v1/reinforce")!
             }
         }
     }
@@ -28,19 +28,24 @@ class APIClient: HTTPClient {
         post(url: endpoint.url, jsonObject: jsonObject, timeout: timeout, completion: completion)
     }
 
-    func createPayload(appId: String, versionId: String?, secret: String, primaryIdentity: String?) -> [String: Any] {
-        var payload = [String: Any]()
-        payload = [ "clientOS": "iOS",
-                    "clientOSVersion": UIDevice.current.systemVersion,
-                    "clientSDKVersion": Bundle(for: APIClient.self).shortVersionString ?? "UNKNOWN",
-                    "clientBuild": Bundle.main.shortVersionString ?? "UNKNOWN",
-                    "utc": NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000),
-                    "timezoneOffset": NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000),
-                    "appId": appId,
-                    "versionId": versionId ?? "nil",
-                    "secret": secret,
-                    "primaryIdentity": primaryIdentity ?? "IDUNAVAILABLE"
+    func createPayload(appId: String, secret: String, versionId: String?, revision: Int, primaryIdentity: String? = nil, timestamps: Bool) -> [String: Any] {
+        var payload: [String: Any] =
+            ["appId": appId,
+//             "auth": secret,
+             "appVersionId": versionId ?? "nil",
+             "revision": revision,
+             "device": ["osName": "iOS",
+                        "osVersion": UIDevice.current.systemVersion,
+                        "buildVersion": Bundle.main.shortVersionString ?? "UNKNOWN",
+                        "clientVersion": Bundle(for: APIClient.self).shortVersionString ?? "UNKNOWN"]
         ]
+        if let externalId = primaryIdentity {
+            payload["externalId"] = externalId
+        }
+        if timestamps {
+            payload["utc"] = NSNumber(value: Int64(Date().timeIntervalSince1970) * 1000)
+            payload["timezoneOffset"] = NSNumber(value: Int64(NSTimeZone.default.secondsFromGMT()) * 1000)
+        }
         return payload
     }
 
