@@ -63,8 +63,7 @@ public class Sesame: NSObject {
 
         super.init()
 
-        let context = coreDataManager.newContext()
-        context.performAndWait {
+        coreDataManager.newContext { context in
             if let appState = BMSAppState.fetch(context: context, appId: appId) ??
                 BMSAppState.insert(context: context, appId: appId, auth: auth, versionId: versionId) {
                 if appState.auth != auth {
@@ -246,8 +245,7 @@ extension Sesame: BMSAppLifecycleListener {
 extension Sesame {
 
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
-        let context = coreDataManager.newContext()
-        context.performAndWait {
+        coreDataManager.newContext { context in
             guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else {
                     completion(false)
@@ -266,8 +264,7 @@ extension Sesame {
                         completion(false)
                         return
                 }
-                let context = self.coreDataManager.newContext()
-                context.performAndWait {
+                self.coreDataManager.newContext { context in
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId) else {
                         completion(false)
                         return
@@ -369,8 +366,7 @@ extension Sesame {
                         completion(false)
                         return
                 }
-                let context = self.coreDataManager.newContext()
-                context.performAndWait {
+                self.coreDataManager.newContext { context in
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId),
                         let reinforcedActions = appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]],
                         let user = appState.user

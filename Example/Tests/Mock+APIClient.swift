@@ -1,5 +1,5 @@
 //
-//  MockAPIClient.swift
+//  Mock+APIClient.swift
 //  Sesame_Tests
 //
 //  Created by Akash Desai on 9/28/18.
@@ -22,14 +22,6 @@ class MockAPIClient: APIClient {
             completion([:])
         }
     }
-}
-
-struct Mock {
-    static let aid1 = "actionId1"
-    static let aname1 = "action1"
-    static let cid1 = "cartridgeId1"
-    static let rid1 = "reinforcementId1"
-    static let rname1 = "sheen"
 }
 
 extension MockAPIClient {

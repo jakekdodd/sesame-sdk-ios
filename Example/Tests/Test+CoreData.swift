@@ -11,12 +11,6 @@ import CoreData
 
 class TestCoreData: XCTestCase {
 
-    var testAppId = "testAppId"
-    var testAppAuth = "testAppAuth"
-    var testUserId = "dev"
-    var testActionName = "testAction"
-    var testCartridgeId = "testCartridgeId"
-
     override func setUp() {
         CoreDataManager().deleteObjects()
     }
@@ -28,41 +22,41 @@ class TestCoreData: XCTestCase {
     func testAppState() {
         let coreData = CoreDataManager()
 
-        XCTAssert(BMSAppState.fetch(context: coreData.newContext(), appId: testAppId) == nil)
+        XCTAssert(BMSAppState.fetch(context: coreData.newContext(), appId: Mock.app1) == nil)
 
-        coreData.inNewContext { context in
-            _ = BMSAppState.insert(context: context, appId: testAppId, auth: testAppAuth)
+        coreData.newContext { context in
+            _ = BMSAppState.insert(context: context, appId: Mock.app1, auth: Mock.auth1)
         }
-        XCTAssert(BMSAppState.fetch(context: coreData.newContext(), appId: testAppId) != nil)
+        XCTAssert(BMSAppState.fetch(context: coreData.newContext(), appId: Mock.app1) != nil)
 
-        XCTAssert(BMSAppState.delete(context: coreData.newContext(), appId: testAppId) == 1)
+        XCTAssert(BMSAppState.delete(context: coreData.newContext(), appId: Mock.app1) == 1)
 
-        XCTAssert(BMSAppState.fetch(context: coreData.newContext(), appId: testAppId) == nil)
+        XCTAssert(BMSAppState.fetch(context: coreData.newContext(), appId: Mock.app1) == nil)
     }
 
     func testUser() {
         let coreData = CoreDataManager()
 
-        XCTAssert(BMSUser.fetch(context: coreData.newContext(), id: testUserId) == nil)
+        XCTAssert(BMSUser.fetch(context: coreData.newContext(), id: Mock.uid1) == nil)
 
-        coreData.inNewContext { context in
-            _ = BMSUser.insert(context: context, id: testUserId)
+        coreData.newContext { context in
+            _ = BMSUser.insert(context: context, id: Mock.uid1)
         }
-        XCTAssert(BMSUser.fetch(context: coreData.newContext(), id: testUserId) != nil)
+        XCTAssert(BMSUser.fetch(context: coreData.newContext(), id: Mock.uid1) != nil)
 
         XCTAssert(BMSUser.delete(context: coreData.newContext()) == 1)
 
-        XCTAssert(BMSUser.fetch(context: coreData.newContext(), id: testUserId) == nil)
+        XCTAssert(BMSUser.fetch(context: coreData.newContext(), id: Mock.uid1) == nil)
     }
 
     func testEvent() {
         let coreData = CoreDataManager()
 
-        coreData.inNewContext { context in
-            guard let user = BMSUser.insert(context: context, id: testUserId) else { fatalError() }
+        coreData.newContext { context in
+            guard let user = BMSUser.insert(context: context, id: Mock.uid1) else { fatalError() }
             XCTAssert(BMSEvent.count(context: context) == 0)
 
-            guard let _ = BMSEvent.insert(context: context, userId: user.id, actionName: testActionName) else { fatalError() }
+            guard let _ = BMSEvent.insert(context: context, userId: user.id, actionName: Mock.aname1) else { fatalError() }
             XCTAssert(BMSEvent.count(context: context) == 1)
         }
     }
@@ -70,8 +64,8 @@ class TestCoreData: XCTestCase {
     func testCartridge() {
         let coreData = CoreDataManager()
 
-        coreData.inNewContext { context in
-            guard let user = BMSUser.insert(context: context, id: testUserId) else { fatalError() }
+        coreData.newContext { context in
+            guard let user = BMSUser.insert(context: context, id: Mock.uid1) else { fatalError() }
             guard nil != BMSCartridge.insert(context: context,
                                                       userId: user.id,
                                                       actionId: Mock.aid1)
@@ -80,7 +74,7 @@ class TestCoreData: XCTestCase {
 
             guard nil != BMSEvent.insert(context: context,
                                           userId: user.id,
-                                          actionName: testActionName)
+                                          actionName: Mock.aname1)
                 else { fatalError() }
             XCTAssert(BMSEvent.count(context: context) == 1)
         }
@@ -89,30 +83,30 @@ class TestCoreData: XCTestCase {
     func testCartridgeReinforcement() {
         let coreData = CoreDataManager()
 
-        coreData.inNewContext { context in
+        coreData.newContext { context in
             guard let user = BMSUser.insert(context: context,
-                                            id: testUserId)
+                                            id: Mock.uid1)
                 else { fatalError() }
-            XCTAssert(BMSCartridge.fetch(context: context, userId: testUserId)?.isEmpty ?? false)
+            XCTAssert(BMSCartridge.fetch(context: context, userId: Mock.uid1)?.isEmpty ?? false)
 
             guard let cartridge = BMSCartridge.insert(context: context,
                                                       userId: user.id,
                                                       actionId: Mock.aid1,
-                                                      cartridgeId: testCartridgeId,
+                                                      cartridgeId: Mock.cid1,
                                                       ttl: 3600000,
-                                                      reinforcementIdAndName: [("rid1", "reward")])
+                                                      reinforcementIdAndName: [(Mock.rid1, Mock.rname1)])
                 else { fatalError() }
             XCTAssert(BMSCartridge.fetch(context: context,
-                                         userId: testUserId)?.count ?? 0 == 1)
+                                         userId: Mock.uid1)?.count ?? 0 == 1)
             XCTAssert(BMSCartridge.fetch(context: context,
-                                         userId: testUserId,
+                                         userId: Mock.uid1,
                                          actionId: Mock.aid1)?.first != nil)
 
             guard let reinforcement = cartridge.nextReinforcement,
-                reinforcement.name == "reward",
+                reinforcement.name == Mock.rname1,
                 nil != BMSEvent.insert(context: context,
                                          userId: user.id,
-                                         actionName: testActionName,
+                                         actionName: Mock.aname1,
                                          reinforcement: reinforcement)
                 else { fatalError() }
 
@@ -127,10 +121,10 @@ class TestCoreData: XCTestCase {
     func testCartridgeNeutral() {
         let coreData = CoreDataManager()
 
-        coreData.inNewContext { context in
-            guard let user = BMSUser.insert(context: context, id: testUserId) else { fatalError() }
+        coreData.newContext { context in
+            guard let user = BMSUser.insert(context: context, id: Mock.uid1) else { fatalError() }
             XCTAssert(BMSCartridge.fetch(context: context,
-                                         userId: testUserId,
+                                         userId: Mock.uid1,
                                          actionId: Mock.aid1)?.isEmpty ?? false)
 
             guard let cartridge = BMSCartridge.insert(context: context,
@@ -139,17 +133,22 @@ class TestCoreData: XCTestCase {
                                                       cartridgeId: BMSCartridge.NeutralCartridgeId)
                 else { fatalError() }
             XCTAssert(BMSCartridge.fetch(context: context,
-                                         userId: testUserId)?.count ?? 0 == 1)
+                                         userId: user.id)?.count ?? 0 == 1)
             XCTAssert(BMSCartridge.fetch(context: context,
-                                         userId: testUserId,
+                                         userId: user.id,
                                          actionId: Mock.aid1)?.first != nil)
+            coreData.save()
+        }
 
-            guard let reinforcement = cartridge.nextReinforcement,
+        coreData.newContext { context in
+            guard let user = BMSUser.insert(context: context, id: Mock.uid1),
+                let cartridge = BMSCartridge.fetch(context: context, userId: user.id, actionId: Mock.aid1)?.first,
+                let reinforcement = cartridge.nextReinforcement,
                 reinforcement.name == BMSReinforcement.NeutralName
             else { fatalError() }
             guard nil != BMSEvent.insert(context: context,
                                           userId: user.id,
-                                          actionName: testActionName,
+                                          actionName: Mock.aname1,
                                           reinforcement: reinforcement)
                 else { fatalError() }
 
@@ -160,32 +159,32 @@ class TestCoreData: XCTestCase {
     func testReport() {
         let coreData = CoreDataManager()
 
-        coreData.inNewContext { context in
+        coreData.newContext { context in
             guard let user = BMSUser.insert(context: context,
-                                            id: testUserId)
+                                            id: Mock.uid1)
                 else { fatalError() }
             XCTAssert(BMSReport.fetch(context: context,
                                       userId: user.id)?.isEmpty ?? false)
 
             XCTAssert(BMSReport.insert(context: context,
                                        userId: user.id,
-                                       actionName: testActionName) != nil)
+                                       actionName: Mock.aname1) != nil)
             XCTAssert(BMSReport.fetch(context: context,
-                                      userId: testUserId)?.count ?? 0 == 1)
+                                      userId: Mock.uid1)?.count ?? 0 == 1)
             XCTAssert(BMSReport.fetch(context: context,
-                                      userId: testUserId,
-                                      actionName: testActionName) != nil)
+                                      userId: Mock.uid1,
+                                      actionName: Mock.aname1) != nil)
 
             XCTAssert(BMSEvent.insert(context: context,
                                       userId: user.id,
-                                      actionName: testActionName) != nil)
+                                      actionName: Mock.aname1) != nil)
             XCTAssert(BMSReport.fetch(context: context,
                                       userId: user.id,
-                                      actionName: testActionName)?.events.count == 1)
+                                      actionName: Mock.aname1)?.events.count == 1)
 
             _ = (BMSReport.fetch(context: context,
                             userId: user.id,
-                                 actionName: testActionName)?.events.array as? [BMSEvent])?
+                                 actionName: Mock.aname1)?.events.array as? [BMSEvent])?
                 .compactMap({context.delete($0)})
             XCTAssert(BMSReport.fetch(context: context,
                                       userId: user.id)?.isEmpty ?? false)
