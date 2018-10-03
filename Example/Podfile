@@ -1,0 +1,21 @@
+platform :ios, '10.0'
+use_frameworks!
+
+target 'Sesame_Example' do
+  pod 'Sesame', :path => '../'
+
+  target 'Sesame_Tests' do
+      inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if ['Sesame'].include?target.name
+            target.build_configurations.each do |config|
+                # Only allow app extension safe APIs
+                config.build_settings['APPLICATION_EXTENSION_API_ONLY'] ||= "YES"
+            end
+        end
+    end
+end

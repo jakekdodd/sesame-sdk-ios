@@ -1,0 +1,16 @@
+PODS:
+  - Sesame (0.1.0)
+
+DEPENDENCIES:
+  - Sesame (from `../`)
+
+EXTERNAL SOURCES:
+  Sesame:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Sesame: 5fd3ec3c8f2c51d24ab1df99def78bc2dca37990
+
+PODFILE CHECKSUM: 5788c873b45cd70e2cfcc46a1faa2b7ce14aadd9
+
+COCOAPODS: 1.5.3
