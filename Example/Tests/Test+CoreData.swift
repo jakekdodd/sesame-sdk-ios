@@ -53,10 +53,10 @@ class TestCoreData: XCTestCase {
         let coreData = CoreDataManager()
 
         coreData.newContext { context in
-            guard let user = BMSUser.insert(context: context, id: Mock.uid1) else { fatalError() }
+            XCTAssert(nil != BMSUser.insert(context: context, id: Mock.uid1))
             XCTAssert(BMSEvent.count(context: context) == 0)
 
-            guard let _ = BMSEvent.insert(context: context, userId: user.id, actionName: Mock.aname1) else { fatalError() }
+            XCTAssert(nil != BMSEvent.insert(context: context, userId: Mock.uid1, actionName: Mock.aname1))
             XCTAssert(BMSEvent.count(context: context) == 1)
         }
     }
@@ -127,11 +127,11 @@ class TestCoreData: XCTestCase {
                                          userId: Mock.uid1,
                                          actionId: Mock.aid1)?.isEmpty ?? false)
 
-            guard let cartridge = BMSCartridge.insert(context: context,
+            XCTAssert(nil != BMSCartridge.insert(context: context,
                                                       userId: user.id,
                                                       actionId: Mock.aid1,
-                                                      cartridgeId: BMSCartridge.NeutralCartridgeId)
-                else { fatalError() }
+                                                      cartridgeId: BMSCartridge.NeutralCartridgeId))
+
             XCTAssert(BMSCartridge.fetch(context: context,
                                          userId: user.id)?.count ?? 0 == 1)
             XCTAssert(BMSCartridge.fetch(context: context,

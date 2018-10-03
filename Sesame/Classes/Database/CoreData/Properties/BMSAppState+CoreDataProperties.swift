@@ -42,4 +42,12 @@ extension BMSAppState {
         }
     }
 
+    var reinforcedActions: [[String: Any]]? {
+        return effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]]
+    }
+
+    var actionIds: [String]? {
+        return reinforcedActions?.compactMap({$0["id"] as? String})
+    }
+
 }

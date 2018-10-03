@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension BMSReinforcementEffect {
 
     @nonobjc public class func fetch() -> NSFetchRequest<BMSReinforcementEffect> {

@@ -75,8 +75,10 @@ open class BMSAppLifecycle: NSObject {
 
     public override init() {
         super.init()
-        for notification in notificationsToRegister { //swiftlint:disable:next line_length
-            NotificationCenter.default.addObserver(self, selector: #selector(receive(_:)), name: notification, object: nil)
+        for notification in notificationsToRegister {
+            NotificationCenter.default.addObserver(self, selector: #selector(receive(_:)),
+                                                   name: notification,
+                                                   object: nil)
         }
     }
 

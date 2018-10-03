@@ -23,7 +23,10 @@ extension BMSReinforcementEffect {
             }
             effect.reinforcement = reinforcement
             _ = attributes.compactMap({
-                BMSReinforcementEffectAttribute.insert(context: context, reinforementEffect: effect, key: $0.key, value: $0.value)
+                BMSReinforcementEffectAttribute.insert(context: context,
+                                                       reinforementEffect: effect,
+                                                       key: $0.key,
+                                                       value: $0.value)
             })
             do {
                 try context.save()

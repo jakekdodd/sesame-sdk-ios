@@ -63,6 +63,7 @@ class Tests: XCTestCase {
         XCTAssert(count == desiredCount)
     }
 
+    //swiftlint:disable:next function_body_length
     func testUserChange() {
         let sesame = MockSesame()
         let user1 = "ann"
@@ -71,9 +72,12 @@ class Tests: XCTestCase {
         let setUser1 = { currentUser = user1; sesame.setUserId(currentUser) }
         let setUser2 = { currentUser = user2; sesame.setUserId(currentUser) }
         let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
-        let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: currentUser) ?? -1 }
+        let countEvents = {
+            return BMSEvent.count(context: sesame.coreDataManager.newContext(),
+                                                  userId: currentUser) ?? -1
+        }
         let deleteEvents = {
-            sesame.coreDataManager.newContext { context in
+            _ = sesame.coreDataManager.newContext { context in
                 _ = (BMSReport.fetch(context: context, userId: currentUser, actionName: BMSEvent.AppOpenName)?
                     .events.array as? [BMSEvent])?
                     .map({context.delete($0)})
@@ -178,10 +182,4 @@ class Tests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
-}
-
-extension BMSAppState {
-    var actionIds: [String]? {
-        return (effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.compactMap({$0["id"] as? String})
-    }
 }

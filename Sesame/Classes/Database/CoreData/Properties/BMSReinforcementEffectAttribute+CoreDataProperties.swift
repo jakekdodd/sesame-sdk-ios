@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension BMSReinforcementEffectAttribute {
 
     @nonobjc public class func fetch() -> NSFetchRequest<BMSReinforcementEffectAttribute> {
@@ -17,7 +16,8 @@ extension BMSReinforcementEffectAttribute {
     }
 
     class func create(in context: NSManagedObjectContext) -> BMSReinforcementEffectAttribute? {
-        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReinforcementEffectAttribute", in: context) else {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReinforcementEffectAttribute",
+                                                      in: context) else {
             return nil
         }
         return BMSReinforcementEffectAttribute(entity: entity, insertInto: context)
