@@ -31,7 +31,3 @@ class TestApiClient: XCTestCase {
     }
 
 }
-
-struct MockApiResponse {
-    
-}

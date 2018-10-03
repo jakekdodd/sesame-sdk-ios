@@ -7,6 +7,7 @@
 //
 
 @testable import Sesame
+import CoreData.NSManagedObjectContext
 
 extension Sesame {
 
@@ -18,8 +19,17 @@ extension Sesame {
                       versionId: "sesame2",
                       userId: userId)
         sesame.api = MockAPIClient()
-        sesame.sendBoot()
         return sesame
     }
 
+}
+
+extension CoreDataManager {
+    func inNewContext(completion: (NSManagedObjectContext) -> Void) {
+        let context = newContext()
+        context.performAndWait {
+            completion(context)
+            try? context.save()
+        }
+    }
 }

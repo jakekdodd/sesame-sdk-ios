@@ -249,7 +249,10 @@ extension Sesame {
         let context = coreDataManager.newContext()
         context.performAndWait {
             guard let appState = BMSAppState.fetch(context: context, appId: appId)
-                else { return }
+                else {
+                    completion(false)
+                    return
+            }
             let payload = api.createPayload(appId: appId,
                                             secret: appState.auth,
                                             versionId: appState.versionId,
@@ -266,6 +269,7 @@ extension Sesame {
                 let context = self.coreDataManager.newContext()
                 context.performAndWait {
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId) else {
+                        completion(false)
                         return
                     }
                     if let revision = response["revision"] as? Int {
@@ -368,14 +372,16 @@ extension Sesame {
                 let context = self.coreDataManager.newContext()
                 context.performAndWait {
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId),
+                        let reinforcedActions = appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]],
                         let user = appState.user
                         else { return }
                     for cartridgeInfo in response["cartridges"] as? [[String: Any]] ?? [] {
+                        BMSLog.warning("Cart info:\(cartridgeInfo as AnyObject)")
                         if let ttl = cartridgeInfo["ttl"] as? Int64,
                             let actionId = cartridgeInfo["actionId"] as? String,
                             let cartridgeId = cartridgeInfo["cartridgeId"] as? String,
                             let reinforcementIds = (cartridgeInfo["reinforcements"] as? [[String: String]])?.compactMap({$0["reinforcementId"]}),
-                            let reinforcedAction = (appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.filter({$0["id"] as? String == actionId}).first,
+                            let reinforcedAction = reinforcedActions.filter({$0["id"] as? String == actionId}).first,
                             let reinforcements = reinforcedAction["reinforcements"] as? [[String: Any]] {
                             var reinforcementIdsAndNames = [(String, String)]()
                             for id in reinforcementIds {

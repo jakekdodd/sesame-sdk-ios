@@ -63,26 +63,6 @@ class Tests: XCTestCase {
         XCTAssert(count == desiredCount)
     }
 
-//    func testAppStateRemeberLast() {
-//        var sesame = Sesame.dev()
-//        let testConfigId = "0123"
-//        let setConfigId = { sesame.configId = testConfigId }
-//        let assertConfigId: ((String?) -> Void) = { configId in
-//            XCTAssert(sesame.configId == configId)
-//            let context = sesame.coreDataManager.newContext()
-//            context.performAndWait {
-//                let config = BMSAppState.fetch(context: context, configId: sesame.configId)
-//                XCTAssert(config?.configId == configId)
-//            }
-//        }
-//
-//        setConfigId()
-//        assertConfigId(testConfigId)
-//
-//        sesame = Sesame.dev()
-//        assertConfigId(testConfigId)
-//    }
-
     func testUserChange() {
         let sesame = Sesame.dev()
         let user1 = "ann"
@@ -133,59 +113,37 @@ class Tests: XCTestCase {
         XCTAssert(countEvents() == 0)
     }
 
-    func testSendTracks() {
+    func testBoot() {
         let sesame = Sesame.dev()
 
-        sesame.addEvent(actionName: "action1")
-        sesame.addEvent(actionName: "action1")
-        sesame.addEvent(actionName: "action2")
-
-        let promise = expectation(description: "Did send tracks")
-        sesame.sendTracks(context: sesame.coreDataManager.newContext(), userId: sesame.getUserId()!) { success in
-            XCTAssert(success)
-            XCTAssert(BMSReport.fetch(context: sesame.coreDataManager.newContext(),
-                                      userId: sesame.getUserId()!)?
-                .count == 0)
-            promise.fulfill()
-        }
-
-        waitForExpectations(timeout: 3)
-    }
-
-    func testCartridgeStorage() {
-        let sesame = Sesame.dev()
-
-        let promise = expectation(description: "Did boot")
+        let promise = expectation(description: "Did configure on boot")
         sesame.sendBoot { _ in
-            guard let userId = sesame.getUserId() else { fatalError() }
-            let context = sesame.coreDataManager.newContext()
-            for cartridge in BMSCartridge.fetch(context: context, userId: userId) ?? [] {
-                BMSLog.info(cartridge.debugDescription)
+            sesame.coreDataManager.inNewContext { context in
+                XCTAssert(BMSAppState.fetch(context: context, appId: sesame.appId)?.actionIds?.count ?? 0 > 0)
+                promise.fulfill()
             }
-            promise.fulfill()
         }
 
         waitForExpectations(timeout: 3)
     }
 
-    func testCartridgeRefresh() {
+    func testReinforce() {
         let sesame = Sesame.dev()
 
         let promise = expectation(description: "Did refresh")
-        sesame.sendBoot { _ in
-            let context = sesame.coreDataManager.newContext()
-            context.performAndWait {
-                guard let userId = sesame.getUserId(context) else {
-                    fatalError()
-                }
-                sesame.sendRefresh(context: context, actionName: BMSEvent.AppOpenName) { success in
-                    XCTAssert(success)
-                    let context = sesame.coreDataManager.newContext()
-                    context.performAndWait {
-                        guard let cartridges = BMSCartridge.fetch(context: context, userId: userId)?.first else { fatalError() }
-                        XCTAssert(!cartridges.reinforcements.array.isEmpty)
-                        promise.fulfill()
+        sesame.sendBoot { success in
+            XCTAssert(success)
+            sesame.sendReinforce(context: sesame.coreDataManager.newContext()) { success in
+                XCTAssert(success)
+                sesame.coreDataManager.inNewContext { context in
+                    guard let userId = sesame.getUserId(context),
+                        let cartridges = BMSCartridge.fetch(context: context, userId: userId),
+                        !cartridges.isEmpty,
+                        cartridges.filter({$0.reinforcements.count == 0}).isEmpty
+                        else {
+                            fatalError()
                     }
+                    promise.fulfill()
                 }
             }
         }
@@ -193,4 +151,10 @@ class Tests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
+}
+
+extension BMSAppState {
+    var actionIds: [String]? {
+        return (effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.compactMap({$0["id"] as? String})
+    }
 }

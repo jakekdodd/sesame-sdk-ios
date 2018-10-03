@@ -1,6 +1,6 @@
 //
 //  Test+CoreData.swift
-//  
+//
 //
 //  Created by Akash Desai on 9/30/18.
 //
@@ -74,7 +74,7 @@ class TestCoreData: XCTestCase {
             guard let user = BMSUser.insert(context: context, id: testUserId) else { fatalError() }
             guard nil != BMSCartridge.insert(context: context,
                                                       userId: user.id,
-                                                      actionName: testActionName)
+                                                      actionId: Mock.aid1)
                 else { fatalError() }
             XCTAssert(BMSEvent.count(context: context) == 0)
 
@@ -97,15 +97,16 @@ class TestCoreData: XCTestCase {
 
             guard let cartridge = BMSCartridge.insert(context: context,
                                                       userId: user.id,
-                                                      actionName: testActionName,
+                                                      actionId: Mock.aid1,
                                                       cartridgeId: testCartridgeId,
-                                                      reinforcementNames: ["reward"])
+                                                      ttl: 3600000,
+                                                      reinforcementIdAndName: [("rid1", "reward")])
                 else { fatalError() }
             XCTAssert(BMSCartridge.fetch(context: context,
                                          userId: testUserId)?.count ?? 0 == 1)
             XCTAssert(BMSCartridge.fetch(context: context,
                                          userId: testUserId,
-                                         actionName: testActionName)?.first != nil)
+                                         actionId: Mock.aid1)?.first != nil)
 
             guard let reinforcement = cartridge.nextReinforcement,
                 reinforcement.name == "reward",
@@ -130,18 +131,18 @@ class TestCoreData: XCTestCase {
             guard let user = BMSUser.insert(context: context, id: testUserId) else { fatalError() }
             XCTAssert(BMSCartridge.fetch(context: context,
                                          userId: testUserId,
-                                         actionName: testActionName)?.isEmpty ?? false)
+                                         actionId: Mock.aid1)?.isEmpty ?? false)
 
             guard let cartridge = BMSCartridge.insert(context: context,
                                                       userId: user.id,
-                                                      actionName: testActionName,
+                                                      actionId: Mock.aid1,
                                                       cartridgeId: BMSCartridge.NeutralCartridgeId)
                 else { fatalError() }
             XCTAssert(BMSCartridge.fetch(context: context,
                                          userId: testUserId)?.count ?? 0 == 1)
             XCTAssert(BMSCartridge.fetch(context: context,
                                          userId: testUserId,
-                                         actionName: testActionName)?.first != nil)
+                                         actionId: Mock.aid1)?.first != nil)
 
             guard let reinforcement = cartridge.nextReinforcement,
                 reinforcement.name == BMSReinforcement.NeutralName
@@ -183,22 +184,12 @@ class TestCoreData: XCTestCase {
                                       actionName: testActionName)?.events.count == 1)
 
             _ = (BMSReport.fetch(context: context,
-                                 userId: user.id,
+                            userId: user.id,
                                  actionName: testActionName)?.events.array as? [BMSEvent])?
                 .compactMap({context.delete($0)})
             XCTAssert(BMSReport.fetch(context: context,
                                       userId: user.id)?.isEmpty ?? false)
         }
 
-    }
-}
-
-extension CoreDataManager {
-    func inNewContext(completion: (NSManagedObjectContext) -> Void) {
-        let context = newContext()
-        context.performAndWait {
-            completion(context)
-            try? context.save()
-        }
     }
 }

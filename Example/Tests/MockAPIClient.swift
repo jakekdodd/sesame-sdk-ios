@@ -15,16 +15,21 @@ class MockAPIClient: APIClient {
         case Endpoint.boot.url:
             completion(MockAPIClient.mockResponse(for: .boot))
 
-        case Endpoint.track.url:
-            completion(MockAPIClient.mockResponse(for: .track))
-
-        case Endpoint.refresh.url:
-            completion(MockAPIClient.mockResponse(for: .refresh))
+        case Endpoint.reinforce.url:
+            completion(MockAPIClient.mockResponse(for: .reinforce))
 
         default:
             completion([:])
         }
     }
+}
+
+struct Mock {
+    static let aid1 = "actionId1"
+    static let aname1 = "action1"
+    static let cid1 = "cartridgeId1"
+    static let rid1 = "reinforcementId1"
+    static let rname1 = "sheen"
 }
 
 extension MockAPIClient {
@@ -35,68 +40,48 @@ extension MockAPIClient {
         var response = [String: Any]()
         switch endpoint {
         case .boot:
-            response["version"] = [
-                "versionID": "sesame2",
-                "mappings": [
-                    "appOpen": [
-                        "actionName": "appOpen",
-                        "codeless": [
-                            "reinforcements": []
-                        ],
-                        "manual": [
-                            "reinforcements": [
-                                "confetti",
-                                "sheen",
-                                "emojisplosion"
+            response["revision"] = 0
+            response["config"] = [
+                "tracking": [
+                    "enabled": true,
+                    "appState": true,
+                    "appViews": true
+                ],
+                "reinforcementEnabled": true,
+                "consoleLogging": true,
+                "reinforcedActions": [
+                    [
+                        "id": Mock.aid1,
+                        "name": Mock.aname1,
+                        "reinforcements": [
+                            [
+                                "id": Mock.rid1,
+                                "name": Mock.rname1,
+                                "effects": [
+                                    "name": Mock.rname1,
+                                    "duration": 2000,
+                                    "color": "#ffffffcc",
+                                    "aspectRatio": 1.667
+                                ]
                             ]
                         ]
                     ]
-                ],
-                "visualizerMappings": []
-            ]
-            response["config"] = [
-                "configID": "4d9cf6d40da638ae28bed8891de5aa3b364a5c3b",
-                "trackingCapabilities": [
-                    "applicationState": true,
-                    "applicationViews": true,
-                    "customViews": [
-                        "viewName": "viewName"
-                    ],
-                    "customEvents": [],
-                    "notificationObservations": false,
-                    "storekitObservations": false,
-                    "locationObservations": true,
-                    "bluetoothObservations": true
-                ],
-                "reinforcementEnabled": true,
-                "triggerEnabled": false,
-                "trackingEnabled": true,
-                "consoleLoggingEnabled": true,
-                "advertiserID": false,
-                "batchSize": [
-                    "track": 5,
-                    "report": 5
-                ],
-                "integrationMethod": "codeless"
-            ]
-            response["status"] = 206
-
-        case .track:
-            break
-
-        case .refresh:
-            response["cartridgeId"] = "DEVELOPMENT"
-            response["serverUtc"] = 1538162488492 as Int64
-            response["ttl"] = 86400000 as Int64
-            response["actionName"] = "appOpen"
-            response["reinforcements"] = [
-                ["reinforcementName": "NEUTRAL_RESP"],
-                ["reinforcementName": "confetti"],
-                ["reinforcementName": "sheen"],
-                ["reinforcementName": "emojisplosion"]
+                ]
             ]
 
+        case .reinforce:
+            response["utc"] = Int64(Date().timeIntervalSince1970 * 1000)
+            response["cartridges"] = [[
+                "ttl": 3600000 as Int64,
+                "cartridgeId": Mock.cid1,
+                "actionId": Mock.aid1,
+                "reinforcements": [
+                    ["reinforcementId": Mock.rid1],
+                    ["reinforcementId": Mock.rid1]
+                ]
+            ]]
         }
         return response
+
     }
 }
