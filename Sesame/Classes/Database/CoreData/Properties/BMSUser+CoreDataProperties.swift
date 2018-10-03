@@ -15,6 +15,13 @@ extension BMSUser {
         return NSFetchRequest<BMSUser>(entityName: "BMSUser")
     }
 
+    class func create(in context: NSManagedObjectContext) -> BMSUser? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSUser", in: context) else {
+            return nil
+        }
+        return BMSUser(entity: entity, insertInto: context)
+    }
+
     @NSManaged var id: String
     @NSManaged var appState: BMSAppState?
     @NSManaged var cartridges: NSSet

@@ -25,6 +25,13 @@ extension BMSReport {
         return NSFetchRequest<BMSReport>(entityName: "BMSReport")
     }
 
+    class func create(in context: NSManagedObjectContext) -> BMSReport? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReport", in: context) else {
+            return nil
+        }
+        return BMSReport(entity: entity, insertInto: context)
+    }
+
     @NSManaged var type: BMSReportType
     @NSManaged var actionName: String
     @NSManaged var events: NSOrderedSet

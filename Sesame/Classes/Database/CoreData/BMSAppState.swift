@@ -50,8 +50,7 @@ extension BMSAppState {
     class func insert(context: NSManagedObjectContext, appId: String, auth: String, versionId: String? = nil, configId: String? = nil) -> BMSAppState? {
         var value: BMSAppState?
         context.performAndWait {
-            if let entity = NSEntityDescription.entity(forEntityName: BMSAppState.description(), in: context) {
-                let appState = BMSAppState(entity: entity, insertInto: context)
+            if let appState = BMSAppState.create(in: context) {
                 appState.appId = appId
                 appState.auth = auth
                 appState.versionId = versionId

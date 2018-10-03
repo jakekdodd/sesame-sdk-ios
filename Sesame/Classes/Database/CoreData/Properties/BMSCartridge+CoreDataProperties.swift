@@ -15,6 +15,13 @@ extension BMSCartridge {
         return NSFetchRequest<BMSCartridge>(entityName: "BMSCartridge")
     }
 
+    class func create(in context: NSManagedObjectContext) -> BMSCartridge? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSCartridge", in: context) else {
+            return nil
+        }
+        return BMSCartridge(entity: entity, insertInto: context)
+    }
+
     @NSManaged var actionId: String
     @NSManaged var cartridgeId: String
     @NSManaged var utc: Int64

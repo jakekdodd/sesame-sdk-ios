@@ -119,8 +119,7 @@ extension BMSCartridge {
         var value: BMSCartridge?
         context.performAndWait {
             if let user = BMSUser.fetch(context: context, id: userId),
-                let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) {
-                let cartridge = BMSCartridge(entity: entity, insertInto: context)
+                let cartridge = BMSCartridge.create(in: context) {
                 cartridge.user = user
                 cartridge.actionId = actionId
                 cartridge.cartridgeId = cartridgeId

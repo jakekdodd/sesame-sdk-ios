@@ -58,8 +58,7 @@ extension BMSUser {
         context.performAndWait {
             let request = BMSUser.request()
             request.predicate = NSPredicate(format: "\(#keyPath(BMSUser.id)) == '\(id)'")
-            if let entity = NSEntityDescription.entity(forEntityName: BMSUser.description(), in: context) {
-                let user = BMSUser(entity: entity, insertInto: context)
+            if let user = BMSUser.create(in: context) {
                 user.id = id
                 do {
                     try context.save()
