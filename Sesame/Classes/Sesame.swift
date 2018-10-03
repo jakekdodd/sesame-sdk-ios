@@ -251,13 +251,11 @@ extension Sesame {
                     return
             }
             let payload = api.createPayload(appId: appId,
-                                            secret: appState.auth,
                                             versionId: appState.versionId,
                                             revision: Int(appState.revision),
-                                            primaryIdentity: nil,
-                                            timestamps: false)
+                                            primaryIdentity: nil)
 
-            api.post(endpoint: .boot, jsonObject: payload) { response in
+            api.post(endpoint: .boot, auth: appState.bearerAuth, jsonBody: payload) { response in
                 guard let response = response,
                     response["errors"] == nil else {
                         completion(false)
@@ -286,6 +284,7 @@ extension Sesame {
                     }
                 }
                 completion(true)
+                self.sendReinforce(context: self.coreDataManager.newContext())
             }
         }
     }
@@ -308,11 +307,9 @@ extension Sesame {
                 return
             }
             var payload = api.createPayload(appId: appState.appId,
-                                            secret: appState.auth,
                                             versionId: appState.versionId,
                                             revision: Int(appState.revision),
-                                            primaryIdentity: user.id,
-                                            timestamps: true)
+                                            primaryIdentity: user.id)
             payload["reports"] = {
                 var tracks = [[String: Any]]()
                 if let reports = appState.user?.reports.allObjects as? [BMSReport] {
@@ -357,7 +354,7 @@ extension Sesame {
                 return refresh
             }()
 
-            api.post(endpoint: .reinforce, jsonObject: payload) { response in
+            api.post(endpoint: .reinforce, auth: appState.bearerAuth, jsonBody: payload) { response in
                 guard let response = response,
                     response["errors"] == nil,
                     let utc = response["utc"] as? Int64 else {

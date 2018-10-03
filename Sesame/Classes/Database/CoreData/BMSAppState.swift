@@ -10,7 +10,13 @@ import Foundation
 import CoreData
 
 @objc(BMSAppState)
-class BMSAppState: NSManagedObject { }
+class BMSAppState: NSManagedObject {
+
+    var bearerAuth: HTTPClient.AuthorizationHeader {
+        return .bearer(appId, auth)
+    }
+
+}
 
 extension BMSAppState {
 
