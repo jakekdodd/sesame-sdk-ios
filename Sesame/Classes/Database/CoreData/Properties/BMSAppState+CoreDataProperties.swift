@@ -15,6 +15,13 @@ extension BMSAppState {
         return NSFetchRequest<BMSAppState>(entityName: "BMSAppState")
     }
 
+    class func create(in context: NSManagedObjectContext) -> BMSAppState? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSAppState", in: context) else {
+            return nil
+        }
+        return BMSAppState(entity: entity, insertInto: context)
+    }
+
     @NSManaged var appId: String
     @NSManaged var auth: String
     @NSManaged var versionId: String?
@@ -33,6 +40,14 @@ extension BMSAppState {
                 effectDetails = dict
             }
         }
+    }
+
+    var reinforcedActions: [[String: Any]]? {
+        return effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]]
+    }
+
+    var actionIds: [String]? {
+        return reinforcedActions?.compactMap({$0["id"] as? String})
     }
 
 }

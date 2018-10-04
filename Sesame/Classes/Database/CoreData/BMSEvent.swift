@@ -28,10 +28,9 @@ extension BMSEvent {
         context.performAndWait {
             guard let report = BMSReport.fetch(context: context, userId: userId, actionName: actionName) ??
                 BMSReport.insert(context: context, userId: userId, actionName: actionName),
-                let entity = NSEntityDescription.entity(forEntityName: BMSEvent.description(), in: context) else {
+                let event = BMSEvent.create(in: context) else {
                     return
             }
-            let event = BMSEvent(entity: entity, insertInto: context)
             event.report = report
             event.reinforcement = reinforcement
             event.sessionId = sessionId

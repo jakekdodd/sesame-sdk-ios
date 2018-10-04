@@ -15,6 +15,13 @@ extension BMSEvent {
         return NSFetchRequest<BMSEvent>(entityName: "BMSEvent")
     }
 
+    class func create(in context: NSManagedObjectContext) -> BMSEvent? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSEvent", in: context) else {
+            return nil
+        }
+        return BMSEvent(entity: entity, insertInto: context)
+    }
+
     @NSManaged var metadata: String?
     @NSManaged var sessionId: NSNumber?
     @NSManaged var timezoneOffset: Int64

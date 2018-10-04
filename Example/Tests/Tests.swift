@@ -15,9 +15,9 @@ class Tests: XCTestCase {
     }
 
     func testMultipleEvents() {
-        let sesame = Sesame.dev()
-        let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
-        let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: Sesame.devUserId) }
+        let sesame = MockSesame()
+        let addEvent = { sesame.addEvent(actionName: Mock.ename1) }
+        let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: Mock.uid1) }
         XCTAssert(countEvents() == 0)
 
         addEvent()
@@ -28,11 +28,11 @@ class Tests: XCTestCase {
     }
 
     func testMultipleReports() {
-        let sesame = Sesame.dev()
-        let countReports = { BMSReport.fetch(context: sesame.coreDataManager.newContext(), userId: Sesame.devUserId)?.count }
+        let sesame = MockSesame()
+        let countReports = { BMSReport.fetch(context: sesame.coreDataManager.newContext(), userId: Mock.uid1)?.count }
         XCTAssert(countReports() == 0)
 
-        sesame.addEvent(actionName: BMSEvent.AppOpenName)
+        sesame.addEvent(actionName: Mock.ename1)
         XCTAssert(countReports() == 1)
 
         sesame.addEvent(actionName: "appClose")
@@ -40,7 +40,7 @@ class Tests: XCTestCase {
     }
 
     func testConcurrentEventsCount() {
-        let sesame = Sesame.dev()
+        let sesame = MockSesame()
         let desiredCount = 5
 
         let group = DispatchGroup()
@@ -63,17 +63,21 @@ class Tests: XCTestCase {
         XCTAssert(count == desiredCount)
     }
 
+    //swiftlint:disable:next function_body_length
     func testUserChange() {
-        let sesame = Sesame.dev()
+        let sesame = MockSesame()
         let user1 = "ann"
         let user2 = "bob"
         var currentUser = user1
         let setUser1 = { currentUser = user1; sesame.setUserId(currentUser) }
         let setUser2 = { currentUser = user2; sesame.setUserId(currentUser) }
         let addEvent = { sesame.addEvent(actionName: BMSEvent.AppOpenName) }
-        let countEvents = { return BMSEvent.count(context: sesame.coreDataManager.newContext(), userId: currentUser) ?? -1 }
+        let countEvents = {
+            return BMSEvent.count(context: sesame.coreDataManager.newContext(),
+                                                  userId: currentUser) ?? -1
+        }
         let deleteEvents = {
-            sesame.coreDataManager.inNewContext { context in
+            _ = sesame.coreDataManager.newContext { context in
                 _ = (BMSReport.fetch(context: context, userId: currentUser, actionName: BMSEvent.AppOpenName)?
                     .events.array as? [BMSEvent])?
                     .map({context.delete($0)})
@@ -114,11 +118,11 @@ class Tests: XCTestCase {
     }
 
     func testBoot() {
-        let sesame = Sesame.dev()
+        let sesame = MockSesame()
 
         let promise = expectation(description: "Did configure on boot")
         sesame.sendBoot { _ in
-            sesame.coreDataManager.inNewContext { context in
+            sesame.coreDataManager.newContext { context in
                 XCTAssert(BMSAppState.fetch(context: context, appId: sesame.appId)?.actionIds?.count ?? 0 > 0)
                 promise.fulfill()
             }
@@ -128,14 +132,14 @@ class Tests: XCTestCase {
     }
 
     func testReinforce() {
-        let sesame = Sesame.dev()
+        let sesame = MockSesame()
 
         let promise = expectation(description: "Did refresh")
         sesame.sendBoot { success in
             XCTAssert(success)
             sesame.sendReinforce(context: sesame.coreDataManager.newContext()) { success in
                 XCTAssert(success)
-                sesame.coreDataManager.inNewContext { context in
+                sesame.coreDataManager.newContext { context in
                     guard let userId = sesame.getUserId(context),
                         let cartridges = BMSCartridge.fetch(context: context, userId: userId),
                         !cartridges.isEmpty,
@@ -151,10 +155,31 @@ class Tests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
-}
-
-extension BMSAppState {
-    var actionIds: [String]? {
-        return (effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.compactMap({$0["id"] as? String})
+    class ReinforcementDelegate: NSObject, SesameReinforcementDelegate {
+        var didGetView: (() -> Void) = { }
+        func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController) {
+            didGetView()
+        }
     }
+
+    func testReinforceDelegate() {
+        let sesame = MockSesame()
+        let delegate = ReinforcementDelegate()
+        sesame.reinforcementDelegate = delegate
+
+        let promise = expectation(description: "Did get reinforcement")
+        delegate.didGetView = {
+            promise.fulfill()
+        }
+        sesame.sendBoot { success in
+            XCTAssert(success)
+            sesame.sendReinforce(context: sesame.coreDataManager.newContext()) { success in
+                XCTAssert(success)
+                sesame.addEvent(actionName: Mock.aname1, reinforce: true)
+            }
+        }
+
+        waitForExpectations(timeout: 3)
+    }
+
 }

@@ -63,8 +63,7 @@ public class Sesame: NSObject {
 
         super.init()
 
-        let context = coreDataManager.newContext()
-        context.performAndWait {
+        coreDataManager.newContext { context in
             if let appState = BMSAppState.fetch(context: context, appId: appId) ??
                 BMSAppState.insert(context: context, appId: appId, auth: auth, versionId: versionId) {
                 if appState.auth != auth {
@@ -136,6 +135,7 @@ public extension Sesame {
         return userId
     }
 
+    //swiftlint:disable:next function_body_length
     public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
         var reinforcementName: String?
         var eventCount = 0
@@ -153,9 +153,7 @@ public extension Sesame {
                                               sessionId: appLifecycleTracker.sessionId as NSNumber?,
                                               metadata: metadata) else { return }
             if reinforce,
-                let effectDetails = appState.effectDetailsAsDictionary,
-                let reinforcedAction = (effectDetails["reinforcedActions"] as? [[String: Any]])?
-                    .filter({$0["name"] as? String == actionName}).first,
+                let reinforcedAction = appState.reinforcedActions?.filter({$0["name"] as? String == actionName}).first,
                 let actionId = reinforcedAction["id"] as? String,
                 let reinforcement = BMSCartridge.fetch(context: context,
                                                        userId: user.id,
@@ -246,28 +244,24 @@ extension Sesame: BMSAppLifecycleListener {
 extension Sesame {
 
     public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
-        let context = coreDataManager.newContext()
-        context.performAndWait {
+        coreDataManager.newContext { context in
             guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else {
                     completion(false)
                     return
             }
             let payload = api.createPayload(appId: appId,
-                                            secret: appState.auth,
                                             versionId: appState.versionId,
                                             revision: Int(appState.revision),
-                                            primaryIdentity: nil,
-                                            timestamps: false)
+                                            primaryIdentity: nil)
 
-            api.post(endpoint: .boot, jsonObject: payload) { response in
+            api.post(endpoint: .boot, auth: appState.basicAuth, jsonBody: payload) { response in
                 guard let response = response,
                     response["errors"] == nil else {
                         completion(false)
                         return
                 }
-                let context = self.coreDataManager.newContext()
-                context.performAndWait {
+                self.coreDataManager.newContext { context in
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId) else {
                         completion(false)
                         return
@@ -290,17 +284,19 @@ extension Sesame {
                     }
                 }
                 completion(true)
+                self.sendReinforce(context: self.coreDataManager.newContext())
             }
         }
     }
 
+    //swiftlint:disable:next cyclomatic_complexity function_body_length
     func sendReinforce(context: NSManagedObjectContext, completion: @escaping (Bool) -> Void = {_ in}) {
         context.performAndWait {
             guard !uploadScheduled else { return }
             uploadScheduled = true
             guard let appState = BMSAppState.fetch(context: context, appId: appId),
                 let user = appState.user,
-                let allActionIds = (appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]])?.compactMap({$0["id"] as? String})
+                let allActionIds = appState.actionIds
                 else {
                     uploadScheduled = false
                     return
@@ -311,11 +307,9 @@ extension Sesame {
                 return
             }
             var payload = api.createPayload(appId: appState.appId,
-                                            secret: appState.auth,
                                             versionId: appState.versionId,
                                             revision: Int(appState.revision),
-                                            primaryIdentity: user.id,
-                                            timestamps: true)
+                                            primaryIdentity: user.id)
             payload["reports"] = {
                 var tracks = [[String: Any]]()
                 if let reports = appState.user?.reports.allObjects as? [BMSReport] {
@@ -360,7 +354,7 @@ extension Sesame {
                 return refresh
             }()
 
-            api.post(endpoint: .reinforce, jsonObject: payload) { response in
+            api.post(endpoint: .reinforce, auth: appState.basicAuth, jsonBody: payload) { response in
                 guard let response = response,
                     response["errors"] == nil,
                     let utc = response["utc"] as? Int64 else {
@@ -369,10 +363,9 @@ extension Sesame {
                         completion(false)
                         return
                 }
-                let context = self.coreDataManager.newContext()
-                context.performAndWait {
+                self.coreDataManager.newContext { context in
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId),
-                        let reinforcedActions = appState.effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]],
+                        let reinforcedActions = appState.reinforcedActions,
                         let user = appState.user
                         else { return }
                     for cartridgeInfo in response["cartridges"] as? [[String: Any]] ?? [] {
@@ -380,16 +373,24 @@ extension Sesame {
                         if let ttl = cartridgeInfo["ttl"] as? Int64,
                             let actionId = cartridgeInfo["actionId"] as? String,
                             let cartridgeId = cartridgeInfo["cartridgeId"] as? String,
-                            let reinforcementIds = (cartridgeInfo["reinforcements"] as? [[String: String]])?.compactMap({$0["reinforcementId"]}),
+                            let reinforcementIds = (cartridgeInfo["reinforcements"] as? [[String: String]])?
+                                .compactMap({$0["reinforcementId"]}),
                             let reinforcedAction = reinforcedActions.filter({$0["id"] as? String == actionId}).first,
                             let reinforcements = reinforcedAction["reinforcements"] as? [[String: Any]] {
                             var reinforcementIdsAndNames = [(String, String)]()
                             for id in reinforcementIds {
-                                if let name = reinforcements.filter({$0["id"] as? String == id}).first?["name"] as? String {
+                                if let reinforcement = reinforcements.filter({$0["id"] as? String == id}).first,
+                                    let name = reinforcement["name"] as? String {
                                     reinforcementIdsAndNames.append((id, name))
                                 }
                             }
-                            BMSCartridge.insert(context: context, userId: user.id, actionId: actionId, cartridgeId: cartridgeId, utc: utc, ttl: ttl, reinforcementIdAndName: reinforcementIdsAndNames)
+                            BMSCartridge.insert(context: context,
+                                                userId: user.id,
+                                                actionId: actionId,
+                                                cartridgeId: cartridgeId,
+                                                utc: utc,
+                                                ttl: ttl,
+                                                reinforcementIdAndName: reinforcementIdsAndNames)
                         }
                     }
                 }
@@ -400,3 +401,5 @@ extension Sesame {
         }
     }
 }
+
+//swiftlint:disable:this file_length

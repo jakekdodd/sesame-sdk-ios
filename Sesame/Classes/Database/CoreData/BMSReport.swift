@@ -50,8 +50,7 @@ extension BMSReport {
         var value: BMSReport?
         context.performAndWait {
             if let user = BMSUser.fetch(context: context, id: userId),
-                let entity = NSEntityDescription.entity(forEntityName: BMSReport.description(), in: context) {
-                let report = BMSReport(entity: entity, insertInto: context)
+                let report = BMSReport.create(in: context) {
                 report.actionName = actionName
                 report.user = user
                 do {

@@ -14,8 +14,8 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		8472FB82213A7499003B86CE /* Sesame+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472FB80213A7486003B86CE /* Sesame+Extensions.swift */; };
-		847734F6215EAE6E00D97B7C /* MockAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847734F5215EAE6E00D97B7C /* MockAPIClient.swift */; };
+		8472FB82213A7499003B86CE /* Mock+Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472FB80213A7486003B86CE /* Mock+Sesame.swift */; };
+		847734F6215EAE6E00D97B7C /* Mock+APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */; };
 		848553F22160D02D003DAE63 /* Test+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848553F12160D02D003DAE63 /* Test+CoreData.swift */; };
 		8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8491A2E1211CE03B00069B94 /* Utilities.swift */; };
 		849B508221620E370096A91C /* Test+AppLifecycleTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */; };
@@ -49,8 +49,8 @@
 		76BA4BF8511F2697FB82B137 /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC2485495B52FF43A9AE41D /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sesame_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sesame_Tests/Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8422CD7A21124C9F001E94FF /* Sesame_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sesame_Example.entitlements; sourceTree = "<group>"; };
-		8472FB80213A7486003B86CE /* Sesame+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sesame+Extensions.swift"; sourceTree = "<group>"; };
-		847734F5215EAE6E00D97B7C /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
+		8472FB80213A7486003B86CE /* Mock+Sesame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+Sesame.swift"; sourceTree = "<group>"; };
+		847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+APIClient.swift"; sourceTree = "<group>"; };
 		848553F12160D02D003DAE63 /* Test+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Test+CoreData.swift"; path = "/Users/cuddergambino/boundless/sesame-sdk-ios/Example/Tests/Test+CoreData.swift"; sourceTree = "<absolute>"; };
 		8491A2E1211CE03B00069B94 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+AppLifecycleTracker.swift"; sourceTree = "<group>"; };
@@ -140,8 +140,8 @@
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				848553F12160D02D003DAE63 /* Test+CoreData.swift */,
 				849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */,
-				8472FB80213A7486003B86CE /* Sesame+Extensions.swift */,
-				847734F5215EAE6E00D97B7C /* MockAPIClient.swift */,
+				8472FB80213A7486003B86CE /* Mock+Sesame.swift */,
+				847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -225,7 +225,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -374,8 +374,8 @@
 				849B508221620E370096A91C /* Test+AppLifecycleTracker.swift in Sources */,
 				848553F22160D02D003DAE63 /* Test+CoreData.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
-				8472FB82213A7499003B86CE /* Sesame+Extensions.swift in Sources */,
-				847734F6215EAE6E00D97B7C /* MockAPIClient.swift in Sources */,
+				8472FB82213A7499003B86CE /* Mock+Sesame.swift in Sources */,
+				847734F6215EAE6E00D97B7C /* Mock+APIClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,12 +421,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -475,12 +477,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

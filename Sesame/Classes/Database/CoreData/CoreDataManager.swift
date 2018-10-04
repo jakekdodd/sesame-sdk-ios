@@ -46,44 +46,27 @@ class CoreDataManager: NSObject {
     }()
 
     private lazy var managedObjectContext: NSManagedObjectContext? = {
-        if let coordinator = persistentStoreCoordinator {
-            let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            managedObjectContext.persistentStoreCoordinator = coordinator
-            managedObjectContext.mergePolicy = NSOverwriteMergePolicy
-            // Setup notifications
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(saveChanges(_:)),
-                                                   name: UIApplication.didEnterBackgroundNotification,
-                                                   object: nil)
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(saveChanges(_:)),
-                                                   name: UIApplication.willTerminateNotification,
-                                                   object: nil)
-            return managedObjectContext
-        }
-        return nil
+        guard let coordinator = persistentStoreCoordinator else { return nil }
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = coordinator
+        managedObjectContext.mergePolicy = NSRollbackMergePolicy
+        return managedObjectContext
     }()
 
-    func newContext() -> NSManagedObjectContext {
+    @discardableResult
+    func newContext(completion: (NSManagedObjectContext) -> Void = {_ in}) -> NSManagedObjectContext {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context.parent = managedObjectContext
+        context.performAndWait {
+            completion(context)
+            if context.hasChanges {
+                try? context.save()
+            }
+        }
         return context
     }
 
     // MARK: - Save & Delete Methods
-
-    @objc
-    func saveChanges(_ notification: Notification?) {
-        managedObjectContext?.perform {
-            if self.managedObjectContext?.hasChanges ?? false {
-                do {
-                    try self.managedObjectContext?.save()
-                } catch {
-                    BMSLog.error("\(error)")
-                }
-            }
-        }
-    }
 
     func save() {
         managedObjectContext?.performAndWait {

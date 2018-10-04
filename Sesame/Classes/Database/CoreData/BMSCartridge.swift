@@ -18,7 +18,8 @@ class BMSCartridge: NSManagedObject {
         guard let context = managedObjectContext else { return nil }
         var value: BMSReinforcement?
         context.performAndWait {
-            BMSLog.warning("Total Cartridges: \(BMSCartridge.fetch(context: context, userId: user.id)?.compactMap({$0}) as AnyObject)")
+//            let cartridgeCount = BMSCartridge.fetch(context: context, userId: user.id)?.compactMap({$0})
+//            BMSLog.warning("Total Cartridges: \(cartridgeCount as AnyObject)")
             if (utc + ttl) >= Int64(1000 * Date().timeIntervalSince1970),
                 let reinforcements = reinforcements.array as? [BMSReinforcement],
                 let reinforcement = reinforcements.filter({$0.event == nil}).first {
@@ -47,9 +48,12 @@ extension BMSCartridge {
         context.performAndWait {
             let now = Int64(Date().timeIntervalSince1970 * 1000)
             for actionId in actionIds {
-                guard let cartridge = BMSCartridge.fetch(context: context, userId: userId, actionId: actionId)?.first else {
-                    value.append(actionId)
-                    continue
+                guard let cartridge = BMSCartridge.fetch(context: context,
+                                                         userId: userId,
+                                                         actionId: actionId)?
+                    .first else {
+                        value.append(actionId)
+                        continue
                 }
                 if cartridge.cartridgeId == BMSCartridge.NeutralCartridgeId ||
                     cartridge.utc + cartridge.ttl < now ||
@@ -119,8 +123,7 @@ extension BMSCartridge {
         var value: BMSCartridge?
         context.performAndWait {
             if let user = BMSUser.fetch(context: context, id: userId),
-                let entity = NSEntityDescription.entity(forEntityName: BMSCartridge.description(), in: context) {
-                let cartridge = BMSCartridge(entity: entity, insertInto: context)
+                let cartridge = BMSCartridge.create(in: context) {
                 cartridge.user = user
                 cartridge.actionId = actionId
                 cartridge.cartridgeId = cartridgeId

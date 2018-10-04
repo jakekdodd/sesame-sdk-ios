@@ -1,5 +1,5 @@
 //
-//  MockAPIClient.swift
+//  Mock+APIClient.swift
 //  Sesame_Tests
 //
 //  Created by Akash Desai on 9/28/18.
@@ -10,7 +10,7 @@ import Foundation
 @testable import Sesame
 
 class MockAPIClient: APIClient {
-    override func post(url: URL, jsonObject: [String: Any], timeout: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
+    override func post(url: URL, auth: AuthorizationHeader, jsonBody: [String: Any], timeout: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
         switch url {
         case Endpoint.boot.url:
             completion(MockAPIClient.mockResponse(for: .boot))
@@ -22,14 +22,6 @@ class MockAPIClient: APIClient {
             completion([:])
         }
     }
-}
-
-struct Mock {
-    static let aid1 = "actionId1"
-    static let aname1 = "action1"
-    static let cid1 = "cartridgeId1"
-    static let rid1 = "reinforcementId1"
-    static let rname1 = "sheen"
 }
 
 extension MockAPIClient {
