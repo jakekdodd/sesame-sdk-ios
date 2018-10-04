@@ -72,8 +72,8 @@ extension HTTPClient {
         let type: String
         let credentials: String
 
-        static func bearer(_ username: String, _ password: String) -> AuthorizationHeader {
-            return AuthorizationHeader(type: "Bearer",
+        static func basic(_ username: String, _ password: String) -> AuthorizationHeader {
+            return AuthorizationHeader(type: "Basic",
                                        credentials: "\(username):\(password)".toBase64())
         }
     }

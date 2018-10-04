@@ -12,8 +12,8 @@ import CoreData
 @objc(BMSAppState)
 class BMSAppState: NSManagedObject {
 
-    var bearerAuth: HTTPClient.AuthorizationHeader {
-        return .bearer(appId, auth)
+    var basicAuth: HTTPClient.AuthorizationHeader {
+        return .basic(appId, auth)
     }
 
 }

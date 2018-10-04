@@ -255,7 +255,7 @@ extension Sesame {
                                             revision: Int(appState.revision),
                                             primaryIdentity: nil)
 
-            api.post(endpoint: .boot, auth: appState.bearerAuth, jsonBody: payload) { response in
+            api.post(endpoint: .boot, auth: appState.basicAuth, jsonBody: payload) { response in
                 guard let response = response,
                     response["errors"] == nil else {
                         completion(false)
@@ -354,7 +354,7 @@ extension Sesame {
                 return refresh
             }()
 
-            api.post(endpoint: .reinforce, auth: appState.bearerAuth, jsonBody: payload) { response in
+            api.post(endpoint: .reinforce, auth: appState.basicAuth, jsonBody: payload) { response in
                 guard let response = response,
                     response["errors"] == nil,
                     let utc = response["utc"] as? Int64 else {

@@ -16,11 +16,11 @@ class APIClient: HTTPClient {
             switch self {
             case .boot:
 //                return URL(string: "https://reinforce.boundless.ai/v6/app/boot")!
-                return URL(string: "http://localhost:8080/v1/boot")!
+                return URL(string: "https://reinforcement.boundless.ai/v1/boot")!
 //                return URL(string: "http://192.168.1.12:8080/v1/boot")!
             case .reinforce:
 //                return URL(string: "https://reinforce.boundless.ai/v6/app/report")!
-                return URL(string: "http://localhost:8080/v1/reinforce")!
+                return URL(string: "https://reinforcement.boundless.ai/v1/reinforce")!
 //                return URL(string: "http://192.168.1.12:8080/v1/reinforce")!
             }
         }
