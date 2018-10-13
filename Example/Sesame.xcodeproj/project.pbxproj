@@ -51,7 +51,7 @@
 		8422CD7A21124C9F001E94FF /* Sesame_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sesame_Example.entitlements; sourceTree = "<group>"; };
 		8472FB80213A7486003B86CE /* Mock+Sesame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+Sesame.swift"; sourceTree = "<group>"; };
 		847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+APIClient.swift"; sourceTree = "<group>"; };
-		848553F12160D02D003DAE63 /* Test+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Test+CoreData.swift"; path = "/Users/cuddergambino/boundless/sesame-sdk-ios/Example/Tests/Test+CoreData.swift"; sourceTree = "<absolute>"; };
+		848553F12160D02D003DAE63 /* Test+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+CoreData.swift"; sourceTree = "<group>"; };
 		8491A2E1211CE03B00069B94 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+AppLifecycleTracker.swift"; sourceTree = "<group>"; };
 		B88D121BCE5EF6408FE87B07 /* Sesame.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Sesame.podspec; path = ../Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
