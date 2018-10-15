@@ -312,7 +312,7 @@ extension Sesame {
                                             primaryIdentity: user.id)
             payload["reports"] = {
                 var tracks = [[String: Any]]()
-                if let reports = appState.user?.reports.allObjects as? [BMSReport] {
+                if let reports = appState.user?.reports.allObjects as? [BMSEventReport] {
                     for report in reports {
                         var track = [String: Any]()
                         track["actionId"] = report.actionName

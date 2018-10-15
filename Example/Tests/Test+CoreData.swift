@@ -112,9 +112,9 @@ class TestCoreData: XCTestCase {
 
             guard cartridge.nextReinforcement == nil else { fatalError() }
 
-            _ = (BMSReport.fetch(context: context, userId: user.id)?
+            _ = (BMSEventReport.fetch(context: context, userId: user.id)?
                 .flatMap({$0.events}) as? [BMSEvent])?.compactMap({context.delete($0)})
-            XCTAssert(BMSReport.fetch(context: context, userId: user.id)?.count == 0)
+            XCTAssert(BMSEventReport.fetch(context: context, userId: user.id)?.count == 0)
         }
     }
 
@@ -163,30 +163,30 @@ class TestCoreData: XCTestCase {
             guard let user = BMSUser.insert(context: context,
                                             id: Mock.uid1)
                 else { fatalError() }
-            XCTAssert(BMSReport.fetch(context: context,
+            XCTAssert(BMSEventReport.fetch(context: context,
                                       userId: user.id)?.isEmpty ?? false)
 
-            XCTAssert(BMSReport.insert(context: context,
+            XCTAssert(BMSEventReport.insert(context: context,
                                        userId: user.id,
                                        actionName: Mock.aname1) != nil)
-            XCTAssert(BMSReport.fetch(context: context,
+            XCTAssert(BMSEventReport.fetch(context: context,
                                       userId: Mock.uid1)?.count ?? 0 == 1)
-            XCTAssert(BMSReport.fetch(context: context,
+            XCTAssert(BMSEventReport.fetch(context: context,
                                       userId: Mock.uid1,
                                       actionName: Mock.aname1) != nil)
 
             XCTAssert(BMSEvent.insert(context: context,
                                       userId: user.id,
                                       actionName: Mock.aname1) != nil)
-            XCTAssert(BMSReport.fetch(context: context,
+            XCTAssert(BMSEventReport.fetch(context: context,
                                       userId: user.id,
                                       actionName: Mock.aname1)?.events.count == 1)
 
-            _ = (BMSReport.fetch(context: context,
+            _ = (BMSEventReport.fetch(context: context,
                             userId: user.id,
                                  actionName: Mock.aname1)?.events.array as? [BMSEvent])?
                 .compactMap({context.delete($0)})
-            XCTAssert(BMSReport.fetch(context: context,
+            XCTAssert(BMSEventReport.fetch(context: context,
                                       userId: user.id)?.isEmpty ?? false)
         }
 

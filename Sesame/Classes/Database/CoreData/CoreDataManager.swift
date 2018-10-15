@@ -85,7 +85,7 @@ class CoreDataManager: NSObject {
             let rootModels = [BMSCartridgeReinforcement.self,
                               BMSCartridge.self,
                               BMSEvent.self,
-                              BMSReport.self,
+                              BMSEventReport.self,
                               BMSUser.self,
                               BMSAppState.self]
             for model in rootModels {

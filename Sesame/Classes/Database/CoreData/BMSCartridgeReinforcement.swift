@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc
+@objc(BMSCartridgeReinforcement)
 public class BMSCartridgeReinforcement: NSManagedObject {
 
     @objc public static let NeutralName = "NEUTRAL_RESP"

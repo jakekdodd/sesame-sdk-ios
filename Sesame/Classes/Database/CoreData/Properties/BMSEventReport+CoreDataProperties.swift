@@ -1,5 +1,5 @@
 //
-//  BMSReport+CoreDataProperties.swift
+//  BMSEventReport+CoreDataProperties.swift
 //  
 //
 //  Created by Akash Desai on 9/26/18.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc enum BMSReportType: Int32 {
+@objc enum BMSEventReportType: Int32 {
     case reinforceable, nonreinforceable
     var stringValue: String {
         switch self {
@@ -19,20 +19,20 @@ import CoreData
     }
 }
 
-extension BMSReport {
+extension BMSEventReport {
 
-    @nonobjc class func request() -> NSFetchRequest<BMSReport> {
-        return NSFetchRequest<BMSReport>(entityName: "BMSReport")
+    @nonobjc class func request() -> NSFetchRequest<BMSEventReport> {
+        return NSFetchRequest<BMSEventReport>(entityName: "BMSEventReport")
     }
 
-    class func create(in context: NSManagedObjectContext) -> BMSReport? {
-        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReport", in: context) else {
+    class func create(in context: NSManagedObjectContext) -> BMSEventReport? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSEventReport", in: context) else {
             return nil
         }
-        return BMSReport(entity: entity, insertInto: context)
+        return BMSEventReport(entity: entity, insertInto: context)
     }
 
-    @NSManaged var type: BMSReportType
+    @NSManaged var type: BMSEventReportType
     @NSManaged var actionName: String
     @NSManaged var events: NSOrderedSet
     @NSManaged var user: BMSUser
@@ -40,7 +40,7 @@ extension BMSReport {
 }
 
 // MARK: Generated accessors for events
-extension BMSReport {
+extension BMSEventReport {
 
     @objc(insertObject:inEventsAtIndex:)
     @NSManaged func insertIntoEvents(_ value: BMSEvent, at idx: Int)

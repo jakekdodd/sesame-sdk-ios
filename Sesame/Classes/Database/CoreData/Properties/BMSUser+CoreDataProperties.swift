@@ -50,10 +50,10 @@ extension BMSUser {
 extension BMSUser {
 
     @objc(addReportsObject:)
-    @NSManaged public func addToReports(_ value: BMSReport)
+    @NSManaged public func addToReports(_ value: BMSEventReport)
 
     @objc(removeReportsObject:)
-    @NSManaged public func removeFromReports(_ value: BMSReport)
+    @NSManaged public func removeFromReports(_ value: BMSEventReport)
 
     @objc(addReports:)
     @NSManaged public func addToReports(_ values: NSSet)

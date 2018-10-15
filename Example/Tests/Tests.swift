@@ -29,7 +29,7 @@ class Tests: XCTestCase {
 
     func testMultipleReports() {
         let sesame = MockSesame()
-        let countReports = { BMSReport.fetch(context: sesame.coreDataManager.newContext(), userId: Mock.uid1)?.count }
+        let countReports = { BMSEventReport.fetch(context: sesame.coreDataManager.newContext(), userId: Mock.uid1)?.count }
         XCTAssert(countReports() == 0)
 
         sesame.addEvent(actionName: Mock.ename1)
@@ -78,7 +78,7 @@ class Tests: XCTestCase {
         }
         let deleteEvents = {
             _ = sesame.coreDataManager.newContext { context in
-                _ = (BMSReport.fetch(context: context, userId: currentUser, actionName: BMSEvent.AppOpenName)?
+                _ = (BMSEventReport.fetch(context: context, userId: currentUser, actionName: BMSEvent.AppOpenName)?
                     .events.array as? [BMSEvent])?
                     .map({context.delete($0)})
             }

@@ -1,5 +1,5 @@
 //
-//  BMSReport+CoreDataClass.swift
+//  BMSEventReport+CoreDataClass.swift
 //  
 //
 //  Created by Akash Desai on 9/26/18.
@@ -9,16 +9,16 @@
 import Foundation
 import CoreData
 
-@objc(BMSReport)
-class BMSReport: NSManagedObject { }
+@objc(BMSEventReport)
+class BMSEventReport: NSManagedObject { }
 
-extension BMSReport {
+extension BMSEventReport {
 
-    class func fetch(context: NSManagedObjectContext, userId: String) -> [BMSReport]? {
-        var values: [BMSReport]?
+    class func fetch(context: NSManagedObjectContext, userId: String) -> [BMSEventReport]? {
+        var values: [BMSEventReport]?
         context.performAndWait {
-            let request = BMSReport.request()
-            request.predicate = NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'")
+            let request = BMSEventReport.request()
+            request.predicate = NSPredicate(format: "\(#keyPath(BMSEventReport.user.id)) == '\(userId)'")
             do {
                 values = try context.fetch(request)
             } catch let error as NSError {
@@ -28,13 +28,13 @@ extension BMSReport {
         return values
     }
 
-    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSReport? {
-        var value: BMSReport?
+    class func fetch(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSEventReport? {
+        var value: BMSEventReport?
         context.performAndWait {
-            let request = BMSReport.request()
+            let request = BMSEventReport.request()
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(#keyPath(BMSReport.user.id)) == '\(userId)'"),
-                NSPredicate(format: "\(#keyPath(BMSReport.actionName)) == '\(actionName)'")
+                NSPredicate(format: "\(#keyPath(BMSEventReport.user.id)) == '\(userId)'"),
+                NSPredicate(format: "\(#keyPath(BMSEventReport.actionName)) == '\(actionName)'")
                 ])
             request.fetchLimit = 1
             do {
@@ -46,11 +46,11 @@ extension BMSReport {
         return value
     }
 
-    class func insert(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSReport? {
-        var value: BMSReport?
+    class func insert(context: NSManagedObjectContext, userId: String, actionName: String) -> BMSEventReport? {
+        var value: BMSEventReport?
         context.performAndWait {
             if let user = BMSUser.fetch(context: context, id: userId),
-                let report = BMSReport.create(in: context) {
+                let report = BMSEventReport.create(in: context) {
                 report.actionName = actionName
                 report.user = user
                 do {

@@ -26,8 +26,8 @@ extension BMSEvent {
     class func insert(context: NSManagedObjectContext, userId: String, actionName: String, reinforcement: BMSCartridgeReinforcement? = nil, sessionId: NSNumber? = nil, metadata: [String: Any] = [:]) -> BMSEvent? {
         var value: BMSEvent?
         context.performAndWait {
-            guard let report = BMSReport.fetch(context: context, userId: userId, actionName: actionName) ??
-                BMSReport.insert(context: context, userId: userId, actionName: actionName),
+            guard let report = BMSEventReport.fetch(context: context, userId: userId, actionName: actionName) ??
+                BMSEventReport.insert(context: context, userId: userId, actionName: actionName),
                 let event = BMSEvent.create(in: context) else {
                     return
             }
