@@ -35,28 +35,28 @@ extension BMSCartridge {
 extension BMSCartridge {
 
     @objc(insertObject:inReinforcementsAtIndex:)
-    @NSManaged func insertIntoReinforcements(_ value: BMSReinforcement, at idx: Int)
+    @NSManaged func insertIntoReinforcements(_ value: BMSCartridgeReinforcement, at idx: Int)
 
     @objc(removeObjectFromReinforcementsAtIndex:)
     @NSManaged func removeFromReinforcements(at idx: Int)
 
     @objc(insertReinforcements:atIndexes:)
-    @NSManaged func insertIntoReinforcements(_ values: [BMSReinforcement], at indexes: NSIndexSet)
+    @NSManaged func insertIntoReinforcements(_ values: [BMSCartridgeReinforcement], at indexes: NSIndexSet)
 
     @objc(removeReinforcementsAtIndexes:)
     @NSManaged func removeFromReinforcements(at indexes: NSIndexSet)
 
     @objc(replaceObjectInReinforcementsAtIndex:withObject:)
-    @NSManaged func replaceReinforcements(at idx: Int, with value: BMSReinforcement)
+    @NSManaged func replaceReinforcements(at idx: Int, with value: BMSCartridgeReinforcement)
 
     @objc(replaceReinforcementsAtIndexes:withReinforcements:)
-    @NSManaged func replaceReinforcements(at indexes: NSIndexSet, with values: [BMSReinforcement])
+    @NSManaged func replaceReinforcements(at indexes: NSIndexSet, with values: [BMSCartridgeReinforcement])
 
     @objc(addReinforcementsObject:)
-    @NSManaged func addToReinforcements(_ value: BMSReinforcement)
+    @NSManaged func addToReinforcements(_ value: BMSCartridgeReinforcement)
 
     @objc(removeReinforcementsObject:)
-    @NSManaged func removeFromReinforcements(_ value: BMSReinforcement)
+    @NSManaged func removeFromReinforcements(_ value: BMSCartridgeReinforcement)
 
     @objc(addReinforcements:)
     @NSManaged func addToReinforcements(_ values: NSOrderedSet)

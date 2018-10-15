@@ -27,7 +27,7 @@ extension BMSEvent {
     @NSManaged var timezoneOffset: Int64
     @NSManaged var utc: Int64
     @NSManaged var report: BMSReport
-    @NSManaged public var reinforcement: BMSReinforcement?
+    @NSManaged public var reinforcement: BMSCartridgeReinforcement?
 
     var metadataAsDictionary: [String: Any]? {
         get {

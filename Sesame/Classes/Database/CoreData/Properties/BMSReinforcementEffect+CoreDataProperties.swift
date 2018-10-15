@@ -22,7 +22,7 @@ extension BMSReinforcementEffect {
         return BMSReinforcementEffect(entity: entity, insertInto: context)
     }
 
-    @NSManaged public var reinforcement: BMSReinforcement
+    @NSManaged public var reinforcement: BMSCartridgeReinforcement
     @NSManaged public var attributes: NSSet
 
 }

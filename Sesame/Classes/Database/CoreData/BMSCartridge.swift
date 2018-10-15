@@ -14,22 +14,22 @@ class BMSCartridge: NSManagedObject {
 
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
-    var nextReinforcement: BMSReinforcement? {
+    var nextReinforcement: BMSCartridgeReinforcement? {
         guard let context = managedObjectContext else { return nil }
-        var value: BMSReinforcement?
+        var value: BMSCartridgeReinforcement?
         context.performAndWait {
 //            let cartridgeCount = BMSCartridge.fetch(context: context, userId: user.id)?.compactMap({$0})
 //            BMSLog.warning("Total Cartridges: \(cartridgeCount as AnyObject)")
             if (utc + ttl) >= Int64(1000 * Date().timeIntervalSince1970),
-                let reinforcements = reinforcements.array as? [BMSReinforcement],
+                let reinforcements = reinforcements.array as? [BMSCartridgeReinforcement],
                 let reinforcement = reinforcements.filter({$0.event == nil}).first {
                 value = reinforcement
                 BMSLog.warning("Available Reinforcements:\(reinforcements.filter({$0.event == nil}).count)")
             } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
-                let reinforcement = BMSReinforcement.insert(context: context,
+                let reinforcement = BMSCartridgeReinforcement.insert(context: context,
                                                             cartridge: self,
-                                                            id: BMSReinforcement.NeutralName,
-                                                            name: BMSReinforcement.NeutralName,
+                                                            id: BMSCartridgeReinforcement.NeutralName,
+                                                            name: BMSCartridgeReinforcement.NeutralName,
                                                             idx: Int32(reinforcements.count)
                                                             ) {
                 BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
@@ -57,7 +57,7 @@ extension BMSCartridge {
                 }
                 if cartridge.cartridgeId == BMSCartridge.NeutralCartridgeId ||
                     cartridge.utc + cartridge.ttl < now ||
-                    cartridge.reinforcements.filter({($0 as? BMSReinforcement)?.event == nil}).isEmpty {
+                    cartridge.reinforcements.filter({($0 as? BMSCartridgeReinforcement)?.event == nil}).isEmpty {
                     value.append(actionId)
                     continue
                 }
@@ -105,7 +105,7 @@ extension BMSCartridge {
             let now = Int64(Date().timeIntervalSince1970 * 1000)
             for cartridge in fetch(context: context, userId: userId) ?? [] {
                 if (cartridge.utc + cartridge.ttl) < now {
-                    if cartridge.reinforcements.array.filter({($0 as? BMSReinforcement)?.event != nil}).isEmpty {
+                    if cartridge.reinforcements.array.filter({($0 as? BMSCartridgeReinforcement)?.event != nil}).isEmpty {
                         context.delete(cartridge)
                         value += 1
                     }
@@ -131,7 +131,7 @@ extension BMSCartridge {
                 cartridge.ttl = ttl
                 var idx: Int32 = 0
                 _ = reinforcementIdAndName.compactMap({
-                    _ = BMSReinforcement.insert(context: context, cartridge: cartridge, id: $0.0, name: $0.1, idx: idx)
+                    _ = BMSCartridgeReinforcement.insert(context: context, cartridge: cartridge, id: $0.0, name: $0.1, idx: idx)
                     idx += 1
                 })
                 BMSLog.warning("Inserted cartridge with :\(cartridge.reinforcements.count) reinforcements")

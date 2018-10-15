@@ -11,10 +11,10 @@
 		01374EA990AA9FF4610874B9673513CF /* BMSAppLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642488C99D05136173329D542C252053 /* BMSAppLifecycle.swift */; };
 		0144A04D7389C3E22AB5532271C2D0CD /* BMSAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D04C6D98C5F73926A6F6142268C486F /* BMSAppState.swift */; };
 		066C310F47FC2364DEF627952542F2DD /* BMSSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = F782F4269751D8508DB565BDB3F69615 /* BMSSessionId.swift */; };
-		0CD51CB6701EA25B629F2288A5A9A973 /* BMSReinforcement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFF2D28CC087A22E8987F9194954C8C /* BMSReinforcement.swift */; };
+		0CD51CB6701EA25B629F2288A5A9A973 /* BMSCartridgeReinforcement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFF2D28CC087A22E8987F9194954C8C /* BMSCartridgeReinforcement.swift */; };
 		10D549A1E4AB0688EA614A4B56897452 /* BMSConfettiEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25C9BFC50969CEEBE99DE07D5F7249CF /* BMSConfettiEffectView.swift */; };
 		1B53482E26D4620AB2A87562F9A35228 /* Pods-Sesame_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD74E89C714298195F88A98A09FC5C2 /* Pods-Sesame_Example-dummy.m */; };
-		1FD6035B640DFA8A41D3112CC26BEF0E /* BMSReinforcement+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618C1C21A1A72BA36C3FBD113D85D5E /* BMSReinforcement+CoreDataProperties.swift */; };
+		1FD6035B640DFA8A41D3112CC26BEF0E /* BMSCartridgeReinforcement+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618C1C21A1A72BA36C3FBD113D85D5E /* BMSCartridgeReinforcement+CoreDataProperties.swift */; };
 		23D17631F450165B62DF81230B5ABA25 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473FB77FEBB41F6E6E552DE4FFF202A7 /* UIApplication+Extensions.swift */; };
 		24A48A44AFB5CB409DB0D4EDEE6ED82C /* CG+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708FC8548177F5EDE28E000F5EEF8060 /* CG+Extensions.swift */; };
 		2A9EE368AE693B6436C3AB256824D17A /* BMSReinforcementEffect+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72E3B8B055A24150FB7301D210FC270 /* BMSReinforcementEffect+CoreDataProperties.swift */; };
@@ -94,7 +94,7 @@
 /* Begin PBXFileReference section */
 		022DBE062FD542DC07EF06129DBD35ED /* BMSSheenEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSSheenEffectView.swift; sourceTree = "<group>"; };
 		02E57E757A8A4354713EC136929BA111 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		083642D0D7D0DDA4C10A71CEA64DF685 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		083642D0D7D0DDA4C10A71CEA64DF685 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0850A18D99E82338AACA65ECF12BF8FF /* BMSUser+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0954B47DB180D4FDDCCD01311785CD70 /* Pods-Sesame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		1166FC5149C8F4713DFC781010C15405 /* Sesame.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sesame.xcconfig; sourceTree = "<group>"; };
@@ -107,7 +107,7 @@
 		25C9BFC50969CEEBE99DE07D5F7249CF /* BMSConfettiEffectView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSConfettiEffectView.swift; sourceTree = "<group>"; };
 		2679649A954A4AF9B9B93469EDD754AC /* Bundle+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		2B55685E413DCD3644F7451FC9BFE917 /* BMSCartridge+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSCartridge+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		31F5F6810ED7D05E34FBC5D440F9755E /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Sesame_Example.framework; path = "Pods-Sesame_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		31F5F6810ED7D05E34FBC5D440F9755E /* Pods_Sesame_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3427FBADB6ACE92DD4BB0A3D70704E48 /* Pods-Sesame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		35DD416D61EA51794FD5622FE6C4E1E5 /* BMSAppOpenAction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppOpenAction.swift; sourceTree = "<group>"; };
 		3B2FFE6C08D977A6A21B3FC95A34CEBA /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 		567CC9627FCF9E142805D264D34518CC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		588E24ADFD51ECC045E9453F7CB7FCDE /* Pods-Sesame_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sesame_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		59068C93EEA828A1AF77F68D33051D0B /* ResourceBundle-Sesame-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Sesame-Info.plist"; sourceTree = "<group>"; };
-		5938A1FFB92D40ABAF4F84E7C034DB71 /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Sesame_Tests.framework; path = "Pods-Sesame_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5938A1FFB92D40ABAF4F84E7C034DB71 /* Pods_Sesame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sesame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DD0B4F60CDCA0172F58397CA167CDB3 /* Pods-Sesame_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sesame_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		63B08FB0FCC4D1F2B48D203D80D79D8D /* BMSReinforcementEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSReinforcementEffect.swift; sourceTree = "<group>"; };
 		642488C99D05136173329D542C252053 /* BMSAppLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSAppLifecycle.swift; sourceTree = "<group>"; };
@@ -129,10 +129,10 @@
 		6788C15B51D04030F9334A66BAF4776E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		6A2B3A1C72838E0F233CFA886AA7C5AD /* UIColor+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		6AD0F9E29AA24DD719DD2EEE990A7B47 /* Pods-Sesame_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		6EFF2D28CC087A22E8987F9194954C8C /* BMSReinforcement.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSReinforcement.swift; sourceTree = "<group>"; };
+		6EFF2D28CC087A22E8987F9194954C8C /* BMSCartridgeReinforcement.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSCartridgeReinforcement.swift; sourceTree = "<group>"; };
 		708FC8548177F5EDE28E000F5EEF8060 /* CG+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CG+Extensions.swift"; sourceTree = "<group>"; };
 		724C133475ADB5C6D0F66345EA7978A6 /* BMSEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		76B89E8CB2B6EB4A150136062365E6B4 /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		76B89E8CB2B6EB4A150136062365E6B4 /* Sesame.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Sesame.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		7B444F73DB6F7576186D11ACEEF95A48 /* Pods-Sesame_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sesame_Example.release.xcconfig"; sourceTree = "<group>"; };
 		7C3A36129C7CE19341F9A7D61F3AA787 /* DelayedSerialQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DelayedSerialQueue.swift; sourceTree = "<group>"; };
 		7FB4488444253D22BDA2C47C3D80399A /* BMSReinforcementEffectAttribute+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSReinforcementEffectAttribute+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 		8C6C24D218D83A3A53D33732DE276BEB /* Pods-Sesame_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sesame_Example-umbrella.h"; sourceTree = "<group>"; };
 		8E3CD06529A67CB25B29A1C1EB9F0E8E /* BMSReport+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSReport+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		91990B23424A9B7E5D9B3A47ED27D398 /* BMSEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSEvent.swift; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		96AAAB930B4D09B602C276FA3ED7A2A5 /* BMSReinforcementEffectAttribute.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSReinforcementEffectAttribute.swift; sourceTree = "<group>"; };
 		997DF4DF0F8A20D2FE567A5889F1A975 /* BMSLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BMSLog.swift; path = Sesame/Classes/BMSLog.swift; sourceTree = "<group>"; };
 		9A427959461358231A084F82C09BDC75 /* Sesame-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Sesame-umbrella.h"; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 		A67CC9A63A4006DB19CE12C2A80E6C1C /* BMSCartridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSCartridge.swift; sourceTree = "<group>"; };
 		A81DAAA11F90BFE78B440ACEF6C5DDA7 /* Sesame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sesame.swift; path = Sesame/Classes/Sesame.swift; sourceTree = "<group>"; };
 		AB895FADDBD0F9AC58F5C6B69A218187 /* Pods-Sesame_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sesame_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		AC7F04CDF8CCA509E6588E4389CE16F2 /* Sesame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Sesame.framework; path = Sesame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC7F04CDF8CCA509E6588E4389CE16F2 /* Sesame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sesame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEAF89B85AD19D804ED01510B45FCCD7 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		B748654C2A79CAF6764EBDECE3BDBC63 /* Sesame.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Sesame.modulemap; sourceTree = "<group>"; };
 		BC7915A09521E093504F8CB6E66FDB80 /* Pods-Sesame_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sesame_Example.modulemap"; sourceTree = "<group>"; };
@@ -163,10 +163,10 @@
 		C82CDE129444C938E2D45D2300591AA1 /* BMSUser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSUser.swift; sourceTree = "<group>"; };
 		D3A38E8DFF4B8F56BE65E123323D7F2A /* CoreDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D5146F6241524824A61BC90719ED8D1E /* Sesame-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Sesame-dummy.m"; sourceTree = "<group>"; };
-		D618C1C21A1A72BA36C3FBD113D85D5E /* BMSReinforcement+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSReinforcement+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Sesame.bundle; path = "Sesame-Sesame.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D618C1C21A1A72BA36C3FBD113D85D5E /* BMSCartridgeReinforcement+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "BMSCartridgeReinforcement+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E087520DB8AF4BD97FB93AEA542880AA /* Sesame.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sesame.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		E47423DE2AFD7CC0B30783D9009A3AE3 /* BMSSoundEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMSSoundEffect.swift; sourceTree = "<group>"; };
-		E548C3F17782330DAF17D7D3DD674036 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		E548C3F17782330DAF17D7D3DD674036 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E8FAFB5D2954523DFF0EABE58FDA9679 /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		EE14004769855DB0740D529DB4E27422 /* UIWindow+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extensions.swift"; sourceTree = "<group>"; };
 		F2E846F19171FD5D0B774660CAF1D75C /* Pods-Sesame_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sesame_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -312,13 +312,12 @@
 				83E9F052C4D33182FA4C909D98B41190 /* BMSAppState+CoreDataProperties.swift */,
 				2B55685E413DCD3644F7451FC9BFE917 /* BMSCartridge+CoreDataProperties.swift */,
 				724C133475ADB5C6D0F66345EA7978A6 /* BMSEvent+CoreDataProperties.swift */,
-				D618C1C21A1A72BA36C3FBD113D85D5E /* BMSReinforcement+CoreDataProperties.swift */,
+				D618C1C21A1A72BA36C3FBD113D85D5E /* BMSCartridgeReinforcement+CoreDataProperties.swift */,
 				F72E3B8B055A24150FB7301D210FC270 /* BMSReinforcementEffect+CoreDataProperties.swift */,
 				7FB4488444253D22BDA2C47C3D80399A /* BMSReinforcementEffectAttribute+CoreDataProperties.swift */,
 				8E3CD06529A67CB25B29A1C1EB9F0E8E /* BMSReport+CoreDataProperties.swift */,
 				0850A18D99E82338AACA65ECF12BF8FF /* BMSUser+CoreDataProperties.swift */,
 			);
-			name = Properties;
 			path = Properties;
 			sourceTree = "<group>";
 		};
@@ -424,7 +423,7 @@
 				3D04C6D98C5F73926A6F6142268C486F /* BMSAppState.swift */,
 				A67CC9A63A4006DB19CE12C2A80E6C1C /* BMSCartridge.swift */,
 				91990B23424A9B7E5D9B3A47ED27D398 /* BMSEvent.swift */,
-				6EFF2D28CC087A22E8987F9194954C8C /* BMSReinforcement.swift */,
+				6EFF2D28CC087A22E8987F9194954C8C /* BMSCartridgeReinforcement.swift */,
 				63B08FB0FCC4D1F2B48D203D80D79D8D /* BMSReinforcementEffect.swift */,
 				96AAAB930B4D09B602C276FA3ED7A2A5 /* BMSReinforcementEffectAttribute.swift */,
 				FA4BAEAE8D83C0B8E62EB38F908EC80E /* BMSReport.swift */,
@@ -432,7 +431,6 @@
 				D3A38E8DFF4B8F56BE65E123323D7F2A /* CoreDataManager.swift */,
 				503A43383ED02C3F0EB2EA42F55163C9 /* Properties */,
 			);
-			name = CoreData;
 			path = CoreData;
 			sourceTree = "<group>";
 		};
@@ -644,8 +642,8 @@
 				C5D5F773792EF1E37971E9D04FDCAEF5 /* BMSEvent.swift in Sources */,
 				F6C0026726B8996D14FBF9C25556A27B /* BMSEventMetadataOption.swift in Sources */,
 				C05927F3CF862C4E1B036927FDDB2399 /* BMSLog.swift in Sources */,
-				1FD6035B640DFA8A41D3112CC26BEF0E /* BMSReinforcement+CoreDataProperties.swift in Sources */,
-				0CD51CB6701EA25B629F2288A5A9A973 /* BMSReinforcement.swift in Sources */,
+				1FD6035B640DFA8A41D3112CC26BEF0E /* BMSCartridgeReinforcement+CoreDataProperties.swift in Sources */,
+				0CD51CB6701EA25B629F2288A5A9A973 /* BMSCartridgeReinforcement.swift in Sources */,
 				2A9EE368AE693B6436C3AB256824D17A /* BMSReinforcementEffect+CoreDataProperties.swift in Sources */,
 				3825A647570A6228D66A62C27651B567 /* BMSReinforcementEffect.swift in Sources */,
 				F806804BEC8F04B9ACC565C959B52082 /* BMSReinforcementEffectAttribute+CoreDataProperties.swift in Sources */,

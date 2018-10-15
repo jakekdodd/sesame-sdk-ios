@@ -82,7 +82,7 @@ class CoreDataManager: NSObject {
 
     func deleteObjects() {
         managedObjectContext?.performAndWait {
-            let rootModels = [BMSReinforcement.self,
+            let rootModels = [BMSCartridgeReinforcement.self,
                               BMSCartridge.self,
                               BMSEvent.self,
                               BMSReport.self,

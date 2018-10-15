@@ -1,5 +1,5 @@
 //
-//  BMSReinforcement+CoreDataClass.swift
+//  BMSCartridgeReinforcement+CoreDataClass.swift
 //  
 //
 //  Created by Akash Desai on 9/26/18.
@@ -9,18 +9,18 @@
 import Foundation
 import CoreData
 
-@objc(BMSReinforcement)
-public class BMSReinforcement: NSManagedObject {
+@objc
+public class BMSCartridgeReinforcement: NSManagedObject {
 
     @objc public static let NeutralName = "NEUTRAL_RESP"
 
 }
 
-extension BMSReinforcement {
-    class func insert(context: NSManagedObjectContext, cartridge: BMSCartridge, id: String, name: String, idx: Int32) -> BMSReinforcement? {
-        var value: BMSReinforcement?
+extension BMSCartridgeReinforcement {
+    class func insert(context: NSManagedObjectContext, cartridge: BMSCartridge, id: String, name: String, idx: Int32) -> BMSCartridgeReinforcement? {
+        var value: BMSCartridgeReinforcement?
         context.performAndWait {
-            if let reinforcement = BMSReinforcement.create(in: context) {
+            if let reinforcement = BMSCartridgeReinforcement.create(in: context) {
                 reinforcement.id = id
                 reinforcement.name = name
                 reinforcement.idx = idx

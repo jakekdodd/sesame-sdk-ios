@@ -144,7 +144,7 @@ class TestCoreData: XCTestCase {
             guard let user = BMSUser.insert(context: context, id: Mock.uid1),
                 let cartridge = BMSCartridge.fetch(context: context, userId: user.id, actionId: Mock.aid1)?.first,
                 let reinforcement = cartridge.nextReinforcement,
-                reinforcement.name == BMSReinforcement.NeutralName
+                reinforcement.name == BMSCartridgeReinforcement.NeutralName
             else { fatalError() }
             guard nil != BMSEvent.insert(context: context,
                                           userId: user.id,
@@ -152,7 +152,7 @@ class TestCoreData: XCTestCase {
                                           reinforcement: reinforcement)
                 else { fatalError() }
 
-            XCTAssert(cartridge.nextReinforcement?.name == BMSReinforcement.NeutralName)
+            XCTAssert(cartridge.nextReinforcement?.name == BMSCartridgeReinforcement.NeutralName)
         }
     }
 

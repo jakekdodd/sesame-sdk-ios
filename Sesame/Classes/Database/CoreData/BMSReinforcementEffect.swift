@@ -15,7 +15,7 @@ public class BMSReinforcementEffect: NSManagedObject { }
 extension BMSReinforcementEffect {
 
     @discardableResult
-    class func insert(context: NSManagedObjectContext, reinforcement: BMSReinforcement, attributes: [String: NSObject]) -> BMSReinforcementEffect? {
+    class func insert(context: NSManagedObjectContext, reinforcement: BMSCartridgeReinforcement, attributes: [String: NSObject]) -> BMSReinforcementEffect? {
         var value: BMSReinforcementEffect?
         context.performAndWait {
             guard let effect = BMSReinforcementEffect.create(in: context) else {
