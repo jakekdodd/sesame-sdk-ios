@@ -137,7 +137,7 @@ public extension Sesame {
 
     //swiftlint:disable:next function_body_length
     public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
-        var reinforcementName: String?
+        var reinforcementEffect: ReinforcementEffect?
         var eventCount = 0
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
@@ -153,19 +153,25 @@ public extension Sesame {
                                               sessionId: appLifecycleTracker.sessionId as NSNumber?,
                                               metadata: metadata) else { return }
             if reinforce,
-                let reinforcedAction = appState.reinforcedActions?.filter({$0["name"] as? String == actionName}).first,
-                let actionId = reinforcedAction["id"] as? String,
-                let reinforcement = BMSCartridge.fetch(context: context,
+                let reinforcedAction = appState.reinforcedActions.filter({$0.name == actionName}).first,
+                let cartridgeReinforcement = BMSCartridge.fetch(context: context,
                                                        userId: user.id,
-                                                       actionId: actionId)?.first?
+                                                       actionId: reinforcedAction.id)?.first?
                     .nextReinforcement
                     ?? BMSCartridge.insert(context: context,
-                                           userId: user.id,
-                                           actionId: actionId,
+                                           user: user,
+                                           actionId: reinforcedAction.id,
                                            cartridgeId: BMSCartridge.NeutralCartridgeId)?
                         .nextReinforcement {
-                event.reinforcement = reinforcement
-                reinforcementName = reinforcement.name
+                event.reinforcement = cartridgeReinforcement
+                BMSLog.error(reinforcedAction.reinforcements.map({$0.name}))
+                if let reinforcement = reinforcedAction.reinforcements.filter({$0.id == cartridgeReinforcement.id}).first {
+                    for effectAttribute in reinforcement.effects.flatMap({$0.attributes}) {
+                        BMSLog.warning("Reinforcement Effect Attribute:<\(effectAttribute.key),\(effectAttribute.value)>")
+                    }
+
+//                    ReinforcementEffect = (reinforcement.name, reinforcement.a
+                }
             }
 
             eventCount = BMSEvent.count(context: context, userId: user.id) ?? 0
@@ -178,14 +184,14 @@ public extension Sesame {
                 BMSLog.error(error)
             }
         }
-
-        if let reinforcementName = reinforcementName {
-            BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
-            _reinforcementEffect = (reinforcementName, [:])
-            sendReinforce(context: context)
-        } else if eventCount >= eventUploadCount {
-            sendReinforce(context: context)
-        }
+//
+//        if let reinforcementName = reinforcementName {
+//            BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
+//            _reinforcementEffect = (reinforcementName, [:])
+//            sendReinforce(context: context)
+//        } else if eventCount >= eventUploadCount {
+//            sendReinforce(context: context)
+//        }
     }
 
     @objc
@@ -270,8 +276,26 @@ extension Sesame {
                         appState.revision = Int64(revision)
                     }
                     if let config = response["config"] as? [String: Any] {
-                        if let reinforcedActions = config["reinforcedActions"] as? [[String: Any]] {
-                            appState.effectDetailsAsDictionary = ["reinforcedActions": reinforcedActions]
+                        if let reinforcedActionsDict = config["reinforcedActions"] as? [[String: Any]] {
+                            for reinforcedAction in appState.reinforcedActions {
+                                context.delete(reinforcedAction)
+                            }
+                            for reinforcedActionDict in reinforcedActionsDict {
+                                guard let id = reinforcedActionDict["id"] as? String,
+                                     let name = reinforcedActionDict["name"] as? String,
+                                    let reinforcementsDict = reinforcedActionDict["reinforcements"] as? [[String: Any]]
+                                else { continue }
+                                var reinforcements = [BMSReinforcement.Holder]()
+                                for reinforcementDict in reinforcementsDict {
+                                    guard let id = reinforcementDict["id"] as? String,
+                                        let name = reinforcementDict["name"] as? String,
+                                    let effects = reinforcementDict["effects"] as? [[String: NSObject]]
+                                    else { continue }
+                                    reinforcements.append(.init(id: id, name: name, effects: effects))
+                                }
+                                BMSReinforcedAction.insert(context: context, appState: appState, id: id, name: name, reinforcements: reinforcements)
+                            }
+//                            appState.effectDetailsAsDictionary = ["reinforcedActions": reinforcedActions]
                         }
                     }
                     do {
@@ -295,13 +319,14 @@ extension Sesame {
             guard !uploadScheduled else { return }
             uploadScheduled = true
             guard let appState = BMSAppState.fetch(context: context, appId: appId),
-                let user = appState.user,
-                let allActionIds = appState.actionIds
+                let user = appState.user
                 else {
                     uploadScheduled = false
                     return
             }
-            let actionIds = BMSCartridge.needsRefresh(context: context, userId: user.id, actionIds: allActionIds)
+            let actionIds = BMSCartridge.needsRefresh(context: context,
+                                                      userId: user.id,
+                                                      actionIds: appState.reinforcedActions.compactMap({$0.id}))
             guard !actionIds.isEmpty else {
                 uploadScheduled = false
                 return
@@ -312,7 +337,7 @@ extension Sesame {
                                             primaryIdentity: user.id)
             payload["reports"] = {
                 var tracks = [[String: Any]]()
-                if let reports = appState.user?.reports.allObjects as? [BMSEventReport] {
+                if let reports = appState.user?.reports {
                     for report in reports {
                         var track = [String: Any]()
                         track["actionId"] = report.actionName
@@ -323,7 +348,7 @@ extension Sesame {
                             event["utc"] = reportEvent.utc
                             event["timezoneOffset"] = reportEvent.timezoneOffset
                             event["metadata"] = reportEvent.metadataAsDictionary
-                            event["reinforcementDecision"] = reportEvent.reinforcement?.name
+                            event["reinforcementDecision"] = reportEvent.reinforcement?.id
                             event["idx"] = reportEvent.reinforcement?.idx
                             events.append(event)
                             context.delete(reportEvent)
@@ -365,7 +390,6 @@ extension Sesame {
                 }
                 self.coreDataManager.newContext { context in
                     guard let appState = BMSAppState.fetch(context: context, appId: self.appId),
-                        let reinforcedActions = appState.reinforcedActions,
                         let user = appState.user
                         else { return }
                     for cartridgeInfo in response["cartridges"] as? [[String: Any]] ?? [] {
@@ -374,23 +398,21 @@ extension Sesame {
                             let actionId = cartridgeInfo["actionId"] as? String,
                             let cartridgeId = cartridgeInfo["cartridgeId"] as? String,
                             let reinforcementIds = (cartridgeInfo["reinforcements"] as? [[String: String]])?
-                                .compactMap({$0["reinforcementId"]}),
-                            let reinforcedAction = reinforcedActions.filter({$0["id"] as? String == actionId}).first,
-                            let reinforcements = reinforcedAction["reinforcements"] as? [[String: Any]] {
-                            var reinforcementIdsAndNames = [(String, String)]()
-                            for id in reinforcementIds {
-                                if let reinforcement = reinforcements.filter({$0["id"] as? String == id}).first,
-                                    let name = reinforcement["name"] as? String {
-                                    reinforcementIdsAndNames.append((id, name))
-                                }
+                                .compactMap({$0["reinforcementId"]}) {
+                            var index: Int32 = 0
+                            var reinforcements = [BMSCartridgeReinforcement.Holder]()
+                            for reinforcementId in reinforcementIds {
+                                reinforcements.append(.init(id: reinforcementId, idx: index))
+                                index += 1
                             }
                             BMSCartridge.insert(context: context,
-                                                userId: user.id,
+                                                user: user,
                                                 actionId: actionId,
                                                 cartridgeId: cartridgeId,
                                                 utc: utc,
                                                 ttl: ttl,
-                                                reinforcementIdAndName: reinforcementIdsAndNames)
+                                                reinforcements: reinforcements
+                            )
                         }
                     }
                 }

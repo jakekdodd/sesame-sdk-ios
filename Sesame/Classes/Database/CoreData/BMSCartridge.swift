@@ -28,8 +28,7 @@ class BMSCartridge: NSManagedObject {
             } else if cartridgeId == BMSCartridge.NeutralCartridgeId,
                 let reinforcement = BMSCartridgeReinforcement.insert(context: context,
                                                             cartridge: self,
-                                                            id: BMSCartridgeReinforcement.NeutralName,
-                                                            name: BMSCartridgeReinforcement.NeutralName,
+                                                            id: BMSCartridgeReinforcement.NeutralId,
                                                             idx: Int32(reinforcements.count)
                                                             ) {
                 BMSLog.warning("Cartridge is empty. Delivering default reinforcement.")
@@ -119,21 +118,20 @@ extension BMSCartridge {
     }
 
     @discardableResult
-    class func insert(context: NSManagedObjectContext, userId: String, actionId: String, cartridgeId: String = BMSCartridge.NeutralCartridgeId, utc: Int64 = Int64(Date().timeIntervalSince1970 * 1000), ttl: Int64 = 0, reinforcementIdAndName: [(String, String)] = []) -> BMSCartridge? {
+    class func insert(context: NSManagedObjectContext, user: BMSUser, actionId: String, cartridgeId: String = BMSCartridge.NeutralCartridgeId, utc: Int64 = Int64(Date().timeIntervalSince1970 * 1000), ttl: Int64 = 0, reinforcements: [BMSCartridgeReinforcement.Holder] = []) -> BMSCartridge? {
         var value: BMSCartridge?
         context.performAndWait {
-            if let user = BMSUser.fetch(context: context, id: userId),
-                let cartridge = BMSCartridge.create(in: context) {
+            if let cartridge = BMSCartridge.create(in: context) {
                 cartridge.user = user
                 cartridge.actionId = actionId
                 cartridge.cartridgeId = cartridgeId
                 cartridge.utc = utc
                 cartridge.ttl = ttl
-                var idx: Int32 = 0
-                _ = reinforcementIdAndName.compactMap({
-                    _ = BMSCartridgeReinforcement.insert(context: context, cartridge: cartridge, id: $0.0, name: $0.1, idx: idx)
-                    idx += 1
-                })
+                for reinforcement in reinforcements {
+                    guard let id = reinforcement.id,
+                        let idx = reinforcement.idx else { continue }
+                    BMSCartridgeReinforcement.insert(context: context, cartridge: cartridge, id: id, idx: idx)
+                }
                 BMSLog.warning("Inserted cartridge with :\(cartridge.reinforcements.count) reinforcements")
                 do {
                     try context.save()

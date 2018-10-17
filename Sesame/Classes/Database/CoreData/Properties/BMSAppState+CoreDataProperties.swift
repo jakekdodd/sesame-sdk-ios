@@ -24,30 +24,46 @@ extension BMSAppState {
 
     @NSManaged var appId: String
     @NSManaged var auth: String
-    @NSManaged var versionId: String?
-    @NSManaged var configId: String?
     @NSManaged var revision: Int64
     @NSManaged var trackingEnabled: Bool
+    @NSManaged var versionId: String?
+    @NSManaged var reinforcedActions: Set<BMSReinforcedAction>
     @NSManaged var user: BMSUser?
-    @NSManaged var effectDetails: String
 
-    var effectDetailsAsDictionary: [String: Any]? {
-        get {
-            return .from(string: effectDetails)
-        }
-        set {
-            if let dict = newValue.toString() {
-                effectDetails = dict
-            }
-        }
-    }
+//    var effectDetailsAsDictionary: [String: Any]? {
+//        get {
+//            return .from(string: effectDetails)
+//        }
+//        set {
+//            if let dict = newValue.toString() {
+//                effectDetails = dict
+//            }
+//        }
+//    }
 
-    var reinforcedActions: [[String: Any]]? {
-        return effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]]
-    }
+//    var reinforcedActions: [[String: Any]]? {
+//        return effectDetailsAsDictionary?["reinforcedActions"] as? [[String: Any]]
+//    }
+//
+//    var actionIds: [String]? {
+//        return reinforcedActions?.compactMap({$0["id"] as? String})
+//    }
 
-    var actionIds: [String]? {
-        return reinforcedActions?.compactMap({$0["id"] as? String})
-    }
+}
+
+// MARK: Generated accessors for reinforcedActions
+extension BMSAppState {
+
+    @objc(addReinforcedActionsObject:)
+    @NSManaged public func addToReinforcedActions(_ value: BMSReinforcedAction)
+
+    @objc(removeReinforcedActionsObject:)
+    @NSManaged public func removeFromReinforcedActions(_ value: BMSReinforcedAction)
+
+    @objc(addReinforcedActions:)
+    @NSManaged public func addToReinforcedActions(_ values: NSSet)
+
+    @objc(removeReinforcedActions:)
+    @NSManaged public func removeFromReinforcedActions(_ values: NSSet)
 
 }

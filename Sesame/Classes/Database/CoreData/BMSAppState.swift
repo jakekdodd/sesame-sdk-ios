@@ -53,14 +53,13 @@ extension BMSAppState {
         return count
     }
 
-    class func insert(context: NSManagedObjectContext, appId: String, auth: String, versionId: String? = nil, configId: String? = nil) -> BMSAppState? {
+    class func insert(context: NSManagedObjectContext, appId: String, auth: String, versionId: String? = nil) -> BMSAppState? {
         var value: BMSAppState?
         context.performAndWait {
             if let appState = BMSAppState.create(in: context) {
                 appState.appId = appId
                 appState.auth = auth
                 appState.versionId = versionId
-                appState.configId = configId
                 do {
                     try context.save()
                 } catch let error as NSError {

@@ -11,7 +11,7 @@ import CoreData
 
 extension BMSReinforcementEffect {
 
-    @nonobjc public class func fetch() -> NSFetchRequest<BMSReinforcementEffect> {
+    @nonobjc class func fetch() -> NSFetchRequest<BMSReinforcementEffect> {
         return NSFetchRequest<BMSReinforcementEffect>(entityName: "BMSReinforcementEffect")
     }
 
@@ -22,8 +22,9 @@ extension BMSReinforcementEffect {
         return BMSReinforcementEffect(entity: entity, insertInto: context)
     }
 
-    @NSManaged public var reinforcement: BMSCartridgeReinforcement
-    @NSManaged public var attributes: NSSet
+    @NSManaged var name: String
+    @NSManaged var reinforcement: BMSReinforcement
+    @NSManaged var attributes: Set<BMSReinforcementEffectAttribute>
 
 }
 
