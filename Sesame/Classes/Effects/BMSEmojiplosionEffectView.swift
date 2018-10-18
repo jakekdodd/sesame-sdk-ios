@@ -10,21 +10,20 @@ import UIKit
 @objc
 open class BMSEmojiplosionEffectView: BMSVisualEffectView {
 
-    public var location: (CGFloat, CGFloat) = (0.5, 0.5)
-    public var image: UIImage? = UIImage(text: "❤️")
-    public var scale: CGFloat = 0.6
-    public var scaleSpeed: CGFloat = 0.2
-    public var scaleRange: CGFloat = 0.2
-    public var lifetime: Float = 3.0
-    public var lifetimeRange: Float = 0.5
-    public var fadeout: Float = -1
-    public var rate: Float = 4.0
-    public var duration: Double = 1.0
-    public var velocity: CGFloat = -50
-    public var xAcceleration: CGFloat = 0
-    public var yAcceleration: CGFloat = -150
+    public var acceleration: (CGFloat, CGFloat) = (0, -150)
     public var angle: CGFloat = -90
+    public var image: UIImage? = UIImage(text: "❤️")
+    public var duration: Double = 1.0
+    public var fadeout: Float = -1
+    public var lifetime: Float = 3.0
+    public var lifetimeNoise: Float = 0.5
+    public var location: (CGFloat, CGFloat) = (0.5, 0.5)
     public var range: CGFloat = 45
+    public var rate: Float = 4.0
+    public var scaleMean: CGFloat = 0.6
+    public var scaleNoise: CGFloat = 0.2
+    public var scaleSpeed: CGFloat = 0.2
+    public var speed: CGFloat = -50
     public var spin: CGFloat = 0
     public var hapticFeedback: Bool = false
     public var systemSound: UInt32 = 1007
@@ -38,6 +37,67 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+
+    public override func set(attributes: [String: NSObject?]) {
+        guard attributes["name"] as? String == "emojisplosion" else { return }
+
+        if let acceleration = attributes["acceleration"] as? [Double],
+            acceleration.count == 2 {
+            self.acceleration = (CGFloat(acceleration[0] * 1000000), CGFloat(acceleration[1] * 1000000))
+            BMSLog.info("Set acceleration to:\(self.acceleration)")
+        } else { BMSLog.error("Missing parameter")}
+
+        if let angle = attributes["angle"] as? Double {
+            self.angle = CGFloat(angle)
+        } else { BMSLog.error("Missing parameter")}
+
+        if let content = attributes["content"] as? String {
+            self.image = UIImage(text: content)
+        } else { BMSLog.error("Missing parameter")}
+
+        if let durationString = attributes["duration"] as? String,
+            let duration = Double(durationString) {
+            self.duration = duration / 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let fade = attributes["fade"] as? Double {
+            self.fadeout = Float(fade) / 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let lifetime = attributes["lifetime"] as? Double {
+            self.lifetime = Float(lifetime) / 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let lifetimeNoise = attributes["lifetimeNoise"] as? Double {
+            self.lifetimeNoise = Float(lifetimeNoise) / 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let location = attributes["location"] as? [Double],
+            location.count == 2 {
+            self.location = (CGFloat(location[0]), CGFloat(location[1]))
+        } else { BMSLog.error("Missing parameter")}
+
+        if let range = attributes["range"] as? Double {
+            self.range = CGFloat(range)
+        } else { BMSLog.error("Missing parameter")}
+
+        if let scaleMean = attributes["scaleMean"] as? Double {
+            self.scaleMean = CGFloat(scaleMean)
+        } else { BMSLog.error("Missing parameter")}
+
+        if let scaleNoise = attributes["scaleNoise"] as? Double {
+            self.scaleNoise = CGFloat(scaleNoise)
+        } else { BMSLog.error("Missing parameter")}
+
+        if let scaleSpeed = attributes["scaleSpeed"] as? Double {
+            self.scaleSpeed = CGFloat(scaleSpeed) * 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let speed = attributes["speed"] as? Double {
+            self.speed = CGFloat(speed) * 1000
+        } else { BMSLog.error("Missing parameter")}
+
     }
 
     public override func start(completion: @escaping () -> Void = {}) {
@@ -56,16 +116,16 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
             cell.contents = cgImage
             cell.birthRate = self.rate
             cell.lifetime = self.lifetime
-            cell.lifetimeRange = self.lifetimeRange
+            cell.lifetimeRange = self.lifetimeNoise
             cell.spin = self.spin.degreesToRadians()
             cell.spinRange = cell.spin / 8
-            cell.velocity = self.velocity
+            cell.velocity = self.speed
             cell.velocityRange = cell.velocity / 3
-            cell.xAcceleration = self.xAcceleration
-            cell.yAcceleration = self.yAcceleration
-            cell.scale = self.scale
+            cell.xAcceleration = self.acceleration.0
+            cell.yAcceleration = self.acceleration.1
+            cell.scale = self.scaleMean
             cell.scaleSpeed = self.scaleSpeed
-            cell.scaleRange = self.scaleRange
+            cell.scaleRange = self.scaleNoise
             cell.emissionLongitude = self.angle.degreesToRadians()
             cell.emissionRange = self.range.degreesToRadians()
             if self.fadeout > 0 {
@@ -82,7 +142,7 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
             BMSSoundEffect.play(self.systemSound, vibrate: self.hapticFeedback)
             DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
                 emitter.birthRate = 0
-                DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(self.lifetime + self.lifetimeRange)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(self.lifetime + self.lifetimeNoise)) {
                     emitter.removeFromSuperlayer()
                     BMSLog.verbose("💥 Emojiplosion done")
                     completion()
