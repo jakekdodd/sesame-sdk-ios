@@ -35,6 +35,35 @@ open class BMSConfettiEffectView: BMSVisualEffectView {
     var burstEmitter: CAEmitterLayer?
     var showerEmitter: CAEmitterLayer?
 
+    override public func set(attributes: [String: NSObject?]) {
+        guard attributes["name"] as? String == "confetti" else { return }
+
+        if let durationString = attributes["duration"] as? String,
+            let duration = Double(durationString) {
+            self.duration = duration / 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let width = attributes["width"] as? Double,
+            let height = attributes["height"] as? Double {
+            self.size = CGSize(width: width, height: height)
+        } else { BMSLog.error("Missing parameter")}
+
+        if let shapeStrings = attributes["shapes"] as? [String] {
+            self.shapes = shapeStrings.compactMap({
+                switch $0 {
+                case "RECTANGLE":   return .rectangle
+                case "CIRCLE":      return .circle
+                case "TRIANGLE":    return .triangle
+                case "SPIRAL":      return .spiral
+                default:            return nil
+                }})
+        } else { BMSLog.error("Missing parameter")}
+        
+        if let colorStrings = attributes["colors"] as? [String] {
+            self.colors = colorStrings.compactMap({UIColor.from(rgba: $0)})
+        } else { BMSLog.error("Missing parameter")}
+    }
+
     override public func start(completion: @escaping () -> Void = {}) {
         self.showConfetti(duration: duration,
                           size: size,

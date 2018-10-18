@@ -18,20 +18,25 @@ open class BMSEffectViewController: UIViewController {
 
         guard let reinforcementEffects = reinforcementEffects else { return }
         for effect in reinforcementEffects {
+            let effectView: BMSVisualEffectView
             switch effect["name"] as? String {
             case "confetti":
-                effectViews.append(BMSConfettiEffectView())
-                BMSLog.error("Got attributes:\(effect as AnyObject)")
+                let confetti = BMSConfettiEffectView()
+                effectView = confetti
 
             case "sheen":
-                effectViews.append(BMSSheenEffectView())
+                let sheen = BMSSheenEffectView()
+                effectView = sheen
 
             case "emojisplosion":
-                effectViews.append(BMSEmojiplosionEffectView())
+                let emojisplosion = BMSEmojiplosionEffectView()
+                effectView = emojisplosion
 
             default:
-                break
+                continue
             }
+            effectView.set(attributes: effect)
+            effectViews.append(effectView)
         }
     }
 

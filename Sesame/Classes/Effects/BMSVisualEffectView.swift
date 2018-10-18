@@ -27,6 +27,8 @@ open class BMSVisualEffectView: UIView {
         self.init(frame: .zero)
     }
 
+    public func set(attributes: [String: NSObject?]) { }
+
     @objc
     public func start() {
         start(completion: {})
