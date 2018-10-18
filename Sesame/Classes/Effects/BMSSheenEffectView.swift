@@ -10,7 +10,7 @@ import UIKit
 @objc
 open class BMSSheenEffectView: BMSVisualEffectView {
 
-    public enum WidthToHeightRatio: CGFloat {
+    public enum AspectRatio: CGFloat {
         case narrow = 0.333, equal = 1, wide = 1.667
     }
 
@@ -21,13 +21,13 @@ open class BMSSheenEffectView: BMSVisualEffectView {
     @IBInspectable @objc
     public var image: UIImage?
     @IBInspectable @objc
-    public var widthToHeightRatio: CGFloat = WidthToHeightRatio.wide.rawValue {
+    public var aspectRatio: CGFloat = AspectRatio.wide.rawValue {
         didSet {
             if #available(iOS 9.0, *),
                 imageViewWidthConstraint != nil {
                 imageViewWidthConstraint?.isActive = false
                 imageViewWidthConstraint = imageView?.widthAnchor
-                    .constraint(equalTo: self.heightAnchor, multiplier: widthToHeightRatio)
+                    .constraint(equalTo: self.heightAnchor, multiplier: aspectRatio)
                 imageViewWidthConstraint?.isActive = true
                 setNeedsLayout()
             }
@@ -55,6 +55,24 @@ open class BMSSheenEffectView: BMSVisualEffectView {
         }
     }
 
+    public override func set(attributes: [String: NSObject?]) {
+        guard attributes["name"] as? String == "sheen" else { return }
+
+        if let durationString = attributes["duration"] as? String,
+            let duration = Double(durationString) {
+            self.duration = duration / 1000
+        } else { BMSLog.error("Missing parameter")}
+
+        if let colorString = attributes["color"] as? String,
+            let color = UIColor.from(rgba: colorString) {
+            self.color = color
+        } else { BMSLog.error("Missing parameter")} // parameter can be nil tho, TO-DO
+
+        if let aspectRatio = attributes["aspectRatio"] as? Double {
+            self.aspectRatio = CGFloat(aspectRatio)
+        } else { BMSLog.error("Missing parameter")}
+    }
+
     @objc
     override open func start(completion: @escaping () -> Void = {}) { // swiftlint:disable:this function_body_length
         if image == nil,
@@ -79,7 +97,7 @@ open class BMSSheenEffectView: BMSVisualEffectView {
                     imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
                     ])
                 imageViewWidthConstraint = imageView.widthAnchor.constraint(equalTo: heightAnchor,
-                                                                            multiplier: widthToHeightRatio)
+                                                                            multiplier: aspectRatio)
                 imageViewAnimationStartConstraint = imageView.trailingAnchor.constraint(equalTo: leadingAnchor)
                 imageViewAnimationEndConstraint = imageView.leadingAnchor.constraint(equalTo: trailingAnchor)
                 imageViewWidthConstraint?.isActive = true

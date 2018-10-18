@@ -17,9 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var userId = "dev"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        Sesame.shared = .init(appId: "ca604297-0150-4bf7-a973-669fecef4ce0",
-                              auth: "4f5b1b6f54724a2baed4f344af83c7113b0d72d71efc4b70bbc1a77f2b0dc92f",
-                              versionId: "c8372963-752d-4ab3-b885-58a670828be7",
+        Sesame.shared = .init(appId: "bf6bfcca-4cee-42ef-b699-59466bddedeb",
+                              auth: "ghRPZc-N2qiCe-HbVLeciH43ySaBBkYABTCAaO6mGI-ZasjLd3l4cj59ouJfbYz93fUwiFtO26NtmyxgqQ2wZQ",
+                              versionId: "88547a03-01c5-4ab9-b63d-effface60789",
                               userId: userId)
 
         return true
