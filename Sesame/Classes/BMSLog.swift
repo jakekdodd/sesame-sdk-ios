@@ -59,4 +59,5 @@ import Foundation
         Swift.print("[\(fileName):\(line):\(functionSignature) \(level)] - \(message)")
     }
 
+    fileprivate override init() { }
 }
