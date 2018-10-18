@@ -30,18 +30,19 @@ public class Sesame: NSObject {
     @objc public weak var reinforcementDelegate: SesameReinforcementDelegate?
 
     /// The effect is shown using the custom reinforcementDelegate or the top UIWindow
-    fileprivate var _reinforcementEffect: ReinforcementEffect? {
+    fileprivate var _reinforcement: BMSReinforcement.Holder? {
         didSet {
-            if let reinforcementEffect = _reinforcementEffect {
+            if let reinforcement = _reinforcement {
+                BMSLog.info(confirmed: "Got reinforcement:\(reinforcement as AnyObject)")
                 DispatchQueue.main.async {
                     guard let delegate = self.reinforcementDelegate
                         ?? UIWindow.topWindow?.rootViewController
                         else { return }
                     let effectViewController = BMSEffectViewController()
-                    effectViewController.reinforcement = reinforcementEffect
+                    effectViewController.reinforcementEffects = reinforcement.effects
                     delegate.reinforce(sesame: self, effectViewController: effectViewController)
                 }
-                _reinforcementEffect = nil
+                _reinforcement = nil
             }
         }
     }
@@ -135,9 +136,8 @@ public extension Sesame {
         return userId
     }
 
-    //swiftlint:disable:next function_body_length
     public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
-        var reinforcementEffect: ReinforcementEffect?
+        var reinforcementHolder: BMSReinforcement.Holder?
         var eventCount = 0
         let context = context ?? coreDataManager.newContext()
         context.performAndWait {
@@ -164,13 +164,8 @@ public extension Sesame {
                                            cartridgeId: BMSCartridge.NeutralCartridgeId)?
                         .nextReinforcement {
                 event.reinforcement = cartridgeReinforcement
-                BMSLog.error(reinforcedAction.reinforcements.map({$0.name}))
                 if let reinforcement = reinforcedAction.reinforcements.filter({$0.id == cartridgeReinforcement.id}).first {
-                    for effectAttribute in reinforcement.effects.flatMap({$0.attributes}) {
-                        BMSLog.warning("Reinforcement Effect Attribute:<\(effectAttribute.key),\(effectAttribute.value)>")
-                    }
-
-//                    ReinforcementEffect = (reinforcement.name, reinforcement.a
+                    reinforcementHolder = reinforcement.holder
                 }
             }
 
@@ -184,14 +179,9 @@ public extension Sesame {
                 BMSLog.error(error)
             }
         }
-//
-//        if let reinforcementName = reinforcementName {
-//            BMSLog.info(confirmed: "Reinforcement:\(reinforcementName)")
-//            _reinforcementEffect = (reinforcementName, [:])
-//            sendReinforce(context: context)
-//        } else if eventCount >= eventUploadCount {
-//            sendReinforce(context: context)
-//        }
+
+        _reinforcement = reinforcementHolder
+        sendReinforce(context: context)
     }
 
     @objc
@@ -289,7 +279,7 @@ extension Sesame {
                                 for reinforcementDict in reinforcementsDict {
                                     guard let id = reinforcementDict["id"] as? String,
                                         let name = reinforcementDict["name"] as? String,
-                                    let effects = reinforcementDict["effects"] as? [[String: NSObject]]
+                                    let effects = reinforcementDict["effects"] as? [[String: NSObject?]]
                                     else { continue }
                                     reinforcements.append(.init(id: id, name: name, effects: effects))
                                 }
@@ -324,10 +314,11 @@ extension Sesame {
                     uploadScheduled = false
                     return
             }
-            let actionIds = BMSCartridge.needsRefresh(context: context,
+            let actionIdsForRefresh = BMSCartridge.needsRefresh(context: context,
                                                       userId: user.id,
                                                       actionIds: appState.reinforcedActions.compactMap({$0.id}))
-            guard !actionIds.isEmpty else {
+            guard !actionIdsForRefresh.isEmpty
+                /*|| (BMSEvent.count(context: context, userId: user.id) ?? 0) >= eventUploadCount*/ else {
                 uploadScheduled = false
                 return
             }
@@ -372,7 +363,7 @@ extension Sesame {
 
             payload["refresh"] = {
                 var refresh = [[String: Any]]()
-                for actionId in actionIds {
+                for actionId in actionIdsForRefresh {
                     refresh.append(["actionId": actionId, "size": 5])
                 }
 

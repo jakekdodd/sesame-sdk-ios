@@ -37,7 +37,7 @@ extension BMSEvent {
             event.metadataAsDictionary = metadata
             do {
                 try context.save()
-                BMSLog.info("Logged event #\(report.events.count) with actionName:\(actionName)")
+                BMSLog.info("Logged event #\(report.events.count) for actionName:\(actionName)")
             } catch {
                 BMSLog.error(error)
             }

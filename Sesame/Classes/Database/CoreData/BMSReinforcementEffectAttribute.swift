@@ -19,7 +19,7 @@ public class BMSReinforcementEffectAttribute: NSManagedObject {
 }
 
 extension BMSReinforcementEffectAttribute {
-    class func insert(context: NSManagedObjectContext, reinforementEffect: BMSReinforcementEffect, key: String, value attributeValue: NSObject) -> BMSReinforcementEffectAttribute? {
+    class func insert(context: NSManagedObjectContext, reinforementEffect: BMSReinforcementEffect, key: String, value attributeValue: NSObject?) -> BMSReinforcementEffectAttribute? {
 
         var value: BMSReinforcementEffectAttribute?
         context.performAndWait {
@@ -32,7 +32,7 @@ extension BMSReinforcementEffectAttribute {
                 } catch let error as NSError {
                     BMSLog.error(error)
                 }
-                BMSLog.info("Inserted attribute key:\(attr.key) value:\(attr.value)")
+//                BMSLog.info("Inserted attribute key:\(attr.key) value:\(attr.value)")
                 value = attr
             }
         }

@@ -26,6 +26,10 @@ extension BMSReinforcementEffect {
     @NSManaged var reinforcement: BMSReinforcement
     @NSManaged var attributes: Set<BMSReinforcementEffectAttribute>
 
+    var attributesDictionary: EffectAttributes {
+        return Dictionary(uniqueKeysWithValues: attributes.map({($0.key, $0.value)}))
+    }
+
 }
 
 // MARK: Generated accessors for attributes

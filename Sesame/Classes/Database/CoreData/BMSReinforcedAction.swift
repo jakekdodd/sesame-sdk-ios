@@ -28,7 +28,7 @@ extension BMSReinforcedAction {
                     guard let id = reinforcement.id,
                         let name = reinforcement.name,
                     let effects = reinforcement.effects,
-                    let reinforcement = BMSReinforcement.insert(context: context, reinforcedAction: reinforcedAction, id: id, name: name, effectDicts: effects)
+                    let reinforcement = BMSReinforcement.insert(context: context, reinforcedAction: reinforcedAction, id: id, name: name, effects: effects)
                      else { continue }
                     BMSLog.info("""
                         Reinforcement name:\(reinforcement.name)
