@@ -9,8 +9,8 @@ import UIKit
 
 open class BMSEffectViewController: UIViewController {
 
-    var effectViews = [BMSVisualEffectView]()
-    var reinforcementEffects: [EffectAttributes]?
+    public var effectViews = [BMSVisualEffectView]()
+    public var reinforcementEffects: [[String: NSObject?]]?
 
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ open class BMSEffectViewController: UIViewController {
         }
     }
 
-    func showEffect(_ completion: @escaping (Bool) -> Void = {_ in}) {
+    public func showEffect(_ completion: @escaping (Bool) -> Void = {_ in}) {
         DispatchQueue.main.async {
             for effectView in self.effectViews {
                 guard effectView.superview == nil else {
