@@ -39,6 +39,7 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
         super.init(coder: aDecoder)
     }
 
+    //swiftlint:disable:next cyclomatic_complexity function_body_length
     public override func set(attributes: [String: NSObject?]) {
         guard attributes["name"] as? String == "emojisplosion" else { return }
 
@@ -82,6 +83,10 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
             self.range = CGFloat(range)
         } else { BMSLog.error("Missing parameter")}
 
+        if let rate = attributes["rate"] as? Double {
+            self.rate = Float(rate)
+        } else { BMSLog.error("Missing parameter")}
+
         if let scaleMean = attributes["scaleMean"] as? Double {
             self.scaleMean = CGFloat(scaleMean)
         } else { BMSLog.error("Missing parameter")}
@@ -98,6 +103,9 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
             self.speed = CGFloat(speed) * 1000
         } else { BMSLog.error("Missing parameter")}
 
+        if let spin = attributes["spin"] as? Double {
+            self.spin = CGFloat(spin)
+        } else { BMSLog.error("Missing parameter")}
     }
 
     public override func start(completion: @escaping () -> Void = {}) {
