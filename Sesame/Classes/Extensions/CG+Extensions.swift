@@ -37,7 +37,7 @@ internal extension CGFloat {
 
 internal extension CGRect {
     func pointWithMargins(x marginX: CGFloat, y marginY: CGFloat) -> CGPoint {
-        return CGPoint(x: (-1 <= marginX && marginX <= 1) ? marginX * width : marginX,
-                       y: (-1 <= marginY && marginY <= 1) ? marginY * height : marginY)
+        return CGPoint(x: (-1 <= marginX && marginX <= 2) ? marginX * width : marginX,
+                       y: (-1 <= marginY && marginY <= 2) ? marginY * height : marginY)
     }
 }
