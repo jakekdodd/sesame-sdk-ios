@@ -36,10 +36,11 @@ public class Sesame: NSObject {
                 BMSLog.info(confirmed: "Got reinforcement:\(reinforcement as AnyObject)")
                 DispatchQueue.main.async {
                     guard let delegate = self.reinforcementDelegate
-                        ?? UIWindow.topWindow?.rootViewController
+                        ?? UIWindow.topWindow?.rootViewController,
+                        let effects = reinforcement.effectsDictionary
                         else { return }
                     let effectViewController = BMSEffectViewController()
-                    effectViewController.reinforcementEffects = reinforcement.effects
+                    effectViewController.reinforcementEffects = effects
                     delegate.reinforce(sesame: self, effectViewController: effectViewController)
                 }
                 _reinforcement = nil
@@ -279,13 +280,20 @@ extension Sesame {
                                 for reinforcementDict in reinforcementsDict {
                                     guard let id = reinforcementDict["id"] as? String,
                                         let name = reinforcementDict["name"] as? String,
-                                    let effects = reinforcementDict["effects"] as? [[String: NSObject?]]
-                                    else { continue }
+                                        let effects = (reinforcementDict["effects"] as? [[String: Any]])?
+                                            .map({ BMSReinforcementEffect.Holder(
+                                                name: $0["name"] as? String,
+                                                attributes: $0["attributes"] as? EffectAttributes)
+                                            })
+                                        else { continue }
                                     reinforcements.append(.init(id: id, name: name, effects: effects))
                                 }
-                                BMSReinforcedAction.insert(context: context, appState: appState, id: id, name: name, reinforcements: reinforcements)
+                                BMSReinforcedAction.insert(context: context,
+                                                           appState: appState,
+                                                           id: id,
+                                                           name: name,
+                                                           reinforcements: reinforcements)
                             }
-//                            appState.effectDetailsAsDictionary = ["reinforcedActions": reinforcedActions]
                         }
                     }
                     do {

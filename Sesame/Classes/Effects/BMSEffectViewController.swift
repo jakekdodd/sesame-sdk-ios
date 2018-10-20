@@ -10,33 +10,35 @@ import UIKit
 open class BMSEffectViewController: UIViewController {
 
     public var effectViews = [BMSVisualEffectView]()
-    public var reinforcementEffects: [[String: NSObject?]]?
+    public var reinforcementEffects: [String: [[String: NSObject?]]]?
 
     open override func viewDidLoad() {
         super.viewDidLoad()
         view.isUserInteractionEnabled = false
 
         guard let reinforcementEffects = reinforcementEffects else { return }
-        for effect in reinforcementEffects {
-            let effectView: BMSVisualEffectView
-            switch effect["name"] as? String {
-            case "confetti":
-                let confetti = BMSConfettiEffectView()
-                effectView = confetti
+        for (name, effects) in reinforcementEffects {
+            for effect in effects {
+                let effectView: BMSVisualEffectView
+                switch name {
+                case "confetti":
+                    let confetti = BMSConfettiEffectView()
+                    effectView = confetti
 
-            case "sheen":
-                let sheen = BMSSheenEffectView()
-                effectView = sheen
+                case "sheen":
+                    let sheen = BMSSheenEffectView()
+                    effectView = sheen
 
-            case "emojisplosion":
-                let emojisplosion = BMSEmojiplosionEffectView()
-                effectView = emojisplosion
+                case "emojisplosion":
+                    let emojisplosion = BMSEmojiplosionEffectView()
+                    effectView = emojisplosion
 
-            default:
-                continue
+                default:
+                    continue
+                }
+                effectView.set(attributes: effect)
+                effectViews.append(effectView)
             }
-            effectView.set(attributes: effect)
-            effectViews.append(effectView)
         }
     }
 

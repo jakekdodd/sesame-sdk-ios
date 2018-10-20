@@ -12,19 +12,28 @@ import CoreData
 typealias EffectAttributes = [String: NSObject?]
 
 @objc(BMSReinforcementEffect)
-public class BMSReinforcementEffect: NSManagedObject { }
+public class BMSReinforcementEffect: NSManagedObject {
+    struct Holder {
+        var name: String?
+        var attributes: EffectAttributes?
+    }
+}
 
 extension BMSReinforcementEffect {
 
+    var holder: BMSReinforcementEffect.Holder {
+        return .init(name: name, attributes: attributesDictionary)
+    }
+
     @discardableResult
-    class func insert(context: NSManagedObjectContext, reinforcement: BMSReinforcement, name: String, effectAttributes: EffectAttributes) -> BMSReinforcementEffect? {
+    class func insert(context: NSManagedObjectContext, reinforcement: BMSReinforcement, name: String, attributes: EffectAttributes) -> BMSReinforcementEffect? {
         var value: BMSReinforcementEffect?
         context.performAndWait {
             guard let effect = BMSReinforcementEffect.create(in: context) else {
                 return
             }
             effect.name = name
-            for (key, value) in effectAttributes {
+            for (key, value) in attributes {
                 _ = BMSReinforcementEffectAttribute.insert(context: context,
                                                            reinforementEffect: effect,
                                                            key: key,

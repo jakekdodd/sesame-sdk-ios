@@ -56,10 +56,7 @@ open class BMSSheenEffectView: BMSVisualEffectView {
     }
 
     public override func set(attributes: [String: NSObject?]) {
-        guard attributes["name"] as? String == "sheen" else { return }
-
-        if let durationString = attributes["duration"] as? String,
-            let duration = Double(durationString) {
+        if let duration = attributes["duration"] as? Double {
             self.duration = duration / 1000
         } else { BMSLog.error("Missing parameter")}
 

@@ -41,8 +41,6 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
 
     //swiftlint:disable:next cyclomatic_complexity function_body_length
     public override func set(attributes: [String: NSObject?]) {
-        guard attributes["name"] as? String == "emojisplosion" else { return }
-
         if let acceleration = attributes["acceleration"] as? [Double],
             acceleration.count == 2 {
             self.acceleration = (CGFloat(acceleration[0] * 1000000), CGFloat(acceleration[1] * 1000000))
@@ -57,8 +55,7 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
             self.image = UIImage(text: content)
         } else { BMSLog.error("Missing parameter")}
 
-        if let durationString = attributes["duration"] as? String,
-            let duration = Double(durationString) {
+        if let duration = attributes["duration"] as? Double {
             self.duration = duration / 1000
         } else { BMSLog.error("Missing parameter")}
 
