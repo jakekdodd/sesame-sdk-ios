@@ -16,7 +16,7 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		8472FB82213A7499003B86CE /* Mock+Sesame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472FB80213A7486003B86CE /* Mock+Sesame.swift */; };
 		847734F6215EAE6E00D97B7C /* Mock+APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */; };
-		848553F22160D02D003DAE63 /* Test+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848553F12160D02D003DAE63 /* Test+CoreData.swift */; };
+		848553F22160D02D003DAE63 /* TestCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848553F12160D02D003DAE63 /* TestCoreData.swift */; };
 		8491A2E2211CE03B00069B94 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8491A2E1211CE03B00069B94 /* Utilities.swift */; };
 		849A1BCA217B07F7007BB93B /* Sesame.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849A1BC9217B07F7007BB93B /* Sesame.plist */; };
 		849B508221620E370096A91C /* Test+AppLifecycleTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */; };
@@ -52,7 +52,7 @@
 		8422CD7A21124C9F001E94FF /* Sesame_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sesame_Example.entitlements; sourceTree = "<group>"; };
 		8472FB80213A7486003B86CE /* Mock+Sesame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+Sesame.swift"; sourceTree = "<group>"; };
 		847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+APIClient.swift"; sourceTree = "<group>"; };
-		848553F12160D02D003DAE63 /* Test+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+CoreData.swift"; sourceTree = "<group>"; };
+		848553F12160D02D003DAE63 /* TestCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreData.swift; sourceTree = "<group>"; };
 		8491A2E1211CE03B00069B94 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		849A1BC9217B07F7007BB93B /* Sesame.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Sesame.plist; path = "../../../keys/sesame-sdk-ios/Sesame.plist"; sourceTree = "<group>"; };
 		849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+AppLifecycleTracker.swift"; sourceTree = "<group>"; };
@@ -141,7 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
-				848553F12160D02D003DAE63 /* Test+CoreData.swift */,
+				848553F12160D02D003DAE63 /* TestCoreData.swift */,
 				849B508121620E370096A91C /* Test+AppLifecycleTracker.swift */,
 				8472FB80213A7486003B86CE /* Mock+Sesame.swift */,
 				847734F5215EAE6E00D97B7C /* Mock+APIClient.swift */,
@@ -376,7 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				849B508221620E370096A91C /* Test+AppLifecycleTracker.swift in Sources */,
-				848553F22160D02D003DAE63 /* Test+CoreData.swift in Sources */,
+				848553F22160D02D003DAE63 /* TestCoreData.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				8472FB82213A7499003B86CE /* Mock+Sesame.swift in Sources */,
 				847734F6215EAE6E00D97B7C /* Mock+APIClient.swift in Sources */,
