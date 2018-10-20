@@ -118,6 +118,35 @@ class TestCoreData: XCTestCase {
         }
     }
 
+    func testCartridgeReinforcedAction() {
+        let coreData = CoreDataManager()
+
+        coreData.newContext { context in
+            guard let appState = BMSAppState.insert(context: context, appId: Mock.app1, auth: Mock.auth1)
+                else { fatalError() }
+            guard let reinforcedAction = BMSReinforcedAction.insert(
+                context: context,
+                appState: appState,
+                id: Mock.aid1,
+                name: Mock.aname1,
+                reinforcements: [BMSReinforcement.Holder.init(
+                    id: Mock.rid1,
+                    name: Mock.rname1,
+                    effects: [
+                        BMSReinforcementEffect.Holder.init(
+                            name: Mock.rname1,
+                            attributes: [
+                                "attribute1": true as NSObject
+                            ]
+                        )
+                    ])
+                ])
+                else { fatalError() }
+
+            XCTAssert(reinforcedAction.reinforcements.first?.effects.first?.attributes.first?.key == "attribute1")
+        }
+    }
+
     func testCartridgeNeutral() {
         let coreData = CoreDataManager()
 
