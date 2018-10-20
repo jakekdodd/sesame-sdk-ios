@@ -14,13 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    var userId = "dev"
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        Sesame.shared = .init(appId: "bf6bfcca-4cee-42ef-b699-59466bddedeb",
-                              auth: "ghRPZc-N2qiCe-HbVLeciH43ySaBBkYABTCAaO6mGI-ZasjLd3l4cj59ouJfbYz93fUwiFtO26NtmyxgqQ2wZQ",
-                              versionId: "88547a03-01c5-4ab9-b63d-effface60789",
-                              userId: userId)
+        guard NSClassFromString("XCTest") == nil else { return true }
+
+        Sesame.shared = .init(appId: Sesame.PropertyList.file.appId,
+                              auth: Sesame.PropertyList.file.auth,
+                              versionId: Sesame.PropertyList.file.versionId,
+                              userId: Sesame.PropertyList.file.userId)
 
         return true
     }
