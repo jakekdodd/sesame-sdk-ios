@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(BMSReinforcedAction)
-public class BMSReinforcedAction: NSManagedObject {
+class BMSReinforcedAction: NSManagedObject {
 
     @NSManaged var id: String
     @NSManaged var name: String

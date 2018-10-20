@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(BMSReinforcementEffectAttribute)
-public class BMSReinforcementEffectAttribute: NSManagedObject {
+class BMSReinforcementEffectAttribute: NSManagedObject {
 
     @NSManaged var key: String
     @NSManaged var value: NSObject?

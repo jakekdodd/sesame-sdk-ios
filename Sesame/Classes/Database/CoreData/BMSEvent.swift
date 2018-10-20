@@ -19,7 +19,7 @@ class BMSEvent: NSManagedObject {
     @NSManaged var timezoneOffset: Int64
     @NSManaged var utc: Int64
     @NSManaged var report: BMSEventReport
-    @NSManaged public var reinforcement: BMSCartridgeReinforcement?
+    @NSManaged var reinforcement: BMSCartridgeReinforcement?
 
     var metadataAsDictionary: [String: Any]? {
         get {
@@ -37,6 +37,7 @@ class BMSEvent: NSManagedObject {
         setPrimitiveValue(Int64(Date().timeIntervalSince1970 * 1000), forKey: #keyPath(BMSEvent.utc))
         setPrimitiveValue(Int64(NSTimeZone.default.secondsFromGMT() * 1000), forKey: #keyPath(BMSEvent.timezoneOffset))
     }
+
 }
 
 extension BMSEvent {

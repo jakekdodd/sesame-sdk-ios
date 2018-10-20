@@ -10,13 +10,16 @@ import Foundation
 import CoreData
 
 @objc enum BMSEventReportType: Int32 {
+
     case reinforceable, nonreinforceable
+
     var stringValue: String {
         switch self {
         case .reinforceable:    return "REINFORCEABLE"
         case .nonreinforceable: return "NON_REINFORCEABLE"
         }
     }
+
 }
 
 @objc(BMSEventReport)

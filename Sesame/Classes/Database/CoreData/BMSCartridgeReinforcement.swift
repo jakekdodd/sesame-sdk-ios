@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 @objc(BMSCartridgeReinforcement)
-public class BMSCartridgeReinforcement: NSManagedObject {
+class BMSCartridgeReinforcement: NSManagedObject {
 
-    @objc public static let NeutralName = "NEUTRAL_RESP"
-    @objc public static let NeutralId = NeutralName
+    @objc static let NeutralName = "NEUTRAL_RESP"
+    @objc static let NeutralId = NeutralName
 
     @NSManaged var id: String
     @NSManaged var idx: Int32

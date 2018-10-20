@@ -12,7 +12,7 @@ import CoreData
 typealias EffectAttributes = [String: NSObject?]
 
 @objc(BMSReinforcementEffect)
-public class BMSReinforcementEffect: NSManagedObject {
+class BMSReinforcementEffect: NSManagedObject {
 
     @NSManaged var name: String
     @NSManaged var reinforcement: BMSReinforcement
