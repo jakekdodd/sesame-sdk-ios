@@ -167,7 +167,7 @@ public extension Sesame {
                 event.reinforcement = cartridgeReinforcement
                 if let reinforcement = reinforcedAction.reinforcements.filter({$0.id == cartridgeReinforcement.id}).first {
                     reinforcementHolder = reinforcement.holder
-                }
+                } else { BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")}
             }
 
             eventCount = BMSEvent.count(context: context, userId: user.id) ?? 0

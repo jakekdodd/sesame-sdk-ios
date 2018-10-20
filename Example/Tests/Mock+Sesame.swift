@@ -12,7 +12,7 @@ import CoreData.NSManagedObjectContext
 struct Mock {
 
     static let aid1 = "actionId1"
-    static let aname1 = "action1"
+    static let aname1 = "appOpen"
     static let cid1 = "cartridgeId1"
     static let rid1 = "reinforcementId1"
     static let rname1 = "sheen"

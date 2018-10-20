@@ -50,10 +50,14 @@ extension MockAPIClient {
                                 "id": Mock.rid1,
                                 "name": Mock.rname1,
                                 "effects": [
-                                    "name": Mock.rname1,
-                                    "duration": 2000,
-                                    "color": "#ffffffcc",
-                                    "aspectRatio": 1.667
+                                    [
+                                        "name": Mock.rname1,
+                                        "attributes": [
+                                            "duration": 2000.0 as NSObject,
+                                            "color": "#ffffffcc" as NSObject,
+                                            "aspectRatio": 1.667 as NSObject
+                                        ]
+                                    ]
                                 ]
                             ]
                         ]
