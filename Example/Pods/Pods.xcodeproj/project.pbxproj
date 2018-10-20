@@ -347,16 +347,8 @@
 				9FBEC04BCE4499FBE6772D4DE10DA039 /* BMSReinforcementEffectAttribute.swift */,
 				A368A4F5B7F9B879B051FB8EB3C34628 /* BMSUser.swift */,
 				4117C22EE2183A4F4FDDFEC6DFFCFC15 /* CoreDataManager.swift */,
-				88585F7F9F1117728C5FB271B18E9039 /* Properties */,
 			);
 			path = CoreData;
-			sourceTree = "<group>";
-		};
-		88585F7F9F1117728C5FB271B18E9039 /* Properties */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Properties;
 			sourceTree = "<group>";
 		};
 		A5674CFD3B024A5A33D102A170668CA9 /* Pod */ = {
