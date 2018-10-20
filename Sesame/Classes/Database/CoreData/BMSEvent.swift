@@ -62,16 +62,16 @@ extension BMSEvent {
                 let event = BMSEvent.create(in: context) else {
                     return
             }
-            event.report = report
             event.reinforcement = reinforcement
             event.sessionId = sessionId
             event.metadataAsDictionary = metadata
+            report.addToEvents(event)
             do {
                 try context.save()
-                BMSLog.info("Logged event #\(report.events.count) for actionName:\(actionName)")
             } catch {
                 BMSLog.error(error)
             }
+            BMSLog.info("Inserted event #\(report.events.count) for actionName:\(actionName)")
             value = event
         }
         return value

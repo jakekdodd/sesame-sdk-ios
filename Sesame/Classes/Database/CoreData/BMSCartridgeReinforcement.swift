@@ -53,6 +53,7 @@ extension BMSCartridgeReinforcement {
                 } catch let error as NSError {
                     BMSLog.error("Could not insert. \(error)")
                 }
+                BMSLog.info("Inserted reinforcement #\(idx) id:\(id) for actionId:\(cartridge.actionId)")
                 value = reinforcement
             }
         }

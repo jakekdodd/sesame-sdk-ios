@@ -120,6 +120,7 @@ extension BMSEventReport {
                 } catch {
                     BMSLog.error("Could not fetch. \(error)")
                 }
+                BMSLog.warning("Inserted event report for action:\(report.actionName) for userId:\(user.id)")
                 value = report
             }
         }

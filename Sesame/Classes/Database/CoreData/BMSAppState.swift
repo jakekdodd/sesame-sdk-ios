@@ -97,6 +97,7 @@ extension BMSAppState {
                 } catch let error as NSError {
                     BMSLog.error("Could not insert. \(error)")
                 }
+                BMSLog.warning("Inserted appState with id:\(appId)")
                 value = appState
             }
         }

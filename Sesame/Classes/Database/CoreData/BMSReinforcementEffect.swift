@@ -63,23 +63,23 @@ extension BMSReinforcementEffect {
     class func insert(context: NSManagedObjectContext, reinforcement: BMSReinforcement, name: String, attributes: EffectAttributes) -> BMSReinforcementEffect? {
         var value: BMSReinforcementEffect?
         context.performAndWait {
-            guard let effect = BMSReinforcementEffect.create(in: context) else {
-                return
-            }
-            effect.name = name
-            for (key, value) in attributes {
-                _ = BMSReinforcementEffectAttribute.insert(context: context,
+            if let effect = BMSReinforcementEffect.create(in: context) {
+                effect.name = name
+                reinforcement.addToEffects(effect)
+                for (key, value) in attributes {
+                    BMSReinforcementEffectAttribute.insert(context: context,
                                                            reinforementEffect: effect,
                                                            key: key,
                                                            value: value)
+                }
+                do {
+                    try context.save()
+                } catch let error as NSError {
+                    BMSLog.error(error)
+                }
+                BMSLog.info(confirmed: "Inserted reinforcement effect <\(name)> for reinforcement <\(reinforcement.name)>")
+                value = effect
             }
-            reinforcement.addToEffects(effect)
-            do {
-                try context.save()
-            } catch let error as NSError {
-                BMSLog.error(error)
-            }
-            value = effect
         }
         return value
     }

@@ -171,22 +171,22 @@ extension BMSCartridge {
         var value: BMSCartridge?
         context.performAndWait {
             if let cartridge = BMSCartridge.create(in: context) {
-                cartridge.user = user
                 cartridge.actionId = actionId
                 cartridge.cartridgeId = cartridgeId
                 cartridge.utc = utc
                 cartridge.ttl = ttl
+                user.addToCartridges(cartridge)
                 for reinforcement in reinforcements {
                     guard let id = reinforcement.id,
                         let idx = reinforcement.idx else { continue }
                     BMSCartridgeReinforcement.insert(context: context, cartridge: cartridge, id: id, idx: idx)
                 }
-                BMSLog.warning("Inserted cartridge with :\(cartridge.reinforcements.count) reinforcements")
                 do {
                     try context.save()
                 } catch let error as NSError {
                     BMSLog.error("Could not insert. \(error)")
                 }
+                BMSLog.warning("Inserted cartridge with <\(cartridge.reinforcements.count)> reinforcements")
                 value = cartridge
             }
         }

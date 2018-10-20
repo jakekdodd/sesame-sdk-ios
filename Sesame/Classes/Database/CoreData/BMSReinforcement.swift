@@ -73,21 +73,24 @@ extension BMSReinforcement {
             if let reinforcement = BMSReinforcement.create(in: context) {
                 reinforcement.id = id
                 reinforcement.name = name
+                reinforcedAction.addToReinforcements(reinforcement)
                 for effect in effects {
                     guard let name = effect.name,
                         let attributes = effect.attributes
                         else { continue }
-                    BMSReinforcementEffect.insert(context: context, reinforcement: reinforcement, name: name, attributes: attributes)
+                    BMSReinforcementEffect.insert(context: context,
+                                                  reinforcement: reinforcement,
+                                                  name: name,
+                                                  attributes: attributes)
                 }
-                reinforcedAction.addToReinforcements(reinforcement)
 
                 do {
                     try context.save()
-                    BMSLog.info(confirmed: "Inserted reinforcement:\(name)")
-                    value = reinforcement
                 } catch {
                     BMSLog.error(error)
                 }
+                BMSLog.info(confirmed: "Inserted reinforcement <\(name)> for action <\(reinforcedAction.name)>")
+                value = reinforcement
             }
         }
         return value

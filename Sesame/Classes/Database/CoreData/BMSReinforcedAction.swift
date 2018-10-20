@@ -50,29 +50,26 @@ extension BMSReinforcedAction {
         var value: BMSReinforcedAction?
         context.performAndWait {
             if let reinforcedAction = BMSReinforcedAction.create(in: context) {
-                reinforcedAction.appState = appState
                 reinforcedAction.id = id
                 reinforcedAction.name = name
+                appState.addToReinforcedActions(reinforcedAction)
                 for reinforcement in reinforcements {
                     guard let id = reinforcement.id,
                         let name = reinforcement.name,
-                    let effects = reinforcement.effects,
-                    let reinforcement = BMSReinforcement.insert(context: context, reinforcedAction: reinforcedAction, id: id, name: name, effects: effects)
-                     else { continue }
-                    BMSLog.info("""
-                        Reinforcement name:\(reinforcement.name)
-                        effects:\(reinforcement.effects.map({$0.name}))
-                        attributes:\(reinforcement.effects.map({$0.attributes.map({$0.key})}))
-                        done
-                        """)
+                        let effects = reinforcement.effects
+                        else { continue }
+                    BMSReinforcement.insert(context: context,
+                                            reinforcedAction: reinforcedAction,
+                                            id: id,
+                                            name: name,
+                                            effects: effects)
                 }
-
-                BMSLog.warning("Inserted reinforced action:\(reinforcedAction.name)")
                 do {
                     try context.save()
                 } catch let error as NSError {
                     BMSLog.error("Could not insert. \(error)")
                 }
+                BMSLog.warning("Inserted reinforced action <\(reinforcedAction.name)> with <\(reinforcedAction.reinforcements.count)> reinforcements")
                 value = reinforcedAction
             }
         }

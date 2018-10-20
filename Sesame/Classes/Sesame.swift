@@ -33,7 +33,7 @@ public class Sesame: NSObject {
     fileprivate var _reinforcement: BMSReinforcement.Holder? {
         didSet {
             if let reinforcement = _reinforcement {
-                BMSLog.info(confirmed: "Got reinforcement:\(reinforcement as AnyObject)")
+                BMSLog.info(confirmed: "Got reinforcement:\(reinforcement.name ?? "nil")")
                 DispatchQueue.main.async {
                     guard let delegate = self.reinforcementDelegate
                         ?? UIWindow.topWindow?.rootViewController,
@@ -392,7 +392,6 @@ extension Sesame {
                         let user = appState.user
                         else { return }
                     for cartridgeInfo in response["cartridges"] as? [[String: Any]] ?? [] {
-                        BMSLog.warning("Cart info:\(cartridgeInfo as AnyObject)")
                         if let ttl = cartridgeInfo["ttl"] as? Int64,
                             let actionId = cartridgeInfo["actionId"] as? String,
                             let cartridgeId = cartridgeInfo["cartridgeId"] as? String,

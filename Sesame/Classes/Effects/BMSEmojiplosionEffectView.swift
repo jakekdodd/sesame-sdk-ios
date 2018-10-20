@@ -44,7 +44,6 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
         if let acceleration = attributes["acceleration"] as? [Double],
             acceleration.count == 2 {
             self.acceleration = (CGFloat(acceleration[0] * 1000000), CGFloat(acceleration[1] * 1000000))
-            BMSLog.info("Set acceleration to:\(self.acceleration)")
         } else { BMSLog.error("Missing parameter")}
 
         if let angle = attributes["angle"] as? Double {

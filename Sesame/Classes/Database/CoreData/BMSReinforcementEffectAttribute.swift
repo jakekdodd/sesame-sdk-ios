@@ -32,6 +32,7 @@ extension BMSReinforcementEffectAttribute {
         return NSFetchRequest<BMSReinforcementEffectAttribute>(entityName: "BMSReinforcementEffectAttribute")
     }
 
+    @discardableResult
     class func insert(context: NSManagedObjectContext, reinforementEffect: BMSReinforcementEffect, key: String, value attributeValue: NSObject?) -> BMSReinforcementEffectAttribute? {
 
         var value: BMSReinforcementEffectAttribute?
@@ -45,7 +46,7 @@ extension BMSReinforcementEffectAttribute {
                 } catch let error as NSError {
                     BMSLog.error(error)
                 }
-//                BMSLog.info("Inserted attribute key:\(attr.key) value:\(attr.value)")
+                BMSLog.info("Inserted attribute key:\(attr.key) value:\(attr.value ?? "nil" as NSObject)")
                 value = attr
             }
         }

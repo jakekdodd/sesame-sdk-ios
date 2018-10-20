@@ -107,6 +107,7 @@ extension BMSUser {
                 } catch let error as NSError {
                     BMSLog.error("Could not fetch. \(error)")
                 }
+                BMSLog.info(confirmed: "Inserted user with id:\(user.id)")
                 value = user
             }
         }
