@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name                      = 'Sesame'
-    s.version                   = '0.1.1'
+    s.version                   = '0.1.2'
     s.summary                   = 'Sesame is a framework for reinforcing app open behaviors.'
     s.license                   = { :type => 'MIT', :file => 'LICENSE' }
     s.homepage                  = 'https://github.com/BoundlessAI/sesame-sdk-ios'

@@ -1,6 +1,6 @@
 {
   "name": "Sesame",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "summary": "Sesame is a framework for reinforcing app open behaviors.",
   "license": {
     "type": "MIT",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/BoundlessAI/sesame-sdk-ios",
-    "tag": "0.1.1"
+    "tag": "0.1.2"
   },
   "platforms": {
     "ios": "8.0"
