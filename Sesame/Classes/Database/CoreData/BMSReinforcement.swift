@@ -62,7 +62,7 @@ extension BMSReinforcement {
         return BMSReinforcement(entity: entity, insertInto: context)
     }
 
-    @nonobjc class func request() -> NSFetchRequest<BMSReinforcement> {
+    class func request() -> NSFetchRequest<BMSReinforcement> {
         return NSFetchRequest<BMSReinforcement>(entityName: "BMSReinforcement")
     }
 

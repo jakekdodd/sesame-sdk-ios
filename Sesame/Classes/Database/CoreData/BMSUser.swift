@@ -59,7 +59,7 @@ extension BMSUser {
         return BMSUser(entity: entity, insertInto: context)
     }
 
-    @nonobjc public class func request() -> NSFetchRequest<BMSUser> {
+    class func request() -> NSFetchRequest<BMSUser> {
         return NSFetchRequest<BMSUser>(entityName: "BMSUser")
     }
 

@@ -49,7 +49,7 @@ extension BMSEvent {
         return BMSEvent(entity: entity, insertInto: context)
     }
 
-    @nonobjc class func request() -> NSFetchRequest<BMSEvent> {
+    class func request() -> NSFetchRequest<BMSEvent> {
         return NSFetchRequest<BMSEvent>(entityName: "BMSEvent")
     }
 

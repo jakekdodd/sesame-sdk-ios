@@ -87,7 +87,7 @@ extension BMSCartridge {
         return BMSCartridge(entity: entity, insertInto: context)
     }
 
-    @nonobjc class func request() -> NSFetchRequest<BMSCartridge> {
+    class func request() -> NSFetchRequest<BMSCartridge> {
         return NSFetchRequest<BMSCartridge>(entityName: "BMSCartridge")
     }
 

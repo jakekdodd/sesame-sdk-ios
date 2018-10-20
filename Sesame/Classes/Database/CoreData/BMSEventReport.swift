@@ -72,7 +72,7 @@ extension BMSEventReport {
         return BMSEventReport(entity: entity, insertInto: context)
     }
 
-    @nonobjc class func request() -> NSFetchRequest<BMSEventReport> {
+    class func request() -> NSFetchRequest<BMSEventReport> {
         return NSFetchRequest<BMSEventReport>(entityName: "BMSEventReport")
     }
 

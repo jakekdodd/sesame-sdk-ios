@@ -28,7 +28,7 @@ extension BMSReinforcementEffectAttribute {
         return BMSReinforcementEffectAttribute(entity: entity, insertInto: context)
     }
 
-    @nonobjc class func fetch() -> NSFetchRequest<BMSReinforcementEffectAttribute> {
+    class func fetch() -> NSFetchRequest<BMSReinforcementEffectAttribute> {
         return NSFetchRequest<BMSReinforcementEffectAttribute>(entityName: "BMSReinforcementEffectAttribute")
     }
 
