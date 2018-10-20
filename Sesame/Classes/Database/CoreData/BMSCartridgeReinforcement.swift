@@ -12,17 +12,33 @@ import CoreData
 @objc(BMSCartridgeReinforcement)
 public class BMSCartridgeReinforcement: NSManagedObject {
 
+    @objc public static let NeutralName = "NEUTRAL_RESP"
+    @objc public static let NeutralId = NeutralName
+
+    @NSManaged var id: String
+    @NSManaged var idx: Int32
+    @NSManaged var cartridge: BMSCartridge
+    @NSManaged var event: BMSEvent?
+
     struct Holder {
         var id: String?
         var idx: Int32?
     }
 
-    @objc public static let NeutralName = "NEUTRAL_RESP"
-    @objc public static let NeutralId = NeutralName
-
 }
 
 extension BMSCartridgeReinforcement {
+
+    class func create(in context: NSManagedObjectContext) -> BMSCartridgeReinforcement? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSCartridgeReinforcement", in: context) else {
+            return nil
+        }
+        return BMSCartridgeReinforcement(entity: entity, insertInto: context)
+    }
+
+    @nonobjc class func request() -> NSFetchRequest<BMSCartridgeReinforcement> {
+        return NSFetchRequest<BMSCartridgeReinforcement>(entityName: "BMSCartridgeReinforcement")
+    }
 
     @discardableResult
     class func insert(context: NSManagedObjectContext, cartridge: BMSCartridge, id: String, idx: Int32) -> BMSCartridgeReinforcement? {
@@ -42,5 +58,5 @@ extension BMSCartridgeReinforcement {
         }
         return value
     }
-    
+
 }

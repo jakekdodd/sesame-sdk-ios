@@ -11,7 +11,26 @@ import CoreData
 
 @objc(BMSEvent)
 class BMSEvent: NSManagedObject {
+
     static let AppOpenName = "appOpen"
+
+    @NSManaged var metadata: String?
+    @NSManaged var sessionId: NSNumber?
+    @NSManaged var timezoneOffset: Int64
+    @NSManaged var utc: Int64
+    @NSManaged var report: BMSEventReport
+    @NSManaged public var reinforcement: BMSCartridgeReinforcement?
+
+    var metadataAsDictionary: [String: Any]? {
+        get {
+            return (metadata == nil) ? nil : .from(string: metadata!)
+        }
+        set {
+            if let dict = newValue.toString() {
+                metadata = dict
+            }
+        }
+    }
 
     override public func awakeFromInsert() {
         super.awakeFromInsert()
@@ -21,6 +40,17 @@ class BMSEvent: NSManagedObject {
 }
 
 extension BMSEvent {
+
+    class func create(in context: NSManagedObjectContext) -> BMSEvent? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSEvent", in: context) else {
+            return nil
+        }
+        return BMSEvent(entity: entity, insertInto: context)
+    }
+
+    @nonobjc class func request() -> NSFetchRequest<BMSEvent> {
+        return NSFetchRequest<BMSEvent>(entityName: "BMSEvent")
+    }
 
     @discardableResult
     class func insert(context: NSManagedObjectContext, userId: String, actionName: String, reinforcement: BMSCartridgeReinforcement? = nil, sessionId: NSNumber? = nil, metadata: [String: Any] = [:]) -> BMSEvent? {

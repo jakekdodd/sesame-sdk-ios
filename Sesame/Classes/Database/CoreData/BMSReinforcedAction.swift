@@ -12,9 +12,38 @@ import CoreData
 @objc(BMSReinforcedAction)
 public class BMSReinforcedAction: NSManagedObject {
 
+    @NSManaged var id: String
+    @NSManaged var name: String
+    @NSManaged var appState: BMSAppState
+    @NSManaged var reinforcements: Set<BMSReinforcement>
+
+    // MARK: Generated accessors for reinforcements
+    @objc(addReinforcementsObject:)
+    @NSManaged func addToReinforcements(_ value: BMSReinforcement)
+
+    @objc(removeReinforcementsObject:)
+    @NSManaged func removeFromReinforcements(_ value: BMSReinforcement)
+
+    @objc(addReinforcements:)
+    @NSManaged func addToReinforcements(_ values: NSSet)
+
+    @objc(removeReinforcements:)
+    @NSManaged func removeFromReinforcements(_ values: NSSet)
+
 }
 
 extension BMSReinforcedAction {
+
+    class func create(in context: NSManagedObjectContext) -> BMSReinforcedAction? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReinforcedAction", in: context) else {
+            return nil
+        }
+        return BMSReinforcedAction(entity: entity, insertInto: context)
+    }
+
+    @nonobjc class func request() -> NSFetchRequest<BMSReinforcedAction> {
+        return NSFetchRequest<BMSReinforcedAction>(entityName: "BMSReinforcedAction")
+    }
 
     @discardableResult
     class func insert(context: NSManagedObjectContext, appState: BMSAppState, id: String, name: String, reinforcements: [BMSReinforcement.Holder]) -> BMSReinforcedAction? {

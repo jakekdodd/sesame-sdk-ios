@@ -12,13 +12,26 @@ import CoreData
 @objc(BMSReinforcementEffectAttribute)
 public class BMSReinforcementEffectAttribute: NSManagedObject {
 
-    enum Key: String {
-        case name, duration
-    }
+    @NSManaged var key: String
+    @NSManaged var value: NSObject?
+    @NSManaged var effect: BMSReinforcementEffect
 
 }
 
 extension BMSReinforcementEffectAttribute {
+
+    class func create(in context: NSManagedObjectContext) -> BMSReinforcementEffectAttribute? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReinforcementEffectAttribute",
+                                                      in: context) else {
+                                                        return nil
+        }
+        return BMSReinforcementEffectAttribute(entity: entity, insertInto: context)
+    }
+
+    @nonobjc class func fetch() -> NSFetchRequest<BMSReinforcementEffectAttribute> {
+        return NSFetchRequest<BMSReinforcementEffectAttribute>(entityName: "BMSReinforcementEffectAttribute")
+    }
+
     class func insert(context: NSManagedObjectContext, reinforementEffect: BMSReinforcementEffect, key: String, value attributeValue: NSObject?) -> BMSReinforcementEffectAttribute? {
 
         var value: BMSReinforcementEffectAttribute?

@@ -12,13 +12,45 @@ import CoreData
 @objc(BMSAppState)
 class BMSAppState: NSManagedObject {
 
+    @NSManaged var appId: String
+    @NSManaged var auth: String
+    @NSManaged var revision: Int64
+    @NSManaged var trackingEnabled: Bool
+    @NSManaged var versionId: String?
+    @NSManaged var reinforcedActions: Set<BMSReinforcedAction>
+    @NSManaged var user: BMSUser?
+
     var basicAuth: HTTPClient.AuthorizationHeader {
         return .basic(appId, auth)
     }
 
+    // MARK: Generated accessors for reinforcedActions
+    @objc(addReinforcedActionsObject:)
+    @NSManaged public func addToReinforcedActions(_ value: BMSReinforcedAction)
+
+    @objc(removeReinforcedActionsObject:)
+    @NSManaged public func removeFromReinforcedActions(_ value: BMSReinforcedAction)
+
+    @objc(addReinforcedActions:)
+    @NSManaged public func addToReinforcedActions(_ values: NSSet)
+
+    @objc(removeReinforcedActions:)
+    @NSManaged public func removeFromReinforcedActions(_ values: NSSet)
+
 }
 
 extension BMSAppState {
+
+    class func create(in context: NSManagedObjectContext) -> BMSAppState? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSAppState", in: context) else {
+            return nil
+        }
+        return BMSAppState(entity: entity, insertInto: context)
+    }
+
+    class func request() -> NSFetchRequest<BMSAppState> {
+        return NSFetchRequest<BMSAppState>(entityName: "BMSAppState")
+    }
 
     class func fetch(context: NSManagedObjectContext, appId: String) -> BMSAppState? {
         var value: BMSAppState?

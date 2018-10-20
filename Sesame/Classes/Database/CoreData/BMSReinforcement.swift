@@ -11,6 +11,12 @@ import CoreData
 
 @objc(BMSReinforcement)
 class BMSReinforcement: NSManagedObject {
+
+    @NSManaged var id: String
+    @NSManaged var name: String
+    @NSManaged var action: BMSReinforcedAction
+    @NSManaged var effects: Set<BMSReinforcementEffect>
+
     struct Holder {
         var id: String?
         var name: String?
@@ -27,12 +33,37 @@ class BMSReinforcement: NSManagedObject {
             })
         }
     }
+
+    var holder: BMSReinforcement.Holder {
+        return .init(id: id, name: name, effects: effects.map({$0.holder}))
+    }
+
+    // MARK: Generated accessors for effects
+    @objc(addEffectsObject:)
+    @NSManaged func addToEffects(_ value: BMSReinforcementEffect)
+
+    @objc(removeEffectsObject:)
+    @NSManaged func removeFromEffects(_ value: BMSReinforcementEffect)
+
+    @objc(addEffects:)
+    @NSManaged func addToEffects(_ values: NSSet)
+
+    @objc(removeEffects:)
+    @NSManaged func removeFromEffects(_ values: NSSet)
+
 }
 
 extension BMSReinforcement {
 
-    var holder: BMSReinforcement.Holder {
-        return .init(id: id, name: name, effects: effects.map({$0.holder}))
+    class func create(in context: NSManagedObjectContext) -> BMSReinforcement? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSReinforcement", in: context) else {
+            return nil
+        }
+        return BMSReinforcement(entity: entity, insertInto: context)
+    }
+
+    @nonobjc class func request() -> NSFetchRequest<BMSReinforcement> {
+        return NSFetchRequest<BMSReinforcement>(entityName: "BMSReinforcement")
     }
 
     @discardableResult

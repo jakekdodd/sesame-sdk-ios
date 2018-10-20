@@ -14,6 +14,13 @@ class BMSCartridge: NSManagedObject {
 
     static let NeutralCartridgeId = "CLIENT_NEUTRAL"
 
+    @NSManaged var actionId: String
+    @NSManaged var cartridgeId: String
+    @NSManaged var utc: Int64
+    @NSManaged var ttl: Int64
+    @NSManaged var reinforcements: NSOrderedSet
+    @NSManaged var user: BMSUser
+
     var nextReinforcement: BMSCartridgeReinforcement? {
         guard let context = managedObjectContext else { return nil }
         var value: BMSCartridgeReinforcement?
@@ -38,9 +45,51 @@ class BMSCartridge: NSManagedObject {
         return value
     }
 
+    // MARK: Generated accessors for reinforcements
+    @objc(insertObject:inReinforcementsAtIndex:)
+    @NSManaged func insertIntoReinforcements(_ value: BMSCartridgeReinforcement, at idx: Int)
+
+    @objc(removeObjectFromReinforcementsAtIndex:)
+    @NSManaged func removeFromReinforcements(at idx: Int)
+
+    @objc(insertReinforcements:atIndexes:)
+    @NSManaged func insertIntoReinforcements(_ values: [BMSCartridgeReinforcement], at indexes: NSIndexSet)
+
+    @objc(removeReinforcementsAtIndexes:)
+    @NSManaged func removeFromReinforcements(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInReinforcementsAtIndex:withObject:)
+    @NSManaged func replaceReinforcements(at idx: Int, with value: BMSCartridgeReinforcement)
+
+    @objc(replaceReinforcementsAtIndexes:withReinforcements:)
+    @NSManaged func replaceReinforcements(at indexes: NSIndexSet, with values: [BMSCartridgeReinforcement])
+
+    @objc(addReinforcementsObject:)
+    @NSManaged func addToReinforcements(_ value: BMSCartridgeReinforcement)
+
+    @objc(removeReinforcementsObject:)
+    @NSManaged func removeFromReinforcements(_ value: BMSCartridgeReinforcement)
+
+    @objc(addReinforcements:)
+    @NSManaged func addToReinforcements(_ values: NSOrderedSet)
+
+    @objc(removeReinforcements:)
+    @NSManaged func removeFromReinforcements(_ values: NSOrderedSet)
+
 }
 
 extension BMSCartridge {
+
+    class func create(in context: NSManagedObjectContext) -> BMSCartridge? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "BMSCartridge", in: context) else {
+            return nil
+        }
+        return BMSCartridge(entity: entity, insertInto: context)
+    }
+
+    @nonobjc class func request() -> NSFetchRequest<BMSCartridge> {
+        return NSFetchRequest<BMSCartridge>(entityName: "BMSCartridge")
+    }
 
     class func needsRefresh(context: NSManagedObjectContext, userId: String, actionIds: [String]) -> [String] {
         var value = [String]()
