@@ -326,7 +326,7 @@ extension Sesame {
                                                       userId: user.id,
                                                       actionIds: appState.reinforcedActions.compactMap({$0.id}))
             guard !actionIdsForRefresh.isEmpty
-                /*|| (BMSEvent.count(context: context, userId: user.id) ?? 0) >= eventUploadCount*/ else {
+                || (BMSEvent.count(context: context, userId: user.id) ?? 0) >= eventUploadCount else {
                 uploadScheduled = false
                 return
             }
