@@ -21,12 +21,13 @@ class ViewController: UIViewController {
     @IBAction
     func didTapTest(_ sender: Any) {
         Sesame.shared?.addEvent(actionName: "buttonTap")
+        Sesame.shared?.reinforcementDelegate = self
     }
 
     @IBAction
     func didTapLabel(_ sender: Any) {
-        Sesame.shared?.appLifecycleTracker.didEnterBackground()
-        Sesame.shared?.appLifecycleTracker.didBecomeActive()
+//        Sesame.shared?.appLifecycleTracker.didEnterBackground()
+//        Sesame.shared?.appLifecycleTracker.didBecomeActive()
     }
 
     @IBAction func didTapSendNotification(_ sender: Any) {
@@ -46,5 +47,11 @@ class ViewController: UIViewController {
         } else {
             // Fallback on earlier versions
         }
+    }
+}
+
+extension ViewController {
+    override func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController) {
+        print("TEST")
     }
 }

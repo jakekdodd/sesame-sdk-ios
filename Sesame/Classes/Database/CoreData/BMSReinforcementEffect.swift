@@ -77,7 +77,9 @@ extension BMSReinforcementEffect {
                 } catch let error as NSError {
                     BMSLog.error(error)
                 }
-                BMSLog.info(confirmed: "Inserted reinforcement effect <\(name)> for reinforcement <\(reinforcement.name)>")
+                BMSLog.info(confirmed:
+                    "Inserted reinforcement effect <\(effect.name)> for reinforcement <\(reinforcement.name)>"
+                )
                 value = effect
             }
         }

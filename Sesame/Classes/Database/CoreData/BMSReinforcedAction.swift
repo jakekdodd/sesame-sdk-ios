@@ -69,7 +69,10 @@ extension BMSReinforcedAction {
                 } catch let error as NSError {
                     BMSLog.error("Could not insert. \(error)")
                 }
-                BMSLog.warning("Inserted reinforced action <\(reinforcedAction.name)> with <\(reinforcedAction.reinforcements.count)> reinforcements")
+                BMSLog.warning(
+                    "Inserted reinforced action <\(reinforcedAction.name)> " +
+                    "with <\(reinforcedAction.reinforcements.count)> reinforcements"
+                )
                 value = reinforcedAction
             }
         }

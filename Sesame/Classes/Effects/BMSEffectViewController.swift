@@ -42,7 +42,7 @@ open class BMSEffectViewController: UIViewController {
         }
     }
 
-    public func showEffect(_ completion: @escaping (Bool) -> Void = {_ in}) {
+    public func showEffects(_ completion: @escaping (Bool) -> Void = {_ in}) {
         DispatchQueue.main.async {
             for effectView in self.effectViews {
                 guard effectView.superview == nil else {

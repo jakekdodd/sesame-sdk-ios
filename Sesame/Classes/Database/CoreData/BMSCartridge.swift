@@ -153,7 +153,9 @@ extension BMSCartridge {
             let now = Int64(Date().timeIntervalSince1970 * 1000)
             for cartridge in fetch(context: context, userId: userId) ?? [] {
                 if (cartridge.utc + cartridge.ttl) < now {
-                    if cartridge.reinforcements.array.filter({($0 as? BMSCartridgeReinforcement)?.event != nil}).isEmpty {
+                    if cartridge.reinforcements.array.filter({
+                        ($0 as? BMSCartridgeReinforcement)?.event != nil
+                    }).isEmpty {
                         context.delete(cartridge)
                         value += 1
                     }

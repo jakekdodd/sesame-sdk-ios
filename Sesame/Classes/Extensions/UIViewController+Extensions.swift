@@ -10,14 +10,14 @@ import UIKit
 
 extension UIViewController: SesameReinforcementDelegate {
 
-    public func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController) {
+    open func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController) {
         DispatchQueue.main.async {
             // implement this UIViewController as a container for the effect
             self.addChild(effectViewController)
             effectViewController.view.frame = self.view.bounds
             self.view.addSubview(effectViewController.view)
             effectViewController.didMove(toParent: self)
-            effectViewController.showEffect { _ in
+            effectViewController.showEffects { _ in
                 // remove the effect from the container when done
                 effectViewController.willMove(toParent: nil)
                 effectViewController.view.removeFromSuperview()

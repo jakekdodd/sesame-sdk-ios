@@ -7,35 +7,6 @@
 
 import UIKit
 
-public typealias BMSEventMetadataOptions = [BMSEventMetadataOption]
-
-public extension Array where Element == BMSEventMetadataOption {
-
-    static func standard() -> BMSEventMetadataOptions {
-//        return [.deviceModel, .carrier, .country, .language]
-        return []
-    }
-
-    mutating func enable(_ option: BMSEventMetadataOption) {
-        if !contains(option) {
-            append(option)
-        }
-    }
-
-    mutating func disable(_ option: BMSEventMetadataOption) {
-        if let idx = index(of: option) {
-            remove(at: idx)
-        }
-    }
-
-    func annotate(_ dict: inout [String: Any]) {
-        for option in self {
-            dict[option.key] = option.getValue()
-        }
-    }
-
-}
-
 @objc
 public enum BMSEventMetadataOption: Int {
     case carrier, deviceModel, language, country
@@ -64,4 +35,33 @@ public enum BMSEventMetadataOption: Int {
             return NSLocale.preferredLanguages.first ?? "unknown"
         }
     }
+}
+
+public typealias BMSEventMetadataOptions = [BMSEventMetadataOption]
+
+public extension Array where Element == BMSEventMetadataOption {
+
+    static func standard() -> BMSEventMetadataOptions {
+//        return [.deviceModel, .carrier, .country, .language]
+        return []
+    }
+
+    mutating func enable(_ option: BMSEventMetadataOption) {
+        if !contains(option) {
+            append(option)
+        }
+    }
+
+    mutating func disable(_ option: BMSEventMetadataOption) {
+        if let idx = index(of: option) {
+            remove(at: idx)
+        }
+    }
+
+    func annotate(_ dict: inout [String: Any]) {
+        for option in self {
+            dict[option.key] = option.getValue()
+        }
+    }
+
 }
