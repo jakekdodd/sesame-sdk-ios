@@ -12,14 +12,28 @@ import CoreData
 @objc(BMSAppState)
 class BMSAppState: NSManagedObject {
 
+    /// AppId that can be found on https://dashboard.boundless.ai
     @NSManaged var appId: String
+
+    /// Auth that can be found on https://dashboard.boundless.ai
     @NSManaged var auth: String
+
+    /// Revision for your app version that can be found on https://dashboard.boundless.ai
     @NSManaged var revision: Int64
+
+    /// TrackingEnabled that is controlled from https://dashboard.boundless.ai
     @NSManaged var trackingEnabled: Bool
+
+    /// VersionId that can be found on https://dashboard.boundless.ai Used as an identifier in reinforcement experiments
     @NSManaged var versionId: String?
+
+    /// Actions to reinforce like appOpen. Configured on https://dashboard.boundless.ai
     @NSManaged var reinforcedActions: Set<BMSReinforcedAction>
+
+    /// The current user
     @NSManaged var user: BMSUser?
 
+    /// The appId and auth as an http header
     var basicAuth: HTTPClient.AuthorizationHeader {
         return .basic(appId, auth)
     }
@@ -41,6 +55,12 @@ class BMSAppState: NSManagedObject {
 
 extension BMSAppState {
 
+    /// Creates a new instance of the object in the given context.
+    /// You should set its member variables after creating it.
+    /// Does not save.
+    ///
+    /// - Parameter context: The context to create an instance in
+    /// - Returns: A new instance
     class func create(in context: NSManagedObjectContext) -> BMSAppState? {
         guard let entity = NSEntityDescription.entity(forEntityName: "BMSAppState", in: context) else {
             return nil

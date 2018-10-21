@@ -8,52 +8,42 @@
 import UIKit
 import CoreData
 
+/// Receives an effects view controller configured by the reinforcement API.
+/// Set this object as `sesame.reinforcementDelegate`
+///
+/// Implementing this protocol is optional,
+/// and only needs to be used if the effect does not display correctly by default.
+///
 @objc
 public protocol SesameReinforcementDelegate: class {
-
-    /// Override this method to receive reinforcements!
-    /// Set this object as the delegate of the Sesame object from your AppDelegate
+    /// A view controller configured with reinforcement effects, and creates its own views in `viewDidLoad()`.
+    /// Calling `effectViewController.showEffects()` will begin effects if they haven't already started.
     ///
     /// - Parameters:
-    ///   - app: The Sesame app
-    ///   - reinforcement: A string representing the reinforcement effect configured on the web dashboard
-    ///   - options: A dictionary with any additional options configured on the web dashboard
+    ///   - sesame: The Sesame object that received reinforcement
+    ///   - effectViewController: A view controller that will show effects over a transparent background
     func reinforce(sesame: Sesame, effectViewController: BMSEffectViewController)
 }
 
 @objc
 public class Sesame: NSObject {
 
+    /// Returns a singleton sesame instance
     @objc public static var shared: Sesame?
 
-    /// If the delegate is not set, the reinforcement effect will affect the whole screen
+    /// If the delegate is not set, the default behavior is
+    /// for the reinforcement effect to display over the window
     @objc public weak var reinforcementDelegate: SesameReinforcementDelegate?
 
-    /// The effect is shown using the custom reinforcementDelegate or the top UIWindow
-    fileprivate var _reinforcement: BMSReinforcement.Holder? {
-        didSet {
-            if let reinforcement = _reinforcement {
-                BMSLog.info(confirmed: "Got reinforcement:\(reinforcement.name ?? "nil")")
-                DispatchQueue.main.async {
-                    guard let delegate = self.reinforcementDelegate
-                        ?? UIWindow.topWindow?.rootViewController,
-                        let effects = reinforcement.effectsDictionary
-                        else { return }
-                    let effectViewController = BMSEffectViewController()
-                    effectViewController.reinforcementEffects = effects
-                    delegate.reinforce(sesame: self, effectViewController: effectViewController)
-                }
-                _reinforcement = nil
-            }
-        }
-    }
-
+    let appId: String
     var api: APIClient
     let coreDataManager: CoreDataManager
 
-    @objc public var appLifecycleTracker: BMSAppLifecycle
-    var trackingOptions: BMSEventMetadataOptions
-    let appId: String
+    var appLifecycleTracker: BMSAppLifecycle
+
+    /// Enabled or disable the default metadata added to events,
+    /// overriding the configuration on https://dashboard.boundlesss.ai
+    public var trackingOptions: BMSEventMetadataOptions
 
     @objc
     public init(appId: String, auth: String, versionId: String?, userId: String) {
@@ -137,6 +127,7 @@ public extension Sesame {
         return userId
     }
 
+    //swiftlint:disable:next function_body_length
     public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
         var reinforcementHolder: BMSReinforcement.Holder?
         var eventCount = 0
@@ -165,9 +156,15 @@ public extension Sesame {
                                            cartridgeId: BMSCartridge.NeutralCartridgeId)?
                         .nextReinforcement {
                 event.reinforcement = cartridgeReinforcement
-                if let reinforcement = reinforcedAction.reinforcements.filter({$0.id == cartridgeReinforcement.id}).first {
+                if let reinforcement = reinforcedAction.reinforcements.filter({
+                    $0.id == cartridgeReinforcement.id
+                }).first {
                     reinforcementHolder = reinforcement.holder
-                } else { BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")}
+                } else {
+                    BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")
+                }
+            } else {
+                BMSLog.error("Could not find reinforced action with name:\(actionName)")
             }
 
             eventCount = BMSEvent.count(context: context, userId: user.id) ?? 0
@@ -181,7 +178,9 @@ public extension Sesame {
             }
         }
 
-        _reinforcement = reinforcementHolder
+        if let reinforcement = reinforcementHolder {
+            delegate(reinforcement: reinforcement)
+        }
         sendReinforce(context: context)
     }
 
@@ -202,45 +201,11 @@ public extension Sesame {
     }
 }
 
-// MARK: - App Open Reinforcement
-
-extension Sesame: BMSAppLifecycleListener {
-
-    func appLifecycleSessionDidStart(_ appLifecycle: BMSAppLifecycle, lastSession: BMSSessionId?) {
-        addEvent(actionName: BMSSessionId.StartName)
-    }
-
-    func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool) {
-        guard let appOpenAction = appLifecycle.appOpenAction else { return }
-        addEvent(actionName: BMSSessionId.AppOpenName)
-        addEvent(actionName: BMSEvent.AppOpenName,
-                 metadata: appOpenAction.metadata,
-                 reinforce: reinforceable)
-    }
-
-    func appLifecycleSessionInterrupetionWillStart(_ appLifecycle: BMSAppLifecycle) {
-        addEvent(actionName: BMSSessionId.InterruptionStartName)
-    }
-
-    func appLifecycleSessionInterrupetionDidEnd(_ appLifecycle: BMSAppLifecycle) {
-        addEvent(actionName: BMSSessionId.InterruptionEndName)
-    }
-
-    func appLifecycleSessionAppWillClose(_ appLifecycle: BMSAppLifecycle) {
-        addEvent(actionName: BMSSessionId.AppCloseName)
-    }
-
-    func appLifecycleSessionWillEnd(_ appLifecycle: BMSAppLifecycle) {
-        addEvent(actionName: BMSSessionId.EndName)
-    }
-
-}
-
 // MARK: - HTTP Methods
 
 extension Sesame {
-
-    public func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
+    //swiftlint:disable:next cyclomatic_complexity function_body_length
+    func sendBoot(completion: @escaping (Bool) -> Void = {_ in}) {
         coreDataManager.newContext { context in
             guard let appState = BMSAppState.fetch(context: context, appId: appId)
                 else {
@@ -420,37 +385,53 @@ extension Sesame {
             }
         }
     }
-}
 
-public extension Sesame {
-    public struct PropertyList {
-        public static let file: PropertyList = {
-            guard let path = Bundle.main.path(forResource: "Sesame", ofType: "plist"),
-                let plist = NSDictionary(contentsOfFile: path) as? [String: Any],
-                let sesameProperties = PropertyList(dict: plist)
-                else { fatalError() }
-            return sesameProperties
-        }()
-
-        public let raw: [String: Any]
-        public let appId: String
-        public let auth: String
-        public let versionId: String
-        public let userId: String
-
-        init?(dict: [String: Any]) {
-            guard let appId = dict["appId"] as? String, !appId.isEmpty,
-                let auth = dict["auth"] as? String, !auth.isEmpty,
-                let versionId = dict["versionId"] as? String, !versionId.isEmpty,
-                let userId = dict["userId"] as? String, !userId.isEmpty
-                else { return nil }
-            self.raw = dict
-            self.appId = appId
-            self.auth = auth
-            self.versionId = versionId
-            self.userId = userId
+    fileprivate func delegate(reinforcement: BMSReinforcement.Holder) {
+        BMSLog.info(confirmed: "Got reinforcement:\(reinforcement.name ?? "nil")")
+        DispatchQueue.main.async {
+            guard let delegate = self.reinforcementDelegate
+                ?? UIWindow.topWindow?.rootViewController,
+                let effects = reinforcement.effectsDictionary
+                else { return }
+            let effectViewController = BMSEffectViewController()
+            effectViewController.reinforcementEffects = effects
+            delegate.reinforce(sesame: self, effectViewController: effectViewController)
         }
     }
+}
+
+// MARK: - App Open Reinforcement
+
+extension Sesame: BMSAppLifecycleListener {
+
+    func appLifecycleSessionDidStart(_ appLifecycle: BMSAppLifecycle, lastSession: BMSSessionId?) {
+        addEvent(actionName: BMSSessionId.StartName)
+    }
+
+    func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool) {
+        guard let appOpenAction = appLifecycle.appOpenAction else { return }
+        addEvent(actionName: BMSSessionId.AppOpenName)
+        addEvent(actionName: BMSEvent.AppOpenName,
+                 metadata: appOpenAction.metadata,
+                 reinforce: reinforceable)
+    }
+
+    func appLifecycleSessionInterrupetionWillStart(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.InterruptionStartName)
+    }
+
+    func appLifecycleSessionInterrupetionDidEnd(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.InterruptionEndName)
+    }
+
+    func appLifecycleSessionAppWillClose(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.AppCloseName)
+    }
+
+    func appLifecycleSessionWillEnd(_ appLifecycle: BMSAppLifecycle) {
+        addEvent(actionName: BMSSessionId.EndName)
+    }
+
 }
 
 //swiftlint:disable:this file_length
