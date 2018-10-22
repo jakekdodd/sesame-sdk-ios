@@ -56,7 +56,9 @@ public class Sesame: NSObject {
     ///
     /// - Parameters:
     ///   - appId: AppId from the dashboard.
-    ///   - auth: Auth from the dashboard. For development use the development secret. For builds published to the app store, use the production secret.
+    ///   - auth: Auth from the dashboard.
+    ///           For development use the development secret.
+    ///           For builds published to the app store, use the production secret.
     ///   - versionId: VersionId from the dashboard.
     ///   - userId: UserId for the current user. If no user is set, events are dropped.
     @objc
@@ -87,7 +89,6 @@ public class Sesame: NSObject {
 
     /// The number of events to trigger an upload
     public var eventUploadCount: Int = 20
-    var eventUploadPeriod: TimeInterval = 30
 
     fileprivate var uploadScheduled = false
 }
@@ -96,6 +97,9 @@ public class Sesame: NSObject {
 
 public extension Sesame {
 
+    /// Set a user, or no user by passing `nil`.
+    ///
+    /// - Parameter userId: A user id or `nil`
     @objc
     public func setUserId(_ userId: String?) {
         setUserId(userId: userId)
@@ -128,6 +132,9 @@ public extension Sesame {
         }
     }
 
+    /// Get the current user
+    ///
+    /// - Returns: The current user id
     @objc
     public func getUserId() -> String? {
         return getUserId(nil)
@@ -142,9 +149,21 @@ public extension Sesame {
         BMSLog.verbose("got userId:\(String(describing: userId))")
         return userId
     }
+}
 
-    //swiftlint:disable:next function_body_length
-    public func addEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
+extension Sesame {
+
+    /// Add events by creating a report and sending reports to the API once `eventUploadCount` is reached
+    ///
+    /// - Parameters:
+    ///   - actionName: A name for the action
+    ///   - metadata: Extra info about the event
+    public func addEvent(actionName: String, metadata: [String: Any] = [:]) {
+        reportEvent(actionName: actionName, metadata: metadata)
+    }
+
+    func reportEvent(context: NSManagedObjectContext? = nil, actionName: String, metadata: [String: Any] = [:], reinforce: Bool = false) {
+        //swiftlint:disable:previous function_body_length
         var reinforcementHolder: BMSReinforcement.Holder?
         var eventCount = 0
         let context = context ?? coreDataManager.newContext()
@@ -203,17 +222,28 @@ public extension Sesame {
         sendReinforce(context: context)
     }
 
-    @objc
-    public func eventCount() -> Int {
+    func eventCount() -> Int {
         let context = coreDataManager.newContext()
         return BMSEvent.count(context: context) ?? 0
     }
+}
 
+extension Sesame {
+    /// Toggle metadata added to events
+    ///
+    /// - Parameters:
+    ///   - option: An option key from `BMSEventMetadataOption`
+    ///   - disabled: Boolean
     @objc
     public func tracking(option: BMSEventMetadataOption, disabled: Bool) {
         tracking(option: option, enabled: !disabled)
     }
 
+    /// Toggle metadata added to events
+    ///
+    /// - Parameters:
+    ///   - option: An option key from `BMSEventMetadataOption`
+    ///   - enabled: Boolean
     @objc
     public func tracking(option: BMSEventMetadataOption, enabled: Bool) {
         enabled ? trackingOptions.enable(option) : trackingOptions.disable(option)
@@ -430,9 +460,9 @@ extension Sesame: BMSAppLifecycleListener {
     func appLifecycleSessionAppDidOpen(_ appLifecycle: BMSAppLifecycle, reinforceable: Bool) {
         guard let appOpenAction = appLifecycle.appOpenAction else { return }
         addEvent(actionName: BMSSessionId.AppOpenName)
-        addEvent(actionName: BMSEvent.AppOpenName,
-                 metadata: appOpenAction.metadata,
-                 reinforce: reinforceable)
+        reportEvent(actionName: BMSEvent.AppOpenName,
+                    metadata: appOpenAction.metadata,
+                    reinforce: reinforceable)
     }
 
     func appLifecycleSessionInterrupetionWillStart(_ appLifecycle: BMSAppLifecycle) {
