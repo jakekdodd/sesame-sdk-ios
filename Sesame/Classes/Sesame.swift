@@ -39,6 +39,7 @@ public class Sesame: NSObject {
     var api: APIClient
     let coreDataManager: CoreDataManager
 
+    /// Sends app open and other session events to this object
     var appLifecycleTracker: BMSAppLifecycle
 
     /// Enabled or disable the default metadata added to events,
@@ -65,13 +66,14 @@ public class Sesame: NSObject {
                     _ = BMSAppState.insert(context: context, appId: appId, auth: auth, versionId: versionId)
                 }
             }
-            setUserId(context, userId)
+            setUserId(context: context, userId: userId)
         }
 
         appLifecycleTracker.listener = self
     }
 
-    var eventUploadCount: Int = 20
+    /// The number of events to trigger an upload
+    public var eventUploadCount: Int = 20
     var eventUploadPeriod: TimeInterval = 30
 
     fileprivate var uploadScheduled = false
@@ -83,10 +85,11 @@ public extension Sesame {
 
     @objc
     public func setUserId(_ userId: String?) {
-        setUserId(coreDataManager.newContext(), userId)
+        setUserId(userId: userId)
     }
 
-    internal func setUserId( _ context: NSManagedObjectContext, _ userId: String?) {
+    internal func setUserId(context: NSManagedObjectContext? = nil, userId: String?) {
+        let context = context ?? coreDataManager.newContext()
         context.performAndWait {
             guard let appState = BMSAppState.fetch(context: context, appId: appId) else {
                 BMSLog.error("setUserId without an appState")
@@ -145,23 +148,26 @@ public extension Sesame {
                                               sessionId: appLifecycleTracker.sessionId as NSNumber?,
                                               metadata: metadata) else { return }
             if reinforce,
-                let reinforcedAction = appState.reinforcedActions.filter({$0.name == actionName}).first,
-                let cartridgeReinforcement = BMSCartridge.fetch(context: context,
-                                                       userId: user.id,
-                                                       actionId: reinforcedAction.id)?.first?
+                let reinforcedAction = appState.reinforcedActions.filter({$0.name == actionName}).first {
+                if let cartridgeReinforcement = BMSCartridge.fetch(context: context,
+                                                                   userId: user.id,
+                                                                   actionId: reinforcedAction.id)?.first?
                     .nextReinforcement
                     ?? BMSCartridge.insert(context: context,
                                            user: user,
                                            actionId: reinforcedAction.id,
                                            cartridgeId: BMSCartridge.NeutralCartridgeId)?
                         .nextReinforcement {
-                event.reinforcement = cartridgeReinforcement
-                if let reinforcement = reinforcedAction.reinforcements.filter({
-                    $0.id == cartridgeReinforcement.id
-                }).first {
-                    reinforcementHolder = reinforcement.holder
+                    event.reinforcement = cartridgeReinforcement
+                    if let reinforcement = reinforcedAction.reinforcements.filter({
+                        $0.id == cartridgeReinforcement.id
+                    }).first {
+                        reinforcementHolder = reinforcement.holder
+                    } else {
+                        BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")
+                    }
                 } else {
-                    BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")
+                    BMSLog.error("Could not get cartridge reinforcement for action name:\(actionName)")
                 }
             } else {
                 BMSLog.error("Could not find reinforced action with name:\(actionName)")
