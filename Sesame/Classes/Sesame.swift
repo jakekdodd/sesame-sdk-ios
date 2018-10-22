@@ -179,30 +179,31 @@ extension Sesame {
                                               actionName: actionName,
                                               sessionId: appLifecycleTracker.sessionId as NSNumber?,
                                               metadata: metadata) else { return }
-            if reinforce,
-                let reinforcedAction = appState.reinforcedActions.filter({$0.name == actionName}).first {
-                if let cartridgeReinforcement = BMSCartridge.fetch(context: context,
-                                                                   userId: user.id,
-                                                                   actionId: reinforcedAction.id)?.first?
-                    .nextReinforcement
-                    ?? BMSCartridge.insert(context: context,
-                                           user: user,
-                                           actionId: reinforcedAction.id,
-                                           cartridgeId: BMSCartridge.NeutralCartridgeId)?
-                        .nextReinforcement {
-                    event.reinforcement = cartridgeReinforcement
-                    if let reinforcement = reinforcedAction.reinforcements.filter({
-                        $0.id == cartridgeReinforcement.id
-                    }).first {
-                        reinforcementHolder = reinforcement.holder
+            if reinforce {
+                if let reinforcedAction = appState.reinforcedActions.filter({$0.name == actionName}).first {
+                    if let cartridgeReinforcement = BMSCartridge.fetch(context: context,
+                                                                       userId: user.id,
+                                                                       actionId: reinforcedAction.id)?.first?
+                        .nextReinforcement
+                        ?? BMSCartridge.insert(context: context,
+                                               user: user,
+                                               actionId: reinforcedAction.id,
+                                               cartridgeId: BMSCartridge.NeutralCartridgeId)?
+                            .nextReinforcement {
+                        event.reinforcement = cartridgeReinforcement
+                        if let reinforcement = reinforcedAction.reinforcements.filter({
+                            $0.id == cartridgeReinforcement.id
+                        }).first {
+                            reinforcementHolder = reinforcement.holder
+                        } else {
+                            BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")
+                        }
                     } else {
-                        BMSLog.error("Could not find reinforcement with id:\(cartridgeReinforcement.id)")
+                        BMSLog.error("Could not get cartridge reinforcement for action name:\(actionName)")
                     }
                 } else {
-                    BMSLog.error("Could not get cartridge reinforcement for action name:\(actionName)")
+                    BMSLog.error("Could not find reinforced action with name:\(actionName)")
                 }
-            } else {
-                BMSLog.error("Could not find reinforced action with name:\(actionName)")
             }
 
             eventCount = BMSEvent.count(context: context, userId: user.id) ?? 0
