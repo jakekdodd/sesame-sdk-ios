@@ -64,7 +64,9 @@ extension BMSEvent {
             }
             event.reinforcement = reinforcement
             event.sessionId = sessionId
-            event.metadataAsDictionary = metadata
+            event.metadataAsDictionary = metadata.merging([
+                "BMSSessionId": sessionId?.int64Value as Any
+                ], uniquingKeysWith: {$1})
             report.addToEvents(event)
             do {
                 try context.save()
