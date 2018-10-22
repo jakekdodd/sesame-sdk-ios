@@ -1,6 +1,6 @@
 //
 //  BMSIntegrationState+CoreDataClass.swift
-//  
+//
 //
 //  Created by Akash Desai on 9/26/18.
 //
@@ -33,9 +33,9 @@ class BMSAppState: NSManagedObject {
     /// The current user
     @NSManaged var user: BMSUser?
 
-    /// The appId and auth as an http header
+    /// The versionId and auth as an http header
     var basicAuth: HTTPClient.AuthorizationHeader {
-        return .basic(appId, auth)
+        return .basic(versionId, auth)
     }
 
     // MARK: Generated accessors for reinforcedActions
