@@ -46,8 +46,21 @@ public class Sesame: NSObject {
     /// overriding the configuration on https://dashboard.boundlesss.ai
     public var trackingOptions: BMSEventMetadataOptions
 
+    /// Initialize using credentials from https://dashboard.boundless.ai
+    /// Use this object to reinforce app opens and track events for experiments.
+    /// It is set up to:
+    /// - listen for app lifecycle events
+    /// - sends events to the reinforcement API
+    /// - receives reinforcements from the reinforcement API
+    /// - display reinforcment effect views
+    ///
+    /// - Parameters:
+    ///   - appId: AppId from the dashboard.
+    ///   - auth: Auth from the dashboard. For development use the development secret. For builds published to the app store, use the production secret.
+    ///   - versionId: VersionId from the dashboard.
+    ///   - userId: UserId for the current user. If no user is set, events are dropped.
     @objc
-    public init(appId: String, auth: String, versionId: String?, userId: String) {
+    public init(appId: String, auth: String, versionId: String?, userId: String?) {
         self.api = APIClient()
         self.coreDataManager = CoreDataManager()
         self.trackingOptions = .standard()

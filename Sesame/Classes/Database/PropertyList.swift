@@ -8,7 +8,12 @@
 import Foundation
 
 public extension Sesame {
+
+    /// Used to read a file `Sesame.plist` in the main bundle.
+    /// Includes properties to initialize a Sesame object.
     public struct PropertyList {
+
+        /// Reads `Sesame.plist` and returns a singleton instance
         public static let file: PropertyList = {
             guard let path = Bundle.main.path(forResource: "Sesame", ofType: "plist"),
                 let plist = NSDictionary(contentsOfFile: path) as? [String: Any],
@@ -17,23 +22,23 @@ public extension Sesame {
             return sesameProperties
         }()
 
-        public let raw: [String: Any]
+        /// The properties as a dictionary
+        public let dict: [String: Any]
         public let appId: String
         public let auth: String
         public let versionId: String
-        public let userId: String
+        public let userId: String?
 
         init?(dict: [String: Any]) {
             guard let appId = dict["appId"] as? String, !appId.isEmpty,
                 let auth = dict["auth"] as? String, !auth.isEmpty,
-                let versionId = dict["versionId"] as? String, !versionId.isEmpty,
-                let userId = dict["userId"] as? String, !userId.isEmpty
+                let versionId = dict["versionId"] as? String, !versionId.isEmpty
                 else { return nil }
-            self.raw = dict
+            self.dict = dict
             self.appId = appId
             self.auth = auth
             self.versionId = versionId
-            self.userId = userId
+            self.userId = dict["userId"] as? String
         }
     }
 }
