@@ -80,7 +80,7 @@ open class BMSEmojiplosionEffectView: BMSVisualEffectView {
         } else { BMSLog.error("Missing parameter")}
 
         if let rate = attributes["rate"] as? Double {
-            self.rate = Float(rate)
+            self.rate = Float(rate) * 1000
         } else { BMSLog.error("Missing parameter")}
 
         if let scaleMean = attributes["scaleMean"] as? Double {
